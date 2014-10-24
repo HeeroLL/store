@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m %n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="error" />
+			<param name="levelMax" value="error" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<appender name="app_log"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="log/app.log" />
+		<param name="MaxBackupIndex" value="10" />
+		<param name="MaxFileSize" value="1MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d [%p] (%c:%L)- %m%n" />
+		</layout>
+	</appender>
+
+	<!-- 关闭spring的log -->
+	<category name="org.springframework">
+		<priority value="ERROR" />
+	</category>
+
+	<root>
+		<level value="debug" />
+		<appender-ref ref="app_log" />
+		<!-- logger for print Console -->
+		<appender-ref ref="STDOUT" />
+	</root>
+</log4j:configuration>
