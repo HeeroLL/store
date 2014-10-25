@@ -72,4 +72,16 @@
   <build>
     <finalName>nosql</finalName>
   </build>
+  <!-- 
+  <repositories>  
+    <repository>  
+      <snapshots>  
+        <enabled>false</enabled>  
+      </snapshots>  
+      <id>central</id>  
+      <name>Maven Repository Switchboard</name>  
+      <url>http://search.maven.org</url>  
+    </repository>  
+  </repositories>  
+ -->
 </project>
