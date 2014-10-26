@@ -23,21 +23,8 @@
 		</init-param>
 	</filter>
 
-	<filter>
-		<filter-name>LoginFilter</filter-name>
-		<filter-class>com.home.core.LoginFilter</filter-class>
-		<init-param>
-			<param-name>defaultSkin</param-name>
-			<param-value>default</param-value>
-		</init-param>
-	</filter>
-
 	<filter-mapping>
 		<filter-name>Encoding</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>LoginFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 

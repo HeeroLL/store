@@ -15,46 +15,19 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<context:component-scan base-package="com.heero.*" />
+	
+	<import resource="classpath:SpringContext.xml"/>
 
-	<!-- 多视图处理器 -->
-    <bean class="com.home.core.MixedViewResolver">
-		<property name="resolvers">
-			<map>
-				<entry key="jsp">
-					<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-						<property name="prefix" value="/WEB-INF/jsp/"/>
-						<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-						<property name="suffix" value=".jsp" />
-					</bean>
-				</entry>
-				<entry key="ftl">
-					<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-						<property name="cache" value="true"/>
-						<property name="contentType" value="text/html;charset=UTF-8"></property>
-						<property name="exposeSpringMacroHelpers" value="true"/>
-						<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
-						<property name="requestContextAttribute" value="rc"></property>
-					</bean>
-				</entry>
-			</map>
-		</property>
-	</bean>
-
-	<!-- freemarker config -->
-    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-        <property name="templateLoaderPath" value="/WEB-INF/ftl/" />
-        <property name="freemarkerSettings">
-            <props>
-                <prop key="template_update_delay">5</prop>
-                <prop key="default_encoding">UTF-8</prop>
-            </props>
-        </property>
-    </bean>
-	<!-- 将无法mapping到Controller的path交给default servlet handler处理 -->
+	<!-- 视图解释类 -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
+		<!--
+			可为空,方便实现自已的依据扩展名来选择视图解释类的逻辑
+		-->
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
 	</bean>
 
 	<!-- 配置SpringMVC @ResponseBody和@RequestBody注解 -->
@@ -73,7 +46,7 @@
 		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
-				<value>application/json;charset=utf-8</value>
+				<value>text/html;charset=utf-8</value>
 			</list>
 		</property>
 		<!-- 设置一个自定义 objectMapper，让Date类型的数据转成yyyy-MM-dd HH:mm:ss-->
@@ -96,6 +69,5 @@
 			</list>
 		</property>
 	</bean>
-	
 	
 </beans>
