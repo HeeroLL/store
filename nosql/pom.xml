@@ -78,6 +78,11 @@
     	<artifactId>jackson-mapper-asl</artifactId>
     	<version>1.9.13</version>
     </dependency>
+    <dependency>
+    	<groupId>org.springframework.data</groupId>
+    	<artifactId>spring-data-redis</artifactId>
+    	<version>1.4.0.RELEASE</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>nosql</finalName>
