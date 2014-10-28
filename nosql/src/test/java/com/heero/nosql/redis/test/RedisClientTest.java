@@ -2,6 +2,11 @@ package com.heero.nosql.redis.test;
 
 import redis.clients.jedis.Jedis;
 
+/**
+ * Jedis连接redis示例
+ * 
+ * @author lilin
+ */
 public class RedisClientTest {
 
 	public static void main(String[] args) {
@@ -16,7 +21,7 @@ public class RedisClientTest {
 		String value = jedis.get(keys);
 
 		System.out.println(value);
-		
+
 		jedis.close();
 	}
 

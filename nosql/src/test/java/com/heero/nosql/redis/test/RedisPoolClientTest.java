@@ -4,6 +4,11 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+/**
+ * redis连接池示例
+ * 
+ * @author lilin
+ */
 public class RedisPoolClientTest {
 
 	private static JedisPool pool;
@@ -29,6 +34,8 @@ public class RedisPoolClientTest {
 
 		// 释放对象池
 		pool.returnResource(jedis);
+		
+		pool.destroy();
 	}
 
 }
