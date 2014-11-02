@@ -30,7 +30,7 @@
 
 	<!-- 添加spring3控制器及映射规则 -->
 	<servlet>
-		<servlet-name>spring3</servlet-name>
+		<servlet-name>springMVC</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
@@ -41,11 +41,11 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>spring3</servlet-name>
-		<url-pattern>*.ll</url-pattern>
+		<servlet-name>springMVC</servlet-name>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 </web-app>

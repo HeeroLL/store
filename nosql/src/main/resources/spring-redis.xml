@@ -21,8 +21,12 @@
 		<property name="testOnBorrow" value="${redis.pool.testOnBorrow}" />
 		<property name="testOnReturn" value="${redis.pool.testOnReturn}" />
 	</bean>
+	
+	<bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="jedisConnectionFactory" />
+	</bean>
 
-	<bean class="org.springframework.data.redis.core.RedisTemplate">
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
 		<property name="connectionFactory" ref="jedisConnectionFactory" />
 	</bean>
 </beans>

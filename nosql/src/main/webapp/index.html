@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="/nosql/js/jquery/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="/nosql/js/jquery/themes/icon.css">
+<script type="text/javascript"
+	src="/nosql/js/jquery/jquery-1.8.3.min.js"></script>
+<script type="text/javascript"
+	src="/nosql/js/jquery/jquery.easyui.min.js"></script>
+<script type="text/javascript"
+	src="/nosql/js/jquery/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#ff').form({
+			url : 'user/login',
+			onSubmit : function() {
+				if (!$("#ff").form("validate")) {
+					return false;
+				}
+				return true;
+			},
+			success : function(data) {
+				var data = eval('(' + data + ')');
+				if (data.success) {
+					alert(data.errMsg);
+				}
+			}
+		});
+	});
+
+	function submitForm() {
+		if (!$("#ff").form("validate")) {
+			return;
+		}
+		$.post('user/login', $("#testform").serialize(), function(data) {
+			alert(data.success);
+		}, 'json');
+	}
+</script>
+</head>
+<body>
+	<div
+		style="background: #fafafa; padding: 10px; width: 300px; height: 300px;">
+		<h1>欢迎登录nosql系统</h1>
+		<form id="ff" method="post">
+			<div>
+				<label for="userName">用户:</label> <input class="easyui-validatebox"
+					type="text" name="userName"
+					data-options="required:true, validType:'baseValidate'"></input>
+			</div>
+			<div>
+				<label for="password">密码:</label> <input class="easyui-validatebox"
+					type="password" name="password" data-options="required:true"></input>
+			</div>
+			<div>
+				<input type="submit" value="登录">
+				<!-- 
+				<input type="button" onclick="submitForm()" value="登录2">
+				 -->
+				 <input type="button" value="注册" onclick="javascript:location.href='reg.html'">
+			</div>
+		</form>
+	</div>
+</body>
+</html>
