@@ -1,4 +1,4 @@
-package com.heero.user.po;
+package com.heero.redis.user.po;
 
 /**
  * 用户信息
@@ -6,6 +6,11 @@ package com.heero.user.po;
  * @author lilin
  */
 public class UserInfo {
+    /**
+     * session超时时间
+     */
+    public static final long SESSION_TIME = 60 * 30;
+    
     /**
      * 用户id
      */
@@ -35,6 +40,11 @@ public class UserInfo {
      * email
      */
     private String email;
+    
+    /**
+     * sessionid
+     */
+    private String sessionid;
 
     public String getUserName() {
         return userName;
@@ -82,6 +92,14 @@ public class UserInfo {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public String getSessionid() {
+        return sessionid;
+    }
+
+    public void setSessionid(String sessionid) {
+        this.sessionid = sessionid;
     }
     
 }

@@ -1,4 +1,4 @@
-package com.heero.user.vo;
+package com.heero.redis.user.vo;
 
 /**
  * 登录结果信息

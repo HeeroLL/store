@@ -24,6 +24,8 @@
 			success : function(data) {
 				var data = eval('(' + data + ')');
 				if (data.success) {
+					location.href = "main/index";
+				} else {
 					alert(data.errMsg);
 				}
 			}

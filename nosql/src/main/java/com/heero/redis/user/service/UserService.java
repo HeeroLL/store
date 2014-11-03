@@ -1,7 +1,7 @@
-package com.heero.user.service;
+package com.heero.redis.user.service;
 
-import com.heero.user.po.UserInfo;
-import com.heero.user.vo.ResultMessageVo;
+import com.heero.redis.user.po.UserInfo;
+import com.heero.redis.user.vo.ResultMessageVo;
 
 /**
  * 用户service层接口

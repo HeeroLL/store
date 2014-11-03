@@ -1,7 +1,8 @@
-package com.heero.user.service.impl;
+package com.heero.redis.user.service.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
@@ -10,9 +11,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.heero.user.po.UserInfo;
-import com.heero.user.service.UserService;
-import com.heero.user.vo.ResultMessageVo;
+import com.heero.redis.user.po.UserInfo;
+import com.heero.redis.user.service.UserService;
+import com.heero.redis.user.vo.ResultMessageVo;
 
 /**
  * 用户service层实现类
@@ -100,6 +101,11 @@ public class UserServiceImpl implements UserService {
             return result;
         }
         // 存入session
+        //stringRedisTemplate.boundListOps("user:online").leftPush(userInfo.getSessionid());
+        String onlineUserKey = "user:online:" + userInfo.getSessionid();
+        stringRedisTemplate.boundValueOps(onlineUserKey).set(id);
+        // 设置超时时间
+        stringRedisTemplate.expire(onlineUserKey, UserInfo.SESSION_TIME, TimeUnit.SECONDS);
 
         result.setSuccess(true);
         return result;

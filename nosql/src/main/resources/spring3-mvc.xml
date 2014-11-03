@@ -33,10 +33,10 @@
 		<property name="interceptors">
 			<list>
 				<!-- 注入登录认证拦截器 -->
-				<bean class="com.heero.nosql.interceptor.LoginInterceptor">
+				<bean class="com.heero.redis.interceptor.LoginInterceptor">
 					<property name="ignorePackageList">
 						<list>
-							<value>com.heero.user.controller</value>
+							<value>com.heero.redis.user.controller</value>
 						</list>
 					</property>
 				</bean>
