@@ -7,6 +7,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>nosql Maven Webapp</name>
 	<url>http://maven.apache.org</url>
+	<properties> 
+ 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
+ 		<spring.framework.version>3.1.0.RELEASE</spring.framework.version> 
+ 	</properties> 
+	
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -17,27 +22,27 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${spring.framework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${spring.framework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${spring.framework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-asm</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${spring.framework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${spring.framework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>aspectj</groupId>
@@ -71,7 +76,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${spring.framework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -96,6 +101,17 @@
 	</dependencies>
 	<build>
 		<finalName>nosql</finalName>
+		<plugins> 
+ 			<plugin> 
+ 				<artifactId>maven-compiler-plugin</artifactId> 
+ 				<version>2.3.1</version> 
+ 				<configuration> 
+ 					<source>1.6</source> 
+ 					<target>1.6</target> 
+ 					<encoding>${project.build.sourceEncoding}</encoding> 
+ 				</configuration> 
+ 			</plugin> 
+		</plugins>
 	</build>
 	<!-- <repositories> <repository> <snapshots> <enabled>false</enabled> </snapshots> 
 		<id>central</id> <name>Maven Repository Switchboard</name> <url>http://search.maven.org</url> 
