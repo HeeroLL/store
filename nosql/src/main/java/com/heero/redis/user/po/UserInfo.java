@@ -45,6 +45,23 @@ public class UserInfo {
      * sessionid
      */
     private String sessionid;
+    
+    @Override
+    public int hashCode() {
+        return (int)userId;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){
+            return true;
+        }
+        if (obj == null || !(obj instanceof UserInfo)){
+            return false;
+        }
+        
+        return ((UserInfo)obj).getUserId() == this.userId;
+    }
 
     public String getUserName() {
         return userName;
