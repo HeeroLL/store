@@ -17,11 +17,17 @@
 </head>
 <body class="easyui-layout">
 	<div region="north" title="North Title" split="true"
-		style="height: 100px;">欢迎登录nosql系统</div>
-	<div region="south" title="South" split="true" style="height: 100px;">
+		style="height: 100px;">
+		欢迎你，${userInfo.nickname}
+		<br/>
+		<a href="../user/logout">登出</a>
 	</div>
+	<div region="south" title="South" split="true" style="height: 200px;">
+	</div>
+	<!-- 
 	<div region="east" iconCls="icon-reload" title="East" split="true"
 		style="width: 100px;"></div>
+	 -->
 	<div region="west" split="true" title="在线用户列表" style="width: 150px;">
 		<c:forEach items="${onlineUser}" var="user">
 			<p>${user.nickname}</p>

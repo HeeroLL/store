@@ -2,6 +2,7 @@ package com.heero.redis.user.controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -43,6 +44,35 @@ public class UserController {
         response.addCookie(cookie);
         userInfo.setSessionid(session.getId());
         return userService.login(userInfo);
+    }
+    
+    /**
+     * 用户注销
+     * 
+     * @param userInfo 用户信息
+     * @param session 会话
+     * @return 登录结果信息
+     */
+    @RequestMapping("logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        String sessionId = null;
+        
+        // 删除cookie
+        for (Cookie cookie : request.getCookies()) {
+            if ("nosql.sessionid".equals(cookie.getName())) {
+                // 从cookie中取sessionId
+                sessionId = cookie.getValue();
+                
+                // 超时时间设为0，即删除cookie
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+        }
+        // 销毁session
+        request.getSession().invalidate();
+        userService.logout(sessionId);
+        
+        return "redirect:/index.html";
     }
 
     /**

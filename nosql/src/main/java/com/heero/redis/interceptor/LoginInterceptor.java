@@ -14,6 +14,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.heero.redis.user.po.UserInfo;
+import com.heero.redis.user.service.UserService;
 
 /**
  * 登录拦截器，实现权限控制等功能
@@ -26,6 +27,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
      */
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+    
+    /**
+     * 用户业务接口
+     */
+    @Resource
+    private UserService userService;
     
     /**
      * 定义忽略拦截的package列表
@@ -54,6 +61,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 String onlineUserKey = "user:online:" + cookie.getValue();
                 String userId = stringRedisTemplate.boundValueOps(onlineUserKey).get();
                 if (userId != null) {
+                    if (request.getSession().getAttribute("userInfo") == null) {
+                        request.getSession().setAttribute("userInfo", userService.getUserInfo(userId));
+                    }
+                    
                     // 续期
                     stringRedisTemplate.expire(onlineUserKey, UserInfo.SESSION_TIME, TimeUnit.SECONDS);
                     // System.out.println("续期成功");
@@ -61,7 +72,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 }
             }
         }
-        
+        if (request.getSession(false) != null) {
+            request.getSession(false).invalidate();
+        }
         // System.out.println("in LoginInterceptor");
         response.sendRedirect("/nosql/index.html");
         return false;

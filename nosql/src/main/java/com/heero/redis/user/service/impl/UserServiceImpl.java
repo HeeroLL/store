@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
             return result;
         }
         // 开启事务
-        //stringRedisTemplate.multi();
+        // stringRedisTemplate.multi();
         // 设置用户id
         userInfo.setUserId(stringRedisTemplate.boundValueOps("user:id:count").increment(1));
 
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         stringRedisTemplate.boundHashOps("users:" + userInfo.getUserId()).putAll(userMap);
 
         // 提交事务
-        //stringRedisTemplate.exec();
+        // stringRedisTemplate.exec();
 
         result.setSuccess(true);
         return result;
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
             return result;
         }
         // 存入session
-        //stringRedisTemplate.boundListOps("user:online").leftPush(userInfo.getSessionid());
+        // stringRedisTemplate.boundListOps("user:online").leftPush(userInfo.getSessionid());
         String onlineUserKey = "user:online:" + userInfo.getSessionid();
         stringRedisTemplate.boundValueOps(onlineUserKey).set(id);
         // 设置超时时间
@@ -111,4 +111,43 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    /**
+     * 用户注销
+     * 
+     * @param sessionId cookie中存储的sessionId
+     * @return 注销是否成功
+     */
+    @Override
+    public ResultMessageVo logout(String sessionId) {
+        ResultMessageVo result = new ResultMessageVo();
+        if (sessionId != null) {
+            String onlineUserKey = "user:online:" + sessionId;
+            // 删除缓存数据
+            stringRedisTemplate.delete(onlineUserKey);
+        }
+        result.setSuccess(true);
+        return result;
+    }
+
+    /**
+     * 根据用户id获取用户信息
+     * 
+     * @param userId 用户id
+     * @return 用户信息
+     */
+    @Override
+    public UserInfo getUserInfo(String userId) {
+        UserInfo userInfo = null;
+
+        BoundHashOperations<String, String, String> hash = stringRedisTemplate.boundHashOps("users:" + userId);
+        if (hash != null) {
+            userInfo = new UserInfo();
+            userInfo.setUserId(Long.parseLong(userId));
+            userInfo.setUserName(hash.get("userName"));
+            userInfo.setNickname(hash.get("nickname"));
+            userInfo.setSex(hash.get("sex"));
+            userInfo.setEmail(hash.get("email"));
+        }
+        return userInfo;
+    }
 }

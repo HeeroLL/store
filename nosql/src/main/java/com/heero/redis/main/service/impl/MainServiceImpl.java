@@ -26,25 +26,25 @@ public class MainServiceImpl implements MainService {
      */
     @Resource
     private StringRedisTemplate stringRedisTemplate;
-    
+
     @Override
     public Set<UserInfo> getOnlineUser() {
         Set<String> keySet = stringRedisTemplate.keys("user:online:*");
-        //System.out.println(keySet.size());
+        // System.out.println(keySet.size());
         Set<UserInfo> userInfoSet = new HashSet<UserInfo>(keySet.size());
         for (String key : keySet) {
             // 获取用户id
             String userId = stringRedisTemplate.boundValueOps(key).get();
-            
+
             BoundHashOperations<String, String, String> oper = stringRedisTemplate.boundHashOps("users:" + userId);
-            
+
             UserInfo user = new UserInfo();
             user.setUserId(Long.parseLong(userId));
             user.setUserName(oper.get("userName"));
             user.setNickname(oper.get("nickname"));
             user.setSex(oper.get("sex"));
             user.setEmail(oper.get("email"));
-            
+
             userInfoSet.add(user);
         }
         return userInfoSet;
