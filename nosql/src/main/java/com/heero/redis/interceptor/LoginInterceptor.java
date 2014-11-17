@@ -59,10 +59,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             if ("nosql.sessionid".equals(cookie.getName())) {
                 // 从缓存中取session
                 String onlineUserKey = "user:online:" + cookie.getValue();
-                String userId = stringRedisTemplate.boundValueOps(onlineUserKey).get();
-                if (userId != null) {
-                    if (request.getSession().getAttribute("userInfo") == null) {
-                        request.getSession().setAttribute("userInfo", userService.getUserInfo(userId));
+                //String userId = stringRedisTemplate.boundValueOps(onlineUserKey).get();
+                if (cookie.getValue() != null) {
+                    if (request.getSession().getAttribute("sid") == null) {
+                        request.getSession().setAttribute("sid", cookie.getValue());
                     }
                     
                     // 续期

@@ -40,5 +40,13 @@ public interface UserService {
      * @param userId 用户id
      * @return 用户信息
      */
-    UserInfo getUserInfo(String userId);
+    UserInfo getUserInfoById(String userId);
+    
+    /**
+     * 根据sessionId获取用户信息
+     * 
+     * @param sessionId 会话id
+     * @return 用户信息
+     */
+    UserInfo getUserInfoBySessionId(String sessionId);
 }

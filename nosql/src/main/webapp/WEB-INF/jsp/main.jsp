@@ -23,6 +23,7 @@
 		<a href="../user/logout">登出</a>
 	</div>
 	<div region="south" title="South" split="true" style="height: 200px;">
+		sessionId:<%=session.getId() %>
 	</div>
 	<!-- 
 	<div region="east" iconCls="icon-reload" title="East" split="true"

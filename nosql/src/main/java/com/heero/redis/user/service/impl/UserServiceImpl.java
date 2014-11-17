@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
 
 import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -136,7 +137,7 @@ public class UserServiceImpl implements UserService {
      * @return 用户信息
      */
     @Override
-    public UserInfo getUserInfo(String userId) {
+    public UserInfo getUserInfoById(String userId) {
         UserInfo userInfo = null;
 
         BoundHashOperations<String, String, String> hash = stringRedisTemplate.boundHashOps("users:" + userId);
@@ -150,4 +151,22 @@ public class UserServiceImpl implements UserService {
         }
         return userInfo;
     }
+    
+    /**
+     * 根据sessionId获取用户信息
+     * 
+     * @param sessionId 会话id
+     * @return 用户信息
+     */
+    @Override
+    public UserInfo getUserInfoBySessionId(String sessionId) {
+        String onlineUserKey = "user:online:" + sessionId;
+        BoundValueOperations<String, String> hash = stringRedisTemplate.boundValueOps(onlineUserKey);
+        if (hash != null) {
+            return getUserInfoById(hash.get());
+        }
+        
+        return null;
+    }
+
 }
