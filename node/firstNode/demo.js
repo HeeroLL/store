@@ -12,3 +12,13 @@ function execute(somefunction, value) {
 
 execute(say, "hello");
 execute(say2, "hello");
+
+var fs = require('fs');
+fs.readFile('demo.js', 'utf-8', function(err, data) {
+	if (err) {
+	console.error(err);
+	} else {
+	console.log(data);
+	}
+});
+console.log('end.');
