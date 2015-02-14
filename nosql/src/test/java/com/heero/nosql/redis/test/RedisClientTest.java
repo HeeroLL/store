@@ -10,7 +10,7 @@ import redis.clients.jedis.Jedis;
 public class RedisClientTest {
 
 	public static void main(String[] args) {
-		Jedis jedis = new Jedis("192.168.1.106", 6379);
+		Jedis jedis = new Jedis("192.168.90.186", 6379);
 		String keys = "testKey";
 
 		// 删数据

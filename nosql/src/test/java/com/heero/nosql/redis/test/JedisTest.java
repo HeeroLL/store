@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.heero.redis.user.po.UserInfo;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
@@ -14,22 +16,34 @@ import redis.clients.jedis.SortingParams;
 
 public class JedisTest
 {
-    private static JedisPool pool;
     
     /**
      * 在不同的线程中使用相同的Jedis实例会发生奇怪的错误。但是创建太多的实现也不好因为这意味着会建立很多sokcet连接， 也会导致奇怪的错误发生。单一Jedis实例不是线程安全的。为了避免这些问题，可以使用JedisPool,
      * JedisPool是一个线程安全的网络连接池。可以用JedisPool创建一些可靠Jedis实例，可以从池中拿到Jedis的实例。 这种方式可以解决那些问题并且会实现高效的性能
      */
+    private JedisPool pool;
     
     public static void main(String[] args)
     {
-        
-        // ...when closing your application:
-        pool.destroy();
-        
+        JedisTest test = new JedisTest();
+        test.testU();
     }
     
-    public static void Hello()
+    public UserInfo testU()
+    {
+        Jedis jedis = pool.getResource();
+        try
+        {
+            
+            return null;
+        }
+        finally
+        {
+            pool.returnResource(jedis);
+        }
+    }
+    
+    public void Hello()
     {
         Jedis jedis = pool.getResource();
         try
@@ -69,7 +83,7 @@ public class JedisTest
         
     }
     
-    public static void testKey()
+    public void testKey()
     {
         Jedis jedis = pool.getResource();
         System.out.println("=============key==========================");
@@ -82,7 +96,7 @@ public class JedisTest
         System.out.println(jedis.exists("key"));
     }
     
-    public static void testString()
+    public void testString()
     {
         System.out.println("==String==");
         Jedis jedis = pool.getResource();
@@ -138,7 +152,7 @@ public class JedisTest
         System.out.println(jedis.del(new String[]{"foo", "foo1", "foo3"}));
     }
     
-    public static void testList()
+    public void testList()
     {
         System.out.println("==List==");
         Jedis jedis = pool.getResource();
@@ -191,7 +205,7 @@ public class JedisTest
         System.out.println(jedis.lrange("lists", 0, -1));
     }
     
-    public static void testSet()
+    public void testSet()
     {
         System.out.println("==Set==");
         Jedis jedis = pool.getResource();
@@ -251,7 +265,7 @@ public class JedisTest
         System.out.println(jedis.sdiff("sets1", "sets2"));
     }
     
-    public static void sortedSet()
+    public void sortedSet()
     {
         System.out.println("==SoretedSet==");
         Jedis jedis = pool.getResource();
@@ -297,7 +311,7 @@ public class JedisTest
         System.out.println(jedis.zrange("zset", 0, -1));
     }
     
-    public static void testHsh()
+    public void testHsh()
     {
         System.out.println("==Hash==");
         Jedis jedis = pool.getResource();
@@ -308,7 +322,7 @@ public class JedisTest
             pairs.put("age", "2");
             pairs.put("sex", "Female");
             jedis.hmset("kid", pairs);
-            //List<String> name = jedis.hmget("kid", "name");// 结果是个泛型的LIST
+            // List<String> name = jedis.hmget("kid", "name");// 结果是个泛型的LIST
             // jedis.hdel("kid","age"); //删除map中的某个键值
             System.out.println(jedis.hmget("kid", "pwd")); // 因为删除了，所以返回的是null
             System.out.println(jedis.hlen("kid")); // 返回key为user的键中存放的值的个数
@@ -364,7 +378,7 @@ public class JedisTest
         System.out.println(jedis.hvals("hashs"));
     }
     
-    public static void testOther()
+    public void testOther()
         throws InterruptedException
     {
         Jedis jedis = pool.getResource();
