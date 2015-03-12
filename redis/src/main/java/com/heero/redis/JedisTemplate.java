@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import redis.clients.jedis.ShardedJedis;
-import redis.clients.jedis.ShardedJedisPool;
+import redis.clients.util.Pool;
 
 /**
  * 
@@ -30,7 +30,7 @@ public class JedisTemplate {
      * redis连接池
      */
     @Resource(name = "shardedJedisPool")
-    private ShardedJedisPool pool;
+    private Pool<ShardedJedis> pool;
     
     /**
      * 设置k-v数据
@@ -154,6 +154,38 @@ public class JedisTemplate {
             @Override
             public Object doInRedis(ShardedJedis jedis) {
                 return jedis.hgetAll(key);
+            }
+        });
+    }
+    
+    /**
+     * 从栈顶入栈
+     * 
+     * @param key key
+     * @param values 值
+     * @return long
+     */
+    public Long lpush(final String key, final String... values) {
+        return (Long)execute(new JedisCallback() {
+            @Override
+            public Object doInRedis(ShardedJedis jedis) {
+                return jedis.lpush(key, values);
+            }
+        });
+    }
+    
+    /**
+     * 从栈底入栈
+     * 
+     * @param key key
+     * @param values 值
+     * @return long
+     */
+    public Long rpush(final String key, final String... values) {
+        return (Long)execute(new JedisCallback() {
+            @Override
+            public Object doInRedis(ShardedJedis jedis) {
+                return jedis.rpush(key, values);
             }
         });
     }
