@@ -14,11 +14,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class JedisTemplateTest {
     
     @Autowired
-    private JedisTemplate jedisTemplate;
+    private JedisTemplate<?> jedisTemplate;
     
     @Test
     public void testSetStringString() {
-        
+        jedisTemplate.set("testKey", "testValue");
     }
     
     @Test
@@ -36,7 +36,7 @@ public class JedisTemplateTest {
     
     @Test
     public void testGet() {
-        System.out.println(jedisTemplate.get("testList"));
+        System.out.println(jedisTemplate.getObj("testList"));
     }
     
     @Test
