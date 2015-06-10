@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.register.dao.RegisterTempMapper" >
+    <resultMap id="RegisterTempResultMap" type="com.zebone.register.vo.RegisterTemp" >
+        <result column="ID_" property="id" jdbcType="VARCHAR" />
+        <result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+        <result column="REGISTER_TIME" property="registerTime" jdbcType="VARCHAR" />
+        <result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+        <result column="CARD_TYPE" property="cardType" jdbcType="VARCHAR" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="CARD_ORG" property="cardOrg" jdbcType="VARCHAR" />
+        <result column="SYSTEM_CODE" property="systemCode" jdbcType="VARCHAR" />
+        <result column="WEB_URL" property="webUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.zebone.register.vo.RegisterTemp">
+		INSERT INTO R_REGISTER_TEMP
+		  (ID_,
+		   DOC_NO,
+		   REGISTER_TIME,
+		   CARD_NO,
+		   CARD_TYPE,
+		   NAME,
+		   CARD_ORG,
+		   SYSTEM_CODE)
+		VALUES
+		  (#{id,jdbcType=VARCHAR},
+		   #{docNo,jdbcType=VARCHAR},
+		   #{registerTime,jdbcType=VARCHAR},
+		   #{cardNo,jdbcType=VARCHAR},
+		   #{cardType,jdbcType=VARCHAR},
+		   #{name,jdbcType=VARCHAR},
+		   #{cardOrg,jdbcType=VARCHAR},
+		   #{systemCode,jdbcType=VARCHAR})
+	</insert>
+
+    <select id="getRegisterTempInfo" parameterType="Map" resultMap="RegisterTempResultMap">
+		SELECT T.*, S.WEB_URL FROM R_REGISTER_TEMP T , R_STORE_SERVICE S WHERE T.SYSTEM_CODE = S.SYSTEM_CODE AND
+		S.SERVICE_TYPE = '1' AND T.CARD_NO = #{cardNo,jdbcType=VARCHAR} AND T.CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+		AND T.NAME = #{name,jdbcType=VARCHAR} AND ROWNUM = 1
+	</select>
+</mapper>

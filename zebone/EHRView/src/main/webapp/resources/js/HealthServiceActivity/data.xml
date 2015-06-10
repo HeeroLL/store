@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+	<item key="建立个人健康档案"></item>
+	<item name="建立高血压专档">
+		<item name="高血压随访"></item>
+	</item>
+	<item name="建立糖尿病专档">
+		<item name="糖尿病随访"></item>
+	</item>
+</menu>

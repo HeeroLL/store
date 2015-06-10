@@ -1,0 +1,1 @@
+ java -Xmx800m  -Dlog4j.configuration=file:config/log4j.xml  -jar dnode.jar store register validation analyze preprocess empinotice

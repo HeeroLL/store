@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.etl.adapter.dao.AdapterEtlMapper">
+	<select id="getListByInfo" parameterType="java.lang.String" resultType="java.util.HashMap">
+		<![CDATA[
+		SELECT ${columns} FROM ${tName} WHERE TRANSITION_STATUS = 0 AND ROWNUM <= 50
+		]]>
+	</select>
+	
+	<select id="getSubListByInfo" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT ${columns} FROM ${tableName} WHERE ${foreignKey} = #{keyCode}
+	</select>
+	
+	<update id="updateTransformStatus" parameterType="com.zebone.dnode.etl.adapter.vo.MainTableInfo">
+		UPDATE ${tname} SET DOC_NO = #{docNo},TRANSITION_STATUS=1 WHERE ${tkey} = #{tvalue}
+	</update>
+</mapper>

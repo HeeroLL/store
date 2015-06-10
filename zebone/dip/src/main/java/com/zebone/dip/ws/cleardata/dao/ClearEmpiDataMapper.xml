@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.ws.cleardata.dao.ClearEmpiDataMapper" >
+
+  <select id="getEmpiNo" parameterType="map" resultType="java.lang.String">
+     SELECT EMPI FROM E_RESIDENT_CARD WHERE CARD_NO = #{cardNo,jdbcType=VARCHAR}
+     AND CARD_TYPE=#{cardType,jdbcType=VARCHAR}
+  </select>
+
+    <delete id="deleteLogData" parameterType="java.lang.String" >
+        delete from E_RESIDENT_INFO_LOG
+        where EMPI= #{empiNo,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteCardData" parameterType="java.lang.String" >
+        delete from E_RESIDENT_CARD
+        where EMPI = #{empiNo,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteEmpiInfo" parameterType="java.lang.String" >
+        delete from E_RESIDENT_INFO
+        where EMPI = #{empiNo,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

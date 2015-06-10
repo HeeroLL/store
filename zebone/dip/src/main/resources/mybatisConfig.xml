@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTDConfig 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<typeAlias alias="MainDataType" type="com.zebone.btp.mdm.vo.MainDataTypeVO" />
+		<typeAlias alias="DBQuery" type="com.zebone.btp.mdm.vo.DBQuery" />
+		<typeAlias alias="EmpiCard" type="com.zebone.btp.empi.vo.EmpiCard" />
+		<typeAlias alias="EmpiUser" type="com.zebone.btp.empi.vo.EmpiUser" />
+		<typeAlias alias="EmpiConfig" type="com.zebone.btp.empi.vo.EmpiConfig" />
+		<typeAlias alias="EmpiError" type="com.zebone.btp.empi.vo.EmpiError" />
+		<typeAlias alias="QueryInfo" type="com.zebone.btp.empi.vo.QueryInfo" />
+		<typeAlias alias="MasterDataQuery" type="com.zebone.dip.md.vo.MasterDataQuery"/>
+		
+	</typeAliases>
+	
+	<plugins>
+		<!-- 分页查询插件 -->
+		<plugin interceptor="com.zebone.btp.core.mybatis.interceptor.PaginationInterceptor">
+		<!-- 表示使用的是oracle数据库 ,进行分页查询时，使用oracle分页形式,如果没有指定，将使用逻辑分页形式-->
+			<property name="dialect" value="oracle"/>
+		</plugin>
+	</plugins>
+</configuration>

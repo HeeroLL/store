@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.empi.mapper.EmpiCardMapper">
+
+	<sql id="card_col_list">
+		card_id, card_no, card_sid, card_type, card_state, empi_id
+	</sql>
+
+	<!-- EmpiCard 结果对象 -->
+	<resultMap id="empiCardResultMap" type="EmpiCard">
+		<id property="cardId" column="card_id" />
+		<result property="cardNo" column="card_no" />
+		<result property="cardSid" column="card_sid" />
+		<result property="cardType" column="card_type" />
+		<result property="cardState" column="card_state" />
+		<result property="empiId" column="empi_id" />
+	</resultMap>
+
+	<!-- 新增Card对象 -->
+	<insert id="addEmpiCard" parameterType="EmpiCard">
+		insert into EMPI_CARD
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			card_id, card_no, card_type, card_state, empi_id,
+			<if test="cardSid != null and cardSid != '' ">card_sid,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{cardId, jdbcType=VARCHAR}, #{cardNo, jdbcType=VARCHAR},
+			#{cardType, jdbcType=VARCHAR}, #{cardState,
+			jdbcType=VARCHAR}, #{empiId, jdbcType=VARCHAR},
+			<if test="cardSid != null and cardSid != '' ">
+				#{cardSid,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 根据EmpiUser查询对应的Card列表 -->
+	<select id="queryEmpiCardList" parameterType="EmpiCard"
+		resultMap="empiCardResultMap">
+		select
+		<include refid="card_col_list" />
+		from EMPI_CARD T
+		<where>
+			T.card_state = 1
+			<if test="cardId != null and cardId != '' ">
+				AND T.card_id = #{cardId,jdbcType=VARCHAR}
+			</if>
+			<if test="cardNo != null and cardNo != '' ">
+				AND T.card_no = #{cardNo,jdbcType=VARCHAR}
+			</if>
+			<if test="cardSid != null and cardSid != '' ">
+				AND T.card_sid = #{cardSid,jdbcType=VARCHAR}
+			</if>
+			<if test="cardType != null and cardType != '' ">
+				AND T.card_type = #{cardType,jdbcType=VARCHAR}
+			</if>
+			<if test="empiId != null and empiId != '' ">
+				AND T.EMPI_ID = #{empiId,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by t.card_type, t.card_no, t.card_sid
+	</select>
+
+	<!-- 根据查询card的总数 -->
+	<select id="queryEmpiCardCount" parameterType="EmpiCard"
+		resultType="int">
+		select count(1) from EMPI_CARD t
+		<where>
+			T.card_state = 1
+			<if test="cardNo != null and cardNo != '' ">
+				AND T.card_no = #{cardNo,jdbcType=VARCHAR}
+			</if>
+			<if test="cardType != null and cardType != '' ">
+				AND T.card_type = #{cardType,jdbcType=VARCHAR}
+			</if>
+			<if test="cardState != null and cardState != '' ">
+				AND T.card_state = #{cardState,jdbcType=VARCHAR}
+			</if>
+			<if test="empiId != null and empiId != '' ">
+				AND T.EMPI_ID = #{empiId,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- 更新 包括注销-->
+	<update id="updateEmpiCard" parameterType="EmpiCard">
+		update EMPI_CARD
+		<set>
+			<if test="cardNo != null and cardNo != '' ">
+				card_no = #{cardNo, jdbcType=VARCHAR},
+			</if>
+			<if test="cardSid != null and cardSid != '' ">
+				card_sid = #{cardSid, jdbcType=VARCHAR},
+			</if>
+			<if test="cardType != null and cardType != '' ">
+				card_type = #{cardType, jdbcType=VARCHAR},
+			</if>
+			<if test="cardState != null and cardState != '' ">
+				card_state = #{cardState, jdbcType=VARCHAR},
+			</if>
+		</set>
+		where card_state = 1 and empi_id = #{empiId,jdbcType=VARCHAR}
+		and card_no = #{cardNo, jdbcType=VARCHAR}
+	</update>
+
+
+	<!-- 加载loadEmpiCard -->
+	<select id="loadEmpiCard" parameterType="EmpiCard"
+		resultMap="empiCardResultMap">
+		select
+		<include refid="card_col_list" />
+		from EMPI_CARD T
+		<where>
+			T.card_state = 1
+			<if test="cardId != null and cardId != '' ">
+				AND T.card_id = #{cardId,jdbcType=VARCHAR}
+			</if>
+			<if test="cardNo != null and cardNo != '' ">
+				AND T.card_no = #{cardNo,jdbcType=VARCHAR}
+			</if>
+			<if test="cardSid != null and cardSid != '' ">
+				AND T.card_sid = #{cardSid,jdbcType=VARCHAR}
+			</if>
+			<if test="cardType != null and cardType != '' ">
+				AND T.card_type = #{cardType,jdbcType=VARCHAR}
+			</if>
+			<if test="empiId != null and empiId != '' ">
+				AND T.EMPI_ID = #{empiId,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- 批量删除Card数据 -->
+	<delete id="removeEmpiCard" parameterType="QueryInfo">
+		delete from EMPI_CARD where card_id in
+		<foreach item="item" index="index" collection="idList" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+
+	<!-- empiid更新 同步更新关联的card -->
+	<update id="updateSynEmpiCards" parameterType="EmpiUser">
+		update EMPI_CARD set EMPI_ID = #{newEmpiId,jdbcType=VARCHAR}
+		where card_state = 1 and empi_id = #{empiId,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zebone.notice.dao.NoticeMapper">
+    <resultMap id="noticeResultMap" type="com.zebone.notice.vo.Notice">
+        <id column="N_ID" jdbcType="VARCHAR" property="nId"/>
+        <result column="PUBLISH_ORG" jdbcType="VARCHAR" property="publishOrg"/>
+        <result column="PUBLISH_PERSON_ID" jdbcType="VARCHAR" property="publishPersonId"/>
+        <result column="PUBLISH_OBJECT" jdbcType="VARCHAR" property="publishObject"/>
+        <result column="NOTICE_TITLE" jdbcType="VARCHAR" property="noticeTitle"/>
+        <result column="NOTICE_TYPE" jdbcType="CHAR" property="noticeType"/>
+        <result column="NOTICE_CONTENT" jdbcType="VARCHAR" property="noticeContent"/>
+        <result column="PUBLISH_TIME" jdbcType="TIMESTAMP" property="publishTime"/>
+        <result column="EFFECTIVE_TIME" jdbcType="INTEGER" property="effectiveTime"/>
+        <result column="EXPIRY_DATE" jdbcType="VARCHAR" property="expiryDate"/>
+        <result column="STATUS" jdbcType="CHAR" property="status"/>
+        <result column="DEL_FLAG" jdbcType="CHAR" property="delFlag"/>
+    </resultMap>
+    <select id="getNoticeById" resultMap="noticeResultMap">
+        SELECT
+            *
+        FROM
+             AUX_NOTICE
+        WHERE            
+            N_ID = #{nId,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllNoticeByPersonId" parameterType="java.lang.String" resultMap="noticeResultMap">
+          SELECT * FROM AUX_NOTICE T1 INNER JOIN AUX_NOTICE_PERSON T2 
+          ON T1.N_ID=T2.N_ID WHERE T2.RECIPIENT_PERSON_ID = #{personId,jdbcType=VARCHAR}
+    </select>
+    
+    <delete id="deleteNotice" parameterType="java.lang.String">
+        DELETE
+        FROM
+             AUX_NOTICE
+        WHERE            
+            N_ID = #{nId,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveNotice" parameterType="com.zebone.notice.vo.Notice" >
+        INSERT INTO AUX_NOTICE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nId != null" >
+                N_ID,
+            </if>
+            <if test="publishOrg != null" >
+                PUBLISH_ORG,
+            </if>
+            <if test="publishPersonId != null" >
+                PUBLISH_PERSON_ID,
+            </if>
+            <if test="publishObject != null" >
+                PUBLISH_OBJECT,
+            </if>
+            <if test="noticeTitle != null" >
+                NOTICE_TITLE,
+            </if>
+            <if test="noticeType != null" >
+                NOTICE_TYPE,
+            </if>
+            <if test="noticeContent != null" >
+                NOTICE_CONTENT,
+            </if>
+            <if test="publishTime != null" >
+                PUBLISH_TIME,
+            </if>
+            <if test="effectiveTime != null" >
+                EFFECTIVE_TIME,
+            </if>
+            <if test="expiryDate != null" >
+                EXPIRY_DATE,
+            </if>
+            <if test="status != null" >
+                STATUS,
+            </if>
+            <if test="delFlag != null" >
+                DEL_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nId != null" >
+                #{nId,jdbcType=VARCHAR},
+            </if> 
+            <if test="publishOrg != null" >
+                #{publishOrg,jdbcType=VARCHAR},
+            </if> 
+            <if test="publishPersonId != null" >
+                #{publishPersonId,jdbcType=VARCHAR},
+            </if> 
+            <if test="publishObject != null" >
+                #{publishObject,jdbcType=VARCHAR},
+            </if> 
+            <if test="noticeTitle != null" >
+                #{noticeTitle,jdbcType=VARCHAR},
+            </if> 
+            <if test="noticeType != null" >
+                #{noticeType,jdbcType=CHAR},
+            </if> 
+            <if test="noticeContent != null" >
+                #{noticeContent,jdbcType=VARCHAR},
+            </if> 
+            <if test="publishTime != null" >
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="effectiveTime != null" >
+                #{effectiveTime,jdbcType=CHAR},
+            </if> 
+            <if test="expiryDate != null" >
+                #{expiryDate,jdbcType=VARCHAR},
+            </if> 
+            <if test="status != null" >
+                #{status,jdbcType=CHAR},
+            </if> 
+            <if test="delFlag != null" >
+                #{delFlag,jdbcType=CHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateNotice" parameterType="com.zebone.notice.vo.Notice" >
+        UPDATE AUX_NOTICE
+        <set>
+            <if test="publishOrg != null" >
+                PUBLISH_ORG = #{publishOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="publishPersonId != null" >
+                PUBLISH_PERSON_ID = #{publishPersonId,jdbcType=VARCHAR},
+            </if>
+            <if test="publishObject != null" >
+                PUBLISH_OBJECT = #{publishObject,jdbcType=VARCHAR},
+            </if>
+            <if test="noticeTitle != null" >
+                NOTICE_TITLE = #{noticeTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="noticeType != null" >
+                NOTICE_TYPE = #{noticeType,jdbcType=CHAR},
+            </if>
+            <if test="noticeContent != null" >
+                NOTICE_CONTENT = #{noticeContent,jdbcType=VARCHAR},
+            </if>
+            <if test="publishTime != null" >
+                PUBLISH_TIME = #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="effectiveTime != null" >
+                EFFECTIVE_TIME = #{effectiveTime,jdbcType=CHAR},
+            </if>
+            <if test="expiryDate != null" >
+                EXPIRY_DATE = #{expiryDate,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                STATUS = #{status,jdbcType=CHAR},
+            </if>
+            <if test="delFlag != null" >
+                DEL_FLAG = #{delFlag,jdbcType=CHAR},
+            </if>
+        </set>
+        WHERE 
+            N_ID = #{nId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateStatus">
+    	UPDATE AUX_NOTICE SET DEL_FLAG = '1' WHERE EXPIRY_DATE <![CDATA[<]]> TO_CHAR(SYSDATE,'yyyymmdd')
+    </update>
+</mapper>

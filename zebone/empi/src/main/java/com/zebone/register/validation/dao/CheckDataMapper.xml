@@ -1,0 +1,33 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.validation.mapper.CheckDataMapper">
+
+
+	<!-- 保存校验主表 -->
+	<insert id="saveCheckMain" parameterType="checkMain">
+		INSERT INTO
+		P_CHECK_MAIN
+		(ID_,DOC_TYPE_ID,DOC_CODE,DOC_ORG_CODE,CHECK_FLAG,START_TIME,END_TIME,DOC_XML,DOC_VERSION)
+		VALUES(#{id,jdbcType=VARCHAR},#{docTypeCode,jdbcType=VARCHAR},#{docCode,jdbcType=VARCHAR},#{docOrgCode,jdbcType=VARCHAR},
+		       #{checkFlag,jdbcType=VARCHAR},#{startTime,jdbcType=VARCHAR},#{endTime,jdbcType=VARCHAR},#{docXml,jdbcType=CLOB},
+		       #{docVersion,jdbcType=VARCHAR})
+	</insert>
+    
+    <!-- 保存校验明细 -->
+	<insert id="saveCheckLog" parameterType="checkLog">
+		INSERT INTO P_CHECK_LOG
+		(ID_, MAIN_ID, START_TIME,END_TIME, DOC_XPATH,ERROR_TYPE,ERROR_SUB_TYPE,ERROR_DESC, ERROR_EXCEPTION)
+		VALUES (#{id,jdbcType=VARCHAR},#{mainId,jdbcType=VARCHAR},#{startTime,jdbcType=VARCHAR},#{endTime,jdbcType=VARCHAR}, 
+		#{docXpath,jdbcType=VARCHAR},#{errorType,jdbcType=VARCHAR},#{errorSubType,jdbcType=VARCHAR}, #{errorDesc,jdbcType=VARCHAR},
+		#{errorException,jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 保存校验结果 -->
+	<insert id="saveCheckResult" parameterType="checkResult">
+		INSERT INTO P_CHECK_RESULT
+			(ID_,DOC_XML,CHECK_FLAG,STORAGE_FLAG,ERROR_DESC,DOC_CODE,DOC_ORG_CODE,DOC_TYPE_CODE,DOC_VERSION,SEQ)
+		VALUES (#{id,jdbcType=VARCHAR},#{docXml,jdbcType=VARCHAR},#{checkFlag,jdbcType=VARCHAR},#{storageFlag,jdbcType=VARCHAR}, 
+		#{errorDesc,jdbcType=VARCHAR},#{docCode,jdbcType=VARCHAR},#{docOrgCode,jdbcType=VARCHAR},#{docTypeCode,jdbcType=VARCHAR},
+		#{docVersion,jdbcType=VARCHAR},seq_p_check_result.nextval)
+	</insert>
+
+</mapper>

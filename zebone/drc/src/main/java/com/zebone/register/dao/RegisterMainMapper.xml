@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.register.dao.RegisterMainMapper" >
+	<resultMap id="RegisterMainResultMap" type="com.zebone.register.vo.RegisterMain" >
+		<id column="ID_" property="id" jdbcType="VARCHAR" />
+		<result column="EMPI_ID" property="empiId" jdbcType="VARCHAR" />
+		<result column="DOC_DATA_SOURCE" property="docDataSource" jdbcType="VARCHAR" />
+		<result column="DOC_ORG" property="docOrg" jdbcType="VARCHAR" />
+		<result column="DOC_STATE" property="docState" jdbcType="VARCHAR" />
+		<result column="DOC_OPER_STATE" property="docOperState" jdbcType="VARCHAR" />
+		<result column="DOC_TYPE_CODE" property="docTypeCode" jdbcType="VARCHAR" />
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+		<result column="DOC_WEB_URL" property="docWebUrl" jdbcType="VARCHAR" />
+		<result column="REGISTER_TIME" property="registerTime" jdbcType="VARCHAR" />
+		<result column="DOC_VERSION" property="docVersion" jdbcType="VARCHAR"/>
+        <result column="DOC_SERIAL_NO" property="docSerialNo" jdbcType="VARCHAR" />
+        <result column="DOC_MANAGE_ORG" property="docManageOrg" jdbcType="VARCHAR" />
+        <result column="DOC_TITLE" property="docTitle" jdbcType="VARCHAR" />
+        <result column="PARENT_DOC_NO" property="parentDocNo" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="RegisterMain_Column_List" >
+		ID_, EMPI_ID, DOC_DATA_SOURCE, DOC_ORG, DOC_STATE, DOC_OPER_STATE, DOC_TYPE_CODE, 
+		DOC_NO, DOC_WEB_URL, REGISTER_TIME,DOC_VERSION
+	</sql>
+	
+	<select id="getRegisterCountByDocNo" resultType="int" parameterType="java.lang.String">
+		SELECT COUNT(T.ID_) FROM R_REGISTER_MAIN T WHERE T.DOC_NO = #{docNo,jdbcType=VARCHAR}
+	</select>
+	<insert id="insert" parameterType="com.zebone.register.vo.RegisterMain">
+		INSERT INTO R_REGISTER_MAIN
+		  (ID_,
+		   EMPI_ID,
+		   DOC_DATA_SOURCE,
+		   DOC_ORG,
+		   DOC_STATE,
+		   DOC_OPER_STATE,
+		   DOC_TYPE_CODE,
+		   DOC_NO,
+		   DOC_WEB_URL,
+		   DOC_VERSION,
+		   REGISTER_TIME,
+		   DOC_SERIAL_NO,
+		   DOC_MANAGE_ORG,
+		   DOC_TITLE,
+		   PARENT_DOC_NO)
+		VALUES
+		  (#{id,jdbcType=VARCHAR},
+		   #{empiId,jdbcType=VARCHAR},
+		   #{docDataSource,jdbcType=VARCHAR},
+		   #{docOrg,jdbcType=VARCHAR},
+		   #{docState,jdbcType=VARCHAR},
+		   #{docOperState,jdbcType=VARCHAR},
+		   #{docTypeCode,jdbcType=VARCHAR},
+		   #{docNo,jdbcType=VARCHAR},
+		   #{docWebUrl,jdbcType=VARCHAR},
+		   #{docVersion,jdbcType=VARCHAR},
+		   #{registerTime,jdbcType=VARCHAR},
+		   #{docSerialNo,jdbcType=VARCHAR},
+		   #{docManageOrg,jdbcType=VARCHAR},
+		   #{docTitle,jdbcType=VARCHAR},
+		   #{parentDocNo,jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="getMainIdByDocNo" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT T.ID_ FROM R_REGISTER_MAIN T WHERE T.DOC_NO = #{docNo,jdbcType=VARCHAR}
+	</select>
+	<update id="update" parameterType="com.zebone.register.vo.RegisterMain">
+		UPDATE R_REGISTER_MAIN T
+		   SET T.EMPI_ID         =#{empiId,jdbcType=VARCHAR},
+		       T.DOC_DATA_SOURCE =#{docDataSource,jdbcType=VARCHAR},
+		       T.DOC_ORG         =#{docOrg,jdbcType=VARCHAR},
+		       T.DOC_STATE       =#{docState,jdbcType=VARCHAR},
+		       T.DOC_OPER_STATE  =#{docOperState,jdbcType=VARCHAR},
+		       T.DOC_TYPE_CODE   =#{docTypeCode,jdbcType=VARCHAR},
+		       T.DOC_NO          =#{docNo,jdbcType=VARCHAR},
+		       T.DOC_VERSION     =#{docVersion,jdbcType=VARCHAR},
+		       T.DOC_WEB_URL     =#{docWebUrl,jdbcType=VARCHAR},
+		       T.DOC_SERIAL_NO   =#{docSerialNo,jdbcType=VARCHAR},
+		       T.DOC_MANAGE_ORG  =#{docManageOrg,jdbcType=VARCHAR},
+		       T.DOC_TITLE       =#{docTitle,jdbcType=VARCHAR},
+		       T.PARENT_DOC_NO   =#{parentDocNo,jdbcType=VARCHAR}
+		 WHERE T.ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

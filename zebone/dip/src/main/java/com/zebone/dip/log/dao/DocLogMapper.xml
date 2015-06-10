@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.log.dao.DocLogMapper" >
+	<resultMap id="DocLogResultMap" type="com.zebone.dip.log.vo.DocLog" >
+		<id column="ID_" property="id" jdbcType="VARCHAR" />
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+		<result column="DOC_TYPE" property="docType" jdbcType="VARCHAR" />
+		<result column="UPLOAD_TIME" property="uploadTime" jdbcType="VARCHAR" />
+		<result column="DOC_SOURCE_ORGAN" property="docSourceOrgan" jdbcType="VARCHAR" />
+		<result column="UPLOAD_STATUS" property="uploadStatus" jdbcType="VARCHAR" />
+		<result column="RECEIVE_STATUS" property="receiveStatus" jdbcType="VARCHAR" />
+		<result column="CHECK_STATUS" property="checkStatus" jdbcType="VARCHAR" />
+		<result column="STORAGE_STATUS" property="storageStatus" jdbcType="VARCHAR" />
+		<result column="REGISTER_STATUS" property="registerStatus" jdbcType="VARCHAR" />
+		<result column="ANALYZE_STATUS" property="analyzeStatus" jdbcType="VARCHAR" />
+		<result column="EXECTIME" property="execTime" jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="DocLogList" >
+		ID_, DOC_NO, DOC_TYPE, UPLOAD_TIME, DOC_SOURCE_ORGAN, UPLOAD_STATUS, RECEIVE_STATUS, 
+		CHECK_STATUS, STORAGE_STATUS, REGISTER_STATUS, ANALYZE_STATUS
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="DocLogResultMap" parameterType="java.lang.String" >
+		select 
+		<include refid="DocLogList" />
+		from P_DOC_UPLOAD_LOG
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+		delete from P_DOC_UPLOAD_LOG
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.log.vo.DocLog" >
+		insert into P_DOC_UPLOAD_LOG (ID_, DOC_NO, DOC_TYPE, 
+		  UPLOAD_TIME, DOC_SOURCE_ORGAN, UPLOAD_STATUS, 
+		  RECEIVE_STATUS, CHECK_STATUS, STORAGE_STATUS, 
+		  REGISTER_STATUS, ANALYZE_STATUS)
+		values (#{id,jdbcType=VARCHAR}, #{docNo,jdbcType=VARCHAR}, #{docType,jdbcType=VARCHAR}, 
+		  #{uploadTime,jdbcType=VARCHAR}, #{docSourceOrgan,jdbcType=VARCHAR}, #{uploadStatus,jdbcType=VARCHAR}, 
+		  #{receiveStatus,jdbcType=VARCHAR}, #{checkStatus,jdbcType=VARCHAR}, #{storageStatus,jdbcType=VARCHAR}, 
+		  #{registerStatus,jdbcType=VARCHAR}, #{analyzeStatus,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.zebone.dip.log.vo.DocLog" >
+		insert into P_DOC_UPLOAD_LOG
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="id != null" >
+		    ID_,
+		  </if>
+		  <if test="docNo != null" >
+		    DOC_NO,
+		  </if>
+		  <if test="docType != null" >
+		    DOC_TYPE,
+		  </if>
+		  <if test="uploadTime != null" >
+		    UPLOAD_TIME,
+		  </if>
+		  <if test="docSourceOrgan != null" >
+		    DOC_SOURCE_ORGAN,
+		  </if>
+		  <if test="uploadStatus != null" >
+		    UPLOAD_STATUS,
+		  </if>
+		  <if test="receiveStatus != null" >
+		    RECEIVE_STATUS,
+		  </if>
+		  <if test="checkStatus != null" >
+		    CHECK_STATUS,
+		  </if>
+		  <if test="storageStatus != null" >
+		    STORAGE_STATUS,
+		  </if>
+		  <if test="registerStatus != null" >
+		    REGISTER_STATUS,
+		  </if>
+		  <if test="analyzeStatus != null" >
+		    ANALYZE_STATUS,
+		  </if>
+		  <if test="execTime != null" >
+		    EXECTIME,
+		  </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+		  <if test="id != null" >
+		    #{id,jdbcType=VARCHAR},
+		  </if>
+		  <if test="docNo != null" >
+		    #{docNo,jdbcType=VARCHAR},
+		  </if>
+		  <if test="docType != null" >
+		    #{docType,jdbcType=VARCHAR},
+		  </if>
+		  <if test="uploadTime != null" >
+		    #{uploadTime,jdbcType=VARCHAR},
+		  </if>
+		  <if test="docSourceOrgan != null" >
+		    #{docSourceOrgan,jdbcType=VARCHAR},
+		  </if>
+		  <if test="uploadStatus != null" >
+		    #{uploadStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="receiveStatus != null" >
+		    #{receiveStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="checkStatus != null" >
+		    #{checkStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="storageStatus != null" >
+		    #{storageStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="registerStatus != null" >
+		    #{registerStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="analyzeStatus != null" >
+		    #{analyzeStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="execTime != null" >
+		    #{execTime,jdbcType=VARCHAR},
+		  </if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.zebone.dip.log.vo.DocLog" >
+		update P_DOC_UPLOAD_LOG
+		<set >
+		  <if test="docNo != null" >
+		    DOC_NO = #{docNo,jdbcType=VARCHAR},
+		  </if>
+		  <if test="docType != null" >
+		    DOC_TYPE = #{docType,jdbcType=VARCHAR},
+		  </if>
+		  <if test="uploadTime != null" >
+		    UPLOAD_TIME = #{uploadTime,jdbcType=VARCHAR},
+		  </if>
+		  <if test="docSourceOrgan != null" >
+		    DOC_SOURCE_ORGAN = #{docSourceOrgan,jdbcType=VARCHAR},
+		  </if>
+		  <if test="uploadStatus != null" >
+		    UPLOAD_STATUS = #{uploadStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="receiveStatus != null" >
+		    RECEIVE_STATUS = #{receiveStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="checkStatus != null" >
+		    CHECK_STATUS = #{checkStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="storageStatus != null" >
+		    STORAGE_STATUS = #{storageStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="registerStatus != null" >
+		    REGISTER_STATUS = #{registerStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="analyzeStatus != null" >
+		    ANALYZE_STATUS = #{analyzeStatus,jdbcType=VARCHAR},
+		  </if>
+		  <if test="execTime != null" >
+		    EXECTIME = #{execTime,jdbcType=VARCHAR},
+		  </if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.zebone.dip.log.vo.DocLog" >
+		update P_DOC_UPLOAD_LOG
+		set DOC_NO = #{docNo,jdbcType=VARCHAR},
+		  DOC_TYPE = #{docType,jdbcType=VARCHAR},
+		  UPLOAD_TIME = #{uploadTime,jdbcType=VARCHAR},
+		  DOC_SOURCE_ORGAN = #{docSourceOrgan,jdbcType=VARCHAR},
+		  UPLOAD_STATUS = #{uploadStatus,jdbcType=VARCHAR},
+		  RECEIVE_STATUS = #{receiveStatus,jdbcType=VARCHAR},
+		  CHECK_STATUS = #{checkStatus,jdbcType=VARCHAR},
+		  STORAGE_STATUS = #{storageStatus,jdbcType=VARCHAR},
+		  REGISTER_STATUS = #{registerStatus,jdbcType=VARCHAR},
+		  ANALYZE_STATUS = #{analyzeStatus,jdbcType=VARCHAR}
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="getDictInfo" resultType="com.zebone.dip.log.vo.ParmInfo">
+		SELECT DISTINCT (A.DOC_TYPE_CODE) AS CODE, A.DOC_NAME AS NAME
+		FROM P_DOC_CONF A
+		WHERE A.IS_DELETED = 0 ORDER BY A.DOC_TYPE_CODE
+	</select>
+	<select id="getOrganInfo" parameterType="java.lang.String" resultType="com.zebone.dip.log.vo.ParmInfo">
+		SELECT T.MD_CODE AS code, T.MD_NAME AS name
+		  FROM BIZ_MEDICAL_ORGAN T
+		 WHERE T.MD_CODE LIKE '%' || #{name} || '%'
+		    OR T.MD_NAME LIKE '%' || #{name} || '%'
+		 ORDER BY T.MD_CODE
+	</select>
+	<select id="getAllOrganInfo" resultType="com.zebone.dip.log.vo.ParmInfo">
+		SELECT T.MD_CODE AS code, T.MD_NAME AS name
+		  FROM BIZ_MEDICAL_ORGAN T
+	</select>
+	<select id="getOrganCount" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(T.MD_CODE)
+		  FROM BIZ_MEDICAL_ORGAN T
+		 WHERE T.MD_CODE LIKE '%' || #{name} || '%'
+		    OR T.MD_NAME LIKE '%' || #{name} || '%'
+	</select>
+	<select id="getDocLogList" resultMap="DocLogResultMap" parameterType="com.zebone.dip.log.vo.DocLog">
+		SELECT A.ID_,
+			A.DOC_NO,
+			A.UPLOAD_TIME,
+			B.MD_NAME AS DOC_SOURCE_ORGAN,
+			C.DOC_NAME AS DOC_TYPE,
+			A.UPLOAD_STATUS,
+			A.RECEIVE_STATUS,
+			A.CHECK_STATUS,
+			A.STORAGE_STATUS,
+			A.REGISTER_STATUS,
+			A.ANALYZE_STATUS,
+			A.EXECTIME
+		FROM P_DOC_UPLOAD_LOG A
+		LEFT JOIN P_DOC_CONF C ON A.DOC_TYPE = C.DOC_TYPE_CODE AND C.IS_DELETED = 0
+	    LEFT JOIN BIZ_MEDICAL_ORGAN B ON A.DOC_SOURCE_ORGAN = B.MD_CODE
+		<where>
+			1=1
+			<if test="docNo != null and docNo !=''">
+				AND A.DOC_NO LIKE '%' || #{docNo,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="docSourceOrgan != null and docSourceOrgan !=''">
+				AND A.DOC_SOURCE_ORGAN = #{docSourceOrgan,jdbcType=VARCHAR}
+			</if>
+			<if test="uploadTime !=null and uploadTime !=''">
+				AND A.UPLOAD_TIME >= #{uploadTime,jdbcType=VARCHAR}
+			</if>
+			<if test="receiveStatus !=null and receiveStatus !=''">
+				<![CDATA[
+				AND A.UPLOAD_TIME <= #{receiveStatus,jdbcType=VARCHAR}
+				]]>
+			</if>
+			<if test="uploadStatus == 0">
+				AND (A.UPLOAD_STATUS = '0' OR A.RECEIVE_STATUS = '0' OR A.CHECK_STATUS = '0' 
+				OR A.STORAGE_STATUS = '0' OR A.REGISTER_STATUS = '0' OR A.ANALYZE_STATUS = '0')
+			</if>
+			<if test="uploadStatus == 1">
+				AND (A.UPLOAD_STATUS = '1' OR A.UPLOAD_STATUS IS NULL) 
+				AND (A.RECEIVE_STATUS = '1' OR A.RECEIVE_STATUS IS NULL) 
+				AND (A.CHECK_STATUS = '1' OR A.CHECK_STATUS IS NULL) 
+				AND (A.STORAGE_STATUS = '1' OR A.STORAGE_STATUS IS NULL) 
+				AND (A.REGISTER_STATUS = '1' OR A.REGISTER_STATUS IS NULL) 
+				AND (A.ANALYZE_STATUS = '1' OR A.ANALYZE_STATUS IS NULL) 
+			</if>
+			<if test="docType !=null and docType !=''">
+				AND A.DOC_TYPE = #{docType,jdbcType=VARCHAR}
+			</if>
+		</where>
+		ORDER BY A.UPLOAD_TIME DESC
+	</select>
+	<select id="getDocLogCount" resultType="int" parameterType="com.zebone.dip.log.vo.DocLog">
+		SELECT COUNT(A.ID_)
+		FROM P_DOC_UPLOAD_LOG A
+		<where>
+			1=1
+			<if test="docNo != null and docNo !=''">
+				AND A.DOC_NO LIKE '%' || #{docNo,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="docSourceOrgan != null and docSourceOrgan !=''">
+				AND A.DOC_SOURCE_ORGAN = #{docSourceOrgan,jdbcType=VARCHAR}
+			</if>
+			<if test="uploadTime !=null and uploadTime !=''">
+				AND A.UPLOAD_TIME >= #{uploadTime,jdbcType=VARCHAR}
+			</if>
+			<if test="receiveStatus !=null and receiveStatus !=''">
+				<![CDATA[
+				AND A.UPLOAD_TIME <= #{receiveStatus,jdbcType=VARCHAR}
+				]]>
+			</if>
+			<if test="uploadStatus == 0">
+				AND (A.UPLOAD_STATUS = '0' OR A.RECEIVE_STATUS = '0' OR A.CHECK_STATUS = '0' 
+				OR A.STORAGE_STATUS = '0' OR A.REGISTER_STATUS = '0' OR A.ANALYZE_STATUS = '0')
+			</if>
+			<if test="uploadStatus == 1">
+				AND (A.UPLOAD_STATUS = '1' OR A.UPLOAD_STATUS IS NULL) 
+				AND (A.RECEIVE_STATUS = '1' OR A.RECEIVE_STATUS IS NULL) 
+				AND (A.CHECK_STATUS = '1' OR A.CHECK_STATUS IS NULL) 
+				AND (A.STORAGE_STATUS = '1' OR A.STORAGE_STATUS IS NULL) 
+				AND (A.REGISTER_STATUS = '1' OR A.REGISTER_STATUS IS NULL) 
+				AND (A.ANALYZE_STATUS = '1' OR A.ANALYZE_STATUS IS NULL) 
+			</if>
+			<if test="docType !=null and docType !=''">
+				AND A.DOC_TYPE = #{docType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+    <select id="getOrgName" resultType="String" parameterType="java.lang.String" >
+        select MD_NAME
+        from BIZ_MEDICAL_ORGAN
+        where MD_CODE = #{orgCode,jdbcType=VARCHAR} AND ROWNUM = 1
+    </select>
+
+    <select id="getDoctorName" resultType="String" parameterType="java.lang.String" >
+        select MD_NAME
+        from BIZ_MEDICAL_ORGAN_STAFF
+        where MD_CODE = #{doctorCode,jdbcType=VARCHAR} AND ROWNUM = 1
+    </select>
+
+    <select id="getCardInfo" resultType="com.zebone.dip.log.vo.ParmInfo">
+		SELECT DICT_CODE AS CODE, DICT_NAME AS NAME
+		FROM P_DICTIONARY
+		WHERE DICTTYPE_ID = '81F111E5693443B192D0962C5CBDDE63' AND IS_DELETED = 0 ORDER BY DICT_CODE
+	</select>
+</mapper>

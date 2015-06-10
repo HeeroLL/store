@@ -1,0 +1,121 @@
+@CHARSET "UTF-8";
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, code,
+del, dfn, em, img, q, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0px;
+	padding:0px;
+	border: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	text-decoration:none;
+	font-size:100%;
+
+}
+html,body {
+	height: 100%;
+	_height: 100%;
+	overflow: hidden;
+}
+body, p, td{font-family: sans-serif;font-size: 12px;}
+.login-img-bg{
+	width: 100%;height:100%;
+	position: absolute;left: 0;top: 0;
+}
+.login-img-bg img{width: 100%;height:100%;}
+#loginMainDIV{
+	width: 1002px;
+	height: 700px;
+	margin: 0 auto;
+	position: relative;
+}
+.login-box{
+	width:345px;
+	height:301px;
+	background: url("../images/login/login_bg_all.png") no-repeat;
+	position:absolute;
+	left:335px;
+	top:200px;
+}
+.login-box-inner{
+	width: 100%;height:100%;position: relative;overflow: hidden;
+}
+.usernameDiv,.pwdDiv,.loginBtn{
+	width:225px;height:40px;
+	position: absolute;
+	background-image: url("../images/login/login_bg_all.png");
+	background-repeat: no-repeat;
+}
+.usernameDiv{
+	background-position: -34px -305px;
+	left:58px;
+	top:70px;
+}
+.pwdDiv{
+	background-position: -34px -305px;
+	left:58px;
+	top:123px;
+}
+.rltv{
+	position: relative;
+}
+.usernameTip{
+	position:absolute;
+	left:38px;top:0;
+	width:130px;height:38px;
+	background: url("../images/login/login_bg_all.png") no-repeat -40px -395px;
+}
+.pwdTip{
+	position:absolute;
+	left:38px;top:0;
+	width:130px;height:38px;
+	background: url("../images/login/login_bg_all.png") no-repeat -40px -432px;
+}
+.loginBtn{
+	background-position: -34px -353px;
+    left: 58px;
+    top: 202px;
+    text-align: center;
+}
+.loginBtn .loginBtnText{
+	background: url("../images/login/login_bg_all.png") no-repeat scroll -40px -510px transparent;
+    display: inline-block;
+    height: 32px;
+    line-height: 32px;
+    width: 55px;
+}
+.loginState{
+	position:absolute;
+	left: 75px;
+    top: 213px;
+    width:200px;height:20px;
+    display:none;
+	background: url("../images/load_blue_bar.gif") no-repeat transparent;
+}
+.userNameIco,.pwdIco{
+	width:38px;height:38px;
+	background-image: url("../images/login/login_bg_all.png");
+	background-repeat: no-repeat;
+	display: block;
+    position: absolute;left:0;top:0;
+}
+.userNameIco{
+	background-position: -264px -303px;
+}
+.pwdIco{
+	background-position: -306px -303px;
+}
+.userNameText,.userPwdText{
+	width:130px;height:32px;line-height: 32px;
+	background-color: transparent;
+	border:none;
+	font-family:"微软雅黑";
+	font-size: 18px;
+	color:#FFFFFF;
+	position: absolute;left:38px;top:0;
+	z-index: 1;
+}
+
+

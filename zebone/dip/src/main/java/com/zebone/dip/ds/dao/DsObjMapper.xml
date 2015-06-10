@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.ds.dao.DsObjMapper">
+	<resultMap id="DsObjResultMap" type="com.zebone.dip.ds.vo.DsObj">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="P_DRIVER" property="pDriver" jdbcType="VARCHAR"/>
+		<result column="P_URL" property="pUrl" jdbcType="VARCHAR"/>
+		<result column="P_USER_NAME" property="pUserName" jdbcType="VARCHAR"/>
+		<result column="P_PASSWORD" property="pPassword" jdbcType="VARCHAR"/>
+		<result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR"/>
+		<result column="P_NAME" property="pName" jdbcType="VARCHAR"/>
+		<result column="P_REMARK" property="pRemark" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		ID_, P_DRIVER, P_URL, P_USER_NAME, P_PASSWORD, DEL_FLAG, P_NAME, P_REMARK
+	</sql>
+	<select id="findById" resultMap="DsObjResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from P_DS_OBJ
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from P_DS_OBJ
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.ds.vo.DsObj">
+		insert into P_DS_OBJ
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_,
+			</if>
+			<if test="pDriver != null">
+				P_DRIVER,
+			</if>
+			<if test="pUrl != null">
+				P_URL,
+			</if>
+			<if test="pUserName != null">
+				P_USER_NAME,
+			</if>
+			<if test="pPassword != null">
+				P_PASSWORD,
+			</if>
+			<if test="delFlag != null">
+				DEL_FLAG,
+			</if>
+			<if test="pName != null">
+				P_NAME,
+			</if>
+			<if test="pRemark != null">
+				P_REMARK,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="pDriver != null">
+				#{pDriver,jdbcType=VARCHAR},
+			</if>
+			<if test="pUrl != null">
+				#{pUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="pUserName != null">
+				#{pUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="pPassword != null">
+				#{pPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="delFlag != null">
+				#{delFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="pName != null">
+				#{pName,jdbcType=VARCHAR},
+			</if>
+			<if test="pRemark != null">
+				#{pRemark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.dip.ds.vo.DsObj">
+		update P_DS_OBJ
+		<set>
+			<if test="pDriver != null">
+				P_DRIVER = #{pDriver,jdbcType=VARCHAR},
+			</if>
+			<if test="pUrl != null">
+				P_URL = #{pUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="pUserName != null">
+				P_USER_NAME = #{pUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="pPassword != null">
+				P_PASSWORD = #{pPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="delFlag != null">
+				DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="pName != null">
+				P_NAME = #{pName,jdbcType=VARCHAR},
+			</if>
+			<if test="pRemark != null">
+				P_REMARK = #{pRemark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="searchListDsObj" resultMap="DsObjResultMap" parameterType="com.zebone.dip.ds.vo.DsObj">
+		select 
+		<include refid="column_list"/>
+		from P_DS_OBJ t
+		<where>
+			t.DEL_FLAG = '1' 
+			<if test="pName != null and pName !=''">
+				and t.P_URL LIKE '%' || #{pUrl,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="pUrl != null and pUrl !=''">
+				and t.P_URL = #{pUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="pUserName != null and pUserName !=''">
+				and t.P_USER_NAME = #{pUserName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="searchTotalCountDsObj" resultType="int" parameterType="com.zebone.dip.ds.vo.DsObj">
+		select count(t.ID_) from P_DS_OBJ t
+		<where>
+			t.DEL_FLAG = '1' 
+			<if test="pName != null and pName !=''">
+				and t.P_URL LIKE '%' || #{pUrl,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="pUrl != null and pUrl !=''">
+				and t.P_URL = #{pUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="pUserName != null and pUserName !=''">
+				and t.P_USER_NAME = #{pUserName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="getDsObjInfoById" resultMap="DsObjResultMap" parameterType="java.lang.String">
+		SELECT <include refid="column_list"/> FROM P_DS_OBJ T WHERE T.DEL_FLAG = '1' AND T.ID_ = #{id,jdbcType=VARCHAR}
+	</select>
+	<insert id="saveDsObjInfo" parameterType="com.zebone.dip.ds.vo.DsObj">
+		insert into P_DS_OBJ
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_,
+			</if>
+			<if test="pDriver != null">
+				P_DRIVER,
+			</if>
+			<if test="pUrl != null">
+				P_URL,
+			</if>
+			<if test="pUserName != null">
+				P_USER_NAME,
+			</if>
+			<if test="pPassword != null">
+				P_PASSWORD,
+			</if>
+			<if test="delFlag != null">
+				DEL_FLAG,
+			</if>
+			<if test="pName != null">
+				P_NAME,
+			</if>
+			<if test="pRemark != null">
+				P_REMARK,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="pDriver != null">
+				#{pDriver,jdbcType=VARCHAR},
+			</if>
+			<if test="pUrl != null">
+				#{pUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="pUserName != null">
+				#{pUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="pPassword != null">
+				#{pPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="delFlag != null">
+				#{delFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="pName != null">
+				#{pName,jdbcType=VARCHAR},
+			</if>
+			<if test="pRemark != null">
+				#{pRemark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateDsObjInfo" parameterType="com.zebone.dip.ds.vo.DsObj">
+		UPDATE P_DS_OBJ T SET 
+		T.P_DRIVER = #{pDriver,jdbcType=VARCHAR},
+		T.P_URL = #{pUrl,jdbcType=VARCHAR},
+		T.P_USER_NAME = #{pUserName,jdbcType=VARCHAR},
+		T.P_PASSWORD = #{pPassword,jdbcType=VARCHAR},
+		T.P_NAME = #{pName,jdbcType=VARCHAR},
+		T.P_REMARK = #{pRemark,jdbcType=VARCHAR}
+		WHERE 
+		T.ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="removeDsObjByids">
+		UPDATE P_DS_OBJ T SET T.DEL_FLAG = '0' WHERE 
+		<foreach collection="list" index="index" item="item" separator="OR">
+			(T.ID_ = #{item,jdbcType=VARCHAR})
+		</foreach>
+	</update>
+	<select id="findAllInfo" resultMap="DsObjResultMap">
+		select 
+		<include refid="column_list"/>
+		from P_DS_OBJ
+		where DEL_FLAG = '1'
+	</select>
+</mapper>

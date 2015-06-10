@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.reversebuild.dao.ReverseBuildMapper">
+
+	<select id="getMappingInfo" resultType="mappingInfo">
+		SELECT pdc.DOC_TYPE_CODE AS docTypeCode, pdm.XPATH AS xpath, pftc.COLUMN_NAME as columnName FROM P_DOC_CONF  pdc LEFT JOIN P_DOC_MAPPING pdm ON pdc.ID_ = pdm.DOC_ID 
+		  LEFT JOIN P_FIELD_TABLE_CONF pftc ON  pdm.CLOUMN_ID = pftc.ID_
+		  
+		WHERE pdc.DOC_TYPE_CODE = #{docTypeCode} AND 
+		
+		
+	</select>
+</mapper>

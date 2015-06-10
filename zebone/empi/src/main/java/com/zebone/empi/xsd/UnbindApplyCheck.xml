@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checks>
+    <check field="sex" fieldName="性别">
+        <rule>
+            <type>dic:GB/T2261.1</type>
+        </rule>
+    </check>
+    <check field="nation" fieldName="民族">
+        <rule>
+            <type>dic:GB/T3304</type>
+        </rule>
+    </check>
+    <check field="firstCardType" fieldName="一级标识卡类型">
+        <rule>
+            <type>dic:EXV00.00.001</type>
+        </rule>
+    </check>
+    <check field="secCardType" fieldName="二级标识卡类型">
+        <rule>
+            <type>dic:EXV00.00.001</type>
+        </rule>
+    </check>
+</checks>

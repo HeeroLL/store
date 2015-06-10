@@ -1,0 +1,163 @@
+
+/***
+ * author: charmyin
+ * datetime: 2013-2-22 20:00
+ * title: make the login beautiful
+ ***/
+
+#loginwindow{
+	width:482px; 
+	height:279px;
+	top:100px;
+}
+
+#userconfirmDiv{
+	width:278px;
+	height:160px;
+	background:blue;
+}
+
+div[region=west]{
+	width:200px;
+	background:url(../../../../resources/img/basic/authorize/loginfit.jpg) no-repeat; 
+	margin:0px;
+}
+
+#authForm{
+	height:160px;
+	margin:0px;
+}
+
+#formUl{
+	list-style-type:none; 
+	margin:0px 0px 0px 0px;
+	padding:10px 0px 0px 0px;
+	background:url(../../../../resources/img/basic/authorize/loginbg.jpg) no-repeat;
+}
+
+#formUl .inputText{
+	display:block;
+	height:39px;
+	line-height:39px;
+}
+
+#liValiCode{
+	height:24px;
+	margin-top:3px;
+	font-size:14px;
+	font-weight:bold;
+}
+
+#liValiCode input{
+	display:block;
+	float:left;
+	margin-left:6px;
+	margin-top:1px;
+	width:83px; 
+	font-weight:bold;
+	font-size:14px;
+	letter-spacing: 7px;
+	text-indent:7px;
+	padding-right:15px;
+}
+
+#liValiCode label{
+	width:60px; 
+	display:block;
+	margin-top:4px;
+	float:left;
+	text-align:right;
+}
+
+#imgValiCode{
+	display:block;
+	float:left;
+	width:80px;
+	height:25px;
+	margin:0 0 0 11px;
+	padding:0;
+}
+
+.liConfig{
+	height:30px;
+}
+
+#operationBtnsDiv{
+	background:#F4F4F4; 
+	width:268px; 
+	height:44px;
+	text-align:right; 
+	padding:8px 10px 0px 0px;
+}
+
+.inputText{
+	margin: 0px 0px 0px 0px;
+	padding:0;
+}
+
+.inputText label{
+	display:block;
+	float:left;
+	width:60px;
+	text-align:right;
+	font-size:14px;
+	font-weight:bold;
+}
+
+#inputUsername, #inputPassword{
+	margin-left: 10px;
+	width:165px; 
+	height:22px;
+	font-size:16px;
+	vertical-align: center;
+	line-height:22px;
+	font-weight: bold;
+	letter-spacing: 2px;
+	text-indent:7px;
+	padding-right:15px;
+	padding-left:5px;
+}
+
+#checkboxConfig{
+	width:200px; 
+	height:30px;
+	padding:2px 0 0 23%; 
+}
+
+#checkboxConfig label{
+	width:80px;
+	height:30px;
+	float: left;
+}
+
+#checkboxConfig input{
+	cursor:pointer;
+	display:block;
+	height:21px;
+	line-height:21px;
+	float:left;
+}
+
+#checkboxConfig strong{
+	cursor:pointer;
+	height:27px;
+	display:block;
+	float:left;
+	line-height:27px;
+}
+
+#divLoading{
+	position:absolute;
+	z-index:1000;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	background:#F4F4F4;
+	text-align:center;
+	padding-top: 25%;
+}
+
+#divLoading span{
+	background:url(../../../../resources/img/basic/authorize/loading.gif) no-repeat left center; padding-left: 20px;
+}

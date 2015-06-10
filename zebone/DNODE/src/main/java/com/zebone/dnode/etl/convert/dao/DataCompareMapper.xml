@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.etl.convert.dao.DataCompareMapper">
+
+    <select id="getDictCompareCode" parameterType="Map" resultType="string">
+        SELECT DICT.DICT_CODE FROM P_DICTIONARY_ORG ORG, DICT_MAPPING MA, P_DICTIONARY DICT
+        WHERE ORG.DICT_ID = MA.ORG_DICT_ID AND MA.DICT_ID = DICT.DICT_ID AND ORG.DICTTYPE_ID = '${dictTypeId}'
+        AND ORG.DICT_CODE = '${dictCode}' AND ORG.ORG_CODE = '${orgCode}'
+    </select>
+
+    <select id="getMDTable" parameterType="String" resultType="string">
+        SELECT TABLE_NAME FROM P_MASTER_DATA WHERE CODE = #{code}
+    </select>
+
+    <select id="getMDCompareCode" parameterType="Map" resultType="string">
+        SELECT MD.MD_CODE FROM ${mdTableName} MD, ${orgTableName} ORG_MD WHERE ORG_MD.M_ID = MD.ID_
+        AND ORG_MD.MD_CODE = '${orgMDCode}' AND ORG_MD.ORG_CODE = '${orgCode}'
+    </select>
+
+</mapper>

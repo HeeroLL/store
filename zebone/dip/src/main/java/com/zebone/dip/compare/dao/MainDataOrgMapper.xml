@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.compare.dao.MainDataOrgMapper" >
+	
+	<!-- 保存机构主数据对照信息 -->
+	<insert id="saveMainDataInfo" parameterType="com.zebone.dip.compare.vo.MainInfo">
+		INSERT INTO ${tableName}
+			(ID_, MD_CODE, MD_NAME, M_ID, USER_CODE, ORG_CODE, CREATE_TIME)
+		VALUES
+			(#{id},#{code},#{name},#{mid},#{userCode},#{orgCode},#{createTime})
+	</insert>
+
+	<!-- 更新机构主数据对照信息 -->
+	<update id="updateMainDataInfo" parameterType="com.zebone.dip.compare.vo.MainInfo">
+		UPDATE ${tableName} SET M_ID = #{mid} WHERE ID_ = #{id}
+	</update>
+	
+	<!-- 删除机构主数据对照信息 -->
+	<delete id="removeMainDataInfo" parameterType="com.zebone.dip.compare.vo.MainInfo">
+		DELETE FROM ${tableName} WHERE ID_ = #{id}
+	</delete>
+	
+	<select id="getListByInfo" parameterType="com.zebone.dip.compare.vo.MainInfo" resultType="com.zebone.dip.compare.vo.MainInfo">
+		SELECT 
+			A.ID_ AS id,
+		 	A.MD_NAME AS name, 
+		 	A.MD_CODE AS code, 
+		 	B.MD_NAME AS stdName, 
+		 	B.MD_CODE AS stdCode
+		FROM ${tableName} A
+		LEFT JOIN ${stdTableName} B ON A.M_ID = B.ID_
+		<where>
+			1=1
+			<if test="id!=null and id !=''">
+				AND A.ID_ = #{id}
+			</if>
+            AND A.USER_CODE = #{userCode} AND A.ORG_CODE = #{orgCode}
+		</where>
+	</select>
+	
+	<select id="getCountByInfo" parameterType="com.zebone.dip.compare.vo.MainInfo" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM ${tableName} A
+		<where>
+			1=1
+			<if test="id!=null and id !=''">
+				AND A.ID_ = #{id}
+			</if>
+            AND A.USER_CODE = #{userCode} AND A.ORG_CODE = #{orgCode}
+		</where>
+	</select>
+	
+	<select id="getOrgMainInfoByName" parameterType="com.zebone.dip.compare.vo.MainInfo" resultType="com.zebone.dip.compare.vo.MainInfo">
+		<![CDATA[
+		SELECT A.ID_ AS id, A.MD_NAME AS name, A.MD_CODE AS code
+		FROM ${tableName} A
+		WHERE A.MD_NAME LIKE '%' || #{name} || '%'
+		AND ROWNUM <= 10
+		]]>
+	</select>
+	
+	<select id="getInfoById" parameterType="com.zebone.dip.compare.vo.MainInfo" resultType="com.zebone.dip.compare.vo.MainInfo">
+		SELECT A.MD_NAME AS name, A.MD_CODE AS code, A.ID_ AS id, A.M_ID AS mid
+		  FROM ${tableName} A
+		 WHERE A.ID_ = #{id}
+	</select>
+
+	<select id="getListStd" parameterType="com.zebone.dip.compare.vo.MainInfo" resultType="com.zebone.dip.compare.vo.MDstdInfo">
+		SELECT 
+			${code}
+		FROM 
+			${stdTableName}	
+		<where>
+			1=1
+			<if test="mid != null and mid != ''">
+				and ID_ = #{mid}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getTotalCountStd" parameterType="com.zebone.dip.compare.vo.MainInfo" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			${stdTableName}	
+		<where>
+			1=1
+			<if test="mid != null and mid != ''">
+				and ID_ = #{mid}
+			</if>
+		</where>
+	</select>
+	<select id="getMainListByName" parameterType="com.zebone.dip.compare.vo.MainInfo" resultType="com.zebone.dip.compare.vo.MainInfo">
+		<![CDATA[
+		SELECT 
+		  	A.ID_ AS mid, 
+			A.MD_NAME AS stdName, 
+			A.MD_CODE AS stdCode
+		FROM ${stdTableName} A
+		WHERE
+			A.MD_NAME LIKE '%' || #{stdName} || '%'
+			AND ROWNUM <=10
+		]]>
+	</select>
+	
+	<select id="getCountByCode" parameterType="com.zebone.dip.compare.vo.MainInfo" resultType="int">
+		SELECT COUNT(*)
+		  FROM ${tableName} T
+		 WHERE T.MD_CODE = #{code}
+		   AND T.ORG_CODE = #{orgCode}
+	</select>
+</mapper>

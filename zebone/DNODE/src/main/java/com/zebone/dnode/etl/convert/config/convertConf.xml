@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cleanConf>
+    <clean id="clean001">
+        <table name="O_TBL_PSON_ALLERGY_HT">
+            <column name="ALLERGEN_CODE">
+                <covert type="NoNeedConvert" param="">  <!-- type为java,转化为java自定义实现类 -->
+                </covert>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_DISABILITY_HT">
+            <column name="DISABILITY_CODE">
+                <covert type="NoNeedConvert" param="">
+                </covert>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_DISEASES_OPE_HT">
+            <column name="DIESEASE_TYPE_CODE">
+                <covert type="NoNeedConvert" param=""/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_EXPOSURE_HT">
+            <column name="EXPOSURE_TYPE_CODE">
+                <covert type="NoNeedConvert" param=""/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_GENETIC_HT">
+            <column name="GENETIC_HISTORY_DESC">
+                <covert type="NoNeedConvert" param=""/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_HEALTH_RECORD">
+            <column name="FILING_ORG_CODE">
+                <covert type="NoNeedConvert" param="WJD01.001">  <!-- WJD01.001 医疗机构信息表 -->
+                </covert>
+            </column>
+             <column name="FILING_EMP_CODE">
+                <covert type="MDFormat" param="WJD01.003">  <!-- WJD01.001 医疗机构信息表 -->
+                </covert>
+            </column>
+            
+        </table>
+        <table name="O_TBL_PSON_LIFE_ENV">
+            <column name="EXHAUST_VENT_CODE">
+                <covert type="NoNeedConvert" param=""/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_RTUM_HT">
+            <column name="RTUM_NAME">
+                <covert type="NoNeedConvert" param=""/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_TRANSFUSION_HT">
+            <column name="TRANSFUSION_CAUSE">
+                <covert type="NoNeedConvert" param=""/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_FAMILY_HT">
+            <column name="RELATIONSHIP_CODE">
+                <covert type="NoNeedConvert" param=""/>
+            </column>
+        </table>
+    </clean>
+</cleanConf>

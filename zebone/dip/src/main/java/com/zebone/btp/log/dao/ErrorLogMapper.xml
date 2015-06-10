@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.log.dao.ErrorLogMapper">
+	<resultMap id="ErrorLogResultMap" type="com.zebone.btp.log.pojo.ErrorLog">
+		<id column="ERROR_LOG_ID" property="errorLogId" jdbcType="VARCHAR"/>
+		<result column="CLASS_NAME" property="className" jdbcType="VARCHAR"/>
+		<result column="METHOD_NAME" property="methodName" jdbcType="VARCHAR"/>
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="ERROR_INFO" property="errorInfo" jdbcType="CLOB"/>
+	</resultMap>
+	<sql id="column_list">
+		ERROR_LOG_ID, CLASS_NAME, METHOD_NAME, CREATE_TIME, ERROR_INFO
+	</sql>
+	<select id="findById" resultMap="ErrorLogResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_ERROR_LOG
+		where ERROR_LOG_ID = #{errorLogId,jdbcType=VARCHAR}
+	</select>
+	<select id="getErrorInfoById" parameterType="string" resultType="string">
+		select ERROR_INFO from BTP_ERROR_LOG where ERROR_LOG_ID = #{errorLogid,jdbcType=VARCHAR}
+	</select>
+	<select id="findErrorInfo" resultMap="ErrorLogResultMap">
+		select 
+			<include refid="column_list"/>
+		from BTP_ERROR_LOG
+		<where>
+			<if test="className!=null and className!=''">
+				AND CLASS_NAME like  '%'||#{className,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="methodName!=null and methodName!=''">
+				AND METHOD_NAME like  '%'||#{methodName,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="beginCreateTime!=null">
+				AND CREATE_TIME >=#{beginCreateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endCreateTime!=null">
+				<![CDATA[
+				AND CREATE_TIME <=#{endCreateTime,jdbcType=TIMESTAMP}
+				]]>
+			</if>
+			<if test="errorInfo!=null and errorInfo!=''">
+				AND ERROR_INFO like  '%'||#{errorInfo,jdbcType=VARCHAR}||'%'
+			</if>
+		</where>
+		order by CREATE_TIME desc
+	</select>
+	<select id="findErrorInfoCount" resultType="int">
+		select 
+			count(*)
+		from BTP_ERROR_LOG
+		<where>
+			<if test="className!=null and className!=''">
+				AND CLASS_NAME like  '%'||#{className,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="methodName!=null and methodName!=''">
+				AND METHOD_NAME like  '%'||#{methodName,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="beginCreateTime!=null">
+				AND CREATE_TIME >=#{beginCreateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endCreateTime!=null">
+				<![CDATA[
+				AND CREATE_TIME <=#{endCreateTime,jdbcType=TIMESTAMP}
+				]]>
+			</if>
+			<if test="errorInfo!=null and errorInfo!=''">
+				AND ERROR_INFO like  '%'||#{errorInfo,jdbcType=VARCHAR}||'%'
+			</if>
+		</where>
+	</select>
+	
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from BTP_ERROR_LOG
+		where ERROR_LOG_ID = #{errorLogId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.btp.log.pojo.ErrorLog">
+		insert into BTP_ERROR_LOG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="errorLogId != null">
+				ERROR_LOG_ID,
+			</if>
+			<if test="className != null">
+				CLASS_NAME,
+			</if>
+			<if test="methodName != null">
+				METHOD_NAME,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="errorInfo != null">
+				ERROR_INFO,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="errorLogId != null">
+				#{errorLogId,jdbcType=VARCHAR},
+			</if>
+			<if test="className != null">
+				#{className,jdbcType=VARCHAR},
+			</if>
+			<if test="methodName != null">
+				#{methodName,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="errorInfo != null">
+				#{errorInfo,jdbcType=CLOB},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.btp.log.pojo.ErrorLog">
+		update BTP_ERROR_LOG
+		<set>
+			<if test="className != null">
+				CLASS_NAME = #{className,jdbcType=VARCHAR},
+			</if>
+			<if test="methodName != null">
+				METHOD_NAME = #{methodName,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="errorInfo != null">
+				ERROR_INFO = #{errorInfo,jdbcType=CLOB},
+			</if>
+		</set>
+		where ERROR_LOG_ID = #{errorLogId,jdbcType=VARCHAR}
+	</update>
+</mapper>

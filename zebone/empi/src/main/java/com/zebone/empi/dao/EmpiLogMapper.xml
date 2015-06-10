@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.empi.dao.EmpiLogMapper" >
+  <resultMap id="BaseResultMap" type="com.zebone.empi.vo.EmpiLog" >
+   
+    <id column="ID_" property="id" jdbcType="VARCHAR" />
+    <result column="SOURCE" property="source" jdbcType="VARCHAR" />
+    <result column="TARGET" property="target" jdbcType="VARCHAR" />
+    <result column="EVENT_NAME_CODE" property="eventNameCode" jdbcType="VARCHAR" />
+    <result column="RESULT_CODE" property="resultCode" jdbcType="VARCHAR" />
+    <result column="ERROR_CATEGORY" property="errorCategory" jdbcType="VARCHAR" />
+    <result column="ERROR_TYPE" property="errorType" jdbcType="VARCHAR" />
+    <result column="ERROR_POSITION" property="errorPosition" jdbcType="VARCHAR" />
+    <result column="EMPI" property="empi" jdbcType="VARCHAR" />
+    <result column="EVENT_TIME" property="eventTime" jdbcType="TIMESTAMP" />
+    <result column="CARD_TYPE" property="cardType" jdbcType="VARCHAR" />
+    <result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+    <result column="RESIDENT_NAME" property="residentName" jdbcType="VARCHAR" />
+    <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+    <result column="ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+    <result column="INFO_XMLDOC" property="info_XMLDoc" jdbcType="CLOB" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    ID_, SOURCE, TARGET, EVENT_NAME_CODE, RESULT_CODE, ERROR_CATEGORY, ERROR_TYPE, ERROR_POSITION, 
+    EMPI, EVENT_TIME, CARD_TYPE, CARD_NO, RESIDENT_NAME, ORG_CODE, ORG_NAME, INFO_XMLDOC
+  </sql>
+  
+  <select id="selectEmpiLog" resultMap="BaseResultMap" parameterType="com.zebone.empi.vo.EmpiLog" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from E_EMPI_LOG
+  </select>
+  
+  <select id="selectEmpiLogByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from E_EMPI_LOG
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteEmpiLogByPrimaryKey" parameterType="java.lang.String" >
+    delete from E_EMPI_LOG
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+
+
+<select id="searchEmpiLog" resultMap="BaseResultMap" parameterType="com.zebone.empi.vo.EmpiLog" >
+    select * from E_EMPI_LOG 
+    <where>
+      <if test="cardType != null" >
+       and CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+      </if>
+      <if test="cardNo != null" >
+        and CARD_NO = #{cardNo,jdbcType=VARCHAR}
+      </if>
+      <if test="residentName != null" >
+        and RESIDENT_NAME = #{residentName,jdbcType=VARCHAR}
+      </if>
+     <if test="startSearchTime != null" >
+        and EVENT_TIME >= to_timestamp( #{startSearchTime,jdbcType=VARCHAR}, 'YYYY-MM-DD')
+      </if>
+      <if test="endSearchTime != null" >
+        and EVENT_TIME &lt;=  to_timestamp( #{endSearchTime,jdbcType=VARCHAR}, 'YYYY-MM-DD')+1
+      </if>
+    </where>
+  </select>
+
+  <select id="searchEmpiLogCount" resultMap="BaseResultMap" parameterType="com.zebone.empi.vo.EmpiLog" >
+    select count(*) from E_EMPI_LOG 
+    <where>
+      <if test="cardType != null" >
+       and CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+      </if>
+      <if test="cardNo != null" >
+        and CARD_NO = #{cardNo,jdbcType=VARCHAR}
+      </if>
+      <if test="residentName != null" >
+        and RESIDENT_NAME = #{residentName,jdbcType=VARCHAR}
+      </if>
+      <if test="startSearchTime != null" >
+        and EVENT_TIME >= to_timestamp( #{startSearchTime,jdbcType=VARCHAR}, 'YYYY-MM-DD')
+      </if>
+      <if test="endSearchTime != null" >
+        and EVENT_TIME &lt;=  to_timestamp( #{endSearchTime,jdbcType=VARCHAR}, 'YYYY-MM-DD')+1
+      </if>
+    </where>
+  </select>
+  
+  <insert id="insertEmpiLog" parameterType="com.zebone.empi.vo.EmpiLog" >
+    insert into E_EMPI_LOG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="source != null" >
+        SOURCE,
+      </if>
+      <if test="target != null" >
+        TARGET,
+      </if>
+      <if test="eventNameCode != null" >
+        EVENT_NAME_CODE,
+      </if>
+      <if test="resultCode != null" >
+        RESULT_CODE,
+      </if>
+      <if test="errorCategory != null" >
+        ERROR_CATEGORY,
+      </if>
+      <if test="errorType != null" >
+        ERROR_TYPE,
+      </if>
+      <if test="errorPosition != null" >
+        ERROR_POSITION,
+      </if>
+      <if test="empi != null" >
+        EMPI,
+      </if>
+      <if test="eventTime != null" >
+        EVENT_TIME,
+      </if>
+      <if test="cardType != null" >
+        CARD_TYPE,
+      </if>
+      <if test="cardNo != null" >
+        CARD_NO,
+      </if>
+      <if test="residentName != null" >
+        RESIDENT_NAME,
+      </if>
+      <if test="orgCode != null" >
+        ORG_CODE,
+      </if>
+      <if test="orgName != null" >
+        ORG_NAME,
+      </if>
+      <if test="info_XMLDoc != null" >
+        INFO_XMLDOC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null" >
+        #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="eventNameCode != null" >
+        #{eventNameCode,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCode != null" >
+        #{resultCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errorCategory != null" >
+        #{errorCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="errorType != null" >
+        #{errorType,jdbcType=VARCHAR},
+      </if>
+      <if test="errorPosition != null" >
+        #{errorPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="empi != null" >
+        #{empi,jdbcType=VARCHAR},
+      </if>
+      <if test="eventTime != null" >
+        #{eventTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null" >
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="residentName != null" >
+        #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="info_XMLDoc != null" >
+        #{info_XMLDoc,jdbcType=CLOB},
+      </if>
+      
+    </trim>
+  </insert>
+
+   
+  <update id="updateEmpiLogByPrimaryKey" parameterType="com.zebone.empi.vo.EmpiLog" >
+    update E_EMPI_LOG
+    <set >
+      <if test="source != null" >
+        SOURCE = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null" >
+        TARGET = #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="eventNameCode != null" >
+        EVENT_NAME_CODE = #{eventNameCode,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCode != null" >
+        RESULT_CODE = #{resultCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errorCategory != null" >
+        ERROR_CATEGORY = #{errorCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="errorType != null" >
+        ERROR_TYPE = #{errorType,jdbcType=VARCHAR},
+      </if>
+      <if test="errorPosition != null" >
+        ERROR_POSITION = #{errorPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="empi != null" >
+        EMPI = #{empi,jdbcType=VARCHAR},
+      </if>
+      <if test="eventTime != null" >
+        EVENT_TIME = #{eventTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cardType != null" >
+        CARD_TYPE = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null" >
+        CARD_NO = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="residentName != null" >
+        RESIDENT_NAME = #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        ORG_CODE = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        ORG_NAME = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        INFO_XMLDOC = #{info_XMLDoc,jdbcType=CLOB},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

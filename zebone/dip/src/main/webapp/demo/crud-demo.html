@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/icons.css" />
+<link rel="stylesheet" type="text/css" href="../skin/default/main.css" id="main-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-grid.css"  id="grid-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-dialog.css" id="dialog-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery.checkForm.css" id="checkform-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-button.css" id="button-css"/>
+<script type="text/javascript" src="../js/jquery/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.mark.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-dialog.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-grid.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-checkForm.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.stopBubble.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-button.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.form.js"></script>
+<title>增删改查demo</title>
+<style type="">
+h2{ border-bottom: 1px solid;}
+</style>
+<script type="text/javascript">
+//var tab=new JTab();
+var col1=[ {text: '模块ID',		width: 0,	textAlign: 'center',	align : 'center',	dataIndex: 'modelId'			},
+		   	    {text: '模块编号',		width: 90,	textAlign: 'center',	align : 'center', 	dataIndex: 'modelCode'			},
+		   	    {text: '模块名称',		width: 110,	textAlign: 'center',	align : 'left',		dataIndex: 'modelName'			},
+		   	    {text: '模块类型',		width: 70,	textAlign: 'center',	align : 'center',	dataIndex: 'modeltype'			},
+		   	    {text: '模块业务类型',	width: 100,	textAlign: 'center',	align : 'center',	dataIndex: 'modelBusinessType'	},
+		   	    {text: '模块URL',		width: 150,	textAlign: 'center',	align : 'left',		dataIndex: 'modelUrl'			},
+		   	    {text: '大图标路径',	width: 250,	textAlign: 'center',	align : 'left',		dataIndex: 'modelMaxicon'		},
+		   	    {text: '排序号',		width: 0,	textAlign: 'center',	align : 'left',		dataIndex: 'modelOrder'			} ];
+var grid;
+$(function(){
+	grid = new JGrid({
+			title: '模块列表',
+			col	 :col1,
+			dataCol:'',
+			checkbox : true,
+			striped:true,
+			height   :document.body.clientHeight-175,
+			dataUrl  : '../../btp-modelInfo-list.zb',
+			render   : 'grid',
+			pageBar  : true,
+			crudOpera: true,
+			countEveryPage: 20,
+			formToggleId:'eoc',//切换表单显示的id
+			listeners: {
+	 		}
+	});
+});
+</script>
+</head>
+<body>
+<div class="container">
+	<div class="c_nw"><div class="c_ne"><div class="c_n"></div></div></div>
+	<span class="title-l">
+		<span class="title-r">
+			<b class="icon"></b><span class="title-span">内部账号查询</span>
+		</span>
+	</span>
+	<div class="tools-panel"></div>
+	<div class="c_w">
+		<div class="c_e">
+			<div class="c_content">
+				<table border="0" cellpadding="1" cellspacing="1" align="center" style="float: left">
+					<tr>
+						<td align="right">登录账号：</td>
+						<td>
+							<input name="userAccount" type="text" style="width: 110px;" maxlength="25" validate="string|0-25"/>
+						</td>
+						<td align="right" style="width: 80px;">姓名：</td>
+						<td><input name="workerName" type="text" style="width: 110px;" maxlength="20" validate="string|0-20"/></td>
+						<td align="right" style="width: 80px;">角色名称：</td>
+						<td><input name="roleName" type="text" style="width: 110px;" maxlength="20" validate="string|0-20"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td align="right">到期时间：</td>
+						<td><input name="userCancelDate" type="text" style="width: 110px;" class="Wdate"
+							onclick="WdatePicker({skin:'whyGreen'});" validate="date|0-14"/>
+						</td>
+						<td align="right" style="width: 80px;">账号状态：</td>
+						<td>
+							<select id="userFlag" name="userFlag" style="width: 115px;">
+								<option value="-1">请选择</option>
+								<option value="1">启用</option>
+								<option value="0">停用</option>
+							</select>
+						</td>
+						<td></td>
+						<td></td>
+						<td>
+							<a class="btn" href="javascript:void(0);">
+								<span class="btn-left">
+									<span class="btn-text icon-search">查询</span>
+								</span>
+							</a>
+						</td>
+					</tr>
+				</table>
+				
+			</div>
+		</div>
+	</div>
+	<div class="c_sw"><div class="c_se"><div class="c_s"></div></div></div>
+</div>
+<div id="grid"></div>
+</body>
+</html>

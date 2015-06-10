@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.metadata.dao.DataSetConfMapper" >
+  <resultMap id="DataSetConfMap" type="com.zebone.dip.metadata.vo.DataSetConf" >
+    <id column="ID_" property="id" jdbcType="VARCHAR" />
+    <result column="DATASET_NAME" property="datasetName" jdbcType="VARCHAR" />
+    <result column="DATASET_DESC" property="datasetDesc" jdbcType="VARCHAR" />
+    <result column="STANDARD_CODE" property="standardCode" jdbcType="VARCHAR" />
+    <result column="DATASET_VERSION" property="datasetVersion" jdbcType="VARCHAR" />
+    <result column="DATASET_CODE" property="datasetCode" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="DataSetConfList" >
+    ID_, DATASET_NAME, DATASET_DESC, STANDARD_CODE, DATASET_VERSION, DATASET_CODE,IS_DELETED,CREATE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="DataSetConfMap" parameterType="java.lang.String" >
+    select 
+    <include refid="DataSetConfList" />
+    from P_DATASET_CONF
+    where ID_ = #{id,jdbcType=VARCHAR} and IS_DELETED = 0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from P_DATASET_CONF
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zebone.dip.metadata.vo.DataSetConf" >
+    insert into P_DATASET_CONF (ID_, DATASET_NAME, DATASET_DESC, 
+      STANDARD_CODE, DATASET_VERSION, DATASET_CODE
+      )
+    values (#{id,jdbcType=VARCHAR}, #{datasetName,jdbcType=VARCHAR}, #{datasetDesc,jdbcType=VARCHAR}, 
+      #{standardCode,jdbcType=VARCHAR}, #{datasetVersion,jdbcType=VARCHAR}, #{datasetCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zebone.dip.metadata.vo.DataSetConf" >
+    insert into P_DATASET_CONF
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="datasetName != null" >
+        DATASET_NAME,
+      </if>
+      <if test="datasetDesc != null" >
+        DATASET_DESC,
+      </if>
+      <if test="standardCode != null" >
+        STANDARD_CODE,
+      </if>
+      <if test="datasetVersion != null" >
+        DATASET_VERSION,
+      </if>
+      <if test="datasetCode != null" >
+        DATASET_CODE,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="datasetName != null" >
+        #{datasetName,jdbcType=VARCHAR},
+      </if>
+      <if test="datasetDesc != null" >
+        #{datasetDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="standardCode != null" >
+        #{standardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="datasetVersion != null" >
+        #{datasetVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="datasetCode != null" >
+        #{datasetCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zebone.dip.metadata.vo.DataSetConf" >
+    update P_DATASET_CONF
+    <set >
+      <if test="datasetName != null" >
+        DATASET_NAME = #{datasetName,jdbcType=VARCHAR},
+      </if>
+      <if test="datasetDesc != null" >
+        DATASET_DESC = #{datasetDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="standardCode != null" >
+        STANDARD_CODE = #{standardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="datasetVersion != null" >
+        DATASET_VERSION = #{datasetVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="datasetCode != null" >
+        DATASET_CODE = #{datasetCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zebone.dip.metadata.vo.DataSetConf" >
+    update P_DATASET_CONF
+    set DATASET_NAME = #{datasetName,jdbcType=VARCHAR},
+      DATASET_DESC = #{datasetDesc,jdbcType=VARCHAR},
+      STANDARD_CODE = #{standardCode,jdbcType=VARCHAR},
+      DATASET_VERSION = #{datasetVersion,jdbcType=VARCHAR},
+      DATASET_CODE = #{datasetCode,jdbcType=VARCHAR}
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="datasetList" resultMap="DataSetConfMap" parameterType="com.zebone.dip.metadata.vo.DataSetConf">
+  	SELECT 
+	T.ID_,T.DATASET_NAME,T.DATASET_DESC,T.DATASET_VERSION,T.DATASET_CODE,M.DICT_NAME AS STANDARD_CODE 
+	FROM P_DATASET_CONF T 
+	LEFT JOIN BTP_DICTIONARY M ON M.DICT_CODE = T.STANDARD_CODE 
+	AND M.IS_DELETED = 0 AND M.DICTTYPE_ID ='742f7cd6d1ba47aebd4119ce67b6ce71'
+	<where>
+		T.IS_DELETED = 0
+		<if test="standardCode != null and standardCode !=''">
+			AND T.STANDARD_CODE = #{standardCode,jdbcType=VARCHAR}
+		</if>
+		<if test="datasetName != null and datasetName !=''">
+			AND T.DATASET_NAME LIKE '%' || #{datasetName,jdbcType=VARCHAR} || '%' escape '/'
+		</if>
+	</where>
+	ORDER BY T.CREATE_TIME DESC
+  </select>
+  <select id="datasetTotalCount" resultType="int" parameterType="com.zebone.dip.metadata.vo.DataSetConf">
+  	SELECT 
+	COUNT(T.ID_)
+	FROM P_DATASET_CONF T 
+	LEFT JOIN BTP_DICTIONARY M ON M.DICT_CODE = T.STANDARD_CODE 
+	AND M.IS_DELETED = 0 AND M.DICTTYPE_ID ='742F7CD6D1BA47AEBD4119CE67B6CE71'
+	<where>
+		T.IS_DELETED = 0
+		<if test="standardCode != null and standardCode !=''">
+			AND T.STANDARD_CODE = #{standardCode,jdbcType=VARCHAR}
+		</if>
+		<if test="datasetName != null and datasetName !=''">
+			AND T.DATASET_NAME LIKE '%' || #{datasetName,jdbcType=VARCHAR} || '%' escape '/'
+		</if>
+	</where>
+  </select>
+  <update id="removeDatasetByIds">
+  	update P_DATASET_CONF SET IS_DELETED = 1 WHERE 
+	<foreach collection="list" item="item" index="index" separator="OR">
+		(ID_ = #{item,jdbcType=VARCHAR})
+	</foreach>
+  </update>
+  <select id="getDatasetNames" resultType="java.lang.String">
+  	SELECT 
+	DISTINCT(T.DATASET_NAME) 
+	FROM P_DATASET_CONF T WHERE T.IS_DELETED = 0
+  </select>
+  <select id="existsDatasetInfo" parameterType="com.zebone.dip.metadata.vo.DataSetConf" resultType="int">
+  	SELECT COUNT(T.ID_) FROM P_DATASET_CONF T WHERE T.IS_DELETED = 0 
+	AND T.DATASET_NAME = #{datasetName,jdbcType=VARCHAR} AND T.DATASET_VERSION = #{datasetVersion,jdbcType=VARCHAR} AND T.STANDARD_CODE = #{standardCode,jdbcType=VARCHAR}
+	<if test="id!=''">
+		AND T.ID_ != #{id,jdbcType=VARCHAR}
+	</if>
+  </select>
+  <select id="getListByName" parameterType="java.lang.String" resultMap="DataSetConfMap">
+  	<![CDATA[
+  	select 
+    a.ID_, a.DATASET_NAME, b.DICT_NAME as STANDARD_CODE, a.DATASET_VERSION
+    from P_DATASET_CONF a,
+    (select m.DICT_CODE,m.DICT_NAME from BTP_DICTIONARY m,BTP_DICTIONARY_TYPE n where m.DICTTYPE_ID=n.TYPE_ID and n.TYPE_CODE = 'standorgan') b 
+    where a.STANDARD_CODE = b.DICT_CODE and a.IS_DELETED = 0 and a.DATASET_NAME like '%' || #{datasetName,jdbcType=VARCHAR} || '%'
+    AND ROWNUM <= 10
+    ]]>
+  </select>
+</mapper>

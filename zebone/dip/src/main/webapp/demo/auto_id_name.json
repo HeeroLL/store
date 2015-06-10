@@ -1,0 +1,16 @@
+{
+query:'a',
+data:[{id:'AF',name:'Afghanistan'},
+	{id:'AL',name:'Albania'},
+	{id:'DZ',name:'Algeria'},
+	{id:'AS',name:'American Samoa'},
+	{id:'AD',name:'Andorra'},
+	{id:'AO',name:'Angola'},
+	{id:'AI',name:'Anguilla'},
+	{id:'AG',name:'Antigua & Barbuda'},
+	{id:'AR',name:'Argentina'},
+	{id:'AM',name:'Armenia'},
+	{id:'AW',name:'Aruba'},
+	{id:'zhangsan',name:'张三'},
+	{id:'lisi',name:'李四'}]
+}

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zebone.register.analyze.dao.EmpiRegLogMapper">
+    <resultMap id="BaseResultMap" type="com.zebone.register.analyze.vo.EmpiRegLog">
+        <id column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="BUSINESS_SYS_CODE" jdbcType="VARCHAR" property="businessSysCode"/>
+        <result column="INPUT_TIME" jdbcType="TIMESTAMP" property="inputTime"/>
+        <result column="INPUT_ORG_CODE" jdbcType="VARCHAR" property="inputOrgCode"/>
+        <result column="INPUT_USER_CODE" jdbcType="VARCHAR" property="inputUserCode"/>
+        <result column="REG_DOCUMENT" jdbcType="CLOB" property="regDocument"/>
+    </resultMap>
+    <select id="getEmpiRegLogById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             EMPI_REG_LOG
+        WHERE            
+            ID = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllEmpiRegLog" resultMap="BaseResultMap">
+          SELECT * FROM EMPI_REG_LOG 
+    </select>
+    
+    <delete id="deleteEmpiRegLog">
+        DELETE
+        FROM
+             EMPI_REG_LOG
+        WHERE            
+            ID = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveEmpiRegLog" parameterType="com.zebone.register.analyze.vo.EmpiRegLog" >
+        INSERT INTO EMPI_REG_LOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                ID,
+            </if>
+            <if test="businessSysCode != null" >
+                BUSINESS_SYS_CODE,
+            </if>
+            <if test="inputTime != null" >
+                INPUT_TIME,
+            </if>
+            <if test="inputOrgCode != null" >
+                INPUT_ORG_CODE,
+            </if>
+            <if test="inputUserCode != null" >
+                INPUT_USER_CODE,
+            </if>
+            <if test="regDocument != null" >
+                REG_DOCUMENT,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="businessSysCode != null" >
+                #{businessSysCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="inputTime != null" >
+                #{inputTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="inputOrgCode != null" >
+                #{inputOrgCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="inputUserCode != null" >
+                #{inputUserCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="regDocument != null" >
+                #{regDocument,jdbcType=CLOB},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateEmpiRegLog" parameterType="com.zebone.register.analyze.vo.EmpiRegLog" >
+        UPDATE EMPI_REG_LOG
+        <set>
+            <if test="id != null" >
+                ID = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="businessSysCode != null" >
+                BUSINESS_SYS_CODE = #{businessSysCode,jdbcType=VARCHAR},
+            </if>
+            <if test="inputTime != null" >
+                INPUT_TIME = #{inputTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="inputOrgCode != null" >
+                INPUT_ORG_CODE = #{inputOrgCode,jdbcType=VARCHAR},
+            </if>
+            <if test="inputUserCode != null" >
+                INPUT_USER_CODE = #{inputUserCode,jdbcType=VARCHAR},
+            </if>
+            <if test="regDocument != null" >
+                REG_DOCUMENT = #{regDocument,jdbcType=CLOB},
+            </if>
+        </set>
+        WHERE 
+            ID = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

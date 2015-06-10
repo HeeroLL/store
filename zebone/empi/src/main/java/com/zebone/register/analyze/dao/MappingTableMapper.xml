@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.analyze.dao.MappingTableMapper">
+	<resultMap id="MappingInfo" type="com.zebone.dnode.engine.analyze.vo.MappingInfo">
+		<result column="COLUMN_NAME" property="fieldName" jdbcType="VARCHAR"/>
+		<result column="COLUMN_TYPE" property="fieldtype" jdbcType="VARCHAR"/>
+		<result column="IS_KEY" property="iskey" jdbcType="VARCHAR"/>
+		<result column="COLUMN_POLICY" property="policy" jdbcType="VARCHAR"/>
+		<result column="XPATH" property="xpath" jdbcType="VARCHAR"/>
+		<result column="GROUP_NO" property="groupNo" jdbcType="VARCHAR"/>
+		<result column="FUNC" property="func" jdbcType="VARCHAR"/>
+		<result column="ISFK" property="isfk" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<!-- 根据文档的类型代码查询出此文档在解析的时候需要把数据解析到那些表中。 -->
+	<select id="getMappingTableByDocTypeCode" resultType="java.util.HashMap">
+		SELECT
+		    tab.ID_ AS tableId,
+		    tab.TABLE_NAME AS tableName
+		FROM
+		    P_DOC_CONF temp
+		JOIN
+		    P_DOC_MAPPING mapping
+		ON
+		    temp.ID_ = mapping.DOC_ID
+		JOIN
+		    P_FIELD_COLUMN_CONF col
+		ON
+		    col.id_ = mapping.CLOUMN_ID
+		JOIN
+		    P_FIELD_TABLE_CONF tab
+		ON
+		    tab.ID_ = col.TABLE_ID
+		WHERE
+		    temp.DOC_TYPE_CODE = #{docTypecode,jdbcType=VARCHAR}
+		GROUP BY
+		    tab.ID_ ,
+		    tab.TABLE_NAME
+	</select>
+	
+	<!-- 
+		根据文档的类型代码查询出此文档在解析的时候需要把数据解析到那些子表中。
+		如果某个表中的一个字段是“外键”，那么此表叫做子表。
+	 -->
+	<select id="getMappingSubTableByDocTypeCode" resultType="java.util.HashMap">
+		SELECT
+		   tab.ID_ AS tableId,
+		   tab.TABLE_NAME AS tableName
+		FROM
+		    P_DOC_CONF temp
+		JOIN
+		    P_DOC_MAPPING mapping
+		ON
+		    temp.ID_ = mapping.DOC_ID
+		JOIN
+		    P_FIELD_COLUMN_CONF col
+		ON
+		    col.id_ = mapping.CLOUMN_ID
+		JOIN
+		    P_FIELD_TABLE_CONF tab
+		ON
+		    tab.ID_ = col.TABLE_ID
+		JOIN
+		    P_DOC_MAPPING2 mapping2
+		ON
+		    (
+		        mapping2.CLOUMN_ID = temp.id_
+		    AND mapping2.MAPPING_ID = mapping.id_)
+		WHERE
+		    temp.DOC_TYPE_CODE = #{docTypecode,jdbcType=VARCHAR}
+		GROUP BY
+		    tab.ID_ ,
+		    tab.TABLE_NAME
+	</select>
+	<!-- 根据表ID查询出映射信息及字段与文档节点的对应关系。 -->
+	<select id="getMappingInfo" resultMap="MappingInfo">
+		   SELECT DISTINCT
+			    c.COLUMN_NAME ,
+			    c.COLUMN_TYPE ,
+			    c.IS_KEY ,
+			    c.COLUMN_POLICY ,
+			    m.XPATH ,
+			    m.GROUP_NO ,
+			    m.FUNC,
+			    '0' AS ISFK
+			FROM
+			    P_FIELD_COLUMN_CONF c
+			JOIN
+			    P_DOC_MAPPING m
+			ON
+			    c.id_ = m.CLOUMN_ID
+			LEFT JOIN
+			    P_DOC_MAPPING2 m2
+			ON
+			    m2.CLOUMN_ID = c.id_
+			WHERE
+			    c.table_id = #{tableId,jdbcType=VARCHAR}
+			UNION
+			SELECT
+			    c.COLUMN_NAME ,
+			    c.COLUMN_TYPE ,
+			    c.IS_KEY ,
+			    c.COLUMN_POLICY ,
+			    m.XPATH ,
+			    m.GROUP_NO ,
+			    m.FUNC,
+			    '1' AS ISFK
+			FROM
+			    P_FIELD_COLUMN_CONF c
+			JOIN
+			    P_DOC_MAPPING2 m2
+			ON
+			    c.id_ = m2.CLOUMN_ID
+			JOIN
+			    P_DOC_MAPPING m
+			ON			  
+			     m. id_ = m2.MAPPING_ID
+			 join P_DOC_CONF doc
+			 	on doc.id_ = m.doc_id
+			WHERE
+			    c.table_id = #{tableId,jdbcType=VARCHAR}
+			AND doc.DOC_TYPE_CODE = #{docType,jdbcType=VARCHAR}
+			and doc.DOC_VERSION= #{docVersion,jdbcType=VARCHAR}
+	</select>
+</mapper>

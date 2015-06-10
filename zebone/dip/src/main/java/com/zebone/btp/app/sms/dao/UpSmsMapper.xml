@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.sms.dao.UpSmsMapper">
+	<resultMap id="UpSmsResultMap" type="com.zebone.btp.app.sms.pojo.UpSms">
+		<result column="UP_SMS_ID" property="upSmsId" jdbcType="VARCHAR"/>
+		<result column="MOBILE_NO" property="mobileNo" jdbcType="VARCHAR"/>
+		<result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+		<result column="RECEIVE_TIME" property="receiveTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<insert id="insert" parameterType="com.zebone.btp.app.sms.pojo.UpSms">
+		insert into BTP_UP_SMS
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="upSmsId != null">
+				UP_SMS_ID,
+			</if>
+			<if test="mobileNo != null">
+				MOBILE_NO,
+			</if>
+			<if test="content != null">
+				CONTENT,
+			</if>
+			<if test="receiveTime != null">
+				RECEIVE_TIME,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="upSmsId != null">
+				#{upSmsId,jdbcType=VARCHAR},
+			</if>
+			<if test="mobileNo != null">
+				#{mobileNo,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="receiveTime != null">
+				#{receiveTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+</mapper>

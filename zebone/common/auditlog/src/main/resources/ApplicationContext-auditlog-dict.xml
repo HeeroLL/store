@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	<!-- 审计日志的事件类型、操作类型定义 -->
+	<bean id="eventTypeMap" class="java.util.TreeMap">
+		<constructor-arg>
+			<map>
+				<entry key="11" value="平台登陆" />
+				<entry key="12" value="文档调阅" />
+				<entry key="211" value="个人注册" />
+				<entry key="212" value="个人基本信息查询" />
+				<entry key="213" value="医疗机构注册匹配" />
+				<entry key="214" value="医疗人员注册匹配" />
+				<entry key="215" value="医疗术语注册匹配" />
+				<entry key="216" value="字典注册匹配" />
+				<entry key="217" value="资源注册" />
+				<entry key="221" value="文档上传" />
+				<entry key="222" value="文档存储" />
+				<entry key="223" value="文档注册" />
+				<entry key="224" value="文档解析" />
+				<entry key="231" value="个人注册与更新" />
+				<entry key="232" value="业务查询" />
+				<entry key="30" value="系统操作" />
+			</map>
+		</constructor-arg>
+	</bean>
+	<bean id="optTypeMap" class="java.util.TreeMap">
+		<constructor-arg>
+			<map>
+				<entry key="01" value="新建" />
+				<entry key="02" value="修改" />
+				<entry key="03" value="删除" />
+				<entry key="04" value="查询" />
+				<entry key="05" value="停止" />
+				<entry key="06" value="启动" />
+				<entry key="07" value="发布" />
+				<entry key="08" value="合并" />
+				<entry key="09" value="拆分" />
+				<entry key="10" value="导入" />
+				<entry key="11" value="登录" />
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

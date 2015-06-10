@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.transaction.mapper.DeptInfoMapper">
+	<resultMap id="DeptInfoResultMap" type="com.zebone.btp.transaction.pojo.DeptInfo">
+		<id column="DEPT_ID" property="deptId" jdbcType="VARCHAR"/>
+		<result column="ORGAN_ID" property="organId" jdbcType="VARCHAR"/>
+		<result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
+		<result column="ACTOR_ID" property="actorId" jdbcType="VARCHAR"/>
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="DEL_FLAG" property="delFlag" jdbcType="DECIMAL"/>
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="UPDATOR_ID" property="updatorId" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		DEPT_ID, ORGAN_ID, DEPT_NAME, ACTOR_ID, CREATE_TIME, DEL_FLAG, UPDATE_TIME, UPDATOR_ID
+	</sql>
+	<select id="findById" resultMap="DeptInfoResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_DEPT_INFO
+		where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from BTP_DEPT_INFO
+		where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.btp.transaction.pojo.DeptInfo">
+		insert into BTP_DEPT_INFO
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="deptId != null">
+				DEPT_ID,
+			</if>
+			<if test="organId != null">
+				ORGAN_ID,
+			</if>
+			<if test="deptName != null">
+				DEPT_NAME,
+			</if>
+			<if test="actorId != null">
+				ACTOR_ID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="delFlag != null">
+				DEL_FLAG,
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME,
+			</if>
+			<if test="updatorId != null">
+				UPDATOR_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="deptId != null">
+				#{deptId,jdbcType=VARCHAR},
+			</if>
+			<if test="organId != null">
+				#{organId,jdbcType=VARCHAR},
+			</if>
+			<if test="deptName != null">
+				#{deptName,jdbcType=VARCHAR},
+			</if>
+			<if test="actorId != null">
+				#{actorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				#{delFlag,jdbcType=DECIMAL},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatorId != null">
+				#{updatorId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.btp.transaction.pojo.DeptInfo">
+		update BTP_DEPT_INFO
+		<set>
+			<if test="organId != null">
+				ORGAN_ID = #{organId,jdbcType=VARCHAR},
+			</if>
+			<if test="deptName != null">
+				DEPT_NAME = #{deptName,jdbcType=VARCHAR},
+			</if>
+			<if test="actorId != null">
+				ACTOR_ID = #{actorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				DEL_FLAG = #{delFlag,jdbcType=DECIMAL},
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatorId != null">
+				UPDATOR_ID = #{updatorId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+	</update>
+</mapper>

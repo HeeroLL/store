@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<healthRecord>
+	<followUps>
+		<item date="2010-11-11" doctor="李香" org="黄丽卫生院" type="家庭" comment="控制满意" id="1"></item>
+		<item date="2010-4-21" doctor="李香" org="日本卫生院" type="美国家庭" comment="控制不满意" id="2"></item>
+	</followUps>
+</healthRecord>

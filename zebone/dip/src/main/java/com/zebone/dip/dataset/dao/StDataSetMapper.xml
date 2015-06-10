@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.dataset.dao.StDataSetMapper">
+	<resultMap id="StDataSetResultMap" type="com.zebone.dip.dataset.vo.StDataSet">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="P_CODE" property="pCode" jdbcType="VARCHAR"/>
+		<result column="P_NAME" property="pName" jdbcType="VARCHAR"/>
+		<result column="P_DESC" property="pDesc" jdbcType="VARCHAR"/>
+		<result column="P_TYPE" property="pType" jdbcType="VARCHAR"/>
+		<result column="P_FORMAT" property="pFormat" jdbcType="VARCHAR"/>
+		<result column="P_VALUE" property="pValue" jdbcType="VARCHAR"/>
+		<result column="P_VALUE_TYPE" property="pValueType" jdbcType="VARCHAR"/>
+		<result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		ID_, P_CODE, P_NAME, P_DESC, P_TYPE, P_FORMAT, P_VALUE, P_VALUE_TYPE, DEL_FLAG
+	</sql>
+	<select id="findById" resultMap="StDataSetResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from P_ST_DATASET
+		where ID_ = #{id,jdbcType=VARCHAR} and DEL_FLAG = 1
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from P_ST_DATASET
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.dataset.vo.StDataSet">
+		insert into P_ST_DATASET
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_,
+			</if>
+			<if test="pCode != null">
+				P_CODE,
+			</if>
+			<if test="pName != null">
+				P_NAME,
+			</if>
+			<if test="pDesc != null">
+				P_DESC,
+			</if>
+			<if test="pType != null">
+				P_TYPE,
+			</if>
+			<if test="pFormat != null">
+				P_FORMAT,
+			</if>
+			<if test="pValue != null">
+				P_VALUE,
+			</if>
+			<if test="pValueType != null">
+				P_VALUE_TYPE,
+			</if>
+			<if test="delFlag != null">
+				DEL_FLAG,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="pCode != null">
+				#{pCode,jdbcType=VARCHAR},
+			</if>
+			<if test="pName != null">
+				#{pName,jdbcType=VARCHAR},
+			</if>
+			<if test="pDesc != null">
+				#{pDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="pType != null">
+				#{pType,jdbcType=VARCHAR},
+			</if>
+			<if test="pFormat != null">
+				#{pFormat,jdbcType=VARCHAR},
+			</if>
+			<if test="pValue != null">
+				#{pValue,jdbcType=VARCHAR},
+			</if>
+			<if test="pValueType != null">
+				#{pValueType,jdbcType=VARCHAR},
+			</if>
+			<if test="delFlag != null">
+				#{delFlag,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.dip.dataset.vo.StDataSet">
+		update P_ST_DATASET
+		<set>
+			<if test="pCode != null and pCode != ''">
+				P_CODE = #{pCode,jdbcType=VARCHAR},
+			</if>
+			<if test="pName != null and pName != ''">
+				P_NAME = #{pName,jdbcType=VARCHAR},
+			</if>
+			<if test="pDesc != null and pDesc != ''">
+				P_DESC = #{pDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="pType != null and pType != ''">
+				P_TYPE = #{pType,jdbcType=VARCHAR},
+			</if>
+			<if test="pFormat != null and pFormat != ''">
+				P_FORMAT = #{pFormat,jdbcType=VARCHAR},
+			</if>
+			<if test="pValue != null and pValue != ''">
+				P_VALUE = #{pValue,jdbcType=VARCHAR},
+			</if>
+			<if test="pValueType != null and pValueType != ''">
+				P_VALUE_TYPE = #{pValueType,jdbcType=VARCHAR},
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="datasetInfoList" resultMap="StDataSetResultMap" parameterType="com.zebone.dip.dataset.vo.StDataSet">
+		SELECT 
+		<include refid="column_list"/>
+		FROM P_ST_DATASET
+		<where>
+			DEL_FLAG = 1
+			<if test="pCode != null and pCode != ''">
+				AND P_CODE = #{pCode,jdbcType=VARCHAR}
+			</if>
+			<if test="pName != null and pName != ''">
+				AND P_NAME LIKE '%' || #{pName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="pType != null and pType != ''">
+				AND P_TYPE = #{pType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="datasetInfoTotalCount" resultType="int" parameterType="com.zebone.dip.dataset.vo.StDataSet">
+		SELECT 
+		COUNT(ID_)
+		FROM P_ST_DATASET
+		<where>
+			DEL_FLAG = 1
+			<if test="pCode != null and pCode != ''">
+				AND P_CODE = #{pCode,jdbcType=VARCHAR}
+			</if>
+			<if test="pName != null and pName != ''">
+				AND P_NAME LIKE '%' || #{pName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="pType != null and pType != ''">
+				AND P_TYPE = #{pType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+</mapper>

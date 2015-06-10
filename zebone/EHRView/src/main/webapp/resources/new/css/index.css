@@ -1,0 +1,105 @@
+html,body{
+	background: url("../images/index_bg.png") repeat-y center center #fff;
+}
+.index_outer{
+	width:1000px;
+	margin:0 auto;
+}
+.index_header{
+	height:70px;
+	background: url("../images/index_header_bg.png") repeat-x 0 0 transparent;
+	position: relative;
+	border-top:1px solid #00a6eb;
+	border-bottom:1px solid #004560;
+}
+.index_logo{
+	background: url("../images/logo.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: #FFFFFF;
+    font-size: 36px;
+    height: 48px;
+    left: 25px;
+    line-height: 44px;
+    padding-left: 48px;
+    position: absolute;
+    top:12px;
+}
+.user_toolbar{
+	position: absolute;right:21px;top:10px;
+}
+.user_toolbar span{
+	padding-left: 16px;margin-left:10px;
+	color: #FFFFFF;
+}
+.user_toolbar span a{
+	color: #FFFFFF;
+    height: 17px;
+    text-decoration: none;
+	line-height: 12px;
+	
+}
+.user_toolbar span a:hover{
+	text-decoration: underline;
+}
+.user_toolbar .home{
+    background: url("../images/icons/home.png") no-repeat  0 0 transparent;
+}
+.user_toolbar .org{
+	background: url("../images/icons/org.gif") no-repeat  0 0 transparent;
+}
+.user_toolbar .user{
+	background: url("../images/icons/user.png") no-repeat  0 0 transparent;
+}
+.user_toolbar .role{
+	background: url("../images/icons/role.png") no-repeat  0 0 transparent;
+}
+.user_toolbar .logout{
+	background: url("../images/icons/icon_logout.png") no-repeat  0 3px transparent;
+}
+.avatar{
+	text-align:center;
+}
+.avatar img{ 
+	width:96px;height:114px;border: 1px solid #909090;
+	box-shadow: 1px 1px 2px #909090;
+}
+.user_info_list label{
+	font-weight:bold;
+}
+.user_info_list li{
+	border-bottom: 1px dashed #909090;
+	line-height: 22px;
+}
+.user_info_list td{
+	line-height: 22px;
+	border-bottom: 1px dashed #909090;
+}
+.main{
+	overflow:hidden;
+	padding:5px 0 0 0;
+}
+.left{
+	width:215px;float:left;
+}
+.right{
+	width:783px;float:right;
+}
+.right_left{
+	width:50%;float:left;
+}
+.right_right{
+	width:50%;float:right;
+}
+.right_bottom{
+	width:100%;
+}
+.clear{
+	clear:both;
+}
+.position{
+    background: url("../images/box_bg.png") repeat scroll 0 0;
+    border: 1px solid #EAEAEA;
+    height: 30px;
+    line-height: 30px;
+    text-indent: 10px;
+	margin:0 0 10px 0;
+}

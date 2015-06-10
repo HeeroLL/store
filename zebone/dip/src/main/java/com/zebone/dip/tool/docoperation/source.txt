@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClinicalDocument name="文档">
+	<header name="文档头">
+		<document name="文档基础信息">
+			<slot name="文档编号" code="EX00.00.000.54">
+				<value code="aa001" displayName="aa001"/>
+			</slot>
+			<slot name="文档类型" code="EX00.00.000.55">
+				<value code="A00.01.01.00" displayName="个人健康档案"/>
+			</slot>
+			<slot name="文档版本" code="EX00.00.000.60">
+				<value code="01" displayName="1.0"/>
+			</slot>
+			<slot name="机构编码" code="EX00.00.000.06">
+				<value code="1000101102" displayName="前黄镇大成社区卫生服务站"/>
+			</slot>
+			<slot name="上传类型" code="EX00.00.000.56">
+				<value code="1" displayName="新增"/>
+			</slot>
+			<slot name="上传系统类型" code="EX00.00.000.57">
+				<value code="01" displayName="LIS"/>
+			</slot>
+		</document>
+		<service name="文档服务信息">
+			<slot name="卡类型" code="EX00.00.000.01">
+				<value code="01" displayName="社保卡"/>
+			</slot>
+			<slot name="卡号" code="EX00.00.000.02">
+				<value code="KH00000001" displayName="KH00000001"/>
+			</slot>
+			<slot name="医生编号" code="EX00.00.000.07">
+				<value code="10001201110001" displayName="姓名一"/>
+			</slot>
+			<slot name="建档科室" code="DE08.10.025.00">
+				<value code="52" displayName="中西医结合科"/>
+			</slot>
+			<slot name="活动时间" code="EX00.00.000.58">
+				<value code="20130802t083000" displayName="20130802t083000"/>
+			</slot>
+			<slot name="健康和疾病问题" code="DE05.01.024.00">
+				<value code="G00-G99" displayName="神经系统疾病"/>
+			</slot>
+			<slot name="卫生服务活动" code="EX00.00.000.59">
+				<value code="001" displayName="建立个人健康档案"/>
+			</slot>
+		</service>
+	</header>
+	<structuredBody name="文档体">
+		<PERSON_HEALTH_RECORD name="基本信息">
+			<slot name="身份证件号码" code="DE02.01.030.00">
+				<value code="32062119850215142X" displayName="32062119850215142X"/>
+			</slot>
+			<slot name="身份证件类别代码" code="DE02.01.031.00">
+				<value code="01" displayName="身份证"/>
+			</slot>
+			<slot name="联系人姓名" code="DE02.01.039.00">
+				<value code="殷昌明" displayName="殷昌明"/>
+			</slot>
+			<slot name="本人姓名" code="DE02.01.039.00">
+				<value code="菜祥龙" displayName="菜祥龙"/>
+			</slot>
+			<slot name="性别代码" code="DE02.01.040.00">
+				<value code="1" displayName="男"/>
+			</slot>
+			<slot name="城乡居民健康档案编号" code="DE01.00.009.00">
+				<value code="11111111111111111" displayName="11111111111111111"/>
+			</slot>
+			<slot name="出生日期" code="DE02.01.005.01">
+				<value code="19850215" displayName="19850215"/>
+			</slot>
+			<slot name="联系人电话号码" code="DE02.01.010.00">
+				<value code="05198455112" displayName="05198455112"/>
+			</slot>
+			<slot name="本人电话号码" code="DE02.01.010.00">
+				<value code="13554578951" displayName="13554578951"/>
+			</slot>
+			<slot name="工作单位名称" code="DE08.10.007.00">
+				<value code="某某有限公司" displayName="某某有限公司"/>
+			</slot>
+			<slot name="卡类型代码" code="EX00.00.000.01">
+				<value code="04" displayName="健康卡"/>
+			</slot>
+			<slot name="卡号" code="EX00.00.000.02">
+				<value code="0121012" displayName="0121012"/>
+			</slot>
+			<slot name="民族" code="DE02.01.025.00">
+				<value code="42" displayName="怒族"/>
+			</slot>
+			<slot name="学历代码" code="DE02.01.041.00">
+				<value code="30" displayName="大学专科及专科学校"/>
+			</slot>
+			<slot name="常住地址户籍标志" code="DE02.01.003.00">
+				<value code="F" displayName="F"/>
+			</slot>
+			<slot name="Rh血型代码" code="DE04.50.010.00">
+				<value code="1" displayName="Rh阳性"/>
+			</slot>
+			<slot name="职业类别代码" code="DE02.01.052.00">
+				<value code="1" displayName="专业技术人员"/>
+			</slot>
+			<slot name="AB0血型代码" code="DE04.50.001.00">
+				<value code="2" displayName="B型"/>
+			</slot>
+			<slot name="国籍" code="DE02.01.015.00">
+				<value code="156" displayName="中国"/>
+			</slot>
+			<slot name="婚姻状况代码" code="DE02.01.018.00">
+				<value code="10" displayName="未婚"/>
+			</slot>
+			<slot name="医疗费用支付方式代码" code="DE07.00.007.00">
+				<value code="02" displayName="城镇居民基本医疗保险"/>
+			</slot>
+			<slot name="村（居）委会名称" code="DE08.10.023.00">
+				<value code="某村委会" displayName="某村委会"/>
+			</slot>
+			<slot name="宗教" code="EX00.00.000.03">
+				<value code="10" displayName="佛教"/>
+			</slot>
+			<slot name="居住地址-详细地址" code="EX00.00.000.04">
+				<value code="常州市武进区" displayName="常州市武进区"/>
+			</slot>
+			<slot name="户籍地址-详细地址" code="EX00.00.000.04">
+				<value code="常州市武进区" displayName="常州市武进区"/>
+			</slot>
+			<slot name="纸质档案号" code="EX00.00.000.05">
+				<value code="ZZ001" displayName="ZZ001"/>
+			</slot>
+			<slot name="建档时间" code="EX00.00.000.08">
+				<value code="20130805t083000" displayName="20130805t083000"/>
+			</slot>
+			<slot name="档案状态" code="EX00.00.000.09">
+				<value code="1" displayName="正常"/>
+			</slot>
+			<slot name="档案来源代码" code="EX00.00.000.10">
+				<value code="1" displayName="入户服务（调查）"/>
+			</slot>
+			<slot name="管理机构代码" code="EX00.00.000.06">
+				<value code="1000101102" displayName="前黄镇大成社区卫生服务站"/>
+			</slot>
+			<slot name="建档机构" code="EX00.00.000.06">
+				<value code="1000101102" displayName="前黄镇大成社区卫生服务站"/>
+			</slot>
+			<slot name="责任医生编码" code="EX00.00.000.07">
+				<value code="10001201110001" displayName="姓名一"/>
+			</slot>
+			<slot name="建档人员编码" code="EX00.00.000.07">
+				<value code="10001201110001" displayName="姓名一"/>
+			</slot>
+			<slot name="居住地址-省（自治区，直辖市）、市（地区，州）、县（区）、乡（镇，" code="EX00.00.000.53">
+				<value code="320412100022" displayName="大学新村一社区居委会"/>
+			</slot>
+			<slot name="户籍地址-省（自治区，直辖市）、市（地区，州）、县（区）、乡（镇，" code="EX00.00.000.53">
+				<value code="320412100022" displayName="大学新村一社区居委会"/>
+			</slot>
+		</PERSON_HEALTH_RECORD>
+		<PERSON_ALLERGY name="过敏史">
+			<slot name="药物过敏源" code="DE02.10.022.00">
+				<value code="大豆" displayName="大豆"/>
+			</slot>
+		</PERSON_ALLERGY>
+		<PERSON_EXPOSURE_HISTORY name="暴露史">
+			<slot name="环境危险因素暴露类别代码" code="DE03.00.021.00">
+				<value code="2" displayName="化学品"/>
+			</slot>
+		</PERSON_EXPOSURE_HISTORY>
+		<PERSON_PAST_HISTORY name="既往史">
+			<slot name="既往患病种类代码" code="DE02.10.021.00">
+				<value code="02" displayName="高血压"/>
+			</slot>
+			<slot name="既往患病确诊日期" code="DE05.01.035.00">
+				<value code="20090802t083000" displayName="20090802t083000"/>
+			</slot>
+		</PERSON_PAST_HISTORY>
+		<PERSON_OPERATION_HISTORY name="手术史">
+			<slot name="手术史" code="DE02.10.061.00">
+				<value code="阑尾切除" displayName="阑尾切除"/>
+			</slot>
+			<slot name="手术(操作)日期时间" code="DE06.00.095.00">
+				<value code="20030802t083000" displayName="20030802t083000"/>
+			</slot>
+		</PERSON_OPERATION_HISTORY>
+		<PERSON_TRAUMATISM_HISTORY name="外伤史">
+			<slot name="外伤发生日期时间" code="DE02.10.067.00">
+				<value code="20050802t083000" displayName="20050802t083000"/>
+			</slot>
+			<slot name="外伤名称" code="DE02.10.068.00">
+				<value code="摔伤" displayName="摔伤"/>
+			</slot>
+		</PERSON_TRAUMATISM_HISTORY>
+		<PERSON_TRANSFUSE_HISTORY name="输血史">
+			<slot name="输血日期时间" code="DE06.00.105.00">
+				<value code="20050802t153000" displayName="20050802t153000"/>
+			</slot>
+			<slot name="输血原因" code="DE06.00.107.00">
+				<value code="出血过多" displayName="出血过多"/>
+			</slot>
+		</PERSON_TRANSFUSE_HISTORY>
+		<PERSON_FAMILY_HISTORY name="家族史">
+			<slot name="家族性疾病名称代码" code="DE02.10.095.00">
+				<value code="02" displayName="高血压"/>
+			</slot>
+			<slot name="患者与本人关系代码" code="DE02.10.024.00">
+				<value code="6" displayName="祖父母或外祖父母"/>
+			</slot>
+		</PERSON_FAMILY_HISTORY>
+		<PERSON_GENETIC_HISTORY name="遗传病史">
+			<slot name="遗传性疾病史" code="DE02.10.026.00">
+				<value code="高血压" displayName="高血压"/>
+			</slot>
+		</PERSON_GENETIC_HISTORY>
+		<PERSON_DISABILITY_HISTORY name="残疾史">
+			<slot name="残疾情况代码" code="DE05.10.006.00">
+				<value code="01" displayName="无残疾"/>
+			</slot>
+		</PERSON_DISABILITY_HISTORY>
+		<PERSON_LIFE_ENVIRONMENT name="生活环境">
+			<slot name="家庭禽畜栏类别" code="DE03.00.049.00">
+				<value code="1" displayName="单设"/>
+			</slot>
+			<slot name="家庭燃料类型类别代码" code="DE03.00.050.00">
+				<value code="1" displayName="液化气"/>
+			</slot>
+			<slot name="家庭饮水类别代码" code="DE03.00.082.00">
+				<value code="1" displayName="自来水"/>
+			</slot>
+			<slot name="家庭厨房排风设施标志" code="DE03.00.099.00">
+				<value code="T" displayName="T"/>
+			</slot>
+			<slot name="家庭厕所类别代码" code="DE03.00.005.00">
+				<value code="1" displayName="卫生厕所"/>
+			</slot>
+			<slot name="家庭厨房排风设施类别代码" code="DE03.00.006.00">
+				<value code="1" displayName="油烟机"/>
+			</slot>
+			<slot name="饮水类型其它描述" code="EX00.00.000.21">
+				<value code="矿泉水" displayName="矿泉水"/>
+			</slot>
+			<slot name="燃料类型其他描述" code="EX00.00.000.22">
+				<value code="木材" displayName="木材"/>
+			</slot>
+		</PERSON_LIFE_ENVIRONMENT>
+	</structuredBody>
+</ClinicalDocument>

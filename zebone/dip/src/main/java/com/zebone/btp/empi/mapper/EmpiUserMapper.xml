@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.empi.mapper.EmpiUserMapper">
+
+	<!-- ######################## EmpiUser对象 ######################### -->
+	<sql id="user_col_list">
+		f_user_id, empi_id, f_username, f_icn, f_sex, f_birthday,
+		f_nation, f_tel, f_photo, f_regaddress, f_preaddress, f_state,
+		f_createdate, f_updatedate, f_creator, f_updator, del_flag
+	</sql>
+
+	<!-- EmpiCard 结果对象 -->
+	<resultMap id="empiCardResultMap" type="EmpiCard">
+		<id property="cardId" column="card_id" />
+		<result property="cardNo" column="card_no" />
+		<result property="cardSid" column="card_sid" />
+		<result property="cardType" column="card_type" />
+		<result property="cardState" column="card_state" />
+		<result property="empiId" column="empi_id" />
+	</resultMap>
+
+	<!-- EmpiUser 结果对象 -->
+	<resultMap id="empiUserResultMap" type="EmpiUser">
+		<id property="userId" column="f_user_id" />
+		<result property="empiId" column="empi_id" />
+		<result property="userName" column="f_username" />
+		<result property="icn" column="f_icn" />
+		<result property="sex" column="f_sex" />
+		<result property="birthday" column="f_birthday" />
+		<result property="nation" column="f_nation" />
+		<result property="tel" column="f_tel" />
+		<result property="photo" column="f_photo" />
+		<result property="regaddress" column="f_regaddress" />
+		<result property="preaddress" column="f_preaddress" />
+		<result property="state" column="f_state" />
+		<result property="createDate" column="f_createdate" />
+		<result property="updateDate" column="f_updatedate" />
+		<result property="creator" column="f_creator" />
+		<result property="updator" column="f_updator" />
+		<result property="delFlag" column="del_flag" />
+		<collection property="cards" ofType="EmpiCard"
+			resultMap="empiCardResultMap" />
+	</resultMap>
+
+	<!-- 新增EmpiUser -->
+	<insert id="addEmpiUser" parameterType="EmpiUser">
+		insert into EMPI_USER
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			f_user_id, empi_id, f_username, f_icn, f_state,
+			f_createdate,f_creator, del_flag,
+			<if test="sex != null and sex != '' ">f_sex,</if>
+			<if test="birthday != null and birthday != '' ">
+				f_birthday,
+			</if>
+			<if test="nation != null and nation != '' ">f_nation,</if>
+			<if test="tel != null and tel != '' ">f_tel,</if>
+			<if test="photo != null and photo != '' ">f_photo,</if>
+			<if test="regaddress != null and regaddress != '' ">
+				f_regaddress,
+			</if>
+			<if test="preaddress != null and preaddress != '' ">
+				f_preaddress,
+			</if>
+			<if test="updateDate != null and updateDate != '' ">
+				f_updatedate,
+			</if>
+			<if test="updator != null and updator != '' ">
+				f_updator,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{userId, jdbcType=VARCHAR}, #{empiId, jdbcType=VARCHAR},
+			#{userName, jdbcType=VARCHAR}, #{icn, jdbcType=VARCHAR},
+			#{state, jdbcType=VARCHAR}, #{createDate, jdbcType=VARCHAR},
+			#{creator, jdbcType=VARCHAR}, #{delFlag, jdbcType=VARCHAR},
+			<if test="sex != null and sex != '' ">
+				#{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null and birthday != '' ">
+				#{birthday,jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null and nation != '' ">
+				#{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="tel != null and tel != '' ">
+				#{tel,jdbcType=VARCHAR},
+			</if>
+			<if test="photo != null and photo != '' ">
+				#{photo,jdbcType=VARCHAR},
+			</if>
+			<if test="regaddress != null and regaddress != '' ">
+				#{regaddress,jdbcType=VARCHAR},
+			</if>
+			<if test="preaddress != null and preaddress != '' ">
+				#{preaddress,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null and updateDate != '' ">
+				#{updateDate,jdbcType=VARCHAR},
+			</if>
+			<if test="updator != null and updator != '' ">
+				#{updator,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 逻辑删除 -->
+	<update id="logicDeleteEmpiUser" parameterType="EmpiUser">
+		update EMPI_USER set del_flag = 0 where empi_id = #{empiId,
+		jdbcType=VARCHAR}
+	</update>
+
+	<!-- 用户注销 -->
+	<update id="cancelEmpiUser" parameterType="EmpiUser">
+		update EMPI_USER set f_state = 0 where del_flag = 1 and empi_id
+		= #{empiId}
+	</update>
+
+	<!-- 批量删除用户数据 -->
+	<delete id="removeEmpiUser" parameterType="QueryInfo">
+		delete from EMPI_USER where empi_id in
+		<foreach item="item" index="index" collection="idList" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 用户更新 -->
+	<update id="updateEmpiUser" parameterType="EmpiUser">
+		update EMPI_USER
+		<set>
+			<if test="userName != null and userName != '' ">
+				f_username = #{userName, jdbcType=VARCHAR},
+			</if>
+			<if test="icn != null and icn != '' ">
+				f_icn = #{icn, jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null and sex != '' ">
+				f_sex = #{sex, jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null and birthday != '' ">
+				f_birthday = #{birthday, jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null and nation != '' ">
+				f_nation = #{nation, jdbcType=VARCHAR},
+			</if>
+			<if test="tel != null and tel != '' ">
+				f_tel = #{tel, jdbcType=VARCHAR},
+			</if>
+			<if test="photo != null and photo != '' ">
+				f_photo = #{photo, jdbcType=VARCHAR},
+			</if>
+			<if test="regaddress != null and regaddress != '' ">
+				f_regaddress = #{regaddress, jdbcType=VARCHAR},
+			</if>
+			<if test="preaddress != null and preaddress != '' ">
+				f_preaddress = #{preaddress, jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null and updateDate != '' ">
+				f_updatedate= #{updateDate, jdbcType=VARCHAR},
+			</if>
+			<if test="updator != null and updator != '' ">
+				f_updator= #{updator, jdbcType=VARCHAR},
+			</if>
+		</set>
+		where del_flag = 1 and f_state = 1 and empi_id = #{empiId}
+	</update>
+
+	<!-- 根据ICN查询该用户是否注册 -->
+	<select id="getEmpiUserByEmpi" parameterType="string"
+		resultType="int">
+		select count(1) from EMPI_USER where del_flag = 1 and f_state =
+		1 and empi_id = #{icn}
+	</select>
+
+	<!-- 查询用户列表 -->
+	<select id="queryEmpiUserList" resultMap="empiUserResultMap">
+		select u.f_user_id, u.empi_id, u.f_username, u.f_icn, u.f_sex,
+		u.f_birthday, u.f_nation, u.f_tel, u.f_photo, u.f_regaddress,
+		u.f_preaddress, u.f_state, u.f_createdate, u.f_updatedate,
+		u.f_creator, u.f_updator, u.del_flag from EMPI_USER u
+		<where>
+			u.del_flag = 1 and u.f_state = 1
+			<if test="userId != null and userId != '' ">
+				AND u.f_user_id = #{userId,jdbcType=VARCHAR}
+			</if>
+			<if test="empiId != null and empiId != '' ">
+				AND u.empi_id = #{empiId,jdbcType=VARCHAR}
+			</if>
+			<if test="userName != null and userName != '' ">
+				AND u.f_username LIKE
+				'%'||#{userName,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="icn != null and icn != '' ">
+				AND u.f_icn = #{icn,jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null and sex != '' ">
+				AND u.f_sex = #{sex,jdbcType=VARCHAR}
+			</if>
+			<if test="nation != null and nation != '' ">
+				AND u.f_nation LIKE '%'||#{nation,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="regaddress != null and regaddress != '' ">
+				AND u.f_regaddress LIKE
+				'%'||#{regaddress,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="preaddress != null and preaddress != '' ">
+				AND u.f_preaddress LIKE
+				'%'||#{preaddress,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="creator != null and creator != '' ">
+				AND u.f_creator LIKE
+				'%'||#{creator,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="updator != null and updator != '' ">
+				AND u.f_updator LIKE
+				'%'||#{updator,jdbcType=VARCHAR}||'%'
+			</if>
+		</where>
+		order by u.empi_id desc
+	</select>
+
+
+	<select id="queryEmpiUserCount" parameterType="EmpiUser"
+		resultType="int">
+		select count(1) from EMPI_USER u
+		<where>
+			u.del_flag = 1 and u.f_state = 1
+			<if test="empiId != null and empiId != '' ">
+				AND u.empi_id = #{empiId,jdbcType=VARCHAR}
+			</if>
+			<if test="userName != null and userName != '' ">
+				AND u.f_username LIKE
+				'%'||#{userName,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="icn != null and icn != '' ">
+				AND u.f_icn = #{icn,jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null and sex != '' ">
+				AND u.f_sex = #{sex,jdbcType=VARCHAR}
+			</if>
+			<if test="regaddress != null and regaddress != '' ">
+				AND u.f_regaddress LIKE
+				'%'||#{regaddress,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="preaddress != null and preaddress != '' ">
+				AND u.f_preaddress LIKE
+				'%'||#{preaddress,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="creator != null and creator != '' ">
+				AND u.f_creator LIKE
+				'%'||#{creator,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="updator != null and updator != '' ">
+				AND u.f_updator LIKE
+				'%'||#{updator,jdbcType=VARCHAR}||'%'
+			</if>
+		</where>
+	</select>
+
+	<!-- 加载用户详细信息 -->
+	<select id="loadEmpiUser" resultMap="empiUserResultMap">
+		select u.f_user_id, u.empi_id, u.f_username, u.f_icn, u.f_sex,
+		u.f_birthday, u.f_nation, u.f_tel, u.f_photo, u.f_regaddress,
+		u.f_preaddress, u.f_state, u.f_createdate, u.f_updatedate,
+		u.f_creator, u.f_updator, u.del_flag, c.card_id, c.card_no,
+		c.card_sid, c.card_type, c.card_state, c.empi_id cempi from
+		EMPI_USER u left outer join EMPI_CARD c on u.empi_id = c.empi_id
+		and c.card_state = 1
+		<where>
+			u.del_flag = 1 and u.f_state = 1
+			<if test="userId != null and userId != '' ">
+				AND u.f_user_id = #{userId,jdbcType=VARCHAR}
+			</if>
+			<if test="empiId != null and empiId != '' ">
+				AND u.empi_id = #{empiId,jdbcType=VARCHAR}
+			</if>
+			<if test="userName != null and userName != '' ">
+				AND u.f_username LIKE
+				'%'||#{userName,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="icn != null and icn != '' ">
+				AND u.f_icn = #{icn,jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null and sex != '' ">
+				AND u.f_sex = #{sex,jdbcType=VARCHAR}
+			</if>
+			<if test="regaddress != null and regaddress != '' ">
+				AND u.f_regaddress LIKE
+				'%'||#{regaddress,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="preaddress != null and preaddress != '' ">
+				AND u.f_preaddress LIKE
+				'%'||#{preaddress,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="creator != null and creator != '' ">
+				AND u.f_creator LIKE
+				'%'||#{creator,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="updator != null and updator != '' ">
+				AND u.f_updator LIKE
+				'%'||#{updator,jdbcType=VARCHAR}||'%'
+			</if>
+		</where>
+	</select>
+
+	<!-- 用户更新EMPI -->
+	<update id="updateSynEmpiUser" parameterType="EmpiUser">
+		update EMPI_USER
+		<set>
+			<if test="userName != null and userName != '' ">
+				f_username = #{userName, jdbcType=VARCHAR},
+			</if>
+			<if test="newEmpiId != null and newEmpiId != '' ">
+				empi_id = #{newEmpiId, jdbcType=VARCHAR},
+			</if>
+			<if test="icn != null and icn != '' ">
+				f_icn = #{icn, jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null and sex != '' ">
+				f_sex = #{sex, jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null and birthday != '' ">
+				f_birthday = #{birthday, jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null and nation != '' ">
+				f_nation = #{nation, jdbcType=VARCHAR},
+			</if>
+			<if test="tel != null and tel != '' ">
+				f_tel = #{tel, jdbcType=VARCHAR},
+			</if>
+			<if test="photo != null and photo != '' ">
+				f_photo = #{photo, jdbcType=VARCHAR},
+			</if>
+			<if test="regaddress != null and regaddress != '' ">
+				f_regaddress = #{regaddress, jdbcType=VARCHAR},
+			</if>
+			<if test="preaddress != null and preaddress != '' ">
+				f_preaddress = #{preaddress, jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null and updateDate != '' ">
+				f_updatedate= #{updateDate, jdbcType=VARCHAR},
+			</if>
+			<if test="updator != null and updator != '' ">
+				f_updator= #{updator, jdbcType=VARCHAR},
+			</if>
+		</set>
+		where del_flag = 1 and f_state = 1 and empi_id = #{empiId}
+	</update>
+
+	<!-- web service -->
+	<!-- 根据EMPI查询基本信息和注册的卡信息 -->
+	<select id="loadEmpiUserByEmpi" parameterType="string"
+		resultMap="empiUserResultMap">
+		select u.f_user_id, u.empi_id, u.f_username, u.f_icn, u.f_sex,
+		u.f_birthday, u.f_nation, u.f_tel, u.f_photo, u.f_regaddress,
+		u.f_preaddress, u.f_state, u.f_createdate, u.f_updatedate,
+		u.f_creator, u.f_updator, u.del_flag, c.card_id, c.card_no,
+		c.card_sid, c.card_type, c.card_state, c.empi_id cempi from
+		EMPI_USER u left outer join EMPI_CARD c on u.empi_id = c.empi_id
+		and c.card_state = 1
+		<where>
+			u.del_flag = 1 and u.f_state = 1 AND u.empi_id =
+			#{empi,jdbcType=VARCHAR}
+		</where>
+	</select>
+
+	<!-- 根据注册的卡号查询基本信息和注册的卡信息 -->
+	<select id="loadEmpiUserByCode" parameterType="EmpiCard"
+		resultMap="empiUserResultMap">
+		select u.f_user_id, u.empi_id, u.f_username, u.f_icn, u.f_sex,
+		u.f_birthday, u.f_nation, u.f_tel, u.f_photo, u.f_regaddress,
+		u.f_preaddress, u.f_state, u.f_createdate, u.f_updatedate,
+		u.f_creator, u.f_updator, u.del_flag, c.card_id, c.card_no,
+		c.card_sid, c.card_type, c.card_state, c.empi_id cempi from
+		EMPI_USER u left outer join EMPI_CARD c on u.empi_id = c.empi_id
+		and c.card_state = 1 where u.del_flag = 1 and u.f_state = 1 AND
+		u.empi_id in (select c.empi_id from EMPI_CARD c where
+		c.card_state = 1 and c.card_no = #{cardNo,jdbcType=VARCHAR} and
+		card_type = #{cardType,jdbcType=VARCHAR})
+	</select>
+	
+</mapper>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.dict.dao.DictionaryMapper">
+	<resultMap id="DictionaryResultMap" type="com.zebone.btp.app.dict.pojo.Dictionary">
+		<id column="DICT_ID" property="dictId" jdbcType="VARCHAR"/>
+		<result column="DICT_NAME" property="dictName" jdbcType="VARCHAR"/>
+		<result column="DICT_CODE" property="dictCode" jdbcType="VARCHAR"/>
+		<result column="NAME_PINYIN" property="namePinyin" jdbcType="VARCHAR"/>
+		<result column="NAME_JIANPIN" property="nameJianpin" jdbcType="VARCHAR"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="DICTTYPE_ID" property="dicttypeId" jdbcType="VARCHAR"/>
+		<result column="IS_DELETED" property="isDeleted" jdbcType="DECIMAL"/>
+		<result column="ORDER_NO" property="orderNo" jdbcType="DECIMAL"/>
+	</resultMap>
+	<sql id="column_list">
+		DICT_ID, DICT_NAME, DICT_CODE, NAME_PINYIN, NAME_JIANPIN, REMARK, DICTTYPE_ID, IS_DELETED, ORDER_NO
+	</sql>
+	
+	<!-- 根据字典id查询字典信息 -->
+	<select id="findById" resultMap="DictionaryResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_DICTIONARY
+		where DICT_ID = #{dictId,jdbcType=VARCHAR} and IS_DELETED = 0
+	</select>
+	
+	<!-- 根据字典编码查询字典信息 -->
+	<select id="findByCode" resultMap="DictionaryResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_DICTIONARY
+		where DICT_CODE = #{dictCode,jdbcType=VARCHAR} and IS_DELETED = 0
+	</select>
+	
+	<!-- 根据排序号和字典类型id获取字典 -->
+	<select id="findDictionaryByOrderNo" resultMap="DictionaryResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_DICTIONARY
+		where DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR} and ORDER_NO = #{orderNo,jdbcType=DECIMAL} and IS_DELETED = 0
+	</select>	
+	
+	<!-- 查询字典信息列表（不分页） -->
+	<select id="findDictionaryPage" resultMap="DictionaryResultMap" parameterType="com.zebone.btp.app.dict.pojo.Dictionary">
+		select 
+		<include refid="column_list" /> 
+		from BTP_DICTIONARY
+		<where>
+			IS_DELETED = 0
+			and DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+			<if test="dictName!=null and dictName!=''">
+				and DICT_NAME like '%' || #{dictName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="dictCode!=null and dictCode!=''">
+				and DICT_CODE like '%' || #{dictCode,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>		
+		ORDER BY ORDER_NO ASC
+	</select>
+	<!-- 查询字典信息列表总数 -->	
+	<select id="findDictionaryTotalPage" resultType="int" parameterType="com.zebone.btp.app.dict.pojo.Dictionary">
+		select count (*)
+		from BTP_DICTIONARY
+		<where>
+			IS_DELETED = 0
+			and DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+			<if test="dictName!=null and dictName!=''">
+				and DICT_NAME like '%' || #{dictName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="dictCode!=null and dictCode!=''">
+				and DICT_CODE like '%' || #{dictCode,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>		
+	</select>
+	
+	<!-- 根据类型编码查询字典信息 -->
+	<select id="findDictionaryByTypeCode" resultMap="DictionaryResultMap" parameterType="java.lang.String">
+		SELECT
+		    BTP_DICTIONARY.DICT_ID,
+		    BTP_DICTIONARY.DICT_NAME,
+		    BTP_DICTIONARY.DICT_CODE,
+		    BTP_DICTIONARY.NAME_PINYIN,
+		    BTP_DICTIONARY.NAME_JIANPIN,
+		    BTP_DICTIONARY.REMARK,
+		    BTP_DICTIONARY.DICTTYPE_ID,
+		    BTP_DICTIONARY.IS_DELETED,
+		    BTP_DICTIONARY.ORDER_NO
+		FROM
+	    	BTP_DICTIONARY,
+	    	BTP_DICTIONARY_TYPE
+		WHERE
+		    BTP_DICTIONARY.DICTTYPE_ID = BTP_DICTIONARY_TYPE.TYPE_ID
+		AND BTP_DICTIONARY_TYPE.TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+		AND BTP_DICTIONARY.IS_DELETED = 0
+		ORDER BY BTP_DICTIONARY.ORDER_NO
+	</select>
+	
+	<!-- 根据类型编码和字典编码获取字典值 -->
+	<select id="findDictionaryByTypeCodeAndDictCode" resultMap="DictionaryResultMap" parameterType="java.lang.String">
+		SELECT
+		    BTP_DICTIONARY.DICT_ID,
+		    BTP_DICTIONARY.DICT_NAME,
+		    BTP_DICTIONARY.DICT_CODE,
+		    BTP_DICTIONARY.NAME_PINYIN,
+		    BTP_DICTIONARY.NAME_JIANPIN,
+		    BTP_DICTIONARY.REMARK,
+		    BTP_DICTIONARY.DICTTYPE_ID,
+		    BTP_DICTIONARY.IS_DELETED,
+		    BTP_DICTIONARY.ORDER_NO
+		FROM
+	    	BTP_DICTIONARY,
+	    	BTP_DICTIONARY_TYPE
+		WHERE
+		    BTP_DICTIONARY.DICTTYPE_ID = BTP_DICTIONARY_TYPE.TYPE_ID
+			AND BTP_DICTIONARY_TYPE.TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+			AND BTP_DICTIONARY.DICT_CODE = #{dictCode,jdbcType=VARCHAR}
+			AND BTP_DICTIONARY.IS_DELETED = 0
+	</select>
+	
+	<!-- 获取需要交换排序号的字典 -->
+	<!-- upOrdown作为向上或向下移动的标志，1：向上；2：向下 -->
+	<select id="findDictionaryForOrder" resultMap="DictionaryResultMap">
+		SELECT
+		    B.DICT_ID,
+		    B.DICT_NAME,
+		    B.DICT_CODE,
+		    B.NAME_PINYIN,
+		    B.NAME_JIANPIN,
+		    B.REMARK,
+		    B.DICTTYPE_ID,
+		    B.IS_DELETED,
+		    B.ORDER_NO
+		FROM(SELECT
+		    	BTP_DICTIONARY.DICT_ID,
+			    BTP_DICTIONARY.DICT_NAME,
+			    BTP_DICTIONARY.DICT_CODE,
+			    BTP_DICTIONARY.NAME_PINYIN,
+			    BTP_DICTIONARY.NAME_JIANPIN,
+			    BTP_DICTIONARY.REMARK,
+			    BTP_DICTIONARY.DICTTYPE_ID,
+			    BTP_DICTIONARY.IS_DELETED,
+			    BTP_DICTIONARY.ORDER_NO
+			FROM
+		    	BTP_DICTIONARY		    
+			<where>
+				BTP_DICTIONARY.IS_DELETED = 0
+				and BTP_DICTIONARY.DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+				<if test="upOrdowm == 1">
+					and BTP_DICTIONARY.ORDER_NO <![CDATA[<]]> #{orderNo,jdbcType=DECIMAL}
+				</if>
+				<if test="upOrdowm == 2">
+					and BTP_DICTIONARY.ORDER_NO <![CDATA[>]]> #{orderNo,jdbcType=DECIMAL}
+				</if>
+			</where>
+			<if test="upOrdowm == 1">
+				order by BTP_DICTIONARY.ORDER_NO desc
+			</if>
+			<if test="upOrdowm == 2">
+				order by BTP_DICTIONARY.ORDER_NO asc
+			</if>
+			) B
+		WHERE ROWNUM = 1
+	</select>
+	
+	<!-- 根据字典类型id获取类型下最大的排序号 -->
+	<select id="findDictionaryMaxNo" resultType="int" parameterType="java.lang.String">
+		select count(*)
+		from BTP_DICTIONARY
+		where DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR} 
+	</select>	
+	
+	<!-- 根据字典类型id获取类型下的字典 -->
+	<select id="findDictionaryByTypeId" resultMap="DictionaryResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list" /> 
+		from BTP_DICTIONARY
+		where DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR} order by DICT_CODE 
+	</select>
+
+	<!-- 根据字典id删除一条字典信息 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from BTP_DICTIONARY
+		where DICT_ID = #{dictId,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 插入一条字典信息 -->
+	<insert id="insert" parameterType="com.zebone.btp.app.dict.pojo.Dictionary">
+		insert into BTP_DICTIONARY
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dictId != null">
+				DICT_ID,
+			</if>
+			<if test="dictName != null">
+				DICT_NAME,
+			</if>
+			<if test="dictCode != null">
+				DICT_CODE,
+			</if>
+			<if test="namePinyin != null">
+				NAME_PINYIN,
+			</if>
+			<if test="nameJianpin != null">
+				NAME_JIANPIN,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+			<if test="dicttypeId != null">
+				DICTTYPE_ID,
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED,
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dictId != null">
+				#{dictId,jdbcType=VARCHAR},
+			</if>
+			<if test="dictName != null">
+				#{dictName,jdbcType=VARCHAR},
+			</if>
+			<if test="dictCode != null">
+				#{dictCode,jdbcType=VARCHAR},
+			</if>
+			<if test="namePinyin != null">
+				#{namePinyin,jdbcType=VARCHAR},
+			</if>
+			<if test="nameJianpin != null">
+				#{nameJianpin,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="dicttypeId != null">
+				#{dicttypeId,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=DECIMAL},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 更新一条字典信息 -->
+	<update id="updateById" parameterType="com.zebone.btp.app.dict.pojo.Dictionary">
+		update BTP_DICTIONARY
+		<set>
+			<if test="dictName != null">
+				DICT_NAME = #{dictName,jdbcType=VARCHAR},
+			</if>
+			<if test="dictCode != null">
+				DICT_CODE = #{dictCode,jdbcType=VARCHAR},
+			</if>
+			<if test="namePinyin != null">
+				NAME_PINYIN = #{namePinyin,jdbcType=VARCHAR},
+			</if>
+			<if test="nameJianpin != null">
+				NAME_JIANPIN = #{nameJianpin,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="dicttypeId != null">
+				DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO = #{orderNo,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where DICT_ID = #{dictId,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 根据字典类型id重新排序 -->
+	<update id="updateAllOrderNo" parameterType="java.lang.String">
+		
+	</update>
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.log.dao.DocViewLogMapper">
+    <resultMap id="DocViewLogResultMap" type="com.zebone.dip.log.vo.DocViewLog">
+        <result column="ID_" property="id" jdbcType="VARCHAR"/>
+        <result column="VIEW_STATE" property="viewState" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR"/>
+        <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR"/>
+        <result column="DOCTOR_CODE" property="doctorCode" jdbcType="VARCHAR"/>
+        <result column="DOC_DEPT_CODE" property="deptCode" jdbcType="VARCHAR"/>
+        <result column="DOC_TYPE" property="docType" jdbcType="VARCHAR"/>
+        <result column="DOC_NO" property="docNo" jdbcType="VARCHAR"/>
+        <result column="CARD_NO" property="cardNo" jdbcType="VARCHAR"/>
+        <result column="CARD_TYPE" property="cardType" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="CARD_ORG" property="cardOrg" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getDocViewLogList" resultMap="DocViewLogResultMap" parameterType="com.zebone.dip.log.vo.DocViewLog">
+        SELECT * FROM DOC_VIEW_LOG A
+        <where>
+            1=1
+            <if test="docType != null and docType !=''">
+                AND A.DOC_TYPE = #{docType,jdbcType=VARCHAR}
+            </if>
+            <if test="orgCode != null and orgCode !=''">
+                AND A.ORG_CODE = #{orgCode,jdbcType=VARCHAR}
+            </if>
+            <if test="startDt !=null and startDt !=''">
+                AND A.CREATE_TIME >= #{startDt,jdbcType=VARCHAR}
+            </if>
+            <if test="endDt !=null and endDt !=''">
+                <![CDATA[
+				AND A.CREATE_TIME <= #{endDt,jdbcType=VARCHAR}
+				]]>
+            </if>
+            <if test="name !=null and name !=''">
+                AND A.NAME LIKE '%' || #{name,jdbcType=VARCHAR} || '%' escape '/'
+            </if>
+            <if test="cardType !=null and cardType !=''">
+                AND A.CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+            </if>
+            <if test="cardNo !=null and cardNo !=''">
+                AND A.CARD_NO LIKE '%' || #{cardNo,jdbcType=VARCHAR} || '%' escape '/'
+            </if>
+        </where>
+        ORDER BY A.CREATE_TIME DESC
+    </select>
+    <select id="getDocViewLogCount" resultType="int" parameterType="com.zebone.dip.log.vo.DocViewLog">
+        SELECT COUNT(A.ID_)
+        FROM DOC_VIEW_LOG A
+        <where>
+            1=1
+            <if test="docType != null and docType !=''">
+                AND A.DOC_TYPE = #{docType,jdbcType=VARCHAR}
+            </if>
+            <if test="orgCode != null and orgCode !=''">
+                AND A.ORG_CODE = #{orgCode,jdbcType=VARCHAR}
+            </if>
+            <if test="startDt !=null and startDt !=''">
+                AND A.CREATE_TIME >= #{startDt,jdbcType=VARCHAR}
+            </if>
+            <if test="endDt !=null and endDt !=''">
+                <![CDATA[
+				AND A.CREATE_TIME <= #{endDt,jdbcType=VARCHAR}
+				]]>
+            </if>
+            <if test="name !=null and name !=''">
+                AND A.NAME LIKE '%' || #{name,jdbcType=VARCHAR} || '%' escape '/'
+            </if>
+            <if test="cardType !=null and cardType !=''">
+                AND A.CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+            </if>
+            <if test="cardNo !=null and cardNo !=''">
+                AND A.CARD_NO LIKE '%' || #{cardNo,jdbcType=VARCHAR} || '%' escape '/'
+            </if>
+        </where>
+    </select>
+</mapper>

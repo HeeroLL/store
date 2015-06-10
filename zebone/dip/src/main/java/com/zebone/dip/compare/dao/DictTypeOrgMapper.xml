@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.compare.dao.DictTypeOrgMapper" >
+  <resultMap id="DictTypeOrgMap" type="com.zebone.dip.compare.vo.DictTypeOrg" >
+    <id column="TYPE_ID" property="typeId" jdbcType="VARCHAR" />
+    <result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="TYPE_CODE" property="typeCode" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="DECIMAL" />
+    <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+    <result column="VERSION" property="version" jdbcType="VARCHAR" />
+    <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="DictTypeOrgList" >
+    TYPE_ID, TYPE_NAME, TYPE_CODE, REMARK, IS_DELETED, PARENT_ID, VERSION, ORG_CODE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="DictTypeOrgMap" parameterType="java.lang.String" >
+    select 
+    <include refid="DictTypeOrgList" />
+    from P_DICTIONARY_TYPE_ORG
+    where TYPE_ID = #{typeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from P_DICTIONARY_TYPE_ORG
+    where TYPE_ID = #{typeId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zebone.dip.compare.vo.DictTypeOrg" >
+    insert into P_DICTIONARY_TYPE_ORG (TYPE_ID, TYPE_NAME, TYPE_CODE, 
+      REMARK, IS_DELETED, PARENT_ID, 
+      VERSION, ORG_CODE)
+    values (#{typeId,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{typeCode,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{isDeleted,jdbcType=DECIMAL}, #{parentId,jdbcType=VARCHAR}, 
+      #{version,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zebone.dip.compare.vo.DictTypeOrg" >
+    insert into P_DICTIONARY_TYPE_ORG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        TYPE_ID,
+      </if>
+      <if test="typeName != null" >
+        TYPE_NAME,
+      </if>
+      <if test="typeCode != null" >
+        TYPE_CODE,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="version != null" >
+        VERSION,
+      </if>
+      <if test="orgCode != null" >
+        ORG_CODE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCode != null" >
+        #{typeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=DECIMAL},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zebone.dip.compare.vo.DictTypeOrg" >
+    update P_DICTIONARY_TYPE_ORG
+    <set >
+      <if test="typeName != null" >
+        TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCode != null" >
+        TYPE_CODE = #{typeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        VERSION = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        ORG_CODE = #{orgCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TYPE_ID = #{typeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zebone.dip.compare.vo.DictTypeOrg" >
+    update P_DICTIONARY_TYPE_ORG
+    set TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+      TYPE_CODE = #{typeCode,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+      PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      VERSION = #{version,jdbcType=VARCHAR},
+      ORG_CODE = #{orgCode,jdbcType=VARCHAR}
+    where TYPE_ID = #{typeId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="getListByCodeAndName" parameterType="java.lang.String" resultMap="DictTypeOrgMap">
+  	 select 
+    <include refid="DictTypeOrgList" />
+    from P_DICTIONARY_TYPE_ORG
+    <where>
+    	IS_DELETED = 0 and ORG_CODE = #{orgCode,jdbcType=VARCHAR}
+    	<if test="typeName != null and typeName != ''">
+    		and TYPE_NAME like '%' || #{typeName,jdbcType=VARCHAR} || '%'
+    	</if>
+    </where>
+  </select>
+  <select id="getDictList" parameterType="com.zebone.dip.compare.vo.DictInfo" resultType="com.zebone.dip.compare.vo.DictInfo">
+  	SELECT 
+       C.DICTTYPE_ID AS orgDictTypeId,
+	   C.ID_ AS id,
+	   C.ORG_DICT_ID AS orgDictId,
+       C.DICT_NAME AS orgDict,
+       C.DICT_CODE As orgDictCode,
+       C.DICT_ID AS dictId,
+       D.DICT_NAME AS dict,
+       D.DICT_CODE AS dictCode,
+       D.DICTTYPE_ID AS dictTypeId
+	FROM (SELECT A.DICT_ID AS ORG_DICT_ID, A.DICT_NAME, A.DICT_CODE, B.DICT_ID,B.ID_,A.DICTTYPE_ID
+	        FROM P_DICTIONARY_ORG A
+	        LEFT JOIN DICT_MAPPING B
+	          ON A.DICT_ID = B.ORG_DICT_ID
+	       WHERE A.DICTTYPE_ID = #{orgDictTypeId,jdbcType=VARCHAR}
+           AND B.USER_CODE = #{userCode,jdbcType=VARCHAR} AND B.ORG_CODE = #{orgCode,jdbcType=VARCHAR}
+	       <if test="orgDictId != null and orgDictId != ''">
+	       		AND A.DICT_ID = #{orgDictId,jdbcType=VARCHAR}
+	       </if>
+	       ) C
+	LEFT JOIN P_DICTIONARY D
+	  ON D.DICT_ID = C.DICT_ID
+  </select>
+  <select id="getTotalCount" parameterType="com.zebone.dip.compare.vo.DictInfo" resultType="int">
+  	SELECT 
+       COUNT(*)
+	FROM (SELECT A.DICT_ID AS ORG_DICT_ID, A.DICT_NAME, A.DICT_CODE, B.DICT_ID,B.ID_,A.DICTTYPE_ID
+	        FROM P_DICTIONARY_ORG A
+	        LEFT JOIN DICT_MAPPING B
+	          ON A.DICT_ID = B.ORG_DICT_ID
+	       WHERE A.DICTTYPE_ID = #{orgDictTypeId,jdbcType=VARCHAR}
+           AND B.USER_CODE = #{userCode,jdbcType=VARCHAR} AND B.ORG_CODE = #{orgCode,jdbcType=VARCHAR}
+	       <if test="orgDictId != null and orgDictId != ''">
+	       		AND A.DICT_ID = #{orgDictId,jdbcType=VARCHAR}
+	       </if>
+	       ) C
+	LEFT JOIN P_DICTIONARY D
+	  ON D.DICT_ID = C.DICT_ID
+  </select>
+  <select id="getDictByName" parameterType="com.zebone.dip.compare.vo.DictInfo" resultType="com.zebone.dip.compare.vo.DictInfo">
+  	<![CDATA[
+  		SELECT T.DICT_ID AS orgDictId, T.DICT_NAME AS orgDict, T.DICT_CODE AS orgDictCode
+		  FROM P_DICTIONARY_ORG T
+		 WHERE T.DICTTYPE_ID = #{orgDictTypeId,jdbcType=VARCHAR}
+		   AND T.DICT_NAME LIKE '%' || #{orgDict,jdbcType=VARCHAR} || '%'
+		   AND ROWNUM <= 10
+  	]]>
+  </select>
+  <select id="getDictByOrgDictId" parameterType="java.lang.String" resultType="com.zebone.dip.compare.vo.DictInfo">
+  	SELECT E.id,
+       E.orgDictId,
+       E.orgDict,
+       E.orgDictCode,
+       E.dictId,
+       E.dict,
+       E.dictCode,
+       E.orgDictTypeId,
+       E.dictTypeId,
+       F.TYPE_NAME     AS orgDictType,
+       F.TYPE_CODE     AS orgDictTypeCode,
+       G.TYPE_NAME     AS dictType,
+       G.TYPE_CODE     AS dictTypeCode
+  FROM (SELECT C.ID_         AS id,
+               C.ORG_DICT_ID AS orgDictId,
+               C.DICT_NAME   AS orgDict,
+               C.DICT_CODE   As orgDictCode,
+               C.DICT_ID     AS dictId,
+               D.DICT_NAME   AS dict,
+               D.DICT_CODE   AS dictCode,
+               C.DICTTYPE_ID AS orgDictTypeId,
+               D.DICTTYPE_ID AS dictTypeId
+          FROM (SELECT A.DICT_NAME,
+                       A.DICT_CODE,
+                       A.DICT_ID AS ORG_DICT_ID,
+                       B.DICT_ID,
+                       B.ID_,
+                       A.DICTTYPE_ID
+                  FROM P_DICTIONARY_ORG A
+                  LEFT JOIN DICT_MAPPING B
+                    ON A.DICT_ID = B.ORG_DICT_ID
+                 WHERE B.ID_ = #{orgDictId,jdbcType=VARCHAR} ) C
+          LEFT JOIN P_DICTIONARY D
+            ON C.DICT_ID = D.DICT_ID) E
+  LEFT JOIN P_DICTIONARY_TYPE_ORG F
+    ON E.orgDictTypeId = F.TYPE_ID
+  LEFT JOIN P_DICTIONARY_TYPE G
+    ON E.dictTypeId = G.TYPE_ID
+  </select>
+  <select id="getListByName" parameterType="java.lang.String" resultMap="DictTypeOrgMap">
+  	<![CDATA[
+  	SELECT T.TYPE_ID, T.TYPE_NAME, T.TYPE_CODE
+	  FROM P_DICTIONARY_TYPE T
+	 WHERE T.TYPE_NAME LIKE '%' || #{name} || '%'
+	   AND T.IS_DELETED = 0
+		 AND ROWNUM <= 10
+	 ]]>
+  </select>
+  <select id="getDictInfoByName" parameterType="com.zebone.dip.compare.vo.DictInfo" resultType="com.zebone.dip.compare.vo.DictInfo">
+  	<![CDATA[
+  	SELECT T.DICT_ID AS dictId, 
+       T.DICT_NAME AS dict, 
+			 T.DICT_CODE AS dictCode
+	  FROM P_DICTIONARY T
+	 WHERE T.DICTTYPE_ID = #{dictTypeId,jdbcType=VARCHAR}
+	   AND T.DICT_NAME LIKE '%' || #{dict,jdbcType=VARCHAR} || '%'
+	   AND T.IS_DELETED = 0
+		 AND ROWNUM <= 10
+	]]>
+  </select>
+  <update id="updateCompareInfo" parameterType="com.zebone.dip.compare.vo.DictInfo">
+  	UPDATE DICT_MAPPING T SET T.DICT_ID = #{dictId,jdbcType=VARCHAR} WHERE T.ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="getCountByInfo" parameterType="com.zebone.dip.compare.vo.DictInfo" resultType="int">
+  	SELECT COUNT(*) FROM P_DICTIONARY_ORG T WHERE T.DICTTYPE_ID = #{orgDictTypeId,jdbcType=VARCHAR} AND T.DICT_CODE = #{orgDictCode,jdbcType=VARCHAR} 
+  </select>
+  <select id="getCountByDictInfo" parameterType="com.zebone.dip.compare.vo.DictInfo" resultType="int">
+  	SELECT COUNT(*) FROM P_DICTIONARY_ORG T WHERE T.DICT_NAME = #{orgDict,jdbcType=VARCHAR} AND T.DICT_CODE = #{orgDictCode,jdbcType=VARCHAR} 
+  </select>
+  <insert id="saveDictInfo" parameterType="com.zebone.dip.compare.vo.DictInfo">
+  	INSERT INTO P_DICTIONARY_ORG
+	  (DICT_ID, DICTTYPE_ID, DICT_NAME, DICT_CODE, ORG_CODE)
+	VALUES
+	  (#{orgDictId,jdbcType=VARCHAR},#{orgDictTypeId,jdbcType=VARCHAR},#{orgDict,jdbcType=VARCHAR},#{orgDictCode,jdbcType=VARCHAR},#{orgCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="saveCompareInfo" parameterType="com.zebone.dip.compare.vo.DictInfo">
+  	INSERT INTO DICT_MAPPING
+	  (ID_, ORG_DICT_ID, DICT_ID, ORG_CODE, USER_CODE, USER_TIME)
+	VALUES
+	  (#{id,jdbcType=VARCHAR},#{orgDictId,jdbcType=VARCHAR},#{dictId,jdbcType=VARCHAR},#{orgCode,jdbcType=VARCHAR},#{userCode,jdbcType=VARCHAR},#{userTime,jdbcType=VARCHAR})
+  </insert>
+  <select id="getCountTypeByInfo" parameterType="com.zebone.dip.compare.vo.DictInfo" resultType="java.lang.String">
+  	SELECT T.TYPE_ID
+	  FROM P_DICTIONARY_TYPE_ORG T
+	 WHERE T.TYPE_CODE = #{orgDictTypeCode,jdbcType=VARCHAR}
+	   AND T.ORG_CODE = #{orgCode,jdbcType=VARCHAR}
+  </select>
+  <insert id="saveDictType" parameterType="com.zebone.dip.compare.vo.DictInfo" >
+  	INSERT INTO P_DICTIONARY_TYPE_ORG
+	  (TYPE_ID, TYPE_NAME, TYPE_CODE, IS_DELETED, ORG_CODE)
+	VALUES
+	  (#{orgDictTypeId,jdbcType=VARCHAR},#{orgDictType,jdbcType=VARCHAR},#{orgDictTypeCode,jdbcType=VARCHAR},0,#{orgCode,jdbcType=VARCHAR})
+  </insert>
+  <delete id="deleteOrgDictById" parameterType="java.lang.String">
+  	DELETE FROM P_DICTIONARY_ORG T WHERE T.DICT_ID = #{dictId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteCompareById" parameterType="java.lang.String">
+  	DELETE FROM DICT_MAPPING T WHERE T.ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+</mapper>

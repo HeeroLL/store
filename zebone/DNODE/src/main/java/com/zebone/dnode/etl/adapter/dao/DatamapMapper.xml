@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.etl.adapter.dao.DatamapMapper">
+	<select id="getByFieldCode" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.FieldConf">
+		SELECT 
+			T.FIELD_TYPE AS fieldType,
+			T.FIELD_VALUE AS fieldValue,
+			T.FIELD_ID AS fieldId
+		FROM 
+			P_FIELD_CONF T 
+		WHERE 
+			T.FIELD_ID = #{fieldCode} AND T.IS_DELETED = 0
+	</select>
+	<select id="getDictList" resultType="com.zebone.dnode.etl.adapter.vo.DictMap">
+		SELECT 
+			D.DICT_ID AS orgDictId,
+			D.DICT_CODE AS dictCode,
+			C.DICT_ID AS dictId 
+		FROM 
+			(SELECT 
+				A.ORG_DICT_ID,
+				A.DICT_ID 
+			FROM 
+				DICT_MAPPING A
+			WHERE 
+				A.ORG_CODE = #{orgCode} AND EXISTS
+				(SELECT 'X' FROM P_DICTIONARY B WHERE A.DICT_ID = B.DICT_ID AND B.DICTTYPE_ID = #{dictTypeId} )) C
+		LEFT JOIN 
+			P_DICTIONARY_ORG D ON C.ORG_DICT_ID = D.DICT_ID
+	</select>
+	<select id="getByDictId" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.DictInfo">
+		SELECT 
+			T.DICT_NAME AS dictName,
+			T.DICT_CODE AS dictCode
+		FROM 
+			P_DICTIONARY T 
+		WHERE 
+			T.DICT_ID = #{dictId} AND T.IS_DELETED = 0
+	</select>
+	<select id="getByMdId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT T.TABLE_NAME FROM P_MASTER_DATA T WHERE T.ID_ = #{mdId}
+	</select>
+	<select id="getMdIdByMd" resultType="java.lang.String">
+		SELECT 
+			T.M_ID 
+		FROM 
+			#{orgTableName} T 
+		WHERE 
+			T.MD_CODE = #{code} AND T.ORG_CODE = #{orgCode}
+	</select>
+	<select id="getDictByMdId" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.DictInfo">
+		SELECT 
+			T.MD_CODE AS dictCode,
+			T.MD_NAME AS dictName
+		FROM
+			#{tableName} T 
+		WHERE 
+			T.ID_ = #{mdId}
+	</select>
+</mapper>

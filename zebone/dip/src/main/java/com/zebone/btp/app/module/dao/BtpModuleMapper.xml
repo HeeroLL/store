@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.module.dao.BtpModuleMapper">
+	<resultMap id="BtpModuleResultMap" type="com.zebone.btp.app.module.vo.BtpModule">
+		<id column="MODULE_ID" property="moduleId" jdbcType="VARCHAR"/>
+		<result column="PARENT_MODULE_ID" property="parentModuleId" jdbcType="VARCHAR"/>
+		<result column="MODULE_NAME" property="moduleName" jdbcType="VARCHAR"/>
+		<result column="MODULE_NAME_SPELL" property="moduleNameSpell" jdbcType="VARCHAR"/>
+		<result column="MAXICON" property="maxicon" jdbcType="VARCHAR"/>
+		<result column="MINICON" property="minicon" jdbcType="VARCHAR"/>
+		<result column="ORDER_NO" property="orderNo" jdbcType="DECIMAL"/>
+		<result column="TYPE_CODE" property="typeCode" jdbcType="DECIMAL"/>
+		<result column="LEVEL_CODE" property="levelCode" jdbcType="VARCHAR"/>
+		<result column="URL" property="url" jdbcType="VARCHAR"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="IS_DELETED" property="isDeleted" jdbcType="DECIMAL"/>
+		<result column="IS_SYS" property="isSys" jdbcType="DECIMAL"/>
+	</resultMap>
+	<sql id="column_list">
+		MODULE_ID, PARENT_MODULE_ID, MODULE_NAME, MODULE_NAME_SPELL, MAXICON, MINICON, ORDER_NO, 
+		LEVEL_CODE, URL, REMARK, IS_DELETED, IS_SYS
+	</sql>
+	
+	<!-- 根据模块id获取模块的相关信息 -->
+	<select id="findById" resultMap="BtpModuleResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_MODULE
+		where MODULE_ID = #{moduleId,jdbcType=VARCHAR}
+	</select>
+	<select id="getModuleByOrderNo" parameterType="com.zebone.btp.app.module.vo.BtpModule" resultMap="BtpModuleResultMap">
+		<![CDATA[
+		select * from ( select row_.*, rownum rownum_ from (
+		select 
+		t.MODULE_ID, t.PARENT_MODULE_ID, t.MODULE_NAME, t.MODULE_NAME_SPELL, 
+		t.MAXICON, t.MINICON, t.ORDER_NO, 
+		t.LEVEL_CODE, t.URL, t.REMARK, t.IS_DELETED, t.IS_SYS
+		from BTP_MODULE t
+		where t.PARENT_MODULE_ID = #{parentModuleId,jdbcType=VARCHAR} 
+		and t.ORDER_NO >= #{orderNo,jdbcType=DECIMAL} 
+		order by t.ORDER_NO
+		 ) row_ ) where rownum_ > 0 and rownum_ <= 2 
+		]]>
+	</select>
+	<!-- 根据页面查询模块列表信息start -->
+	<select id="searchListBtpModule" parameterType="com.zebone.btp.app.module.vo.BtpModule" resultMap="BtpModuleResultMap">
+		select 
+		<include refid="column_list"/> ,ORDER_NO as TYPE_CODE 
+		from BTP_MODULE a 
+		<where>
+			a.IS_DELETED = 0 and a.PARENT_MODULE_ID = #{parentModuleId,jdbcType=VARCHAR}
+			<if test="moduleName !='' and moduleName !=null">
+				and a.MODULE_NAME like '%' || #{moduleName,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>
+		order by a.ORDER_NO
+	</select>
+	<select id="searchTotalCountBtpModule" resultType="int" parameterType="com.zebone.btp.app.module.vo.BtpModule" >
+		select count(a.MODULE_ID)
+		from BTP_MODULE a 
+		<where>
+			a.IS_DELETED = 0 and a.PARENT_MODULE_ID = #{parentModuleId,jdbcType=VARCHAR}
+			<if test="moduleName !='' and moduleName !=null">
+				and a.MODULE_NAME like '%' || #{moduleName,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>
+		order by a.ORDER_NO
+	</select>
+	<!-- 根据页面查询模块列表信息end -->
+	
+	<!-- 查找所有模块的相关信息 -->
+	<select id="findAllBtpModuleInfo" resultMap="BtpModuleResultMap">
+		SELECT
+		    t.MODULE_ID,
+		    t.PARENT_MODULE_ID,
+		    t.MODULE_NAME
+		FROM
+		    BTP_MODULE t
+		WHERE
+		    t.IS_DELETED = 0
+		ORDER BY
+		    t.ORDER_NO
+	</select>
+	
+	<!-- 找到某父模块下的排序号最大的那个模块 -->
+	<select id="getOrderNoByPModuleId" parameterType="java.lang.String" resultMap="BtpModuleResultMap">
+		select t.order_no from BTP_MODULE t 
+		where t.IS_DELETED = 0 and t.parent_module_id = #{parentModuleId,jdbcType=VARCHAR}
+		order by t.ORDER_NO desc
+	</select>
+	
+	<!-- 根据医疗机构获取模块信息 -->
+	<select id="getModuleByMhoId" parameterType="java.lang.String" resultMap="BtpModuleResultMap">
+		select 
+		t.MODULE_ID, t.PARENT_MODULE_ID, t.MODULE_NAME
+		from BTP_MODULE t
+		left join BTP_MODULE_MHO n on t.MODULE_ID = n.MODULE_ID
+		where t.IS_DELETED = 0 and n.MHO_ID =  #{mhoId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 得到一个父模块下面的所有子模块。如果父id为空，那么查询所有的顶级的  -->
+	<select id="getModuleByParentId" parameterType="string" resultMap="BtpModuleResultMap">
+		SELECT
+		    *
+		FROM
+		    BTP_MODULE
+		WHERE
+		    IS_DELETED = 0
+		AND PARENT_MODULE_ID = #{parentId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 根据角色id，得到此角色的顶级模块 -->
+	<select id="getModuleByRoleIdAndParentId" resultMap="BtpModuleResultMap">
+		SELECT
+		  DISTINCT m.*
+		FROM
+		    BTP_MODULE m
+		JOIN
+		    BTP_ROLE_MODULE_R rm
+		ON
+		    m.MODULE_ID = rm.MODULE_ID
+		WHERE
+			m.IS_DELETED = 0
+		<if test="roleIdList != null and roleIdList.size()>0">
+		AND rm.ROLE_ID IN (
+			<foreach collection="roleIdList" item="roleId" separator=",">
+			#{roleId,jdbcType=VARCHAR}
+			</foreach>
+		)
+		</if>
+		
+		AND PARENT_MODULE_ID = #{parentId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 逻辑删除某个模块的信息 -->
+	<update id="removeBtpModuleByModuleId" parameterType="java.lang.String">
+		update BTP_MODULE t set t.IS_DELETED = 1 
+		where t.MODULE_ID = #{moduleId,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 保存模块信息 -->
+	<insert id="insert" parameterType="com.zebone.btp.app.module.vo.BtpModule">
+		insert into BTP_MODULE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="moduleId != null">
+				MODULE_ID,
+			</if>
+			<if test="parentModuleId != null">
+				PARENT_MODULE_ID,
+			</if>
+			<if test="moduleName != null">
+				MODULE_NAME,
+			</if>
+			<if test="moduleNameSpell != null">
+				MODULE_NAME_SPELL,
+			</if>
+			<if test="maxicon != null">
+				MAXICON,
+			</if>
+			<if test="minicon != null">
+				MINICON,
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO,
+			</if>
+			<if test="typeCode != null">
+				TYPE_CODE,
+			</if>
+			<if test="levelCode != null">
+				LEVEL_CODE,
+			</if>
+			<if test="url != null">
+				URL,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+			<if test="isSys != null">
+				IS_SYS,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="moduleId != null">
+				#{moduleId,jdbcType=VARCHAR},
+			</if>
+			<if test="parentModuleId != null">
+				#{parentModuleId,jdbcType=VARCHAR},
+			</if>
+			<if test="moduleName != null">
+				#{moduleName,jdbcType=VARCHAR},
+			</if>
+			<if test="moduleNameSpell != null">
+				#{moduleNameSpell,jdbcType=VARCHAR},
+			</if>
+			<if test="maxicon != null">
+				#{maxicon,jdbcType=VARCHAR},
+			</if>
+			<if test="minicon != null">
+				#{minicon,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo,jdbcType=DECIMAL},
+			</if>
+			<if test="typeCode != null">
+				#{typeCode,jdbcType=DECIMAL},
+			</if>
+			<if test="levelCode != null">
+				#{levelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isSys != null">
+				#{isSys,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 更新模块信息 -->
+	<update id="updateById" parameterType="com.zebone.btp.app.module.vo.BtpModule">
+		update BTP_MODULE
+		<set>
+			<if test="parentModuleId != null">
+				PARENT_MODULE_ID = #{parentModuleId,jdbcType=VARCHAR},
+			</if>
+			<if test="moduleName != null">
+				MODULE_NAME = #{moduleName,jdbcType=VARCHAR},
+			</if>
+			<if test="moduleNameSpell != null">
+				MODULE_NAME_SPELL = #{moduleNameSpell,jdbcType=VARCHAR},
+			</if>
+			<if test="maxicon != null">
+				MAXICON = #{maxicon,jdbcType=VARCHAR},
+			</if>
+			<if test="minicon != null">
+				MINICON = #{minicon,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO = #{orderNo,jdbcType=DECIMAL},
+			</if>
+			<if test="typeCode != null">
+				TYPE_CODE = #{typeCode,jdbcType=DECIMAL},
+			</if>
+			<if test="levelCode != null">
+				LEVEL_CODE = #{levelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				URL = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+			</if>
+			<if test="isSys != null">
+				IS_SYS = #{isSys,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where MODULE_ID = #{moduleId,jdbcType=VARCHAR}
+	</update>
+</mapper>

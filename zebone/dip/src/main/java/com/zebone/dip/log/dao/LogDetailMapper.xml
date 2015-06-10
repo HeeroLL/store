@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.log.dao.LogDetailMapper" >
+	<resultMap id="LogDetailResultMap" type="com.zebone.dip.log.vo.LogDetail" >
+		<id column="ID_" property="id" jdbcType="VARCHAR" />
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+		<result column="LOG_ID" property="logId" jdbcType="VARCHAR" />
+		<result column="EVENT_TYPE" property="eventType" jdbcType="VARCHAR" />
+		<result column="ERROR_CODE" property="errorCode" jdbcType="VARCHAR" />
+		<result column="LOG_DETAILS" property="logDetails" jdbcType="CLOB" />
+		<result column="EVENT_TIME" property="eventTime" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="LogDetailList" >
+		ID_, DOC_NO, LOG_ID, EVENT_TYPE, ERROR_CODE, LOG_DETAILS, EVENT_TIME
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="LogDetailResultMap" parameterType="java.lang.String" >
+		select 
+		<include refid="LogDetailList" />
+		from P_DOC_UPLOAD_LOG_DETAILS
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+		delete from P_DOC_UPLOAD_LOG_DETAILS
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.log.vo.LogDetail" >
+		insert into P_DOC_UPLOAD_LOG_DETAILS (ID_, DOC_NO, LOG_ID, 
+		  EVENT_TYPE, ERROR_CODE, LOG_DETAILS, 
+		  EVENT_TIME)
+		values (#{id,jdbcType=VARCHAR}, #{docNo,jdbcType=VARCHAR}, #{logId,jdbcType=VARCHAR}, 
+		  #{eventType,jdbcType=VARCHAR}, #{errorCode,jdbcType=VARCHAR}, #{logDetails,jdbcType=CLOB}, 
+		  #{eventTime,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.zebone.dip.log.vo.LogDetail" >
+		insert into P_DOC_UPLOAD_LOG_DETAILS
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="id != null" >
+		    ID_,
+		  </if>
+		  <if test="docNo != null" >
+		    DOC_NO,
+		  </if>
+		  <if test="logId != null" >
+		    LOG_ID,
+		  </if>
+		  <if test="eventType != null" >
+		    EVENT_TYPE,
+		  </if>
+		  <if test="errorCode != null" >
+		    ERROR_CODE,
+		  </if>
+		  <if test="logDetails != null" >
+		    LOG_DETAILS,
+		  </if>
+		  <if test="eventTime != null" >
+		    EVENT_TIME,
+		  </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+		  <if test="id != null" >
+		    #{id,jdbcType=VARCHAR},
+		  </if>
+		  <if test="docNo != null" >
+		    #{docNo,jdbcType=VARCHAR},
+		  </if>
+		  <if test="logId != null" >
+		    #{logId,jdbcType=VARCHAR},
+		  </if>
+		  <if test="eventType != null" >
+		    #{eventType,jdbcType=VARCHAR},
+		  </if>
+		  <if test="errorCode != null" >
+		    #{errorCode,jdbcType=VARCHAR},
+		  </if>
+		  <if test="logDetails != null" >
+		    #{logDetails,jdbcType=CLOB},
+		  </if>
+		  <if test="eventTime != null" >
+		    #{eventTime,jdbcType=VARCHAR},
+		  </if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.zebone.dip.log.vo.LogDetail" >
+		update P_DOC_UPLOAD_LOG_DETAILS
+		<set >
+		  <if test="docNo != null" >
+		    DOC_NO = #{docNo,jdbcType=VARCHAR},
+		  </if>
+		  <if test="logId != null" >
+		    LOG_ID = #{logId,jdbcType=VARCHAR},
+		  </if>
+		  <if test="eventType != null" >
+		    EVENT_TYPE = #{eventType,jdbcType=VARCHAR},
+		  </if>
+		  <if test="errorCode != null" >
+		    ERROR_CODE = #{errorCode,jdbcType=VARCHAR},
+		  </if>
+		  <if test="logDetails != null" >
+		    LOG_DETAILS = #{logDetails,jdbcType=CLOB},
+		  </if>
+		  <if test="eventTime != null" >
+		    EVENT_TIME = #{eventTime,jdbcType=VARCHAR},
+		  </if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.zebone.dip.log.vo.LogDetail" >
+		update P_DOC_UPLOAD_LOG_DETAILS
+		set DOC_NO = #{docNo,jdbcType=VARCHAR},
+		  LOG_ID = #{logId,jdbcType=VARCHAR},
+		  EVENT_TYPE = #{eventType,jdbcType=VARCHAR},
+		  ERROR_CODE = #{errorCode,jdbcType=VARCHAR},
+		  LOG_DETAILS = #{logDetails,jdbcType=CLOB},
+		  EVENT_TIME = #{eventTime,jdbcType=VARCHAR}
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="getLogDetailInfo" parameterType="com.zebone.dip.log.vo.LogDetail" resultMap="LogDetailResultMap">
+		SELECT A.ERROR_CODE,
+		       A.LOG_DETAILS,
+		       A.EVENT_TIME,
+		       D.DICT_NAME AS LOG_ID
+		  FROM P_DOC_UPLOAD_LOG_DETAILS A
+		  LEFT JOIN (SELECT B.DICT_NAME, B.DICT_CODE
+		               FROM BTP_DICTIONARY B
+		              INNER JOIN BTP_DICTIONARY_TYPE C
+		                 ON B.DICTTYPE_ID = C.TYPE_ID
+		                AND C.TYPE_CODE = 'errorCodeType') D
+		    ON A.ERROR_CODE = D.DICT_CODE
+		where A.LOG_ID = #{logId,jdbcType=VARCHAR} and A.EVENT_TYPE = #{eventType,jdbcType=VARCHAR}
+		ORDER BY A.EVENT_TIME DESC
+	</select>
+</mapper>

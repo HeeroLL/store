@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.empi.dao.EmpiInfoMapper" >
+    <resultMap id="BaseResultMap" type="com.zebone.dip.empi.vo.EmpiInfo" >
+        <id column="EMPI" property="empi" jdbcType="VARCHAR" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="SEX" property="sex" jdbcType="VARCHAR" />
+        <result column="BIRTHDAY" property="birthday" jdbcType="DATE" />
+        <result column="AGE" property="age" jdbcType="DECIMAL" />
+        <result column="PHOTO" property="photo" jdbcType="BLOB" />
+        <result column="STAR_LEVEL" property="starLevel" jdbcType="VARCHAR"/>
+        <result column="NATIONALITY" property="nationality" jdbcType="VARCHAR" />
+        <result column="NATION" property="nation" jdbcType="VARCHAR" />
+        <result column="MARITAL_STATUS" property="maritalStatus" jdbcType="VARCHAR" />
+        <result column="MOBILE_NUMBER" property="mobileNumber" jdbcType="VARCHAR" />
+        <result column="TEL_NUMBER" property="telNumber" jdbcType="VARCHAR" />
+        <result column="PROFESSION" property="profession" jdbcType="VARCHAR" />
+        <result column="WORK_UNIT" property="workUnit" jdbcType="VARCHAR" />
+        <result column="CONTACTS" property="contacts" jdbcType="VARCHAR" />
+        <result column="CONTACTS_MOBILE" property="contactsMobile" jdbcType="VARCHAR" />
+        <result column="PERMANENT_ADDRESS" property="permanentAddress" jdbcType="VARCHAR" />
+        <result column="PERMANENT_CODE" property="permanentCode" jdbcType="VARCHAR" />
+        <result column="PERMANENT_HOUSE_NO" property="permanentHouseNo" jdbcType="VARCHAR" />
+        <result column="PERMANENT_ZIPCODE" property="permanentZipcode" jdbcType="VARCHAR" />
+        <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+        <result column="ADDRESS_CODE" property="addressCode" jdbcType="VARCHAR" />
+        <result column="ADDRESS_HOUSE_NO" property="addressHouseNo" jdbcType="VARCHAR" />
+        <result column="ADDRESS_ZIPCODE" property="addressZipcode" jdbcType="VARCHAR" />
+        <result column="MODIFIED_TIME" property="modifiedTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    EMPI, NAME, SEX, BIRTHDAY, PHOTO, STAR_LEVEL, AGE, NATIONALITY, NATION, MARITAL_STATUS, MOBILE_NUMBER,
+    TEL_NUMBER, PROFESSION, WORK_UNIT, CONTACTS, CONTACTS_MOBILE, PERMANENT_ADDRESS,
+    PERMANENT_CODE, PERMANENT_HOUSE_NO, PERMANENT_ZIPCODE, ADDRESS, ADDRESS_CODE,
+    ADDRESS_HOSE_NO, ADDRESS_ZIPCODE, MODIFIED_TIME
+  </sql>
+
+    <select id="empiInfoList" resultMap="BaseResultMap" parameterType="com.zebone.dip.empi.vo.ResidentCard">
+        select
+        <include refid="Base_Column_List"/>
+        from E_RESIDENT_INFO where EMPI IN ( SELECT DISTINCT EMPI FROM E_RESIDENT_CARD WHERE 1=1
+        <if test="cardNo != null and cardNo != '' ">
+            AND CARD_NO = #{cardNo,jdbcType=VARCHAR}
+        </if>
+        <if test="cardType != null and cardType != '' ">
+            AND CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+        </if>
+        <if test="cardOrg != null and cardOrg != '' ">
+            AND CARD_ORG = #{cardOrg,jdbcType=VARCHAR}
+        </if>
+        )
+    </select>
+
+    <select id="empiInfoTotalCount" resultType="int" parameterType="com.zebone.dip.empi.vo.ResidentCard">
+        select count(EMPI)
+        from E_RESIDENT_INFO where EMPI IN ( SELECT DISTINCT EMPI FROM E_RESIDENT_CARD WHERE 1=1
+        <if test="cardNo != null and cardNo != '' ">
+            AND CARD_NO = #{cardNo,jdbcType=VARCHAR}
+        </if>
+        <if test="cardType != null and cardType != '' ">
+            AND CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+        </if>
+        <if test="cardOrg != null and cardOrg != '' ">
+            AND CARD_ORG = #{cardOrg,jdbcType=VARCHAR}
+        </if>
+        )
+    </select>
+
+    <select id="getEmpiDetail" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from E_RESIDENT_INFO where EMPI = #{empiNo,jdbcType=VARCHAR}
+    </select>
+</mapper>

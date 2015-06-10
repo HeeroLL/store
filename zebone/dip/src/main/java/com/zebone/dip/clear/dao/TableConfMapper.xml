@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.clear.dao.TableConfMapper">
+	<resultMap id="TableConfResultMap" type="com.zebone.dip.clear.vo.TableConf">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR"/>
+		<result column="TABLE_DESC" property="tableDesc" jdbcType="VARCHAR"/>
+		<result column="TABLE_TYPE" property="tableType" jdbcType="VARCHAR"/>
+		<result column="DS_ID" property="dsId" jdbcType="VARCHAR"/>
+		<result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		ID_, TABLE_NAME, TABLE_DESC, TABLE_TYPE, DS_ID,IS_DELETED
+	</sql>
+	<select id="findById" resultMap="TableConfResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from P_TABLE_CONF
+		where ID_ = #{id,jdbcType=VARCHAR} and IS_DELETED = 0
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from P_TABLE_CONF
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.clear.vo.TableConf">
+		insert into P_TABLE_CONF
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_,
+			</if>
+			<if test="tableName != null">
+				TABLE_NAME,
+			</if>
+			<if test="tableDesc != null">
+				TABLE_DESC,
+			</if>
+			<if test="tableType != null">
+				TABLE_TYPE,
+			</if>
+			<if test="dsId != null">
+				DS_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="tableName != null">
+				#{tableName,jdbcType=VARCHAR},
+			</if>
+			<if test="tableDesc != null">
+				#{tableDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="tableType != null">
+				#{tableType,jdbcType=VARCHAR},
+			</if>
+			<if test="dsId != null">
+				#{dsId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.dip.clear.vo.TableConf">
+		update P_TABLE_CONF
+		<set>
+			<if test="tableName != null">
+				TABLE_NAME = #{tableName,jdbcType=VARCHAR},
+			</if>
+			<if test="tableDesc != null">
+				TABLE_DESC = #{tableDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="tableType != null">
+				TABLE_TYPE = #{tableType,jdbcType=VARCHAR},
+			</if>
+			<if test="dsId != null">
+				DS_ID = #{dsId,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{dsId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="getTableConfList" resultMap="TableConfResultMap" parameterType="com.zebone.dip.clear.vo.TableConf">
+		SELECT 
+			M.ID_,M.TABLE_NAME,M.TABLE_DESC,M.TABLE_TYPE,N.P_NAME AS DS_ID
+		FROM 
+			P_TABLE_CONF M
+		INNER JOIN 
+			P_DS_OBJ N ON M.DS_ID = N.ID_
+		<where>
+			M.IS_DELETED = 0 AND N.DEL_FLAG = 1
+			<if test="tableName != null and tableName != ''">
+				AND M.TABLE_NAME LIKE '%' || #{tableName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="tableType != '' and tableType != null">
+				AND M.TABLE_TYPE = #{tableType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getTableConfTotalCount" resultType="int" parameterType="com.zebone.dip.clear.vo.TableConf">
+		SELECT 
+			COUNT(M.ID_)
+		FROM 
+			P_TABLE_CONF M
+		INNER JOIN 
+			P_DS_OBJ N ON M.DS_ID = N.ID_
+		<where>
+			M.IS_DELETED = 0 AND N.DEL_FLAG = 1
+			<if test="tableName != null and tableName != ''">
+				AND M.TABLE_NAME LIKE '%' || #{tableName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="tableType != '' and tableType != null">
+				AND M.TABLE_TYPE = #{tableType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<update id="updateTableConfByIds">
+		UPDATE P_TABLE_CONF T SET T.IS_DELETED = '1'  WHERE 
+		<foreach collection="list" item="item" index="index" separator="OR">
+			(T.ID_ = #{item,jdbcType=VARCHAR})
+		</foreach>
+	</update>
+	<select id="getAllTableConf" resultMap="TableConfResultMap">
+		select 
+			<include refid="column_list"/>
+		from 
+			P_TABLE_CONF
+		where 
+			IS_DELETED = 0
+	</select>
+</mapper>

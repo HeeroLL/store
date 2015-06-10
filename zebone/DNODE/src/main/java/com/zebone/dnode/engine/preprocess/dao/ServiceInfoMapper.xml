@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.preprocess.dao.ServiceInfoMapper">
+    <resultMap id="LifeStyle" type="com.zebone.dnode.engine.preprocess.vo.LifeStyle">
+        <result column="SPORT_FREQ" property="sportFreq" jdbcType="VARCHAR"/>
+        <result column="DIET_CUSTOM" property="dietCustom" jdbcType="VARCHAR"/>
+        <result column="SMOKE_STATUS" property="smokeStatus" jdbcType="VARCHAR"/>
+        <result column="OCCUPA_HAZARDOUS_DESC" property="occHazardousDesc" jdbcType="VARCHAR"/>
+        <result column="OCCUPA_HAZARDOUS_ST" property="occHazardousSt" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ExamInfo" type="com.zebone.dnode.engine.preprocess.vo.ExamInfo">
+        <result column="RPT_TIME" property="rptTime" jdbcType="VARCHAR"/>
+        <result column="EXAM_ITEM_NAME" property="examName" jdbcType="VARCHAR"/>
+        <result column="IMAGE_FINDING" property="imageFinding" jdbcType="VARCHAR"/>
+        <result column="SERVICE_ORG" property="serviceOrg" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="OutPatientInfo" type="com.zebone.dnode.engine.preprocess.vo.OutPatientInfo">
+        <result column="OUTPATIENT_TIME" property="outPatientTime" jdbcType="VARCHAR"/>
+        <result column="DISEASE_DIAG" property="diseaseDiag" jdbcType="VARCHAR"/>
+        <result column="SERVICE_ORG" property="serviceOrg" jdbcType="VARCHAR"/>
+        <result column="CLINIC_DEPT" property="clinicDept" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="InspectInfo" type="com.zebone.dnode.engine.preprocess.vo.InspectInfo">
+        <result column="INSPECT_DATE" property="inspectDate" jdbcType="VARCHAR"/>
+        <result column="INSPECT_ITEM_NAME" property="inspectName" jdbcType="VARCHAR"/>
+        <result column="INSPECT_RPT_RESULT" property="inspectResult" jdbcType="VARCHAR"/>
+        <result column="SERVICE_ORG" property="serviceOrg" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="InHospitalInfo" type="com.zebone.dnode.engine.preprocess.vo.InHospitalInfo">
+        <result column="INHOS_TIME" property="inHosTime" jdbcType="VARCHAR"/>
+        <result column="INHOS_DIAG" property="inHosDiag" jdbcType="VARCHAR"/>
+        <result column="SERVICE_ORG" property="serviceOrg" jdbcType="VARCHAR"/>
+        <result column="SERVICE_ORG" property="inHosDept" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="FollowUpInfo" type="com.zebone.dnode.engine.preprocess.vo.FollowUpInfo">
+        <result column="FU_VISIT_DATE" property="fuVisitDate" jdbcType="VARCHAR"/>
+        <result column="FU_DOCTOR" property="fuVisitDoctor" jdbcType="VARCHAR"/>
+        <result column="SERVICE_ORG" property="serviceOrg" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="PreviousHisInfo" type="com.zebone.dnode.engine.preprocess.vo.PreviousHisInfo">
+        <result column="TIME" property="time" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="HbpCurveInfo" type="com.zebone.dnode.engine.preprocess.vo.HbpCurveInfo">
+        <result column="FU_VISIT_DATE" property="visitDate" jdbcType="VARCHAR"/>
+        <result column="SBP" property="sbp" jdbcType="VARCHAR"/>
+        <result column="DBP" property="dbp" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="DmCurveInfo" type="com.zebone.dnode.engine.preprocess.vo.DmCurveInfo">
+        <result column="FU_VISIT_DATE" property="visitDate" jdbcType="VARCHAR"/>
+        <result column="FBG" property="fbg" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="CommonForMedication" type="com.zebone.dnode.engine.preprocess.vo.CommonForMedication">
+        <result column="LATEST_DT" property="latestDt" jdbcType="VARCHAR"/>
+        <result column="SINGLE_NO" property="singleNo" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="MedicationInfo" type="com.zebone.dnode.engine.preprocess.vo.MedicationInfo">
+        <result column="CATEGORY" property="category" jdbcType="VARCHAR"/>
+        <result column="DT" property="date" jdbcType="VARCHAR"/>
+        <result column="DRUG_NAME" property="drugName" jdbcType="VARCHAR"/>
+        <result column="DRUG_USAGE" property="drugUsage" jdbcType="VARCHAR"/>
+        <result column="DRUG_OP_PATH" property="drugOpPath" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ManageDoctorInfo" type="com.zebone.dnode.engine.preprocess.vo.ManageDoctorInfo">
+        <result column="DOCTOR_NAME" property="doctorName" jdbcType="VARCHAR"/>
+        <result column="CONTACT_TEL" property="contactTel" jdbcType="VARCHAR"/>
+        <result column="ORG" property="org" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="CompositeInfo" type="com.zebone.dnode.engine.preprocess.vo.CompositeInfo">
+        <result column="ABO_TYPE" property="ABOType" jdbcType="VARCHAR"/>
+        <result column="RH_TYPE" property="RHType" jdbcType="VARCHAR"/>
+        <result column="GENETIC_HISTORY" property="geneticHis" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getAllergyInfo" parameterType="Map" resultType="string">
+        SELECT b.dict_name FROM TBL_PSON_ALLERGY_HT a, P_DICTIONARY b
+        WHERE a.ALLERGEN_CODE = b.DICT_CODE AND b.DICTTYPE_ID ='44C5D8394ECA4D338C76FF6D61BB6863'
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} AND A.DOC_NO = #{docNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getExposureInfo" parameterType="Map" resultType="string">
+        SELECT b.dict_name FROM TBL_PSON_EXPOSURE_HT a, P_DICTIONARY b
+        WHERE a.EXPOSURE_TYPE_CODE = b.DICT_CODE AND b.DICTTYPE_ID ='0B53E7FD195743F79EC72A2BA9CD1009'
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} AND A.DOC_NO = #{docNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getDiseasesInfo" parameterType="Map" resultMap="PreviousHisInfo">
+        <![CDATA[
+        SELECT * FROM (SELECT ROWNUM, A.DIAG_DATE TIME,B.DICT_NAME NAME FROM TBL_PSON_DISEASES_HT A,
+        P_DICTIONARY B WHERE a.DIESEASE_TYPE_CODE = b.DICT_CODE AND b.DICTTYPE_ID ='129675B8527540C6905259915B242A2A'
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} ORDER BY DIAG_DATE DESC) WHERE ROWNUM <=3
+        ]]>
+    </select>
+
+    <select id="getOperationInfo" parameterType="Map" resultType="PreviousHisInfo">
+        <![CDATA[
+        SELECT * FROM (SELECT OPERAT_TIME TIME,OPERAT_HISTORY NAME FROM TBL_PSON_OPERATION_HT WHERE
+        EMPI_NO = #{empiNo,jdbcType=VARCHAR} ORDER BY OPERAT_TIME DESC) WHERE ROWNUM <=3
+        ]]>
+    </select>
+
+    <select id="getRtumHisInfo" parameterType="Map" resultType="PreviousHisInfo">
+        <![CDATA[
+        SELECT * FROM (SELECT RTRM_OCCR_TIME TIME, RTUM_NAME NAME FROM TBL_PSON_RTUM_HT WHERE
+        EMPI_NO= #{empiNo,jdbcType=VARCHAR} ORDER BY RTRM_OCCR_TIME DESC) WHERE ROWNUM <=3
+        ]]>
+    </select>
+
+    <select id="getTransfusionInfo" parameterType="Map" resultType="PreviousHisInfo">
+        <![CDATA[
+        SELECT * FROM (SELECT TRANSFUSION_TIME TIME, TRANSFUSION_CAUSE NAME  FROM TBL_PSON_TRANSFUSION_HT WHERE
+        EMPI_NO = #{empiNo,jdbcType=VARCHAR} ORDER BY TRANSFUSION_TIME DESC) WHERE ROWNUM <=3
+        ]]>
+    </select>
+
+    <select id="getFamilyInfo" parameterType="Map" resultType="string">
+        SELECT b.dict_name FROM TBL_PSON_FAMILY_HT a, P_DICTIONARY b
+        WHERE a.FAMILY_DIESEASE_TYPE_CODE = b.DICT_CODE AND b.DICTTYPE_ID ='129675B8527540C6905259915B242A2A'
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} AND A.DOC_NO = #{docNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getGeneticInfo" parameterType="Map" resultType="string">
+        SELECT GENETIC_HISTORY_DESC FROM TBL_PSON_GENETIC_HT
+        WHERE EMPI_NO = #{empiNo,jdbcType=VARCHAR} AND DOC_NO = #{docNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getDisabilityInfo" parameterType="Map" resultType="string">
+        SELECT b.dict_name FROM TBL_PSON_DISABILITY_HT a, P_DICTIONARY b
+        WHERE a.DISABILITY_CODE = b.DICT_CODE AND b.DICTTYPE_ID ='90059B77364A4358970E5A4916CFB796'
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} AND A.DOC_NO = #{docNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getLifeStyle" parameterType="Map" resultMap="LifeStyle">
+        SELECT * FROM (SELECT P1.DICT_NAME SPORT_FREQ, P2.DICT_NAME DIET_CUSTOM, P3.DICT_NAME SMOKE_STATUS,
+        OCCUPA_HAZARDOUS_DESC, OCCUPA_HAZARDOUS_ST FROM TBL_HC_LIFESTYLE A, P_DICTIONARY P1, P_DICTIONARY P2,
+        P_DICTIONARY P3 WHERE A.SPORT_FREQ_CODE = P1.DICT_CODE AND P1.DICTTYPE_ID='B36AFAA56AC84C33BF890B2AAE00BD75'
+        AND A.DIET_CUSTOM_CODE = P2.DICT_CODE AND P2.DICTTYPE_ID='4F3BFCBEC3624F23BABB6CA5B3DDFFB6'
+        AND A.SMOKE_STATUS_CODE = P3.DICT_CODE AND P3.DICTTYPE_ID='A777187BBF0F4D099E52ED0D42F19558'
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR}  ORDER BY A.CREATE_TIME DESC) WHERE  ROWNUM = 1
+    </select>
+
+    <select id="getDrinkType" parameterType="Map" resultType="string">
+       SELECT B.DICT_NAME FROM TBL_HC_DRINKTYPE A, P_DICTIONARY B
+       WHERE A.DRINK_TYPE_CODE = B.DICT_CODE AND B.DICTTYPE_ID='C49D79C91B424A4684BF653C8B8F4E3A'
+       AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} AND A.DOC_NO = #{docNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getExamInfo" parameterType="Map" resultMap="ExamInfo">
+        <![CDATA[
+        SELECT * FROM (SELECT A.RPT_TIME,A.EXAM_ITEM_NAME,C.DICT_NAME IMAGE_FINDING,B.MD_NAME SERVICE_ORG
+        FROM TBL_IMAGE_EXAM A, BIZ_MEDICAL_ORGAN B, P_DICTIONARY C WHERE A.SERVICE_ORG_CODE = B.MD_CODE
+        AND A.ISMASCULINE = C.DICT_CODE AND EMPI_NO= #{empiNo,jdbcType=VARCHAR}
+        AND C.DICTTYPE_ID = 'B3176437815F40AE853DDC30E7620439' ORDER BY RPT_TIME DESC) WHERE ROWNUM <= 3
+        ]]>
+    </select>
+
+    <select id="getOutPatientInfo" parameterType="Map" resultMap="OutPatientInfo">
+        <![CDATA[
+        SELECT * FROM (SELECT B.OUTPATIENT_TIME,C.MD_NAME DISEASE_DIAG,
+        D.MD_NAME SERVICE_ORG,E.DICT_NAME CLINIC_DEPT FROM TBL_OUTPATIENT_DIAG B,
+        MD_ICD_10 C, BIZ_MEDICAL_ORGAN D, P_DICTIONARY E WHERE B.MAIN_DISEASE_DIAG_CODE = C.MD_CODE
+        AND B.SERVICE_ORG_CODE = D.MD_CODE AND B.CLINIC_DEPT_CODE = E.DICT_CODE
+        AND E.DICTTYPE_ID='DF38A949C56743F99D6667C39CD88182'
+        AND B.EMPI_NO= #{empiNo,jdbcType=VARCHAR}
+        ORDER BY B.OUTPATIENT_TIME DESC) WHERE ROWNUM<=3
+        ]]>
+    </select>
+
+    <select id="getInspectInfo" parameterType="Map" resultMap="InspectInfo">
+        <![CDATA[
+        SELECT * FROM (SELECT A.INSPECT_DATE,A.INSPECT_ITEM_NAME,D.REMARK INSPECT_RPT_RESULT,B.MD_NAME SERVICE_ORG
+        FROM TBL_INSEPECT_REPORT A, BIZ_MEDICAL_ORGAN B, TBL_INSPECT_REPORT_DETAIL C, P_DICTIONARY D
+        WHERE A.SERVICE_ORG_CODE = B.MD_CODE AND A.INSPECT_RPT_NO = C.INSPECT_RPT_NO
+        AND C.ABNORMAL_PROMPT = D.DICT_CODE AND D.DICTTYPE_ID = 'B9202D6AA1314FE68513895C490D3716'
+        AND A.EMPI_NO= #{empiNo,jdbcType=VARCHAR} ORDER BY INSPECT_DATE DESC) WHERE ROWNUM <= 3
+        ]]>
+    </select>
+
+    <select id="getInHospitalInfo" parameterType="Map" resultMap="InHospitalInfo">
+        <![CDATA[
+        SELECT * FROM (SELECT A.INHOS_TIME,C.MD_NAME INHOS_DIAG, D.MD_NAME SERVICE_ORG, E.DICT_NAME INHOS_DEPT
+        FROM TBL_INHOSPITAL_REG A, TBL_INHOSPITAL_REG_DIAG B, MD_ICD_10 C, BIZ_MEDICAL_ORGAN D, P_DICTIONARY E WHERE
+        A.INHOSPITAL_SN = B.INHOSPITAL_SN AND C.MD_CODE = B.INHOS_DIAG_CODE AND A.SERVICE_ORG_CODE = D.MD_CODE
+        AND A.INHOS_DEPT_CODE = E.DICT_CODE AND E.DICTTYPE_ID='DF38A949C56743F99D6667C39CD88182'
+        AND A.EMPI_NO= #{empiNo,jdbcType=VARCHAR} ORDER BY INHOS_TIME DESC) WHERE ROWNUM <= 3
+        ]]>
+    </select>
+
+    <select id="getFollowUpInfo" parameterType="Map" resultMap="FollowUpInfo">
+        SELECT * FROM (SELECT FU_VISIT_DATE, C.MD_NAME FU_DOCTOR, B.MD_NAME SERVICE_ORG FROM TBL_HBP_FOLLOWUP A,
+        BIZ_MEDICAL_ORGAN B,BIZ_MEDICAL_ORGAN_STAFF C WHERE A.FU_DOCTOR_CODE = C.MD_CODE AND A.SERVICE_ORG_CODE = B.MD_CODE
+        AND A.EMPI_NO= #{empiNo,jdbcType=VARCHAR}
+        UNION SELECT FU_VISIT_DATE, C.MD_NAME FU_DOCTOR, B.MD_NAME SERVICE_ORG FROM TBL_DM_FOLLOWUP A, BIZ_MEDICAL_ORGAN B,
+        BIZ_MEDICAL_ORGAN_STAFF C WHERE A.FU_DOCTOR_CODE = C.MD_CODE AND A.SERVICE_ORG_CODE = B.MD_CODE
+        AND A.EMPI_NO= #{empiNo,jdbcType=VARCHAR}
+        UNION SELECT FU_VISIT_DATE, C.MD_NAME FU_DOCTOR, B.MD_NAME SERVICE_ORG FROM TBL_ELDERFU A, BIZ_MEDICAL_ORGAN B,
+        BIZ_MEDICAL_ORGAN_STAFF C WHERE A.FU_DOCTOR_CODE = C.MD_CODE AND A.SERVICE_ORG_CODE = B.MD_CODE
+        AND A.EMPI_NO= #{empiNo,jdbcType=VARCHAR}) ORDER BY FU_VISIT_DATE DESC
+    </select>
+
+    <select id="getHbpCurveInfo" parameterType="Map" resultMap="HbpCurveInfo">
+        <![CDATA[
+        SELECT A.FU_VISIT_DATE, B.SBP, B.DBP FROM TBL_HBP_FOLLOWUP A, TBL_HBPFU_SIGN B
+        WHERE A.HBPCARD_NO = B.HBPCARD_NO AND A.HBP_FU_NO = B.HBP_FU_NO AND
+        A.FU_VISIT_DATE <= TO_CHAR(LAST_DAY(TRUNC(SYSDATE,'MONTH')),'YYYYMMDD')
+        AND A.FU_VISIT_DATE >=TO_CHAR (ADD_MONTHS (TRUNC(SYSDATE,'MONTH'), -11), 'YYYYMMDD')
+        AND A.EMPI_NO= #{empiNo,jdbcType=VARCHAR} ORDER BY A.FU_VISIT_DATE DESC
+        ]]>
+    </select>
+
+    <select id="getDmCurveInfo" parameterType="Map" resultMap="DmCurveInfo">
+        <![CDATA[
+        SELECT FU_VISIT_DATE, FBG FROM TBL_DM_FOLLOWUP
+        WHERE FU_VISIT_DATE <= TO_CHAR(LAST_DAY(TRUNC(SYSDATE,'MONTH')),'YYYYMMDD')
+        AND FU_VISIT_DATE >=TO_CHAR (ADD_MONTHS (TRUNC(SYSDATE,'MONTH'), -11), 'YYYYMMDD')
+        AND EMPI_NO= #{empiNo,jdbcType=VARCHAR} ORDER BY FU_VISIT_DATE DESC
+        ]]>
+    </select>
+
+    <select id="getLatestOutPatientInfo" parameterType="string" resultMap="CommonForMedication">
+        SELECT * FROM (SELECT OUTPATIENT_TIME LATEST_DT, OUTPATIENT_SN SINGLE_NO FROM TBL_OUTPATIENT_DIAG
+        WHERE EMPI_NO= #{empiNo,jdbcType=VARCHAR} ORDER BY OUTPATIENT_TIME DESC) WHERE ROWNUM = 1
+    </select>
+
+    <select id="getLatestInHospitalInfo" parameterType="string" resultMap="CommonForMedication">
+        SELECT * FROM (SELECT INHOS_TIME LATEST_DT, INHOSPITAL_SN SINGLE_NO FROM TBL_INHOSPITAL_REG
+        WHERE EMPI_NO= #{empiNo,jdbcType=VARCHAR} ORDER BY INHOS_TIME DESC) WHERE ROWNUM = 1
+    </select>
+
+    <select id="getOutPatientMedication" parameterType="Map" resultMap="MedicationInfo">
+        SELECT '门诊' CATEGORY, A.PRESCRIBE_DATE DT,B.DRUG_NAME,B.DRUG_OP_FREQ || ',一次' || B.DRUG_OP_SINGLE_DOSE || DRUG_OP_DOSE_UNIT DRUG_USAGE,
+        C.DICT_NAME DRUG_OP_PATH FROM TBL_OUTPATIENT_RECIPE A, TBL_OUTPATIENT_RECIPE_DETAIL B, P_DICTIONARY C
+        WHERE A.RECIPE_SN = B.RECIPE_SN AND B.DURG_OP_PATH_CODE = C.DICT_CODE
+        AND C.DICTTYPE_ID = '4F66629BA4504B4E8F821136EF5D5DBF' AND A.OUTPATIENT_SN = #{singleNo,jdbcType=VARCHAR}
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getInHospitalMedication" parameterType="Map" resultMap="MedicationInfo">
+        SELECT '住院' CATEGORY, A.EXECUTE_TIME DT,B.DRUG_NAME,B.DRUG_OP_FREQ || ',一次' || B.DRUG_OP_SINGLE_DOSE || DRUG_OP_DOSE_UNIT DRUG_USAGE,
+        C.DICT_NAME DRUG_OP_PATH FROM TBL_INHOSPITAL_ORDER A, TBL_INHOSPITAL_ORDER_DRUG B, P_DICTIONARY C
+        WHERE A.DOCTOR_ORDER_SN = B.DOCTOR_ORDER_SN AND B.DURG_OP_PATH_CODE = C.DICT_CODE AND
+        C.DICTTYPE_ID = '4F66629BA4504B4E8F821136EF5D5DBF' AND A.INHOSPITAL_SN = #{singleNo,jdbcType=VARCHAR}
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getHbpMedication" parameterType="string" resultMap="MedicationInfo">
+        SELECT * FROM (SELECT '长期' CATEGORY, A.FU_VISIT_DATE DT,B.DRUG_NAME,B.DRUG_OP_FREQ || ',一次'
+        || B.DRUG_OP_SINGLE_DOSE || DRUG_OP_DOSE_UNIT DRUG_USAGE, C.DICT_NAME DRUG_OP_PATH FROM TBL_HBP_FOLLOWUP A,
+        TBL_HBPFU_MEDICATIONS B, P_DICTIONARY C WHERE A.HBPCARD_NO = B.HBPCARD_NO AND A.HBP_FU_NO = B.HBP_FU_NO AND
+        B.DURG_OP_PATH_CODE = C.DICT_CODE AND C.DICTTYPE_ID = '4F66629BA4504B4E8F821136EF5D5DBF'
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} ORDER BY A.FU_VISIT_DATE DESC) WHERE ROWNUM = 1
+    </select>
+
+    <select id="getDmMedication" parameterType="string" resultMap="MedicationInfo">
+        SELECT * FROM (SELECT '长期' CATEGORY, A.FU_VISIT_DATE DT,B.DRUG_NAME,B.DRUG_OP_FREQ || ',一次'
+        || B.DRUG_OP_SINGLE_DOSE || DRUG_OP_DOSE_UNIT DRUG_USAGE, C.DICT_NAME DRUG_OP_PATH FROM TBL_DM_FOLLOWUP A,
+        TBL_DMFU_MEDICATIONS B, P_DICTIONARY C WHERE A.DM_FU_NO = B.DM_FU_NO AND
+        B.DURG_OP_PATH_CODE = C.DICT_CODE AND C.DICTTYPE_ID = '4F66629BA4504B4E8F821136EF5D5DBF'
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} ORDER BY A.FU_VISIT_DATE DESC) WHERE ROWNUM = 1
+    </select>
+
+    <select id="getElderMedication" parameterType="string" resultMap="MedicationInfo">
+        SELECT * FROM (SELECT '长期' CATEGORY, A.FU_VISIT_DATE DT,B.DRUG_NAME,B.DRUG_OP_FREQ || ',一次'
+        || B.DRUG_OP_SINGLE_DOSE || DRUG_OP_DOSE_UNIT DRUG_USAGE, C.DICT_NAME DRUG_OP_PATH FROM TBL_ELDERFU A,
+        TBL_ELDERFU_MEDICATIONS B, P_DICTIONARY C WHERE A.ELDERFU_NO = B.ELDERFU_NO AND
+        B.DURG_OP_PATH_CODE = C.DICT_CODE AND C.DICTTYPE_ID = '4F66629BA4504B4E8F821136EF5D5DBF'
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} ORDER BY A.FU_VISIT_DATE DESC) WHERE ROWNUM = 1
+    </select>
+
+    <select id="getManageDoctorInfo" parameterType="Map" resultMap="ManageDoctorInfo">
+        SELECT C.MD_NAME DOCTOR_NAME, C.MOBILE CONTACT_TEL, B.MD_NAME ORG FROM TBL_PSON_HEALTH_RECORD A,
+        BIZ_MEDICAL_ORGAN B, BIZ_MEDICAL_ORGAN_STAFF C WHERE A.RP_CODE = C.MD_CODE AND B.MD_CODE = C.MEDICAL_ORGAN_CODE
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} AND A.DOC_NO = #{docNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getCompositeInfo" parameterType="Map" resultMap="CompositeInfo">
+        SELECT B.DICT_NAME ABO_TYPE, C.DICT_NAME RH_TYPE, D.GENETIC_HISTORY_DESC GENETIC_HISTORY
+        FROM TBL_PSON_HEALTH_RECORD A, P_DICTIONARY B, P_DICTIONARY C, TBL_PSON_GENETIC_HT D
+        WHERE A.HR_NO = D.HR_NO AND A.ABO_TYPE_CODE = B.DICT_CODE
+        AND B.DICTTYPE_ID = '0AEED2AB24C34A56B5163F6F9F8EF585' AND A.RH_TYPE_CODE = C.DICT_CODE
+        AND C.DICTTYPE_ID = '88ABA94848F1449CB56F7501583E7CAB'
+        AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} AND A.DOC_NO = #{docNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getBMIValue" parameterType="string" resultType="string">
+        SELECT BMI FROM (SELECT B.BMI, A.HC_DATE ACTIVE_DT FROM  TBL_HC A, TBL_HC_GENERAL B
+        WHERE A.HC_NO = B.HC_NO AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR}
+        UNION SELECT B.BMI, A.FU_VISIT_DATE ACTIVE_DT FROM TBL_HBP_FOLLOWUP A, TBL_HBPFU_SIGN B
+        WHERE A.HBPCARD_NO = B.HBPCARD_NO AND A.HBP_FU_NO = B.HBP_FU_NO AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR}
+        UNION SELECT B.BMI, A.FU_VISIT_DATE ACTIVE_DT FROM TBL_DM_FOLLOWUP A, TBL_DMFU_SIGN B
+        WHERE A.DM_FU_NO = B.DM_FU_NO AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR}
+        UNION SELECT B.BMI, A.FU_VISIT_DATE ACTIVE_DT FROM TBL_ELDERFU A, TBL_ELDERFU_SIGN B
+        WHERE A.ELDERFU_NO = B.ELDERFU_NO AND A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} ORDER BY ACTIVE_DT DESC)
+        WHERE ROWNUM = 1
+    </select>
+</mapper>

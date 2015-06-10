@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.empi.dao.DictionaryMapper">
+	<sql id="dipdict_cols">
+		dict_id, dict_name, dict_code, name_pinyin, name_jianpin, remark, dicttype_id
+	</sql>
+	
+	<select id="getDictionaryByTypeId" parameterType="string" resultType="com.zebone.empi.vo.Dictionary">
+		select <include refid="dipdict_cols" /> from P_DICTIONARY where dicttype_id=#{dicttype_id,jdbcType=VARCHAR}
+	</select>
+
+    <select id="countDictInfo" parameterType="Map" resultType="int">
+        SELECT COUNT(*) AS COUNT FROM P_DICTIONARY_TYPE PDT, P_DICTIONARY PD WHERE PDT.TYPE_ID = PD.DICTTYPE_ID
+        AND PDT.STANDARD_CODE = #{typeCode,jdbcType=VARCHAR} AND UPPER(PD.DICT_CODE) = #{checkValue,jdbcType=VARCHAR}
+        AND PD.IS_DELETED = '0'
+    </select>
+
+    <select id="getOrgName" parameterType="String" resultType="String">
+        SELECT MD_NAME FROM BIZ_MEDICAL_ORGAN WHERE MD_CODE = #{orgCode,jdbcType=VARCHAR}
+    </select>
+	
+</mapper>

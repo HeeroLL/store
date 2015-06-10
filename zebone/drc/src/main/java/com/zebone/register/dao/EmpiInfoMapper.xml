@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.register.dao.EmpiInfoMapper" >
+	<resultMap id="EmpiInfoResultMap" type="com.zebone.register.vo.EmpiInfo" >
+		<id column="ID_" property="id" jdbcType="VARCHAR" />
+		<result column="MAIN_ID" property="mainId" jdbcType="VARCHAR" />
+		<result column="DOC_ORG" property="docOrg" jdbcType="VARCHAR" />
+		<result column="SYSTEM_TYPE" property="systemType" jdbcType="VARCHAR" />
+		<result column="CARD_TYPE" property="cardType" jdbcType="VARCHAR" />
+		<result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+		<result column="DOCTOR_CODE" property="doctorCode" jdbcType="VARCHAR" />
+		<result column="DOC_DEPT_CODE" property="docDeptCode" jdbcType="VARCHAR" />
+		<result column="ICD_CODE" property="icdCode" jdbcType="VARCHAR" />
+		<result column="HEALTH_CODE" property="healthCode" jdbcType="VARCHAR" />
+		<result column="ACTIVE_TIME" property="activeTime" jdbcType="VARCHAR"/>
+        <result column="CARD_ORG" property="cardOrg" jdbcType="VARCHAR"/>
+	</resultMap>
+  
+	<sql id="EmpiInfo_Column_List" >
+		ID_, MAIN_ID, DOC_ORG, SYSTEM_TYPE, CARD_TYPE, CARD_NO, NAME, DOCTOR_CODE, DOC_DEPT_CODE,
+		ICD_CODE, HEALTH_CODE,ACTIVE_TIME,CARD_ORG
+	</sql>
+	<insert id="insert" parameterType="com.zebone.register.vo.EmpiInfo">
+		INSERT INTO R_EMPI_INFO
+		  (ID_,
+		   MAIN_ID,
+		   DOC_ORG,
+		   SYSTEM_TYPE,
+		   CARD_TYPE,
+		   CARD_NO,
+		   NAME,
+		   DOCTOR_CODE,
+		   DOC_DEPT_CODE,
+		   ICD_CODE,
+		   ACTIVE_TIME,
+		   HEALTH_CODE,
+		   CARD_ORG)
+		VALUES
+		  (#{id,jdbcType=VARCHAR},
+		   #{mainId,jdbcType=VARCHAR},
+		   #{docOrg,jdbcType=VARCHAR},
+		   #{systemType,jdbcType=VARCHAR},
+		   #{cardType,jdbcType=VARCHAR},
+		   #{cardNo,jdbcType=VARCHAR},
+		   #{name,jdbcType=VARCHAR},
+		   #{doctorCode,jdbcType=VARCHAR},
+		   #{docDeptCode,jdbcType=VARCHAR},
+		   #{icdCode,jdbcType=VARCHAR},
+		   #{activeTime,jdbcType=VARCHAR},
+		   #{healthCode,jdbcType=VARCHAR},
+		   #{cardOrg,jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="update" parameterType="com.zebone.register.vo.EmpiInfo">
+		UPDATE R_EMPI_INFO T
+		   SET T.DOC_ORG       =#{docOrg,jdbcType=VARCHAR},
+		       T.SYSTEM_TYPE   =#{systemType,jdbcType=VARCHAR},
+		       T.CARD_TYPE     =#{cardType,jdbcType=VARCHAR},
+		       T.CARD_NO       =#{cardNo,jdbcType=VARCHAR},
+		       T.DOCTOR_CODE   =#{doctorCode,jdbcType=VARCHAR},
+		       T.DOC_DEPT_CODE =#{docDeptCode,jdbcType=VARCHAR},
+		       T.ICD_CODE      =#{icdCode,jdbcType=VARCHAR},
+		       T.ACTIVE_TIME   =#{activeTime,jdbcType=VARCHAR},
+		       T.HEALTH_CODE   =#{healthCode,jdbcType=VARCHAR},
+		       T.CARD_ORG      =#{cardOrg,jdbcType=VARCHAR}
+		 WHERE T.MAIN_ID =#{mainId,jdbcType=VARCHAR}
+	</update>
+	<select id="getEmpiInfoByEmpiId" resultMap="EmpiInfoResultMap" parameterType="java.lang.String">
+		SELECT DISTINCT(M.HEALTH_CODE),M.MAIN_ID FROM (
+		SELECT B.DICT_NAME AS HEALTH_CODE,C.DOC_TYPE_CODE AS MAIN_ID  FROM R_EMPI_INFO A   
+		INNER JOIN R_REGISTER_MAIN C ON A.MAIN_ID = C.ID_ AND C.EMPI_ID = #{empiId,jdbcType=VARCHAR}
+		LEFT JOIN P_DICTIONARY B ON A.HEALTH_CODE = B.DICT_CODE 
+		AND B.DICTTYPE_ID = '2f093621d63c472fab7a1b2b360b3354'   ORDER BY C.DOC_TYPE_CODE
+		) M
+	</select>
+	<select id="getIcdByEmpiId" parameterType="java.lang.String" resultMap="EmpiInfoResultMap">
+		SELECT DISTINCT(M.ICD_CODE),M.CARD_NO FROM (
+		SELECT A.ICD_CODE,C.MD_NAME AS CARD_NO FROM R_EMPI_INFO A
+		    INNER JOIN R_REGISTER_MAIN B ON A.MAIN_ID = B.ID_ AND B.EMPI_ID = #{empiId,jdbcType=VARCHAR}
+		    LEFT JOIN MD_ICD_10 C ON A.ICD_CODE =C.MD_CODE 
+		    ORDER BY A.ICD_CODE
+		) M
+	</select>
+	<select id="getEmpiInfoByIcdAndEmpiId" parameterType="java.lang.String" resultMap="EmpiInfoResultMap">
+		SELECT A.ACTIVE_TIME || ',' || 
+		A.ACTIVE_TIME || ',' || 
+		CASE WHEN C.DICT_NAME = '就诊信息' THEN '门诊' ELSE C.DICT_NAME END || ',' ||
+		B.DOC_TYPE_CODE || ',' || 
+		B.DOC_NO AS CARD_NO
+		FROM R_EMPI_INFO A
+		INNER JOIN R_REGISTER_MAIN B ON A.MAIN_ID = B.ID_ AND B.EMPI_ID = #{empiId,jdbcType=VARCHAR}
+		LEFT JOIN P_DICTIONARY C ON A.HEALTH_CODE = C.DICT_CODE AND C.DICTTYPE_ID = '2f093621d63c472fab7a1b2b360b3354'
+		WHERE A.ICD_CODE = #{icdCode,jdbcType=VARCHAR} AND B.DOC_TYPE_CODE NOT IN
+		('C00.01.01.00','C00.01.03.00','C00.02.05.00','C00.03.01.00','C00.03.02.01')
+		ORDER BY A.ACTIVE_TIME DESC
+	</select>
+	<select id="getEmpiInfoByAge" resultMap="EmpiInfoResultMap" parameterType="java.lang.String">
+		<![CDATA[
+			SELECT A.ACTIVE_TIME || ',' || 
+			D.MD_NAME || ',' ||
+			CASE WHEN C.DICT_NAME = '就诊信息' THEN '门诊' ELSE C.DICT_NAME END || ',' ||
+			B.DOC_TYPE_CODE || ',' || 
+			B.DOC_NO AS CARD_NO
+			FROM R_EMPI_INFO A
+			INNER JOIN R_REGISTER_MAIN B ON A.MAIN_ID = B.ID_ AND B.EMPI_ID = #{empiId,jdbcType=VARCHAR}
+			LEFT JOIN P_DICTIONARY C ON A.HEALTH_CODE = C.DICT_CODE AND C.DICTTYPE_ID = '2f093621d63c472fab7a1b2b360b3354'
+			LEFT JOIN MD_ICD_10 D ON A.Icd_Code = D.MD_CODE
+			WHERE A.ACTIVE_TIME >= #{startDate,jdbcType=VARCHAR} AND A.ACTIVE_TIME < #{endDate,jdbcType=VARCHAR}
+			AND B.DOC_TYPE_CODE NOT IN ('C00.01.01.00','C00.01.03.00','C00.02.05.00','C00.03.01.00','C00.03.02.01')
+			ORDER BY A.ACTIVE_TIME DESC
+		]]>
+	</select>
+
+    <select id="getFollowUpList" resultType="String" parameterType="Map">
+      SELECT A.ACTIVE_TIME
+       || ','
+       || E.MD_NAME
+       || ','
+       || D.MD_NAME
+       || ','
+       || C.DICT_NAME
+       || ','
+       || B.DOC_NO
+      FROM R_EMPI_INFO A, R_REGISTER_MAIN B, P_DICTIONARY C,BIZ_MEDICAL_ORGAN D, BIZ_MEDICAL_ORGAN_STAFF E
+      WHERE A.MAIN_ID = B.ID_  AND C.DICT_CODE = A.DOC_DEPT_CODE AND C.DICTTYPE_ID='DF38A949C56743F99D6667C39CD88182'
+      AND A.DOC_ORG = D.MD_CODE AND A.DOCTOR_CODE = E.MD_CODE AND B.DOC_TYPE_CODE = #{docTypeCode,jdbcType=VARCHAR}
+      AND B.EMPI_ID = #{empiId,jdbcType=VARCHAR} ORDER BY A.ACTIVE_TIME DESC
+	</select>
+
+    <select id="getDocNoByParentNo" resultType="String" parameterType="Map">
+      SELECT * FROM (SELECT DOC_NO
+      FROM R_REGISTER_MAIN
+      WHERE DOC_TYPE_CODE = #{dataCode,jdbcType=VARCHAR}
+      AND EMPI_ID = #{empiId,jdbcType=VARCHAR}
+      AND PARENT_DOC_NO = #{parentDocNo,jdbcType=VARCHAR} ORDER BY REGISTER_TIME DESC) WHERE ROWNUM = 1
+	</select>
+</mapper>

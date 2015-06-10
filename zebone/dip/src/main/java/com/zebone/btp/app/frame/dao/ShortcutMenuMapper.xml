@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.frame.dao.ShortcutMenuMapper">
+	<resultMap id="ShortcutMenuResultMap" type="com.zebone.btp.app.frame.vo.ShortcutMenu">
+		<id column="MODULE_ID" property="moduleId" jdbcType="VARCHAR"/>
+		<id column="PERSONNEL_ID" property="personnelId" jdbcType="VARCHAR"/>
+		<result column="MODULE_NAME" property="name" jdbcType="VARCHAR"/>
+		<result column="URL" property="url" jdbcType="VARCHAR"/>
+		<result column="MAXICON" property="maxicon" jdbcType="VARCHAR"/>
+		<result column="MINICON" property="minicon" jdbcType="VARCHAR"/>
+		<result column="ORDER_NO" property="orderNo" jdbcType="DECIMAL"/>
+	</resultMap>
+	<!-- 根据人员ID得到此人得到快捷方式 -->
+	<select id="getShortcutMenuByPersonnelId" parameterType="string" resultMap="ShortcutMenuResultMap">
+		SELECT
+		    s.MODULE_ID,
+		    s.PERSONNEL_ID,
+		    s.ORDER_NO,
+		    m.MODULE_NAME,
+		    m.URL,
+		    m.MAXICON,
+		    m.MINICON
+		FROM
+		    BTP_SHORTCUT_MENU s
+		JOIN
+		    btp_Module m
+		ON
+		    s.MODULE_ID = m.MODULE_ID
+		WHERE
+		    s.PERSONNEL_ID = #{personnelId,jdbcType=VARCHAR}
+		ORDER BY
+    		s.ORDER_NO
+	</select>
+	
+	<insert id="insert" parameterType="com.zebone.btp.app.frame.vo.ShortcutMenu">
+		insert into BTP_SHORTCUT_MENU
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="moduleId != null">
+				MODULE_ID,
+			</if>
+			<if test="personnelId != null">
+				PERSONNEL_ID,
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="moduleId != null">
+				#{moduleId,jdbcType=VARCHAR},
+			</if>
+			<if test="personnelId != null">
+				#{personnelId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateOrderNo" parameterType="com.zebone.btp.app.frame.vo.ShortcutMenu">
+		UPDATE 
+			BTP_SHORTCUT_MENU 
+		SET    
+			ORDER_NO = #{orderNo,jdbcType=DECIMAL}
+		WHERE  
+			MODULE_ID = #{moduleId,jdbcType=VARCHAR} 
+		AND PERSONNEL_ID = #{personnelId,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteByModuleIdAndPersonnelId">
+		delete BTP_SHORTCUT_MENU where MODULE_ID = #{moduleId,jdbcType=VARCHAR} and PERSONNEL_ID = #{personnelId,jdbcType=VARCHAR}
+	</delete>
+	
+</mapper>

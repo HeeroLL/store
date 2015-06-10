@@ -1,0 +1,65 @@
+/*icon*/
+.icon-blank{
+	padding-left: 20px;background:url('../images/icons/blank.gif') no-repeat;
+}
+.icon-add{
+	padding-left: 20px;background:url('../images/icons/edit_add.png') no-repeat;
+}
+.icon-edit{
+	padding-left: 20px;background:url('../images/icons/pencil.png') no-repeat;
+}
+.icon-remove{
+	padding-left: 20px;background:url('../images/icons/edit_remove.png') no-repeat;
+}
+.icon-save{
+	padding-left: 20px;background:url('../images/icons/filesave.png') no-repeat;
+}
+.icon-cut{
+	padding-left: 20px;background:url('../images/icons/cut.png') no-repeat;
+}
+.icon-ok{
+	padding-left: 20px;background:url('../images/icons/ok.png') no-repeat;
+}
+.icon-no{
+	padding-left: 20px;background:url('../images/icons/no.png') no-repeat;
+}
+.icon-cancel{
+	padding-left: 20px;background:url('../images/icons/cancel.png') no-repeat;
+}
+.icon-reload{
+	padding-left: 20px;background:url('../images/icons/reload.png') no-repeat;
+}
+.icon-search{
+	padding-left: 20px;background:url('../images/icons/search.png') no-repeat;
+}
+.icon-print{
+	padding-left: 20px;background:url('../images/icons/print.png') no-repeat;
+}
+.icon-help{
+	padding-left: 20px;background:url('../images/icons/help.png') no-repeat;
+}
+.icon-undo{
+	padding-left: 20px;background:url('../images/icons/undo.png') no-repeat;
+}
+.icon-redo{
+	padding-left: 20px;background:url('../images/icons/redo.png') no-repeat;
+}
+.icon-back{
+	padding-left: 20px;background:url('../images/icons/back.png') no-repeat;
+}
+.icon-tip{
+	padding-left: 20px;background:url('../images/icons/tip.png') no-repeat;
+}
+/*gird*/
+.addSpan{
+	background: url("../images/icons/edit_add.png") no-repeat 5px;
+}
+.removeSpan{
+	background: url("../images/icons/edit_remove.png") no-repeat 5px;
+}
+.refreshSpan{
+	background: url("../images/icons/reload.png") no-repeat 5px;
+}
+.updateSpan{
+	background: url("../images/icons/pencil.png") no-repeat 5px;
+}

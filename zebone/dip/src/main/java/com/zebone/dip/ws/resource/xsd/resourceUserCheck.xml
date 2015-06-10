@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checks >
+	<check field="requestHead.orgCode" fieldName="上传机构编码">
+		<rule>
+			<type>masterdata:[dataSource,WJD01.001]</type>		
+		</rule>
+	</check>
+	<check field="body.user.idTypeCode" fieldName="身份证件类型">
+		<rule>
+			<type>dic:[dataSource,CV02.01.101]</type>		
+		</rule>
+	</check>
+	<check field="body.user.medicalOrganCode" fieldName="所属医疗机构编码">
+		<rule>
+			<type>masterdata:[dataSource,WJD01.001]</type>		
+		</rule>
+	</check>
+	<check field="body.user.sexCode" fieldName="性别">
+		<rule>
+			<type>dic:[dataSource,GB/T2261.1]</type>		
+		</rule>
+	</check>
+	<check field="body.user.nationCode" fieldName="民族">
+		<rule>
+			<type>dic:[dataSource,GB/T3304]</type>		
+		</rule>
+	</check>
+	<check field="body.user.nativePlace" fieldName="籍贯">
+		<rule>
+			<type>masterdata:[dataSource,WJD01.004]</type>		
+		</rule>
+	</check>
+	<check field="body.user.maritalStatusCode" fieldName="婚姻状况">
+		<rule>
+			<type>dic:[dataSource,GB/T2261.2]</type>		
+		</rule>
+	</check>
+	<check field="body.user.departmentCode" fieldName="所属科室">
+		<rule>
+			<type>dept:[dataSource,{body.user.medicalOrganCode}]</type>		
+		</rule>
+	</check>
+	<check field="body.user.jobCategoryCode" fieldName="工作类别">
+		<rule>
+			<type>dic:[dataSource,GB/T6565]</type>		
+		</rule>
+	</check>
+	<check field="body.user.postCode" fieldName="岗位类别">
+		<rule>
+			<type>dic:[dataSource,EXV00.00.068]</type>		
+		</rule>
+	</check>
+	<check field="body.user.positionalTitlesCode" fieldName="职务类别">
+		<rule>
+			<type>dic:[dataSource,CV08.30.005]</type>		
+		</rule>
+	</check>
+	<check field="body.user.politicalStatusCode" fieldName="政治面貌">
+		<rule>
+			<type>dic:[dataSource,GB/T4762]</type>		
+		</rule>
+	</check>
+	<check field="body.user.addressCode" fieldName="现住地址编码">
+		<rule>
+			<type>masterdata:[dataSource,WJD01.004]</type>		
+		</rule>
+	</check>
+	<check field="body.user.profession" fieldName="所学专业">
+		<rule>
+			<type>dic:[dataSource,GB/T16835]</type>		
+		</rule>
+	</check>
+	<check field="body.user.education" fieldName="学历">
+		<rule>
+			<type>dic:[dataSource,GB/T4658]</type>		
+		</rule>
+	</check>
+	<check field="body.user.degree" fieldName="学位">
+		<rule>
+			<type>dic:[dataSource,GB/T6864]</type>		
+		</rule>
+	</check>
+</checks>

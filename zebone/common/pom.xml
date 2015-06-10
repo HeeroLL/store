@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.zebone</groupId>
+	<artifactId>zebone-common</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+
+	<name>zebone-common</name>
+	<url>http://maven.apache.org</url>
+
+	<modules>
+		<module>util</module>
+		<module>taskscheduling-quartz</module>
+		<module>mq</module>
+		<module>mybatis</module>
+		<module>auditlog</module>
+		<module>redis</module>
+		<module>notice</module>
+	</modules>
+
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
+	
+	
+	<distributionManagement>
+		<repository>
+			<id>zebone_hosted_snapshots</id>
+			<name>zebone hosted</name>
+			<url>http://192.168.90.12:8081/nexus/content/repositories/zebone_hosted_snapshots</url>
+		</repository>
+		
+	</distributionManagement>
+</project>

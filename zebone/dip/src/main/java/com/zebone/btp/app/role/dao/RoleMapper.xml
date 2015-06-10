@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.role.dao.RoleMapper">
+	<resultMap id="RoleResultMap" type="com.zebone.btp.app.role.vo.Role">
+		<id column="ROLE_ID" property="roleId" jdbcType="VARCHAR"/>
+		<result column="NAME" property="name" jdbcType="VARCHAR"/>
+		<result column="NAME_SPELL" property="nameSpell" jdbcType="VARCHAR"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="ORDER_NO" property="orderNo" jdbcType="DECIMAL"/>
+		<result column="MEDICAL_ORGAN_ID" property="medicalOrganId" jdbcType="VARCHAR"/>
+		<result column="IS_PUBLIC_ROLE" property="isPublicRole" jdbcType="DECIMAL"/>
+		<result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR"/>
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="OPERATOR_ID" property="operatorId" jdbcType="VARCHAR"/>
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="IS_DELETED" property="isDelete" jdbcType="DECIMAL"/>
+		<result column="MHO_NAME" property="mhoName" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		ROLE_ID, NAME, NAME_SPELL, REMARK, ORDER_NO, MEDICAL_ORGAN_ID, IS_PUBLIC_ROLE, CREATOR_ID, 
+		CREATE_TIME, OPERATOR_ID, UPDATE_TIME, IS_DELETED
+	</sql>
+	<select id="findById" resultMap="RoleResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_ROLE
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</select>
+		<select id="getRoleList" resultMap="RoleResultMap" parameterType="java.lang.String">
+		select  t.role_id,t.name,t.name_spell
+		from BTP_ROLE t,BTP_MHO b
+		where t.MEDICAL_ORGAN_ID=b.MHO_ID and t.IS_DELETED = 0 and b.LEVEL_CODE LIKE '%'|| #{levelCode,jdbcType=VARCHAR}||'%'
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from BTP_ROLE
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.btp.app.role.vo.Role">
+		insert into BTP_ROLE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">
+				ROLE_ID,
+			</if>
+			<if test="name != null">
+				NAME,
+			</if>
+			<if test="nameSpell != null">
+				NAME_SPELL,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO,
+			</if>
+			<if test="medicalOrganId != null">
+				MEDICAL_ORGAN_ID,
+			</if>
+			<if test="isPublicRole != null">
+				IS_PUBLIC_ROLE,
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="operatorId != null">
+				OPERATOR_ID,
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME,
+			</if>
+			<if test="isDelete != null">
+				IS_DELETED,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">
+				#{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="nameSpell != null">
+				#{nameSpell,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo,jdbcType=DECIMAL},
+			</if>
+			<if test="medicalOrganId != null">
+				#{medicalOrganId,jdbcType=VARCHAR},
+			</if>
+			<if test="isPublicRole != null">
+				#{isPublicRole,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="operatorId != null">
+				#{operatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="logicDelete" parameterType="java.lang.String">
+		update BTP_ROLE set IS_DELETED = 1 where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateById" parameterType="com.zebone.btp.app.role.vo.Role">
+		update BTP_ROLE
+		<set>
+			<if test="name != null">
+				NAME = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="nameSpell != null">
+				NAME_SPELL = #{nameSpell,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO = #{orderNo,jdbcType=DECIMAL},
+			</if>
+			<if test="medicalOrganId != null">
+				MEDICAL_ORGAN_ID = #{medicalOrganId,jdbcType=VARCHAR},
+			</if>
+			<if test="isPublicRole != null">
+				IS_PUBLIC_ROLE = #{isPublicRole,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="operatorId != null">
+				OPERATOR_ID = #{operatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				IS_DELETED = #{isDelete,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</update>
+	<select id="SearchRoleByRole" resultMap="RoleResultMap" parameterType="com.zebone.btp.app.role.vo.Role">
+		select 
+		<include refid="column_list"/>
+		from BTP_ROLE
+		<where>
+			<if test="medicalOrganId != null">
+				and MEDICAL_ORGAN_ID = #{medicalOrganId,jdbcType=VARCHAR}
+			</if>
+			<if test="operatorId != null">
+				OPERATOR_ID = #{operatorId,jdbcType=VARCHAR}
+			</if>
+			<if test="isDelete == null">
+				and IS_DELETED = 0
+			</if>
+		</where>
+	</select>
+	<select id="pageRole" resultMap="RoleResultMap" parameterType="java.lang.String">
+		select
+		<include refid="column_list"/>
+		from BTP_ROLE
+		<where>
+				MEDICAL_ORGAN_ID = #{medicalOrganId,jdbcType=VARCHAR}
+				and IS_DELETED = 0
+		</where>
+	</select>
+	<select id="totalCount" resultType="int" parameterType="java.lang.String">
+		select count(*) from BTP_ROLE 
+		<where>
+				MEDICAL_ORGAN_ID = #{medicalOrganId,jdbcType=VARCHAR}
+				and IS_DELETED = 0
+		</where>
+	</select>
+	<!-- 根据医疗人员id查询出此人的角色 -->
+	<select id="getPersonnelRolesById" resultMap="RoleResultMap" parameterType="string">
+		SELECT
+		    m.MHO_NAME,r.*
+		FROM
+		    BTP_ACCOUNT_ROLE_R rule ,
+		    BTP_ROLE r ,
+		    BTP_MHO m
+		WHERE
+		    r.ROLE_ID = rule.ROLE_ID and r.IS_DELETED = 0
+		    and r.MEDICAL_ORGAN_ID = m.MHO_ID and m.IS_DELETED = 0 
+			AND rule.PERSONNEL_ID = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 根据医疗机构id查询角色 -->
+	<select id="getRoles" resultMap="RoleResultMap">
+		SELECT
+		    m.MHO_NAME,r.*
+		FROM
+		    BTP_ROLE r,BTP_MHO m
+		WHERE
+			r.MEDICAL_ORGAN_ID = m.MHO_ID and m.IS_DELETED = 0 and
+		    r.IS_DELETED = 0 and r.MEDICAL_ORGAN_ID in (
+		    	<foreach collection="list" index="index" item="item" separator=",">
+					#{item}
+				</foreach>
+		    ) order by m.LEVEL_CODE
+	</select>
+</mapper>

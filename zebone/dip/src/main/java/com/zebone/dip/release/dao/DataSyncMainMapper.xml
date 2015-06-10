@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.release.dao.DataSyncMainMapper">
+	<resultMap id="DataSyncMainResultMap" type="com.zebone.dip.release.vo.DataSyncMain">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="SYNC_FLAG" property="syncFlag" jdbcType="VARCHAR"/>
+		<result column="LAST_SYNC_TIME" property="lastSyncTime" jdbcType="VARCHAR"/>
+		<result column="CURRENT_SYNC_TIME" property="currentSyncTime" jdbcType="VARCHAR"/>
+		<result column="SYS_NAME" property="sysName" jdbcType="VARCHAR"/>
+		<result column="IS_ALL" property="isAll" jdbcType="VARCHAR"/>
+		<result column="DATASOURCE_ID" property="dataSourceId" jdbcType="VARCHAR"/>
+		<result column="WS_URL" property="wsUrl" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="column_list">
+		ID_, SYNC_FLAG, LAST_SYNC_TIME, CURRENT_SYNC_TIME, SYS_NAME, IS_ALL, DATASOURCE_ID, WS_URL
+	</sql>
+	
+	<select id="getDataSyncMainEquals" resultMap="DataSyncMainResultMap" parameterType="com.zebone.dip.release.vo.DataSyncMain">
+		SELECT <include refid="column_list"/> FROM P_DATA_SYNC_MAIN
+		<where>
+			<if test="id != null">
+				AND ID_ = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="syncFlag != null">
+				AND SYNC_FLAG = #{syncFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="lastSyncTime != null">
+				AND LAST_SYNC_TIME = #{lastSyncTime,jdbcType=VARCHAR}
+			</if>
+			<if test="currentSyncTime != null">
+				AND CURRENT_SYNC_TIME = #{currentSyncTime,jdbcType=VARCHAR}
+			</if>
+			<if test="sysName != null">
+				AND SYS_NAME = #{sysName,jdbcType=VARCHAR}
+			</if>
+			<if test="isAll != null">
+				AND IS_ALL = #{isAll,jdbcType=VARCHAR}
+			</if>
+			<if test="dataSourceId != null">
+				AND DATASOURCE_ID = #{dataSourceId,jdbcType=VARCHAR}
+			</if>
+			<if test="wsUrl != null">
+				AND WS_URL = #{wsUrl,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="getDataSyncMainEqualsCount" resultType="int" parameterType="com.zebone.dip.release.vo.DataSyncMain">
+		SELECT  COUNT(ID_)  FROM P_DATA_SYNC_MAIN
+		<where>
+			<if test="id != null">
+				AND ID_ = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="syncFlag != null">
+				AND SYNC_FLAG = #{syncFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="lastSyncTime != null">
+				AND LAST_SYNC_TIME = #{lastSyncTime,jdbcType=VARCHAR}
+			</if>
+			<if test="currentSyncTime != null">
+				AND CURRENT_SYNC_TIME = #{currentSyncTime,jdbcType=VARCHAR}
+			</if>
+			<if test="sysName != null">
+				AND SYS_NAME = #{sysName,jdbcType=VARCHAR}
+			</if>
+			<if test="isAll != null">
+				AND IS_ALL = #{isAll,jdbcType=VARCHAR}
+			</if>
+			<if test="dataSourceId != null">
+				AND DATASOURCE_ID = #{dataSourceId,jdbcType=VARCHAR}
+			</if>
+			<if test="wsUrl != null">
+				AND WS_URL = #{wsUrl,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="getDataSyncMainLikes" resultMap="DataSyncMainResultMap" parameterType="com.zebone.dip.release.vo.DataSyncMain">
+		SELECT <include refid="column_list"/> FROM P_DATA_SYNC_MAIN
+		<where>
+			<if test="syncFlag != null">
+				AND SYNC_FLAG LIKE '%' || #{syncFlag,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="lastSyncTime != null">
+				AND LAST_SYNC_TIME LIKE '%' || #{lastSyncTime,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="currentSyncTime != null">
+				AND CURRENT_SYNC_TIME LIKE '%' || #{currentSyncTime,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="sysName != null">
+				AND SYS_NAME LIKE '%' || #{sysName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="isAll != null">
+				AND IS_ALL LIKE '%' || #{isAll,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="dataSourceId != null">
+				AND DATASOURCE_ID LIKE '%' || #{dataSourceId,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="wsUrl != null">
+				AND WS_URL LIKE '%' || #{wsUrl,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>
+	</select>
+	<select id="getDataSyncMainLikesCount" resultType="int" parameterType="com.zebone.dip.release.vo.DataSyncMain">
+		SELECT COUNT(ID_) FROM P_DATA_SYNC_MAIN
+		<where>
+			<if test="syncFlag != null">
+				AND SYNC_FLAG LIKE '%' || #{syncFlag,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="lastSyncTime != null">
+				AND LAST_SYNC_TIME LIKE '%' || #{lastSyncTime,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="currentSyncTime != null">
+				AND CURRENT_SYNC_TIME LIKE '%' || #{currentSyncTime,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="sysName != null">
+				AND SYS_NAME LIKE '%' || #{sysName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="isAll != null">
+				AND IS_ALL LIKE '%' || #{isAll,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="dataSourceId != null">
+				AND DATASOURCE_ID LIKE '%' || #{dataSourceId,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="wsUrl != null">
+				AND WS_URL LIKE '%' || #{wsUrl,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertDataSyncMain" parameterType="com.zebone.dip.release.vo.DataSyncMain">
+		insert into P_DATA_SYNC_MAIN
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_ ,
+			</if>
+			<if test="syncFlag != null">
+				SYNC_FLAG,
+			</if>
+			<if test="lastSyncTime != null">
+				LAST_SYNC_TIME,
+			</if>
+			<if test="currentSyncTime != null">
+				CURRENT_SYNC_TIME,
+			</if>
+			<if test="sysName != null">
+				SYS_NAME,
+			</if>
+			<if test="isAll != null">
+				IS_ALL,
+			</if>
+			<if test="dataSourceId != null">
+				DATASOURCE_ID,
+			</if>
+			<if test="wsUrl != null">
+				WS_URL,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="syncFlag != null">
+				#{syncFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="lastSyncTime != null">
+				#{lastSyncTime,jdbcType=VARCHAR},
+			</if>
+			<if test="currentSyncTime != null">
+				#{currentSyncTime,jdbcType=VARCHAR},
+			</if>
+			<if test="sysName != null">
+				#{sysName,jdbcType=VARCHAR},
+			</if>
+			<if test="isAll != null">
+				#{isAll,jdbcType=VARCHAR},
+			</if>
+			<if test="dataSourceId != null">
+				#{dataSourceId,jdbcType=VARCHAR},
+			</if>
+			<if test="wsUrl != null">
+				#{wsUrl,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateDataSyncMain" parameterType="com.zebone.dip.release.vo.DataSyncMain">
+		UPDATE P_DATA_SYNC_MAIN
+		<set>
+			<if test="syncFlag != null">
+				SYNC_FLAG = #{syncFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="lastSyncTime != null">
+				LAST_SYNC_TIME = #{lastSyncTime,jdbcType=VARCHAR},
+			</if>
+			<if test="currentSyncTime != null">
+				CURRENT_SYNC_TIME = #{currentSyncTime,jdbcType=VARCHAR},
+			</if>
+			<if test="sysName != null">
+				SYS_NAME = #{sysName,jdbcType=VARCHAR},
+			</if>
+			<if test="isAll != null">
+				IS_ALL = #{isAll,jdbcType=VARCHAR},
+			</if>
+			<if test="dataSourceId != null">
+				DATASOURCE_ID = #{dataSourceId,jdbcType=VARCHAR},
+			</if>
+			<if test="wsUrl != null">
+				WS_URL = #{wsUrl,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR} 
+	</update>
+	
+	<delete id="deleteDataSyncMainByIds">
+		delete from P_DATA_SYNC_MAIN where ID_ in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+</mapper>

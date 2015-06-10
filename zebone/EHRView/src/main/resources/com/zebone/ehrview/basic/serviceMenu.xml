@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<result>
+    <entity>
+		<item code="A00.01.01.00">建立个人健康档案</item>
+		<item code="B04.01.01.00">建立高血压专档</item>
+		<item code="B04.01.02.00">高血压随访</item>
+		<item code="B04.02.01.00">建立糖尿病专档</item>
+		<item code="B04.02.02.00">糖尿病随访</item>
+		<item code="B04.04.01.00">老年人保健随访</item>
+		<item code="C00.04.01.00">成人健康体检</item>
+	</entity>
+</result>

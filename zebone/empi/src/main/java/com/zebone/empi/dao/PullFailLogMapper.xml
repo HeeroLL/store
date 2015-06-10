@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.empi.dao.PullFailLogMapper" >
+    <resultMap id="BaseResultMap" type="com.zebone.empi.vo.ResidentInfo" >
+        <id column="ID_" property="id" jdbcType="VARCHAR" />
+        <result column="PULL_TYPE" property="pullType" jdbcType="VARCHAR" />
+        <result column="PULL_CONTENT" property="pullContent" jdbcType="CLOB" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="PULL_STATUS" property="pullStatus" jdbcType="VARCHAR" />
+        <result column="PULL_QUEUE" property="pullQueue" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <insert id="insertPullFailLog" parameterType="com.zebone.empi.oneCard.PullFailLog" >
+        insert into APC_PULL_FAIL_LOG
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                ID_,
+            </if>
+            <if test="pullType != null" >
+                PULL_TYPE,
+            </if>
+            <if test="pullContent != null" >
+                PULL_CONTENT,
+            </if>
+            <if test="pullStatus != null" >
+                PULL_STATUS,
+            </if>
+            <if test="pullQueue != null" >
+                PULL_QUEUE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="pullType != null" >
+                #{pullType,jdbcType=VARCHAR},
+            </if>
+            <if test="pullContent != null" >
+                #{pullContent,jdbcType=CLOB},
+            </if>
+            <if test="pullStatus != null" >
+                #{pullStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="pullQueue != null" >
+                #{pullQueue,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

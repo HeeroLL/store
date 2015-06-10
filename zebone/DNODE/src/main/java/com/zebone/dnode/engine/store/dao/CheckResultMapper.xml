@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.store.dao.CheckResultMapper">
+	<resultMap type="com.zebone.dnode.engine.store.vo.CheckResult" id="CheckResultResultMap" >
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="DOC_XML" property="docXml" jdbcType="CLOB"/>
+		<result column="CHECK_FLAG" property="checkFlag" jdbcType="VARCHAR"/>
+		<result column="STORAGE_FLAG" property="storageFlag" jdbcType="VARCHAR"/>
+		<result column="ERROR_DESC" property="errorDesc" jdbcType="VARCHAR"/>
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR"/>
+		<result column="DOC_ORG_CODE" property="docOrgCode" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="getCheckResultList" parameterType="java.lang.Integer" resultMap="CheckResultResultMap">		
+		SELECT *
+			FROM P_CHECK_RESULT T
+		WHERE T.CHECK_FLAG = '1'
+		    AND T.STORAGE_FLAG = '0'
+		    AND MOD(SEQ,#{threadCount}) = #{threadNo}
+		    AND ROWNUM &lt; 50		
+	</select>
+	<select id="getCheckResultListByOrgCode" resultMap="CheckResultResultMap">
+		<![CDATA[
+		SELECT *
+			FROM P_CHECK_RESULT T
+		WHERE T.CHECK_FLAG = '1'
+		    AND T.STORAGE_FLAG = '0'
+		    AND T.DOC_ORG_CODE = #{docOrgCode}
+		    AND ROWNUM < 50
+		]]>
+	</select>
+	<update id="updateStorageFlag" >
+		UPDATE P_CHECK_RESULT A SET A.STORAGE_FLAG = '1' WHERE 
+		<foreach collection="list" item="item" index="index" separator="OR">
+			(A.ID_ = #{item,jdbcType=VARCHAR})
+		</foreach>
+	</update>
+	<update id="updateStorageFFlag">
+		UPDATE P_CHECK_RESULT A SET A.STORAGE_FLAG = '-1' WHERE 
+		<foreach collection="list" item="item" index="index" separator="OR">
+			(A.ID_ = #{item,jdbcType=VARCHAR})
+		</foreach>
+	</update>
+</mapper>

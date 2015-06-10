@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.empi.mapper.EmpiErrorMapper">
+
+	<sql id="error_col_list">
+		e_id, e_empi, e_username, e_cardno, e_cardtype, e_createdate,
+		e_type
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="addEmpiError" statementType="PREPARED"
+		parameterType="EmpiError">
+		insert into EMPI_ERROR (
+		<include refid="error_col_list" />
+		) values (#{errId}, #{empiId}, #{userName,jdbcType=VARCHAR}, #{errCardNo,jdbcType=VARCHAR},
+		#{errCardType,jdbcType=VARCHAR}, #{errCreateDate}, #{errType})
+	</insert>
+
+	<!-- 批量删除
+		<delete id="removeEmpiErrorBatch" parameterType="DBQuery">
+		delete from EMPI_ERROR where e_id in
+		<foreach item="item" index="index" collection="idList" open="("
+		separator="," close=")">
+		#{item}
+		</foreach>
+		</delete> -->
+
+	<!-- EmpiError 结果对象 -->
+	<resultMap id="empiErrorResultMap" type="EmpiError">
+		<id property="errId" column="e_id" />
+		<result property="empiId" column="e_empi" />
+		<result property="userName" column="e_username" />
+		<result property="errCardNo" column="e_cardno" />
+		<result property="errCardType" column="e_cardtype" />
+		<result property="errCreateDate" column="e_createdate" />
+		<result property="errType" column="e_type" />
+	</resultMap>
+
+	<!-- 根据EmpiError查询对应的EmpiError列表 -->
+	<select id="queryEEList" parameterType="EmpiError"
+		resultMap="empiErrorResultMap">
+		select
+		<include refid="error_col_list" />
+		from EMPI_ERROR T
+		<where>
+			<if test="errId != null and errId != '' ">
+				AND T.e_id = #{errId,jdbcType=VARCHAR}
+			</if>
+			<if test="empiId != null and empiId != '' ">
+				AND T.e_empi = #{empiId,jdbcType=VARCHAR}
+			</if>
+			<if test="userName != null and userName != '' ">
+				AND T.e_username LIKE
+				'%'||#{userName,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="errCardNo != null and errCardNo != '' ">
+				AND T.e_cardno = #{errCardNo,jdbcType=VARCHAR}
+			</if>
+			<if test="errCardType != null and errCardType != '' ">
+				AND T.e_cardtype = #{errCardType,jdbcType=VARCHAR}
+			</if>
+			<if test="errCreateDate != null and errCreateDate != '' ">
+				AND T.e_createdate = #{errCreateDate,jdbcType=VARCHAR}
+			</if>
+			<if test="errType != null and errType != '' ">
+				AND T.e_type = #{errType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+</mapper>

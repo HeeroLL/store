@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.etl.convert.dao.ConvertLogMapper">
+    <insert id="saveConvertLog" parameterType="com.zebone.dnode.etl.convert.pojo.ConvertLogObj">
+        insert into P_CLEAN_COVERT_LOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID_,
+            </if>
+            <if test="nodeName != null">
+                NODE_NAME,
+            </if>
+            <if test="tableName != null">
+                TABLE_NAME,
+            </if>
+            <if test="columnName != null">
+                COLUMN_NAME,
+            </if>
+            <if test="cleanTableName != null">
+                CLEAN_TABLE_NAME,
+            </if>
+            <if test="cleanColumnName != null">
+                CLEAN_COLUMN_NAME,
+            </if>
+            <if test="columnValue != null">
+                COLUMN_VLAUE,
+            </if>
+            <if test="cleanColumnValue != null">
+                CLEAN_COLUNN_VALUE,
+            </if>
+            <if test="cleanRuleNo != null">
+                CLEAN_NO,
+            </if>
+            <if test="cleanType != null">
+                CLEAN_TYPE,
+            </if>
+            <if test="cleanFlag != null">
+                CLEAN_FLAG,
+            </if>
+            <if test="cleanErrorDesc != null">
+                CLEAN_ERROR_DESC,
+            </if>
+            <if test="mainId != null">
+                MAIN_ID,
+            </if>
+            <if test="createTime != null">
+                CREAT_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="nodeName != null">
+                #{nodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="tableName != null">
+                #{tableName,jdbcType=VARCHAR},
+            </if>
+            <if test="columnName != null">
+                #{columnName,jdbcType=VARCHAR},
+            </if>
+            <if test="cleanTableName != null">
+                #{cleanTableName,jdbcType=VARCHAR},
+            </if>
+            <if test="cleanColumnName != null">
+                #{cleanColumnName,jdbcType=VARCHAR},
+            </if>
+            <if test="columnValue != null">
+                #{columnValue,jdbcType=VARCHAR},
+            </if>
+            <if test="cleanColumnValue != null">
+                #{cleanColumnValue,jdbcType=VARCHAR},
+            </if>
+            <if test="cleanRuleNo != null">
+                #{cleanRuleNo,jdbcType=VARCHAR},
+            </if>
+            <if test="cleanType != null">
+                #{cleanType,jdbcType=VARCHAR},
+            </if>
+            <if test="cleanFlag != null">
+                #{cleanFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="cleanErrorDesc != null">
+                #{cleanErrorDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="mainId != null">
+                #{mainId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

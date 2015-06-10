@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="empi_info">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="dept_code"/>
+                <xs:element ref="name"/>
+                <xs:element ref="sex"/>
+                <xs:element ref="birthday"/>
+                <xs:element ref="age"/>
+                <xs:element ref="photo"/>
+                <xs:element ref="star_level"/>
+                <xs:element ref="nationality"/>
+                <xs:element ref="nation"/>
+                <xs:element ref="marital_status"/>
+                <xs:element ref="mobile_number"/>
+                <xs:element ref="tel_number"/>
+                <xs:element ref="profession"/>
+                <xs:element ref="work_unit"/>
+                <xs:element ref="contacts"/>
+                <xs:element ref="contacts_mobile"/>
+                <xs:element ref="permanent_address"/>
+                <xs:element ref="permanent_code"/>
+                <xs:element ref="permanent_house_no"/>
+                <xs:element ref="permanent_zipcode"/>
+                <xs:element ref="address"/>
+                <xs:element ref="address_code"/>
+                <xs:element ref="address_hose_no"/>
+                <xs:element ref="address_zipcode"/>
+                <xs:element ref="card_list"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="dept_code">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="22" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="name">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="50" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="sex">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="2" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="birthday">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="8" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="age">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="3" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="photo">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="star_level">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="1" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="nationality">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="3" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="nation">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="2" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="marital_status">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="3" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="mobile_number">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="11"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="tel_number">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="13"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="profession">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="15" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="work_unit">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="70" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="contacts">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="50" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="contacts_mobile">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="11"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="permanent_address">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="70" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="permanent_code">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="22" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="permanent_house_no">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="70" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="permanent_zipcode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="6"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="address">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="70" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="address_code">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="22" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="address_hose_no">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="70" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="address_zipcode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="6"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="card_list">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:sequence>
+                    <xs:element ref="card"/>
+                </xs:sequence>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="card">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="no"/>
+                <xs:element ref="type"/>
+                <xs:element ref="org"/>
+                <xs:element ref="serial_no"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="no">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1"/>
+                <xs:maxLength value="50" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="type">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1"/>
+                <xs:maxLength value="2" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="org">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="22" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="serial_no">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="50" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+</xs:schema>

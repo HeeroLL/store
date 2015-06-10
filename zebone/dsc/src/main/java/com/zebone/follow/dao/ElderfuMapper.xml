@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.follow.dao.ElderfuMapper" >
+	<resultMap id="ElderfuResultMap" type="com.zebone.follow.vo.Elderfu" >
+		<id column="ELDERFU_NO" property="elderfuNo" jdbcType="CHAR" />
+		<result column="SERVICE_ORG_CODE" property="serviceOrgCode" jdbcType="CHAR" />
+		<result column="CARD_TYPE_CODE" property="cardTypeCode" jdbcType="CHAR" />
+		<result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="RP_CODE" property="rpCode" jdbcType="CHAR" />
+		<result column="FU_VISIT_DATE" property="fuVisitDate" jdbcType="VARCHAR" />
+		<result column="FU_VISIT_TYPE_CODE" property="fuVisitTypeCode" jdbcType="CHAR" />
+		<result column="NORM_VISIT_FLAG" property="normVisitFlag" jdbcType="CHAR" />
+		<result column="FIRST_VISIT_FLAG" property="firstVisitFlag" jdbcType="CHAR" />
+		<result column="SUGGEST_CONTENT" property="suggestContent" jdbcType="VARCHAR" />
+		<result column="HE_FLAG" property="heFlag" jdbcType="CHAR" />
+		<result column="HE_THEME" property="heTheme" jdbcType="VARCHAR" />
+		<result column="FU_DOCTOR_CODE" property="fuDoctorCode" jdbcType="CHAR" />
+		<result column="FU_VISIT_DATE_NEXT" property="fuVisitDateNext" jdbcType="VARCHAR" />
+		<result column="SUGGEST_FU_PERIOD" property="suggestFuPeriod" jdbcType="CHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+		<result column="EMPI_NO" property="empiNo" jdbcType="VARCHAR" />
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="getElderByEmpiId" resultMap="ElderfuResultMap" parameterType="java.lang.String">
+		SELECT A.FU_VISIT_DATE || ',' || A.FU_DOCTOR_CODE || ',' ||
+			A.SERVICE_ORG_CODE || ',' || A.NORM_VISIT_FLAG || ',' ||
+			A.SUGGEST_CONTENT || ',' || A.DOC_NO AS CARD_NO
+		FROM TBL_ELDERFU A
+		WHERE A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} ORDER BY A.FU_VISIT_DATE DESC
+	</select>
+</mapper>

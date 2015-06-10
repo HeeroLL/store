@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/icons.css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/main.css" id="main-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-grid.css"  id="grid-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-dialog.css" id="dialog-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery.checkForm.css" id="checkform-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-button.css" id="button-css"/>
+<script type="text/javascript" src="../js/jquery/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.mark.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-dialog.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-grid.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-checkForm.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.stopBubble.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-button.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.form.js"></script>
+<title>grid</title>
+<script type="text/javascript">
+var grid;
+//表头为多行的col参数定义	
+var col2=[
+		[ 
+			{text: '模块ID',		width: 0 ,dataIndex: 'modelId'},
+	   	    {text: '模块编号',	width: 90,dataIndex: 'modelCode'},
+	   	    {text: '模块名称',	width: 110,dataIndex: 'modelName'},
+	   	    {text: '图标路径',	width: 250},
+	   	    '#cspan',
+	   	    {text: '排序号',		width: 100,dataIndex: 'modelOrder'	} 
+   	    ],
+	    [
+	   	    '#rspan',
+	   	    '#rspan',
+	   	    '#rspan',
+	   	    {text: '大图标',width: 225,dataIndex: 'modelMaxicon'},
+	   	    {text: '小图标',width: 185,dataIndex: 'modelMinicon'},
+	   	    '#rspan',
+   	    ]
+	 ];
+//表头为单行的col参数定义	 
+var col1=[ {text: '模块ID',		width: 0,	textAlign: 'center',	align : 'center',	dataIndex: 'moduleId'			},
+		   {text: '父模块ID',		width: 0,	textAlign: 'center',	align : 'center',	dataIndex: 'parentModuleId'			},
+		   {text: '模块名称',		width: 110,	textAlign: 'center',	align : 'left',		dataIndex: 'moduleName',
+		   	pop:{
+			   	title:'详细信息',
+			   	content:function(data){
+			   		return '模块ID'+data['moduleId'];
+			   	}
+			   }		
+			 },
+		   {text: '模块URL',		width: 150,	textAlign: 'center',	align : 'left',		dataIndex: 'url'			},
+		   {text: '大图标路径',	width: 250,	textAlign: 'center',	align : 'left',		dataIndex: 'maxicon'		},
+		   {	
+		   		text: '排序号',
+				width: 110, 
+				textAlign: 'center',	
+				align : 'left',		
+				dataIndex: 'orderNo',
+		   		renderer: function(value){
+ 					return "<button onClick='clickUpDown(1,\""+value+"\");'>↑</button><button onClick='clickUpDown(2,\""+value+"\");'>↓</button>"; 				
+ 				}
+ 			}];
+$(function(){
+		grid = new JGrid({
+		title: '模块列表',
+		col	 :col1,
+		dataCol:'',
+		checkbox : true,
+		striped:true,
+		height   :document.body.clientHeight-75,
+		dataUrl  : '../btp/module/moduleInfoList.zb',
+		render   : 'grid',
+		pageBar  : true,
+		crudOpera: true,
+		countEveryPage: 20,
+		formToggleId:'eoc',//切换表单显示的id
+		listeners: {
+ 		}
+	});
+	grid.setParams({
+		parentModuleId: '1000'
+	});
+	grid.loadData(1);
+});
+		   	   
+</script>
+</head>
+<body>
+<div id="grid"></div>
+<div id="table"></div>
+
+</body>
+</html>

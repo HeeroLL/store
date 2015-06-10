@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>autocomplete</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link rel="stylesheet" type="text/css" href="../js/jquery/css/jquery.autocomplete.css"/>
+<style type="text/css">
+*{margin: 0;padding: 0;}
+body{background: #e8e7e5;}
+body, div, p, td, input {
+    font-family: '微软雅黑';
+    font-size: 12px;
+}
+input{
+    height: 22px;
+}
+h2{padding-left:20px;margin-top: 20px;}
+hr{margin:5px 0;}
+pre{background: white;}
+</style>
+<script type="text/javascript" src="../js/jquery/jquery-1.6.1.min.js"></script>    
+<script type="text/javascript" src="../js/jquery/jquery.autocomplete.js"></script>
+<script type="text/javascript">
+var onAutocompleteSelect = function(value, data) {
+    alert('value:'+value+',data:'+data);
+};
+var formatSelect=function(value,data){
+	alert(value.name);
+}
+var testValue=function(){
+	var a=comboBoxLocal.checktextField();
+	alert(a);
+}
+$(function(){
+	$('code').each(function(){
+		var code=$(this).html();
+		new Function(code).call(window);
+	});
+}); 
+
+</script>
+</head>
+<body style="height:100%;">
+应把url统一为seriveUrl 
+加是否事先缓存的选项
+ <h3>Ajax AutoComplete Demo</h3>
+ <div>
+ 	为第一个匹配的字符返回一个自动完成的实例。
+ 	可通过开关启用和禁用自动完成功能。
+ 	var ac = $('#query').autocomplete(options);<br/>
+	ac.disable();<br/>
+	ac.enable();<br/>
+ </div>
+ 数据类型分为：本地数据；
+ 服务器实时；
+ 服务器缓存到本地；
+<div>
+<h2>1.本地数据</h2>
+<hr/>
+  <input id="local_1" name="userAccount" type="text"/>
+  <label><input type="checkbox" onclick="this.checked ? a1.disable() : a1.enable();"/>禁用当前autocomplete</label>
+  <div>
+  	&lt;input id="local_1" name="userAccount" type="text"/&gt;
+  </div>
+<pre xmlns="">
+<code  id="">
+	var a1 = $('#local_1').autocomplete({
+        lookup: 'January,February,March,April,May,June,July,August,September,October,November,December,你,你好啊'.split(',')
+    });	
+</code>
+</pre>
+
+<h2>2.本地可选择</h2>
+<hr/>
+  <input id="local_select" type="text"/>
+  <div>
+  	 &lt;input id="local_select" type="text"/&gt;
+  </div>
+<pre xmlns="">
+<code id="">
+	var a1_l=$('#local_select').autocomplete({
+       	select:true,
+        lookup: 'January,February,March,April,May,June,July,August,September,October,November,December,你,你好啊'.split(',')
+     });
+</code>
+</pre>  
+
+<h2>3.服务器可选择</h2>
+<hr/>
+  <input id="userAccount2"  type="text"/>
+  <div>
+  	&lt;input id="userAccount2" type="text"/&gt;
+  </div>
+<pre xmlns="">
+<code  id="">
+	var option2 = {
+       serviceUrl: 'auto_1.json',
+       select:true,
+       noCache:false,//不要缓存
+       width: 384,
+    };	
+	var a2 = $('#userAccount2').autocomplete(option2);
+</code>
+</pre>   
+
+<h2>4.传递多个值</h2>
+<hr/>
+  <input id="comboBoxLocal" name="comboBox" type="text" style="width:300px;"/> <button onclick="testValue();">測試文本值是否在json里</button>
+  <div>
+  	<input id="idtest" type="text" value="valueField" style="width:300px;"/>
+  </div>
+  <div>
+  	&lt;input id="comboBoxLocal" type="text"/&gt;
+	隐藏dataId：&lt;input id="idtest" type="text"/&gt
+  </div>
+<pre xmlns="">
+<code  id="">
+	var comboBoxLocalOpt={
+		select:true,
+		multiple:true,
+		delimiter: ',',
+		width:250,
+		serviceUrl:'auto_id_name.json',
+		textField:'name',//当前文本框传值对应的json的name
+		valueField:{dataIndex:'id',dataId:'idtest'},//json的name和隐藏文本的id 
+		col:[
+			{width:100,dataIndex:'id'},
+			{width:200,dataIndex:'name'}
+		]
+	};
+  	var comboBoxLocal=$('#comboBoxLocal').autocomplete(comboBoxLocalOpt);	
+</code>
+</pre>
+<h2>5.分页:</h2>
+<hr/>
+<input id="comboBoxPaging" name="comboBoxPaging" type="text"/><br />
+<input name="comBoxPagingValue"/>
+<pre xmlns="">
+<code  id="">
+  	$('#comboBoxPaging').autocomplete({
+  		select:true,
+  		width:300,
+  		serviceUrl:'auto_paging.json',//服务器
+  		textField:'workerName',//显示值对应的json的name
+  		valueField:{dataIndex:'id',dataName:'comBoxPagingValue'},//json的name和隐藏文本的name 
+  		col:[
+			{width:200,dataIndex:'workerName'}
+		],
+  		paging:{
+  			pageSize:5
+  		}
+  	});	
+</code>
+</pre>
+ </div>
+<h2>6.手动添加下拉按钮</h2>
+<hr/>
+	<span class="combo">
+		<input id="combo_manually" name="combo_manually" class="combo-text"  style="width: 176px;"/><span class="ffb-arrow"></span>
+	</span>
+<pre xmlns="">
+<code  id="">
+  	var combo_manually=$('#combo_manually').autocomplete({
+       	select:true,
+        lookup: 'January,February,March,April,May,June,July,August,September,October,November,December'.split(',')
+     });
+</code>
+</pre>
+<textarea id="debug" rows="40" cols="80" style="right:0;top:0;position: absolute;display: none;"></textarea>
+</body>
+</html>

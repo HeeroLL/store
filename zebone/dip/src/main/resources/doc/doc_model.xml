@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClinicalDocument name="文档">
+	<header name="文档头">
+        <event name="文档活动类信息">
+			<!--文档编号-->
+			<slot code="EX00.00.000.54" name="文档编号">
+			</slot>
+			<!--文档类型-->
+			<slot code="EX00.00.000.55" name="文档类型">
+			</slot>
+		   <!--文档版本-->
+			<slot code="EX00.00.000.60" name="文档版本">
+			</slot>
+            <slot code="EX00.00.001.82" name="文档标题">
+            </slot>
+            <slot code="EX00.00.000.58" name="创建时间" >
+            </slot>
+		</event>
+        <author name="文档作者">
+            <slot code="EX00.00.000.06" name="机构编码">
+            </slot>
+            <slot code="EX00.00.000.07" name="医生编号">
+            </slot>
+            <slot code="JX00.00.000.09" name="建档科室">
+            </slot>
+        </author>
+        <generate name="生成文档信息">
+            <slot code="EX00.00.000.06" name="机构编码">
+            </slot>
+            <slot code="EX00.00.000.56" name="上传操作类型">
+            </slot>
+            <slot code="EX00.00.000.57" name="上传系统类型">
+            </slot>
+        </generate>
+        <management name="文档管理信息">
+            <slot code="EX00.00.000.06" name="机构编码">
+            </slot>
+        </management>
+        <service name="服务活动">
+            <slot code="EX00.00.000.58" name="活动时间">
+            </slot>
+            <slot code="DE05.01.024.00" name="健康和疾病问题">
+            </slot>
+            <slot code="EX00.00.000.59" name="卫生服务活动">
+            </slot>
+        </service>
+        <patient name="患者信息">
+            <slot code="DE02.01.039.00" name="姓名">
+            </slot>
+            <slot code="EX00.00.000.01" name="标识类型">
+            </slot>
+            <slot code="EX00.00.000.02" name="标识号">
+            </slot>
+            <slot code="JX00.00.000.10" name="发卡单位">
+            </slot>
+        </patient>
+        <relevance name="关联活动">
+            <slot code="EX00.00.000.54" name="父文档编号">
+            </slot>
+            <slot code="EX00.00.000.60" name="文档版本">
+            </slot>
+        </relevance>
+	</header>
+	<structuredBody name="文档体">
+		<!--服务活动-->
+		<services name="服务活动">
+		</services>
+	</structuredBody>
+</ClinicalDocument>

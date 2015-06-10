@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<description>数据库相关配置</description>
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+            	<value>classpath:redis.properties</value>
+                <value>classpath:jdbc.properties</value>
+                <value>classpath:sysConfig.properties</value>
+                <value>classpath:regConfig.properties</value>
+            </list>
+        </property>
+    </bean>
+	
+	<!--定义数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<property name="minIdle" value="${jdbc.minIdle}" />
+	</bean>
+	
+	<!-- 配置mybatis的 SqlSessionFactoryBean-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 设置mybatis的环境配置文件 -->
+		<property name="configLocation" value="classpath:mybatisConfig.xml" />
+	</bean>
+
+	<!-- 指定mybatis映射器的位置，spring自动扫描并将映射器生成代理放到spring上下文中 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.zebone.empi.dao"/>
+		<property name="annotationClass" value="com.zebone.btp.core.mybatis.Mapper"/>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+	</bean>
+	
+	
+	
+	<!--定义数据源 -->
+	<bean id="dcDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${dc.jdbc.driver}" />
+		<property name="url" value="${dc.jdbc.url}" />
+		<property name="username" value="${dc.jdbc.username}" />
+		<property name="password" value="${dc.jdbc.password}" />
+		<property name="initialSize" value="${dc.jdbc.initialSize}" />
+		<property name="maxActive" value="${dc.jdbc.maxActive}" />
+		<property name="maxIdle" value="${dc.jdbc.maxIdle}" />
+		<property name="minIdle" value="${dc.jdbc.minIdle}" />
+	</bean>
+	
+	<bean id="dcSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dcDataSource" />
+		<!-- 设置mybatis的环境配置文件 -->
+		<property name="configLocation" value="classpath:mybatisConfig.xml" />
+	</bean>
+	
+	<!-- 指定mybatis映射器的位置，spring自动扫描并将映射器生成代理放到spring上下文中 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.zebone.empi.dao"/>
+		<property name="annotationClass" value="com.zebone.btp.core.mybatis.DcMapper"/>
+		<property name="sqlSessionFactoryBeanName" value="dcSqlSessionFactory"/>
+	</bean>
+	
+	
+		<!--定义数据源 -->
+	<bean id="wrcDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${wrc.jdbc.driver}" />
+		<property name="url" value="${wrc.jdbc.url}" />
+		<property name="username" value="${wrc.jdbc.username}" />
+		<property name="password" value="${wrc.jdbc.password}" />
+		<property name="initialSize" value="${wrc.jdbc.initialSize}" />
+		<property name="maxActive" value="${wrc.jdbc.maxActive}" />
+		<property name="maxIdle" value="${wrc.jdbc.maxIdle}" />
+		<property name="minIdle" value="${wrc.jdbc.minIdle}" />
+	</bean>
+	
+	<bean id="wrcSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="wrcDataSource" />
+		<!-- 设置mybatis的环境配置文件 -->
+		<property name="configLocation" value="classpath:mybatisConfig.xml" />
+	</bean>
+	
+	<!-- 指定mybatis映射器的位置，spring自动扫描并将映射器生成代理放到spring上下文中 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.zebone.empi.dao"/>
+		<property name="annotationClass" value="com.zebone.btp.core.mybatis.WrcMapper"/>
+		<property name="sqlSessionFactoryBeanName" value="wrcSqlSessionFactory"/>
+	</bean>
+	
+	
+	
+	<bean id="dipDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${dip.jdbc.driver}" />
+		<property name="url" value="${dip.jdbc.url}" />
+		<property name="username" value="${dip.jdbc.username}" />
+		<property name="password" value="${dip.jdbc.password}" />
+		<property name="initialSize" value="${dip.jdbc.initialSize}" />
+		<property name="maxActive" value="${dip.jdbc.maxActive}" />
+		<property name="maxIdle" value="${dip.jdbc.maxIdle}" />
+		<property name="minIdle" value="${dip.jdbc.minIdle}" />
+	</bean>
+	
+	<bean id="dipSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dipDataSource" />
+		<!-- 设置mybatis的环境配置文件 -->
+		<property name="configLocation" value="classpath:mybatisConfig.xml" />
+	</bean>
+	
+	<!-- 指定mybatis映射器的位置，spring自动扫描并将映射器生成代理放到spring上下文中 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.zebone.empi.dao"/>
+		<property name="annotationClass" value="com.zebone.btp.core.mybatis.DipMapper"/>
+		<property name="sqlSessionFactoryBeanName" value="dipSqlSessionFactory"/>
+	</bean>
+	
+</beans>

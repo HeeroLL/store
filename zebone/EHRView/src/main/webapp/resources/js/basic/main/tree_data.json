@@ -1,0 +1,686 @@
+[{
+	"id":0,
+	"text":"easyui开发组件",
+	"children":[{
+		"id":1,
+		"text":"Form表单相关",
+		"state":"closed",
+		"children":[{
+			"id":11,
+			"text":"Form Basic",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/form/basic.html"
+			}
+		},{
+			"id":12,
+			"text":"Form 载入数据",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/form/load.html"
+			}
+		},{
+			"id":13,
+			"text":"Form 表单验证",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/validatebox/basic.html"
+			}
+		},{
+			"id":14,
+			"text":"Form Basic 日期控件",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datetimebox/basic.html"
+			}
+		},{
+			"id":15,
+			"text":"Form 日期显示至秒",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datetimebox/showseconds.html"
+			}
+		},{
+			"id":16,
+			"text":"Form 初始化日期控件",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datetimebox/initvalue.html"
+			}
+		}]
+	},{
+		"id":2,
+		"text":"Grid数据列表",
+		"state":"closed",
+		"children":[{
+			"id":21,
+			"text":"Grid Basic",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/basic.html"
+			}
+		},{
+			"id":22,
+			"text":"Grid 行样式",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/rowstyle.html"
+			}
+		},{
+			"id":23,
+			"text":"Grid 复杂工具条",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/complextoolbar.html"
+			}
+		},{
+			"id":24,
+			"text":"Grid 行边框",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/rowborder.html"
+			}
+		},{
+			"id":25,
+			"text":"Grid 固定列",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/frozencolumns.html"
+			}
+		},{
+			"id":26,
+			"text":"Grid 选择框",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/checkbox.html"
+			}
+		},{
+			"id":27,
+			"text":"Grid 分页",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/clientpagination.html"
+			}
+		},{
+			"id":28,
+			"text":"Grid 选择行",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/selection.html"
+			}
+		},{
+			"id":29,
+			"text":"Grid 列群组",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/columngroup.html"
+			}
+		},{
+			"id":30,
+			"text":"Grid 表头右击菜单",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/contextmenu.html"
+			}
+		},{
+			"id":31,
+			"text":"Grid 固定行",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/frozenrows.html"
+			}
+		},{
+			"id":30,
+			"text":"Grid 自定义分页",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/custompager.html"
+			}
+		},{
+			"id":32,
+			"text":"Grid 传输?（还没弄明白）",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/transform.html"
+			}
+		},{
+			"id":33,
+			"text":"Grid 表底部汇总",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/footer.html"
+			}
+		},{
+			"id":34,
+			"text":"Grid 单元格样式",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/cellstyle.html"
+			}
+		},{
+			"id":35,
+			"text":"Grid 表底部汇总",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/footer.html"
+			}
+		},{
+			"id":36,
+			"text":"Grid 编辑行",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/rowediting.html"
+			}
+		},{
+			"id":37,
+			"text":"Grid 格式化列",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/formatcolumns.html"
+			}
+		},{
+			"id":38,
+			"text":"Grid 合并单元格",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/datagrid/mergecells.html"
+			}
+		}]
+	},{
+		"id":100,
+		"text":"Window窗口",
+		"state":"closed",
+		"children":[{
+			"id":1001,
+			"text":"Window Basic",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/window/basic.html"
+			}
+		},{
+			"id":1002,
+			"text":"Window 框内",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/window/inlinewindow.html"
+			}
+		},{
+			"id":1003,
+			"text":"Window 区域编排",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/window/windowlayout.html"
+			}
+		},{
+			"id":1004,
+			"text":"Window 自定义工具",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/window/customtools.html"
+			}
+		},{
+			"id":1005,
+			"text":"Window 形态窗口（遮罩效果）",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/window/modalwindow.html"
+			}
+		}]
+	},{
+		"id":101,
+		"text":"Dialog 窗口",
+		"state":"closed",
+		"children":[{
+			"id":1011,
+			"text":"Dialog Basic",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/dialog/basic.html"
+			}
+		},{
+			"id":1012,
+			"text":"Window 工具条按钮",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/dialog/toolbarbuttons.html"
+			}
+		},{
+			"id":1013,
+			"text":"Dialog 复杂工具条",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/window/complextoolbar.html"
+			}
+		},{
+			"id":1014,
+			"text":"Window 自定义工具",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/window/customtools.html"
+			}
+		}]
+	},{
+		"id":102,
+		"text":"Messager 提示窗口",
+		"state":"closed",
+		"children":[{
+			"id":1011,
+			"text":"Messager Basic",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/messager/basic.html"
+			}
+		},{
+			"id":1012,
+			"text":"Messager 提示框",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/messager/alert.html"
+			}
+		},{
+			"id":1013,
+			"text":"Messager 提示窗口位置",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/messager/position.html"
+			}
+		},{
+			"id":1014,
+			"text":"Messager 交互窗口",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/messager/interactive.html"
+			}
+		}]
+	},{
+		"id":103,
+		"text":"Tree 控件",
+		"state":"closed",
+		"children":[{
+			"id":1031,
+			"text":"Tree Basic",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/tree/basic.html"
+			}
+		},{
+			"id":1032,
+			"text":"Tree 可拖拽",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/tree/dnd.html"
+			}
+		},{
+			"id":1033,
+			"text":"Tree 编辑",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/tree/editable.html"
+			}
+		},{
+			"id":1034,
+			"text":"Tree 选择框",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/tree/checkbox.html"
+			}
+		},{
+			"id":1035,
+			"text":"Tree 右击菜单",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/tree/contextmenu.html"
+			}
+		},{
+			"id":1036,
+			"text":"Tree 图标",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/tree/icons.html"
+			}
+		},{
+			"id":1037,
+			"text":"Tree 缓进缓出效果",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/tree/animation.html"
+			}
+		}]
+	},{
+		"id":104,
+		"text":"ButtonMenu 按钮与菜单",
+		"state":"closed",
+		"children":[{
+			"id":10401,
+			"text":"LinkButton 基础",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/linkbutton/basic.html"
+			}
+		},{
+			"id":10402,
+			"text":"LinkButton 图标顺序",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/linkbutton/iconalign.html"
+			}
+		},{
+			"id":10403,
+			"text":"LinkButton 平实风格",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/linkbutton/plain.html"
+			}
+		},{
+			"id":10404,
+			"text":"MenuButton 菜单按钮",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/menubutton/basic.html"
+			}
+		},{
+			"id":10405,
+			"text":"MenuButton 菜单按钮操作",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/menubutton/actions.html"
+			}
+		},{
+			"id":10406,
+			"text":"Menu 右击菜单（基础）",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/menu/basic.html"
+			}
+		},{
+			"id":10407,
+			"text":"Menu 右击菜单（自定义）",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/menu/customitem.html"
+			}
+		},{
+			"id":10408,
+			"text":"Menu 右击菜单（绑定事件）",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/menu/events.html"
+			}
+		},{
+			"id":10409,
+			"text":"SplitButton 分隔按钮（基础）",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/splitbutton/basic.html"
+			}
+		},{
+			"id":10410,
+			"text":"SplitButton 分隔按钮（绑定事件）",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/easyui/demo/splitbutton/actions.html"
+			}
+		}]
+	},{
+		"id":105,
+		"text":"Layout 排版布局",
+		"state":"closed",
+		"children":[{
+			"id":10501,
+			"text":"Panel 面板(嵌板)",
+			"state":"closed",
+			"children":[{
+				"id":1050101,
+				"text":"Panel 基础",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/panel/basic.html"
+				}
+			},{
+				"id":1050102,
+				"text":"Panel 面板工具",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/panel/paneltools.html"
+				}
+			},{
+				"id":1050103,
+				"text":"Panel 内容载入",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/panel/loadcontent.html"
+				}
+			},{
+				"id":1050104,
+				"text":"Panel 自定义工具",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/panel/customtools.html"
+				}
+			},{
+				"id":1050105,
+				"text":"Panel 面板嵌套",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/panel/nestedpanel.html"
+				}
+			}]
+		},{
+			"id":10502,
+			"text":"Tab 垂片",
+			"state":"closed",
+			"children":[{
+				"id": 1050201,
+				"text": "Tab 基础",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/tabs/basic.html"
+				}
+			},{
+				"id": 1050202,
+				"text": "Tab 垂片嵌套",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/tabs/nestedtabs.html"
+				}
+			},{
+				"id": 1050203,
+				"text": "Tab 工具",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/tabs/tabstools.html"
+				}
+			},{
+				"id": 1050204,
+				"text": "Tab 自适应高度",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/tabs/autoheight.html"
+				}
+			},{
+				"id": 1050205,
+				"text": "Tab 位置",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/tabs/tabposition.html"
+				}
+			},{
+				"id": 1050206,
+				"text": "Tab 工具条",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/tabs/striptools.html"
+				}
+			},{
+				"id": 1050207,
+				"text": "Tab 悬挂事件",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/tabs/hover.html"
+				}
+			}]
+		},{
+			"id":10503,
+			"text":"Accordion 手风琴菜单",
+			"state":"closed",
+			"children":[{
+				"id":1050301,
+				"text":"Accordion 基础样式",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/accordion/basic.html"
+				}
+			},{
+				"id":1050302,
+				"text":"Accordion ajax交互",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/accordion/ajax.html"
+				}
+			},{
+				"id":1050303,
+				"text":"Accordion 绑定事件",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/accordion/actions.html"
+				}
+			},{
+				"id":1050304,
+				"text":"Accordion 工具",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/accordion/tools.html"
+				}
+			}]
+			
+		},{
+			"id":10504,
+			"text":"Layout 布局",
+			"state":"closed",
+			"children":[{
+				"id":1050401,
+				"text":"Layout 基础样式",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/layout/basic.html"
+				}
+			},{
+				"id":1050402,
+				"text":"Layout 嵌套样式",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/layout/nestedlayout.html"
+				}
+			},{
+				"id":1050403,
+				"text":"Layout 复杂布局",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/layout/complex.html"
+				}
+			},{
+				"id":1050404,
+				"text":"Layout 固定布局（不可缩小）",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/layout/nocollapsible.html"
+				}
+			},{
+				"id":1050405,
+				"text":"Layout 自适应窗体",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/layout/full.html"
+				}
+			},{
+				"id":1050406,
+				"text":"Layout 添加删除模块",
+				"attributes": {
+					"url": "../../../../../../../bbrj/api/easyui/demo/layout/addremove.html"
+				}
+			}]
+		}]
+	}]
+},{
+	"id":10010,
+	"text":"报表工具",
+	"children":[{
+		"id":100100,
+		"text":"jqplot",
+		"state":"closed",
+		"children":[{
+			"id":100101,
+			"text":"ajax,json数据渲染",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/data-renderers.html"
+			}
+		},{
+			"id":100102,
+			"text":"动态条形折线图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/barLineAnimated.html"
+			}
+		},{
+			"id":100103,
+			"text":"动态曲线图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/dashboardWidget.html"
+			}
+		},{
+			"id":100104,
+			"text":"二维轴图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/axisLabelTests.html"
+			}
+		},{
+			"id":100105,
+			"text":"折线，条形图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/axisLabelsRotatedText.html"
+			}
+		},{
+			"id":100106,
+			"text":"条形图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/barTest.html"
+			}
+		},{
+			"id":100107,
+			"text":"块状分布图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/blockPlot.html"
+			}
+		},{
+			"id":100108,
+			"text":"圆形分布图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/bubbleChart.html"
+			}
+		},{
+			"id":100109,
+			"text":"图形风格",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/theming.html"
+			}
+		},{
+			"id":1001010,
+			"text":"饼图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/pieTest4.html"
+			}
+		},{
+			"id":1001011,
+			"text":"年龄分布图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/kcp_pyramid_by_age.html"
+			}
+		},{
+			"id":1001012,
+			"text":"瀑布图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/waterfall.html"
+			}
+		},{
+			"id":1001013,
+			"text":"缩放折线图",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/jqplot/examplediy/zoom1.html"
+			}
+		}]
+	},{
+		"id":20010,
+		"text":"D3(按←键，会相当炫)",
+		"state":"closed",
+		"children":[{
+			"id":200101,
+			"text":"20111116",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/d3/d3page/talk/20111116/index.html#0"
+			}
+		},{
+			"id":200102,
+			"text":"20111018",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/d3/d3page/talk/20111018/index.html#0"
+			}
+		},{
+			"id":200103,
+			"text":"20110921",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/d3/d3page/talk/20110921/index.html#0"
+			}
+		}]
+	}]
+},{
+	"id":30010,
+	"text":"其他案例",
+	"state":"closed",
+	"children":[{
+		"id":300101,
+		"text":"Backbone样例",
+		"children":[{
+			"id":3001011,
+			"text":"Backbone Refactor",
+			"attributes": {
+				"url": "../../../../../../../bbrj/jsframes/backbone/index.html"
+			}
+		},{
+			"id":3001012,
+			"text":"Backbone Directory",
+			"attributes": {
+				"url": "../../../../../../../bbrj/jsframes/backbone-directory/web/index.html"
+			}
+		}]
+	},{
+		"id":300102,
+		"text":"Bootstrap样例",
+		"children":[{
+			"id":30010201,
+			"text":"Bootstrap",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/bootstrap/docs/index.html"
+			}
+		},{
+			"id":30010202,
+			"text":"Flat-UI",
+			"attributes": {
+				"url": "../../../../../../../bbrj/api/flatui/index.html"
+			}
+		}]
+	},{
+		"id":300103,
+		"text":"娱乐一下下",
+		"state":"closed",
+		"children":[{
+			"id":3001031,
+			"text":"sina",
+			"attributes": {
+				"url": "http://www.sina.com"
+			}
+		}]
+	}]
+}]

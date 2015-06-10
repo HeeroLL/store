@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://cxf.apache.org/jaxws 
+		http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<!-- 日志记录拦截器 -->
+	<bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+	<bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+
+
+	<!--
+		**************************************************************** 
+		BTP	web service 示例
+		****************************************************************
+	-->
+	<!-- 
+	<jaxws:endpoint id="echoService"
+		implementor="com.zebone.btp.ws.server.EchoServiceImpl" address="/echo">
+		<jaxws:inInterceptors>
+			<ref bean="loggingInInterceptor" />
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+			<constructor-arg>
+				<map>
+					<entry key="action" value="UsernameToken" />
+					<entry key="passwordType" value="PasswordText" />
+					<entry key="passwordType" value="PasswordDigest" />
+					<entry key="passwordCallbackRef">
+						<bean class="com.zebone.btp.ws.server.callack.ServerPasswordCallback"/>
+					</entry>
+				</map>
+			</constructor-arg>
+		</bean>
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<ref bean="loggingOutInterceptor" />
+		</jaxws:outInterceptors>
+	</jaxws:endpoint>
+
+	<jaxws:endpoint id="storageService"
+		implementor="com.zebone.btp.ws.server.StorageServiceImpl"
+		address="/storage">
+		<jaxws:properties>
+			<entry key="mtom-enabled" value="true" />
+		</jaxws:properties>
+	</jaxws:endpoint>
+	 -->
+	<!-- END -->
+	
+	<jaxws:endpoint id="logStorage" serviceName="logStorage" implementor="#logStorageServiceImpl" address="/logStorage"/>
+	
+	
+	<jaxws:endpoint id="resourceData" implementor="#resourceDataService" address="/resourceData" />
+	
+	
+	<jaxws:endpoint id="dataSet" implementor="#dataSetService" address="/dataSet" />
+
+    <jaxws:endpoint id="clearData" implementor="#clearDataService" address="/clearData" />
+	
+	
+	
+</beans>

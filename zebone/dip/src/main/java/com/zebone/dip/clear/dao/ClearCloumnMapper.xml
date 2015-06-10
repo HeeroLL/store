@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.clear.dao.ClearCloumnMapper">
+	<resultMap id="ClearCloumnResultMap" type="com.zebone.dip.clear.vo.ClearCloumn">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="CLEAR_ID" property="clearId" jdbcType="VARCHAR"/>
+		<result column="CLOUMN_NAME" property="cloumnName" jdbcType="VARCHAR"/>
+		<result column="CLEAR_TYPE" property="clearType" jdbcType="VARCHAR"/>
+		<result column="CLEAR_CONTENT" property="clearContent" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		ID_, CLEAR_ID, CLOUMN_NAME, CLEAR_TYPE, CLEAR_CONTENT
+	</sql>
+	<select id="findById" resultMap="ClearCloumnResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from P_CLEAR_CLOUMN
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from P_CLEAR_CLOUMN
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.clear.vo.ClearCloumn">
+		insert into P_CLEAR_CLOUMN
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_,
+			</if>
+			<if test="clearId != null">
+				CLEAR_ID,
+			</if>
+			<if test="cloumnName != null">
+				CLOUMN_NAME,
+			</if>
+			<if test="clearType != null">
+				CLEAR_TYPE,
+			</if>
+			<if test="clearContent != null">
+				CLEAR_CONTENT,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="clearId != null">
+				#{clearId,jdbcType=VARCHAR},
+			</if>
+			<if test="cloumnName != null">
+				#{cloumnName,jdbcType=VARCHAR},
+			</if>
+			<if test="clearType != null">
+				#{clearType,jdbcType=VARCHAR},
+			</if>
+			<if test="clearContent != null">
+				#{clearContent,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.dip.clear.vo.ClearCloumn">
+		update P_CLEAR_CLOUMN
+		<set>
+			<if test="clearId != null">
+				CLEAR_ID = #{clearId,jdbcType=VARCHAR},
+			</if>
+			<if test="cloumnName != null">
+				CLOUMN_NAME = #{cloumnName,jdbcType=VARCHAR},
+			</if>
+			<if test="clearType != null">
+				CLEAR_TYPE = #{clearType,jdbcType=VARCHAR},
+			</if>
+			<if test="clearContent != null">
+				CLEAR_CONTENT = #{clearContent,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="getClearCloumnsByClearId" resultMap="ClearCloumnResultMap" parameterType="java.lang.String">
+		SELECT  
+			<include refid="column_list"/>
+		FROM 
+			P_CLEAR_CLOUMN T 
+		WHERE 
+			T.CLEAR_ID = #{clearId,jdbcType=VARCHAR}
+	</select>
+	<insert id="insertClearInfos">
+		insert into P_CLEAR_CLOUMN
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_,
+			CLEAR_ID,
+			CLOUMN_NAME,
+			CLEAR_TYPE,
+			CLEAR_CONTENT,
+		</trim>
+		<foreach collection="list" item="item" separator="union all ">
+			select
+				#{id,jdbcType=VARCHAR},
+				#{clearId,jdbcType=VARCHAR},
+				#{cloumnName,jdbcType=VARCHAR},
+				#{clearType,jdbcType=VARCHAR},
+				#{clearContent,jdbcType=VARCHAR}
+			from dual
+		</foreach>
+	</insert>
+	<delete id="deleteByClearId" parameterType="java.lang.String">
+		delete from P_CLEAR_CLOUMN
+		where CLEAR_ID = #{clearId,jdbcType=VARCHAR}
+	</delete>
+</mapper>

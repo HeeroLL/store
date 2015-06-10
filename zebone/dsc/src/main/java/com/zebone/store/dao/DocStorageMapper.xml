@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.store.dao.DocStorageMapper" >
+	<resultMap id="DocStorageResultMap" type="com.zebone.store.vo.DocStorage" >
+		<id column="ID_" property="id" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+		<result column="EMPI_ID" property="empiId" jdbcType="VARCHAR" />
+		<result column="DOC_OPER_STATE" property="docOperState" jdbcType="VARCHAR" />
+		<result column="DOC_ORG" property="docOrg" jdbcType="VARCHAR" />
+		<result column="DOC_REGISTER_STATE" property="docRegisterState" jdbcType="VARCHAR" />
+		<result column="DOC_TYPE_CODE" property="docTypeCode" jdbcType="VARCHAR" />
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+		<result column="DOC_XML" property="docXml" jdbcType="CLOB" />
+		<result column="DOC_PARSE_STATE" property="docParseState" jdbcType="VARCHAR" />
+		<result column="DOC_VERSION" property="docVersion" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="DocStorage_Column_List" >
+		ID_, CREATE_TIME, EMPI_ID, DOC_OPER_STATE, DOC_ORG, DOC_REGISTER_STATE, DOC_TYPE_CODE, DOC_NO, DOC_XML,DOC_PARSE_STATE,DOC_VERSION
+	</sql>
+	<insert id="insert" parameterType="com.zebone.store.vo.DocStorage">
+		INSERT INTO D_DOC_STORAGE
+		  (ID_,
+		   CREATE_TIME,
+		   EMPI_ID,
+		   DOC_XML,
+		   DOC_OPER_STATE,
+		   DOC_ORG,
+		   DOC_TYPE_CODE,
+		   DOC_VERSION,
+		   DOC_NO,
+		   SEQ)
+		VALUES
+		  (#{id,jdbcType=VARCHAR},
+		   #{createTime,jdbcType=VARCHAR},
+		   #{empiId,jdbcType=VARCHAR},
+		   #{docXml,jdbcType=CLOB},
+		   #{docOperState,jdbcType=VARCHAR},
+		   #{docOrg,jdbcType=VARCHAR},
+		   #{docTypeCode,jdbcType=VARCHAR},
+		   #{docVersion,jdbcType=VARCHAR},
+		   #{docNo,jdbcType=VARCHAR},
+		   seq_d_doc_storage.nextval)
+				
+	</insert>
+	<select id="docStorageCount" resultType="int" parameterType="java.lang.String">
+		SELECT COUNT(A.ID_) FROM D_DOC_STORAGE A
+		WHERE A.DOC_NO = #{docNo,jdbcType=VARCHAR}
+	</select>
+	<select id="getDocStorageByDocNo" parameterType="java.lang.String" resultMap="DocStorageResultMap">
+		SELECT 
+			<include refid="DocStorage_Column_List"/> 
+		FROM D_DOC_STORAGE 
+		WHERE DOC_NO =  #{docNo,jdbcType=VARCHAR}
+	</select>
+	<update id="update" parameterType="com.zebone.store.vo.DocStorage">
+		UPDATE 
+			D_DOC_STORAGE 
+		SET
+			DOC_OPER_STATE = #{docOperState,jdbcType=VARCHAR},
+			DOC_XML = #{docXml,jdbcType=CLOB},
+			DOC_ORG = #{docOrg,jdbcType=VARCHAR},
+			DOC_REGISTER_STATE = #{docRegisterState,jdbcType=VARCHAR},
+			DOC_PARSE_STATE = #{docParseState,jdbcType=VARCHAR},
+			DOC_VERSION = #{docVersion,jdbcType=VARCHAR},
+			DOC_TYPE_CODE = #{docTypeCode,jdbcType=VARCHAR}
+		WHERE
+			DOC_NO = #{docNo,jdbcType=VARCHAR}
+	</update>
+	<select id="getDocStorageByDocTypeCode" resultMap="DocStorageResultMap" parameterType="java.lang.String">
+		SELECT * FROM(
+		SELECT * FROM D_DOC_STORAGE T WHERE T.DOC_TYPE_CODE =#{docTypeCode,jdbcType=VARCHAR} AND T.EMPI_ID = #{empiId,jdbcType=VARCHAR} ORDER BY T.CREATE_TIME DESC
+		) WHERE ROWNUM = 1
+	</select>
+
+    <update id="updateRegisterStateByDocNo" parameterType="java.lang.String">
+        UPDATE
+        D_DOC_STORAGE
+        SET
+        DOC_REGISTER_STATE = '2'
+        WHERE
+        DOC_REGISTER_STATE = '9' AND
+        DOC_NO = #{docNo,jdbcType=VARCHAR}
+    </update>
+</mapper>

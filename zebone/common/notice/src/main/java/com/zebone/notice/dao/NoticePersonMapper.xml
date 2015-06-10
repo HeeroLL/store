@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zebone.notice.dao.NoticePersonMapper">
+    <resultMap id="noticePersonResultMap" type="com.zebone.notice.vo.NoticePerson">
+        <result column="N_ID" jdbcType="VARCHAR" property="nId"/>
+        <result column="RECIPIENT_PERSON_ID" jdbcType="VARCHAR" property="recipientPersonId"/>
+    </resultMap>
+    
+    <select id="findNoticePersonByNId" parameterType="java.lang.String" resultMap="noticePersonResultMap">
+          SELECT * FROM AUX_NOTICE_PERSON WHERE NID = #{nId,jdbcType=VARCHAR}
+    </select>
+    
+
+    <insert id="saveNoticePerson" parameterType="com.zebone.notice.vo.NoticePerson" >
+        INSERT INTO AUX_NOTICE_PERSON
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nId != null" >
+                N_ID,
+            </if>
+            <if test="recipientPersonId != null" >
+                RECIPIENT_PERSON_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nId != null" >
+                #{nId,jdbcType=VARCHAR},
+            </if> 
+            <if test="recipientPersonId != null" >
+                #{recipientPersonId,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <delete id="deletePublicNotice" parameterType="java.lang.String">
+        DELETE
+        FROM
+             AUX_NOTICE_PERSON
+        WHERE            
+            N_ID = #{nId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

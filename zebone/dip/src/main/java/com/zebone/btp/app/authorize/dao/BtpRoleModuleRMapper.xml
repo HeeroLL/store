@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.authorize.dao.BtpRoleModuleRMapper">
+	<resultMap id="BtpRoleModuleRResultMap" type="com.zebone.btp.app.authorize.vo.BtpRoleModuleR">
+		<id column="MODULE_ID" property="moduleId" jdbcType="VARCHAR"/>
+		<id column="ROLE_ID" property="roleId" jdbcType="VARCHAR"/>
+		<result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR"/>
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<sql id="column_list">
+		MODULE_ID, ROLE_ID, CREATOR_ID, CREATE_TIME
+	</sql>
+	
+	<!-- 删除某个角色与模块所对应关系的对象的集合 -->
+	<delete id="deleteBtpRoleModuleRByRoleId" parameterType="java.lang.String">
+		delete from BTP_ROLE_MODULE_R
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 保存角色与模块所对应关系的对象的集合 -->
+	<insert id="insertBtpRoleModuleRs">
+		insert into BTP_ROLE_MODULE_R
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			MODULE_ID,
+			ROLE_ID,
+			CREATOR_ID,
+		</trim>
+		<foreach collection="list" item="item" separator="union all ">
+			select
+			#{item.moduleId,jdbcType=VARCHAR},
+			#{item.roleId,jdbcType=VARCHAR},
+			#{item.creatorId,jdbcType=VARCHAR} from dual
+		</foreach>
+	</insert>
+	
+	<!-- 根据模块id获取角色与模块关系对象的集合 -->
+	<select id="getBtpRoleModuleRByModuleId" parameterType="java.lang.String" resultMap="BtpRoleModuleRResultMap">
+		select t.ROLE_ID from BTP_ROLE_MODULE_R t 
+		where t.MODULE_ID = #{moduleId,jdbcType=VARCHAR}
+	</select>
+	<select id="getModuleByRoleId" parameterType="java.lang.String" resultMap="BtpRoleModuleRResultMap">
+		select
+		<include refid="column_list"/>
+		from BTP_ROLE_MODULE_R 
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</select>
+</mapper>

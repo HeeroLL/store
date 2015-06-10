@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.release.dao.DataSyncItemMapper">
+	<resultMap id="DataSyncItemResultMap" type="com.zebone.dip.release.vo.DataSyncItem">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="MAIN_ID" property="mainId" jdbcType="VARCHAR"/>
+		<result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR"/>
+		<result column="DATA_CONTENT" property="dataContent" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		ID_, MAIN_ID, DATA_TYPE, DATA_CONTENT
+	</sql>
+	
+	<select id="getDataSyncItemEquals" resultMap="DataSyncItemResultMap" parameterType="com.zebone.dip.release.vo.DataSyncItem">
+		SELECT <include refid="column_list"/> FROM P_DATA_SYNC_ITEM
+		<where>
+			<if test="id != null">
+				AND ID_ = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="mainId != null">
+				AND MAIN_ID = #{mainId,jdbcType=VARCHAR}
+			</if>
+			<if test="dataType != null">
+				AND DATA_TYPE = #{dataType,jdbcType=VARCHAR}
+			</if>
+			<if test="dataContent != null">
+				AND DATA_CONTENT = #{dataContent,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="getDataSyncItemEqualsCount" resultType="int" parameterType="com.zebone.dip.release.vo.DataSyncItem">
+		SELECT  COUNT(ID_)  FROM P_DATA_SYNC_ITEM
+		<where>
+			<if test="id != null">
+				AND ID_ = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="mainId != null">
+				AND MAIN_ID = #{mainId,jdbcType=VARCHAR}
+			</if>
+			<if test="dataType != null">
+				AND DATA_TYPE = #{dataType,jdbcType=VARCHAR}
+			</if>
+			<if test="dataContent != null">
+				AND DATA_CONTENT = #{dataContent,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="getDataSyncItemLikes" resultMap="DataSyncItemResultMap" parameterType="com.zebone.dip.release.vo.DataSyncItem">
+		SELECT <include refid="column_list"/> FROM P_DATA_SYNC_ITEM
+		<where>
+			<if test="dataType != null">
+				AND DATA_TYPE LIKE '%' || #{dataType,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="dataContent != null">
+				AND DATA_CONTENT LIKE '%' ||  #{dataContent,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>
+		
+	</select>
+	<select id="getDataSyncItemLikesCount" resultType="int" parameterType="com.zebone.dip.release.vo.DataSyncItem">
+		SELECT COUNT(ID_) FROM P_DATA_SYNC_ITEM
+		<where>
+			<if test="dataType != null">
+				AND DATA_TYPE LIKE '%' || #{dataType,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="dataContent != null">
+				AND DATA_CONTENT LIKE '%' ||  #{dataContent,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertDataSyncItem" parameterType="com.zebone.dip.release.vo.DataSyncItem">
+		insert into P_DATA_SYNC_ITEM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_ ,
+			</if>
+			<if test="mainId != null">
+				MAIN_ID ,
+			</if>
+			<if test="dataType != null">
+				DATA_TYPE,
+			</if>
+			<if test="dataContent != null">
+				DATA_CONTENT,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				 #{id,jdbcType=VARCHAR},
+			</if>
+			<if test="mainId != null">
+				 #{mainId,jdbcType=VARCHAR},
+			</if>
+			<if test="dataType != null">
+				#{dataType,jdbcType=VARCHAR},
+			</if>
+			<if test="dataContent != null">
+				#{dataContent,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateDataSyncItem" parameterType="com.zebone.dip.release.vo.DataSyncItem">
+		UPDATE P_DATA_SYNC_ITEM
+		<set>
+			<if test="mainId != null">
+			    MAIN_ID = #{mainId,jdbcType=VARCHAR},
+			</if>
+			<if test="dataType != null">
+				DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+			</if>
+			<if test="dataContent != null">
+				DATA_CONTENT = #{dataContent,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR} 
+	</update>
+	
+	<delete id="deleteDataSyncItemByIds">
+		delete from P_DATA_SYNC_ITEM where ID_ in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteDataSyncItemByMainId" parameterType="String">
+		delete from P_DATA_SYNC_ITEM where MAIN_ID = #{mainId,jdbcType=VARCHAR}
+	</delete>
+	
+</mapper>

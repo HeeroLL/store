@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checks > 
+	<check field="body.office.orgCode" fieldName="科室所属机构">
+		<rule>
+			<type>masterdata:[dataSource,WJD01.001]</type>		
+		</rule>
+	</check>
+	<check field="requestHead.orgCode" fieldName="科室上传机构">
+		<rule>
+			<type>masterdata:[dataSource,WJD01.001]</type>		
+		</rule>
+	</check>
+	<check field="body.office.parentDeptCode" fieldName="上级科室代码">
+		<rule>
+			<type>dept:[dataSource,{body.office.orgCode}]</type>		
+		</rule>
+	</check>
+    <check field="body.office.classifiedCode" fieldName="归类代码">
+        <rule>
+            <type>dic:[dataSource,JXV00.00.054]</type>
+        </rule>
+    </check>
+    <check field="body.office.clinicHospCode" fieldName="门诊住院代码">
+        <rule>
+            <type>dic:[dataSource,EXV00.00.065]</type>
+        </rule>
+    </check>
+</checks>

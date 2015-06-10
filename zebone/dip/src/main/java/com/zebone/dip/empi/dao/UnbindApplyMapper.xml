@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.empi.dao.UnbindApplyMapper" >
+    <resultMap id="BaseResultMap" type="com.zebone.dip.empi.vo.UnbindApply" >
+        <id column="ID_" property="id" jdbcType="VARCHAR" />
+        <result column="EMPI" property="empi" jdbcType="VARCHAR" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="SEX" property="sex" jdbcType="VARCHAR" />
+        <result column="BIRTHDAY" property="birthday" jdbcType="DATE" />
+        <result column="PHOTO" property="photo" jdbcType="BLOB" />
+        <result column="NATION" property="nation" jdbcType="VARCHAR" />
+        <result column="PERMANENT_ADDRESS" property="permanentAddress" jdbcType="VARCHAR" />
+        <result column="APPLY_TIME" property="applyTime" jdbcType="TIMESTAMP" />
+        <result column="AUDIT_STATUS" property="auditStatus" jdbcType="VARCHAR" />
+        <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+        <result column="FIRST_CARD_TYPE" property="firstCardType" jdbcType="VARCHAR" />
+        <result column="FIRST_CARD_NO" property="firstCardNo" jdbcType="VARCHAR" />
+        <result column="SEC_CARD_TYPE" property="secCardType" jdbcType="VARCHAR" />
+        <result column="SEC_CARD_NO" property="secCardNo" jdbcType="VARCHAR" />
+        <result column="SEC_CARD_ORG" property="secCardOrg" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getUnbindApplyList" resultMap="BaseResultMap" parameterType="com.zebone.dip.empi.vo.UnbindApply">
+        SELECT * FROM E_UNBIND_APPLY WHERE 1=1
+        <if test="orgCode != null and orgCode !=''">
+            AND ORG_CODE = #{orgCode,jdbcType=VARCHAR}
+        </if>
+        <if test="secCardType != null and secCardType !=''">
+            AND SEC_CARD_TYPE = #{secCardType,jdbcType=VARCHAR}
+        </if>
+        <if test="secCardNo != null and secCardNo !=''">
+            AND SEC_CARD_NO = #{secCardNo,jdbcType=VARCHAR}
+        </if>
+        <if test="auditStatus != null and auditStatus !=''">
+            AND AUDIT_STATUS = #{auditStatus,jdbcType=VARCHAR}
+        </if>
+        ORDER BY APPLY_TIME DESC
+    </select>
+
+    <select id="getUnbindApplyCount" resultType="int" parameterType="com.zebone.dip.empi.vo.UnbindApply">
+        SELECT COUNT(ID_) FROM E_UNBIND_APPLY WHERE 1=1
+        <if test="orgCode != null and orgCode !=''">
+            AND ORG_CODE = #{orgCode,jdbcType=VARCHAR}
+        </if>
+        <if test="secCardType != null and secCardType !=''">
+            AND SEC_CARD_TYPE = #{secCardType,jdbcType=VARCHAR}
+        </if>
+        <if test="secCardNo != null and secCardNo !=''">
+            AND SEC_CARD_NO = #{secCardNo,jdbcType=VARCHAR}
+        </if>
+        <if test="auditStatus != null and auditStatus !=''">
+            AND AUDIT_STATUS = #{auditStatus,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getUnbindApplyInfo" parameterType="string" resultMap="BaseResultMap">
+        SELECT * FROM E_UNBIND_APPLY
+        WHERE ID_ = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getUnbindApplyRecord" resultMap="BaseResultMap" parameterType="com.zebone.dip.empi.vo.UnbindApply" >
+        SELECT * FROM E_UNBIND_APPLY WHERE SEC_CARD_NO = #{secCardNo,jdbcType=VARCHAR} and SEC_CARD_TYPE = #{secCardType,jdbcType=VARCHAR}
+        AND SEC_CARD_ORG = #{secCardOrg,jdbcType=VARCHAR} AND AUDIT_STATUS = '1'
+    </select>
+</mapper>

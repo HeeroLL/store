@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.empi.dao.ResidentCardMapper" >
+  <resultMap id="BaseResultMap" type="com.zebone.empi.vo.ResidentCard" >
+    <id column="ID_" property="id" jdbcType="VARCHAR" />
+    <result column="EMPI" property="empi" jdbcType="VARCHAR" />
+    <result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+    <result column="CARD_TYPE" property="cardType" jdbcType="VARCHAR" />
+    <result column="CARD_SERIAL_NO" property="cardSerialNo" jdbcType="VARCHAR" />
+    <result column="CARD_ORG" property="cardOrg" jdbcType="VARCHAR" />
+    <result column="CARD_LEVEL" property="cardLevel" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="CARD_STATUS" property="cardStatus" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    ID_, EMPI, CARD_NO, CARD_TYPE, CARD_SERIAL_NO, CARD_ORG, CARD_LEVEL, CREATE_DATE, CARD_STATUS
+  </sql>
+  
+  <select id="selectResidentCard" resultMap="BaseResultMap" parameterType="com.zebone.empi.vo.ResidentCard" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from E_RESIDENT_CARD
+  </select>
+  
+  <select id="selectByFirstLevelCardId" resultType="string" parameterType="string" >
+    select EMPI from E_RESIDENT_CARD
+    where CARD_NO=#{cardNo,jdbcType=VARCHAR} and CARD_LEVEL='1'
+  </select>
+  
+  <select id="selectByEmpi" resultMap="BaseResultMap" parameterType="string" >
+    select
+     <include refid="Base_Column_List" /> 
+    from E_RESIDENT_CARD
+    where EMPI= #{empi,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectResidentCardById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from E_RESIDENT_CARD
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteResidentCardByEmpi" parameterType="java.lang.String" >
+    delete from E_RESIDENT_CARD
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+ 
+  <insert id="insertResidentCard" parameterType="com.zebone.empi.vo.ResidentCard" >
+    insert into E_RESIDENT_CARD
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="empi != null" >
+        EMPI,
+      </if>
+      <if test="cardNo != null" >
+        CARD_NO,
+      </if>
+      <if test="cardType != null" >
+        CARD_TYPE,
+      </if>
+      <if test="cardSerialNo != null" >
+        CARD_SERIAL_NO,
+      </if>
+      <if test="cardOrg != null" >
+        CARD_ORG,
+      </if>
+      <if test="cardLevel != null" >
+        CARD_LEVEL,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+        <if test="deptCode != null" >
+            DEPT_CODE,
+        </if>
+        <if test="operState != null" >
+            OPER_STATE,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="empi != null" >
+        #{empi,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null" >
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardSerialNo != null" >
+        #{cardSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cardOrg != null" >
+        #{cardOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="cardLevel != null" >
+        #{cardLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+        <if test="deptCode != null" >
+            #{deptCode,jdbcType=VARCHAR},
+        </if>
+        <if test="operState != null" >
+            #{operState,jdbcType=VARCHAR},
+        </if>
+    </trim>
+  </insert>
+ 
+  <select id="countSelectByCodeAndTypeAndEmpi" parameterType="com.zebone.empi.vo.ResidentCard" resultType="java.lang.Integer" >
+    select count(*) from E_RESIDENT_CARD
+    where CARD_NO = #{cardNo,jdbcType=VARCHAR} and CARD_TYPE = #{cardType,jdbcType=VARCHAR} and EMPI = #{empi,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByCodeAndTypeAndEmpi" resultMap="BaseResultMap" parameterType="com.zebone.empi.vo.ResidentCard" >
+    select
+    <include refid="Base_Column_List" />
+    from E_RESIDENT_CARD  where CARD_NO = #{cardNo,jdbcType=VARCHAR} and CARD_TYPE = #{cardType,jdbcType=VARCHAR} and EMPI = #{empi,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByCodeAndType" resultMap="BaseResultMap" parameterType="com.zebone.empi.vo.ResidentCard" >
+    select
+    <include refid="Base_Column_List" />
+    from E_RESIDENT_CARD  where CARD_NO = #{cardNo,jdbcType=VARCHAR} and CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+  </select>
+ 
+ <select id="selectByCodeAndTypeAndDept" resultMap="BaseResultMap" parameterType="com.zebone.empi.vo.ResidentCard" >
+    select
+    <include refid="Base_Column_List" />
+    from E_RESIDENT_CARD  where CARD_NO = #{cardNo,jdbcType=VARCHAR} and CARD_TYPE = #{cardType,jdbcType=VARCHAR} and CARD_ORG = #{cardOrg,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateResidentCardById" parameterType="com.zebone.empi.vo.ResidentCard" >
+    update E_RESIDENT_CARD
+    <set >
+      <if test="empi != null" >
+        EMPI = #{empi,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null" >
+        CARD_NO = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        CARD_TYPE = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardSerialNo != null" >
+        CARD_SERIAL_NO = #{cardSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cardOrg != null" >
+        CARD_ORG = #{cardOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="cardLevel != null" >
+        CARD_LEVEL = #{cardLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+
+<update id="updateByCodeAndTypeAndEmpi" parameterType="com.zebone.empi.vo.ResidentCard" >
+    update E_RESIDENT_CARD
+    <set >
+      <if test="empi != null" >
+        EMPI = #{empi,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null" >
+        CARD_NO = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        CARD_TYPE = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardSerialNo != null" >
+        CARD_SERIAL_NO = #{cardSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cardOrg != null" >
+        CARD_ORG = #{cardOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="cardLevel != null" >
+        CARD_LEVEL = #{cardLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where CARD_NO = #{cardNo,jdbcType=VARCHAR} and CARD_TYPE = #{cardType,jdbcType=VARCHAR} and EMPI = #{empi,jdbcType=VARCHAR}
+  </update>
+
+    <select id="getResidentCardInfo" resultMap="BaseResultMap" parameterType="Map" >
+        select
+        <include refid="Base_Column_List" />
+        from E_RESIDENT_CARD  where CARD_NO = #{cardNo,jdbcType=VARCHAR} and CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByCardNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from E_RESIDENT_CARD where CARD_NO = #{cardNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getFirstLevelCards" resultMap="BaseResultMap" parameterType="Map" >
+        select
+        <include refid="Base_Column_List" />
+        from E_RESIDENT_CARD
+        where EMPI= #{empi,jdbcType=VARCHAR} and CARD_TYPE IN
+        <foreach item="item" index="index" collection="cardTypes" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <update id="updateCardStatus" parameterType="com.zebone.empi.vo.ResidentCard">
+        update E_RESIDENT_CARD
+        <set>
+            CARD_STATUS = '2',
+            <if test="cancelDate != null">
+                CANCEL_DATE = #{cancelDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where ID_ = #{id,jdbcType=VARCHAR}
+    </update>
+    
+    <update id="updateCardEmpiById" parameterType="com.zebone.empi.vo.ResidentCard">
+        UPDATE E_RESIDENT_CARD
+        <set>
+            EMPI = #{empi,jdbcType=VARCHAR},
+        </set>
+        WHERE ID_ = #{id,jdbcType=VARCHAR}
+    </update>
+    
+    
+  <delete id="delByCodeAndType" parameterType="com.zebone.empi.vo.ResidentCard" >
+     DELETE FROM E_RESIDENT_CARD  WHERE CARD_NO = #{cardNo,jdbcType=VARCHAR} and CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+  </delete>
+
+</mapper>

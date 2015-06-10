@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.etl.check.dao.SourceDataMapper">
+    <resultMap id="SourceDataObj" type="com.zebone.dnode.etl.check.pojo.SourceDataObj">
+        <result column="ID_" property="id" jdbcType="VARCHAR"/>
+        <result column="COL_DATA" property="columnData" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getSourceDataLic" parameterType="Map" resultMap="SourceDataObj">
+        SELECT ID_ , ${columnName} COL_DATA FROM ${tableName} WHERE CHECK_FLAG is null
+        <if test="startTime != null" >
+            AND TO_CHAR(E_CREATE_TIME,'YYYY/MM/DD') >= '${startTime}'
+        </if>
+        <if test="endTime != null" >
+            AND TO_CHAR(E_CREATE_TIME,'YYYY/MM/DD') &lt;= '${endTime}'
+        </if>
+    </select>
+
+    <update id="updateCheckFlag" parameterType="Map">
+        UPDATE ${tableName} set CHECK_FLAG = '${checkFlag}' WHERE ID_ = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

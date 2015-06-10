@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.docSub.dao.DocSubMapper" >
+    <resultMap id="BaseResultMap" type="com.zebone.docSub.vo.DocSubMessage" >
+        <result column="DOC_ORG" property="docOrg" jdbcType="VARCHAR" />
+        <result column="EMPI_ID" property="empi" jdbcType="VARCHAR" />
+        <result column="DOC_TYPE_CODE" property="docType" jdbcType="VARCHAR" />
+        <result column="DOC_VERSION" property="docVersion" jdbcType="VARCHAR"/>
+        <result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+        <result column="ACTIVE_TIME" property="activeTime" jdbcType="VARCHAR" />
+    </resultMap>
+    
+
+    <select id="getSubMessage" parameterType="Map" resultMap="BaseResultMap">
+       SELECT A.DOC_ORG,A.ACTIVE_TIME, B.EMPI_ID,B.DOC_NO,B.DOC_TYPE_CODE,B.DOC_VERSION FROM R_REGISTER_MAIN B,R_EMPI_INFO A 
+       WHERE B.ID_ = A.MAIN_ID
+       
+        <if test="startDt != null and startDt != '' ">
+            AND B.REGISTER_TIME <![CDATA[>=]]> #{startDt,jdbcType=VARCHAR}
+        </if>
+        <if test="endDt != null and endDt != '' ">
+            AND B.REGISTER_TIME <![CDATA[<=]]> #{endDt,jdbcType=VARCHAR}
+        </if>
+        
+        AND A.DOC_ORG IN (
+        <foreach collection="docOrgLic" index="index" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+        AND B.DOC_TYPE_CODE IN (
+        <foreach collection="docTypeLic" index="index" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+      
+	</select>
+
+	 
+	 <!--  
+	 <select id="getSubMessage" parameterType="Map" resultMap="BaseResultMap">
+	    SELECT DOC_NO  FROM R_REGISTER_MAIN 
+	    WHERE 
+	      DOC_TYPE_CODE IN (
+          <foreach collection="docTypeLic" index="index" item="item" separator=",">
+            #{item}
+          </foreach>
+         )
+         AND  ID_  IN (
+         	SELECT   MAIN_ID  FROM  R_EMPI_INFO 
+         	   WHERE DOC_ORG  IN (
+        			<foreach collection="docOrgLic" index="index" item="item" separator=",">
+            			#{item}
+        			</foreach>
+               )    
+         	<if test="startDt != null and startDt != '' ">
+            	AND ACTIVE_TIME >= #{startDt,jdbcType=VARCHAR}
+        	</if>
+        	<if test="endDt != null and endDt != '' ">
+            	AND ACTIVE_TIME <![CDATA[<=]]> #{endDt,jdbcType=VARCHAR}
+        	</if>
+         )  
+	</select>
+	-->
+	
+</mapper>

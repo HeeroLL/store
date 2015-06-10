@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checks>
+    <check field="sex" fieldName="性别">
+        <rule>
+            <type>dic:GB/T2261.1</type>
+        </rule>
+    </check>
+    <check field="starLevel" fieldName="居民等级">
+        <rule>
+            <type>dic:JXV00.00.052</type>
+        </rule>
+    </check>
+    <check field="nationality" fieldName="国籍">
+        <rule>
+            <type>dic:GB/T2659</type>
+        </rule>
+    </check>
+    <check field="nation" fieldName="民族">
+        <rule>
+            <type>dic:GB/T3304</type>
+        </rule>
+    </check>
+    <check field="maritalStatus" fieldName="婚姻状况">
+        <rule>
+            <type>dic:GB/T2261.2</type>
+        </rule>
+    </check>
+    <check field="mobileNumber" fieldName="手机号码">
+        <rule>
+            <type>regular:^[\d]{11}$</type>
+        </rule>
+    </check>
+    <check field="telNumber" fieldName="电话号码">
+        <rule>
+            <type>regular:(\(\d{3,4}\)|\d{3,4}-|\s)?\d{8}</type>
+        </rule>
+    </check>
+    <check field="profession" fieldName="职业">
+        <rule>
+            <type>dic:GB/T6565</type>
+        </rule>
+    </check>
+    <check field="contactMobile" fieldName="联系人电话">
+        <rule>
+            <type>regular:^[\d]{11}$</type>
+        </rule>
+    </check>
+    <check field="permanentZipcode" fieldName="户籍邮编">
+        <rule>
+            <type>regular:^$|[1-9]\d{5}</type>
+        </rule>
+    </check>
+    <check field="addressZipcode" fieldName="常住地址邮编">
+        <rule>
+            <type>regular:^$|[1-9]\d{5}</type>
+        </rule>
+    </check>
+    <check field="cardList.cardInfo.type" fieldName="卡类型">
+        <rule>
+            <type>dic:EXV00.00.001</type>
+        </rule>
+    </check>
+</checks>

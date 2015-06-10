@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.empi.mapper.EmpiConfigMapper">
+
+	<!-- EmpiConfig 结果对象 -->
+	<resultMap id="empiConfigResultMap" type="EmpiConfig">
+		<result property="updateEmpiFlag" column="p_update_empi_flag" />
+		<result property="uploadPath" column="p_uploadpath" />
+		<result property="empiType" column="p_empi_type" />
+		<result property="updateCardFlag" column="p_update_card_flag" />
+	</resultMap>
+
+	<sql id="config_col_list">
+		p_update_empi_flag, p_uploadpath, p_empi_type,
+		p_update_card_flag
+	</sql>
+
+	<!-- 查询EmpiConfig对象 -->
+	<select id="getEmpiConfig" parameterType="EmpiConfig"
+		resultMap="empiConfigResultMap">
+		select
+		<include refid="config_col_list" />
+		from EMPI_CONFIG T
+	</select>
+
+	<!-- 更新 -->
+	<update id="updateEmpiConfig" parameterType="EmpiConfig">
+		update EMPI_CONFIG
+		<set>
+			<if
+				test="updateEmpiFlag != null and updateEmpiFlag != '' ">
+				p_update_empi_flag = #{updateEmpiFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadPath != null and uploadPath != '' ">
+				p_uploadpath = #{uploadPath,jdbcType=VARCHAR},
+			</if>
+			<if test="empiType != null and empiType != '' ">
+				p_empi_type = #{empiType,jdbcType=VARCHAR},
+			</if>
+			<if
+				test="updateCardFlag != null and updateCardFlag != '' ">
+				p_update_card_flag = #{updateCardFlag,jdbcType=VARCHAR},
+			</if>
+		</set>
+	</update>
+
+</mapper>

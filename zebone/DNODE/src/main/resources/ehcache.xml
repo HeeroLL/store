@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ehcache>
+	<diskStore path="/store/data"/>
+	
+	<defaultCache
+      maxElementsInMemory="10000"
+      eternal="true"
+      timeToIdleSeconds="120"
+      timeToLiveSeconds="120"
+      diskSpoolBufferSizeMB="30"
+      maxElementsOnDisk="10000000"
+      diskExpiryThreadIntervalSeconds="120">
+      <persistence strategy="localTempSwap"/>
+     </defaultCache>
+     
+     <!-- 存放xsd缓存 -->
+     <cache name="dnode"
+        maxBytesLocalHeap="500M"
+        maxBytesLocalDisk="0"
+  	    eternal="true"
+  	    diskSpoolBufferSizeMB="30"
+  	    diskExpiryThreadIntervalSeconds="120">
+  	    <persistence strategy="localTempSwap"/>
+     </cache>
+    
+</ehcache>

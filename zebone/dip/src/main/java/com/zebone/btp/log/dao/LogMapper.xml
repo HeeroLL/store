@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.log.dao.LogMapper">
+	<!-- 单条详细审计日志 -->
+	<resultMap id="auditLogInfoResultMap" type="com.zebone.btp.log.pojo.AuditLogInfo">
+		<id column="LOG_ID" property="logId" jdbcType="VARCHAR"/>
+		<result column="ACTOR_ID" property="actorId" jdbcType="VARCHAR"/>
+		<result column="FULLNAME" property="fullName" jdbcType="VARCHAR"/>
+		<result column="LOG_CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="LOG_IPADDRESS" property="ipAddress" jdbcType="VARCHAR"/>
+		<result column="LEVEL_CODE" property="levelCode" jdbcType="VARCHAR"/>
+		<result column="MHO_NAME" property="mhoName" jdbcType="VARCHAR"/>
+		<result column="MODEL_ID" property="modelId" jdbcType="VARCHAR"/>
+		<result column="MODULE_NAME" property="moduleName" jdbcType="VARCHAR"/>
+		<result column="LOG_SERVICE_ID" property="serviceId" jdbcType="VARCHAR"/>
+		<result column="LOG_OP_FLAG" property="opFlag" jdbcType="VARCHAR"/>
+		<result column="LOG_DESCRPTION" property="description" jdbcType="VARCHAR"/>
+		<!-- 同时需要查询一对多的集合 -->
+		<collection property="auditLogInfoExtList" column="LOG_ID" select="selectLogInfoExt"/>
+	</resultMap>
+	<!-- 审计日志扩展表数据 -->
+	<resultMap id="auditLogInfoExtListMap" type="com.zebone.btp.log.pojo.AuditLogInfoExt">
+		<id column="LOG_ID" property="logId"/>
+		<result column="LOG_NAME" property="name"/>
+		<result column="LOG_VALUE" property="value"/>
+		<result column="LOG_OLDVALUE" property="oldValue"/>
+	</resultMap>
+	<!-- 审计日志列表 -->
+	<resultMap id="auditLogInfoListMap" type="com.zebone.btp.log.pojo.AuditLogInfo">
+		<id column="LOG_ID" property="logId" jdbcType="VARCHAR"/>
+		<result column="ACTOR_ID" property="actorId" jdbcType="VARCHAR"/>
+		<result column="FULLNAME" property="fullName" jdbcType="VARCHAR"/>
+		<result column="LOG_CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="LOG_IPADDRESS" property="ipAddress" jdbcType="VARCHAR"/>
+		<result column="LEVEL_CODE" property="levelCode" jdbcType="VARCHAR"/>
+		<result column="MHO_NAME" property="mhoName" jdbcType="VARCHAR"/>
+		<result column="MODEL_ID" property="modelId" jdbcType="VARCHAR"/>
+		<result column="MODULE_NAME" property="moduleName" jdbcType="VARCHAR"/>
+		<result column="LOG_SERVICE_ID" property="serviceId" jdbcType="VARCHAR"/>
+		<result column="LOG_OP_FLAG" property="opFlag" jdbcType="VARCHAR"/>
+		<result column="LOG_DESCRPTION" property="description" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!-- 查询的字段信息 -->
+	<sql id="log_sql_base">
+		select log.log_id, log.actor_id, per.fullname, log.log_create_time, log.log_ipaddress, log.level_code,
+			mho.mho_name, log.model_id, mod.module_name, log.log_service_id, log.log_op_flag, log.log_descrption
+		from btp_log log left join btp_module mod on log.model_id=mod.module_id
+		left join btp_personnel per on log.actor_id=per.personnel_id
+		left join btp_mho mho on log.level_code=mho.level_code
+	</sql>
+	<!-- 查询条件 -->
+	<sql id="log_sql_where">
+		where 1=1
+		<if test="ipAddress != null">
+			and log_ipaddress=#{ipAddress}
+		</if>
+		<if test="opFlag != null">
+			and log_op_flag=#{opFlag}
+		</if>
+	</sql>
+	<!-- 排序 -->
+	<sql id="log_order">
+		order by log_create_time desc
+	</sql>
+	<!-- 查询记录数 -->
+	<sql id="log_sql_count">
+		select count(*) from btp_log <include refid="log_sql_where"/>
+	</sql>
+	<!-- 查询审计日志扩展表数据 -->
+	<select id="selectLogInfoExt" parameterType="java.lang.String" resultMap="auditLogInfoExtListMap">
+		select * from btp_log_ext where log_id = #{logId}
+	</select>
+	<!-- 查询一条审计日志 -->
+	<select id="findLogById" resultMap="auditLogInfoResultMap" parameterType="java.lang.String">
+		<include refid="log_sql_base" /> where log_id = #{logId}
+	</select>
+	<!-- 分页查询审计日志 -->
+	<select id="searchLog" resultMap="auditLogInfoListMap" parameterType="java.lang.String">
+		<include refid="log_sql_base" /> <include refid="log_sql_where"/> <include refid="log_order" />
+	</select>
+	<!-- 查询审计日志总数 -->
+	<select id="getTotalCount" resultType="int" parameterType="com.zebone.btp.log.pojo.AuditLogInfo">
+		<include refid="log_sql_count" />
+	</select>
+	<!-- 删除审计日志主表 -->
+	<delete id="deleteLogById" parameterType="java.lang.String">
+		delete from btp_log where log_id = #{logId}
+	</delete>
+	<!-- 删除审计日志从表 -->
+	<delete id="deleteLogExt" parameterType="java.lang.String">
+		delete from btp_log_ext where log_id = #{logId}
+	</delete>
+	<!-- 插入一条审计日志 -->
+	<insert id="saveLog" parameterType="com.zebone.btp.log.pojo.AuditLogInfo">
+		insert into btp_log (log_id,actor_id,log_create_time,log_ipaddress,level_code,model_id,log_service_id,log_op_flag,log_descrption)
+		values (#{logId},#{actorId,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{ipAddress,jdbcType=VARCHAR},#{levelCode,jdbcType=VARCHAR},
+			#{modelId,jdbcType=VARCHAR},#{serviceId,jdbcType=VARCHAR},#{opFlag,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR})
+	</insert>
+	<!-- 插入一条审计日志扩展信息 -->
+	<insert id="saveLogExt" parameterType="com.zebone.btp.log.pojo.AuditLogInfoExt">
+		insert into btp_log_ext (log_id,log_name,log_value,log_oldvalue)
+			values (#{logId},#{name,jdbcType=VARCHAR},#{value,jdbcType=VARCHAR},#{oldValue,jdbcType=VARCHAR})
+	</insert>
+</mapper>

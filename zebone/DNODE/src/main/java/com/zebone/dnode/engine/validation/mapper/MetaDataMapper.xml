@@ -1,0 +1,76 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.validation.mapper.MetaDataMapper">
+     
+    <!-- 根据文档主键获取文档配置信息 -->
+	<select id="getDocConfigById" parameterType="string" resultType="docConf1">
+		SELECT ID_  AS  id,
+		       DOC_XSD  AS docXsd
+	    FROM P_DOC_CONF
+	    WHERE ID_ = #{id}		
+	</select>
+	
+	<!--  根据xpath和docId获取元数据主键 -->
+	<select id="getDocMappingByXpathAndDocId" resultType="docMapping">
+		SELECT FIELD_ID AS fieldId,
+		       CLOUMN_ID AS cloumnId,
+			   IS_ONLY AS isOnly
+		FROM  P_DOC_MAPPING
+		WHERE 
+		     XPATH = #{xpath} AND  DOC_ID = #{docId}
+	</select>
+	
+	
+	<!-- 根据主键获取元数据 -->
+	<select id="getFieldConfById" resultType="fieldConf1">
+		SELECT FIELD_NAME AS fieldName,
+			   FIELD_TYPE AS fieldType,
+			   FIELD_VALUE AS fieldValue,
+			   FIELD_FORMAT AS fieldFormat,
+			   FIELD_RULE_FORMAT AS fieldRuleFormat,
+			   ONLY_CODE AS onlyCode
+	    FROM P_FIELD_CONF
+	    WHERE ID = #{id}
+	</select>
+	
+	<!-- 根据元数据标识符号获取 元数据-->
+	<select id="getFieldConfByFieldId" resultType="fieldConf1">
+		SELECT 
+		       ID_ AS id,
+		       FIELD_NAME AS fieldName,
+			   FIELD_TYPE AS fieldType,
+			   FIELD_VALUE AS fieldValue,
+			   FIELD_FORMAT AS fieldFormat,
+			   FIELD_RULE_FORMAT AS fieldRuleFormat,
+			   ONLY_CODE AS onlyCode
+	    FROM P_FIELD_CONF 
+	    WHERE FIELD_ID = #{fieldId} AND IS_DELETED = 0
+	</select>
+	
+    <!-- 根据文档类型编号和文档版本号获取文档信息 -->
+	<select id="getDocConfigByDocTypeCodeAndDocVersion" resultType="docConf1">
+		SELECT ID_  AS  id,
+		       DOC_XSD  AS docXsd
+	    FROM P_DOC_CONF
+	    WHERE DOC_TYPE_CODE = #{docTypeCode} AND DOC_VERSION = #{docVersion} AND IS_DELETED = 0
+	</select>
+	
+	
+	<!-- 根据元数据标识获取文档映射信息 -->
+	<select id="getDocMappingByFieldId" resultType="docMapping">
+		SELECT CLOUMN_ID AS cloumnId
+		FROM  P_DOC_MAPPING
+		WHERE 
+		     DOC_ID = #{docId} AND FIELD_ID = #{fieldId} AND ROWNUM = 1
+	</select>
+	
+	
+	<!-- 根据列主键id获取文档数据映射的表、列 -->
+	<select id="getFieldTableColumn" resultType="fieldTableColumn">
+		SELECT c.COLUMN_NAME AS columnName,
+			   t.TABLE_NAME AS tableName 
+		FROM P_FIELD_COLUMN_CONF c LEFT JOIN P_FIELD_TABLE_CONF t ON c.TABLE_ID = t.ID_
+		WHERE c.ID_ = #{id}  AND ROWNUM = 1
+	</select>
+	
+
+</mapper>

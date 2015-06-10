@@ -1,0 +1,1005 @@
+/* grey */
+@CHARSET "utf-8";
+html,body{
+width:100%;
+height:100%;
+margin:0;padding:0;
+overflow:hidden;
+}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+#desktopWrapper {
+    position: relative;
+    top: 0;
+    z-index: 1;
+    background:url("../../images/blank.gif");
+}
+.toolBar{
+    position: absolute;
+    left: 0; top: 0;
+    width:100%;
+    height:20px;
+    z-index: 1;
+    background:url("./images/desktop/toolbar.png") repeat-x;
+    opacity:0.5;
+}
+.toolBar:hover{
+    opacity:1;
+    -moz-transition: opacity 0.5s ease 0s;
+}
+.toolBarInner{
+	text-align: right;
+	color: #FFFFFF;
+	padding:1px 10px 0 0;
+	height: 20px;
+}
+.toolBarInner a{
+	color: #FFFFFF;
+	background-image: url("./images/desktop/desktop_all.png");
+	background-repeat: no-re 	peat;
+	width:16px;height:16px;
+	display: block;
+	float:right;
+	margin-left:12px;
+	cursor:pointer;
+}
+.personalSetting{
+	background-position: -70px -363px;
+}
+.themeSetting{
+	background-position: -90px -364px
+}
+.sysSetting{
+	background-position: -29px -365px;
+}
+.logout{
+	background-position: -6px -365px;
+}
+.userName{
+	float:right;  margin-left: 6px;
+}
+.personalSetting:hover{
+	background-position: -70px -382px;
+}
+.themeSetting:hover{
+	background-position: -90px -384px;
+}
+.sysSetting:hover{
+	background-position: -29px -383px;
+}
+.logout:hover{
+	background-position: -6px -383px;
+}
+.userName{
+	float:right;  margin-left: 6px;
+}
+#desktopsContainer {
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+#desktopsContainer{
+width: 100%;
+height:100%;
+}
+.desktopsContainer .desktopContainer {
+    left: 2000px;
+    overflow: visible;
+    position: absolute;
+    width:100%;
+    height:100%;
+    padding-top: 20px;
+}
+.desktopsContainer .desktop_current {
+    display: block;
+    left: 0;
+}
+.appListContainer .appButton_appName {
+    overflow: visible;
+}
+.appListContainer .appButton {
+   position: absolute;
+}
+/*
+.dir{
+	background: url("./images/desktop/icons/folder.png") no-repeat;
+}
+*/
+.appButton {
+    color: white;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    font-size: 12px;
+    height: 88px;
+    position: relative;
+    width: 88px;
+}
+.appButton_appName {
+    color: white;
+    cursor: pointer;
+    height: 20px;
+    margin: 8px 0 0;
+    overflow: hidden;
+    text-align: center;
+}
+.appButton {
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+}
+.appListContainer {
+    overflow-y: hidden;
+    position: relative;
+}
+.appListContainer .appButton_appName_inner,.popmenu .appButton_appName_inner {
+    display: inline-block;
+    height: 20px;
+    line-height: 18px;
+    margin: 0;
+    max-width: 78px;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    vertical-align: middle;
+    width: auto;
+}
+.appListContainer .appButton_appName_inner_right,.popmenu .appButton_appName_inner_right {
+    background: url("./images/desktop/portal_all_png.png") no-repeat scroll -166px -560px transparent;
+    display: inline-block;
+    height: 20px;
+    margin: 0 0 0 -4px;
+    /*margin: 0 0 0 -4px\9;*/
+    padding: 0;
+    vertical-align: middle;
+}
+.menuListContainer{
+	width:100%;
+	height:600px;
+	position: absolute;
+	top:0;
+	left:0;
+	background: none transparent;
+	/*filter:alpha(opacity=4);
+	opacity: 0.6;*/
+	z-index: 1000;
+	display: none;
+}
+.menuListContainer .menuListBg{
+	position: absolute;
+	left:0;top:0;
+	width: 100%;
+	height:100%;
+}
+.menuListContainer .menuListBg img{
+	width: 100%;
+	height:100%;
+}
+.menuListContainer .menu_appIcon{
+	background-position: center center;
+    background-repeat: no-repeat;
+    cursor: default;
+    height: 64px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    width: 64px;
+}
+.menuListContainer .menu_dirIcon{
+	
+}
+.menuListContainer .menu_appName{
+	color: white;
+    cursor: pointer;
+    height: 20px;
+    overflow: hidden;
+    text-align: center;
+}
+.menuListContainer .menuApp{
+	display: block;
+	float: left;
+	height: 88px;
+    width: 88px;
+    position: relative;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+}
+.menuListContainer .subDir{
+	width: 100%;
+	float:left;
+	border-top:1px solid #f0f0f0;
+	border-bottom:1px solid #f0f0f0;
+	display: none;
+	background: url("./images/desktop/LinenTexture.jpg") repeat transparent;
+}
+.sharpCorner{
+	width:32px;
+	height:16px;
+	background: url("./images/desktop/desktop_all.png")0 -336px no-repeat transparent;
+	position: absolute;
+	display: none;
+	z-index: 100;
+}
+.menuListContainer .menu_subApp{
+	width:21px;
+	height:21px;
+	float:left;
+	margin:5px;
+}
+.menuListContainer .menu_appIcon .menu_appIconImg{
+	width:100%;
+	height:100%;
+}
+.menuListContainer .menu_appIcon .menu_dirIconImg{
+	width:100%;
+	height:100%;
+	position: absolute;
+	left: 0;top:0;
+}
+.menu_appName_inner{
+}
+.menuListContainer .menuClose{
+	bottom: 13px;
+    left: 32px;
+    position: absolute;
+    z-index: 1;
+}
+.menuListContainer .menuClose a{
+	width:48px;height:48px;
+	display: block;
+	background: url("./images/desktop/desktop_all.png") -156px -2px no-repeat transparent;
+}
+.menuListContainer .menuClose a:hover{
+	background-position: -156px -50px;
+}
+.dock_container .appButton_appIcon, .aMg_dock_container .appButton_appIcon {
+    margin: 5px auto 0;
+}
+.appListContainer .appButton_appIcon,.popmenu .appButton_appIcon {
+    margin-top: 6px;
+}
+.appButton_appIcon {
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 48px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    width: 48px;
+}
+.appButton:hover,.appButtonEditState .appButton,.appButtonEditState,.addQuickLinkButton:hover{background:url('./images/desktop/appbutton_mouseover_bg3.png') no-repeat 1px 0}
+.dock_item_list .appButton:hover{
+	background: none;
+}
+.appButton_appIconImg {
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+fieldset, img {
+    border: 0 none;
+}
+#bottomBar {
+    z-index: 12;
+}
+.bottomBar {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    height: 64px;
+    line-height: 30px;
+    width: 100%;
+}
+.bottomBar .nw{
+	padding-left:35px;
+	background: url("./images/desktop/dock_bg.png") no-repeat 0 0;
+	height: 39px;
+	margin-top: 25px;
+}
+.bottomBar .ne{
+	padding-right:35px;
+	background: url("./images/desktop/dock_bg.png") no-repeat right -39px;
+	height: 100%;
+}
+.bottomBar .n{
+	background: url("./images/desktop/dock_bg.png") repeat-x 0 -78px;
+	height: 100%;
+}
+.taskContainer {
+    height: 64px;
+    overflow: hidden;
+    position: absolute;
+    right: 35px;
+    top: 0;
+    width: 100%;
+}
+.taskContainerInner {
+    /*-moz-transition: margin-right 0.5s ease 0s;*/
+    float: right;
+    height: 100%;
+}
+.bottomBar .taskGroup {
+    -moz-transition: width 0.5s ease 0s;
+    float: right;
+    height: 100%;
+    overflow: hidden;
+    width: 0;
+}
+.bottomBar .taskGroupAnaWidth {
+    width: 114px;
+}
+.bottomBar .taskCurrent .taskItem {
+    background: url("./images/desktop/task_active.png") no-repeat scroll 0 0 transparent;
+}
+.taskItem {
+    background: url("./images/desktop/task.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    float: left;
+    height: 100%;
+    margin: 0 1px;
+    vertical-align: middle;
+    width: 112px;
+}
+.bottomBar .taskGroup .taskItem:hover{background:url(./images/desktop/task_hover.png) no-repeat}
+.launchContainer{
+	width: 60px;
+	height: 60px;
+    overflow: hidden;
+    position: absolute;
+    left: 30px;
+    top: 0;
+    
+}
+.launchPad{
+	background-image: url("./images/desktop/desktop_all.png");
+    background-position: 0 -1px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    display: block;
+    height: 51px;
+    width: 51px;
+}
+.launchPad:hover{
+	background-position: 0 -51px;
+}
+.launchImg{
+	width:100%;
+	height:100%;
+}
+.taskLeft{
+	position: absolute;
+	left:85px;
+	bottom: 24px;
+	display: none;
+}
+.taskRight{
+	position: absolute;
+	right:10px;
+	bottom: 24px;
+	display: none;
+}
+.taskLeftA{
+	width:28px;height:28px;
+	display:block;
+	background: url("./images/desktop/desktop_all.png") no-repeat -212px -48px;
+	cursor: pointer;
+}
+.taskRightA{
+	width:28px;height:28px;
+	display:block;
+	background: url("./images/desktop/desktop_all.png") no-repeat -240px -48px;
+	cursor: pointer;
+}
+:link, *:visited {
+    text-decoration: none;
+}
+a {
+    color: #45649E;
+    font: 12px/1.5 tahoma,helvetica,clean,sans-serif;
+}
+.taskItemIcon {
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 100%;
+}
+.taskItem div {
+    cursor: pointer;
+    text-align: center;
+}
+.taskItemTxt {
+    color: #FFFFFF;
+    cursor: pointer;
+   height: 25px;
+    line-height: 20px;
+    margin-top: -4px;
+    overflow: hidden;
+}
+.taskItemIcon img {
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+}
+fieldset, img {
+    border: 0 none;
+}
+#leftBar{
+    height: 100%;
+    width: 73px;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 0;
+    width: 73px;
+    z-index: 10;
+}
+#topBar, #leftBar, #rightBar {
+    z-index: 10;
+}
+#desktopWrapper {
+    position: relative;
+    top: 0;
+    width: 100%;
+    height:100%;
+}
+#desktopWrapper {
+    z-index: 11;
+}
+.dock_container {
+    height: 576px;
+    left: 0;
+    margin: -290px 0 0;
+    position: absolute;
+    top: 50%;
+    width: 73px;
+}   
+.dock_pos_left .dock_middle {
+    background: url("./images/desktop/dock_l.png") no-repeat scroll 0 0 transparent;
+}
+.dock_middle {
+    height: 566px;
+}
+.dock_container .appButton {
+    height: 58px;
+    margin: 2px 3px 2px 4px;
+    padding: 0;
+    width: 58px;
+}
+.dock_container .appButton_appIcon, .aMg_dock_container .appButton_appIcon {
+    margin: 5px auto 0;
+}
+.appButton_appIcon {
+	width: 48px;
+    height: 48px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    
+}
+.dock_container .appButton:hover,.dock_container .appButtonEditState .appButton,
+.aMg_dock_container .appButton:hover{background:url('./images/desktop/appbutton_mouseover_bg4.png') no-repeat center center}
+.dock_container .appButton{
+	margin:2px 3px 2px 4px;padding:0;width:58px;height:58px
+}
+.dock_container .appButton_appName {
+    display: none;
+}
+.dock_pos_left .dock_tool_list {
+    left: 0;
+}
+.dock_tool_list {
+    bottom: 5px;
+    height: 85px;
+    position: absolute;
+    width: 65px;
+}
+.dock_tool_item {
+    height: 31px;
+    margin: 0 auto;
+    width: 50px;
+}
+.dock_tool_icon {
+    background: url("./images/desktop/portal_all_png.png?t=20111011016") no-repeat scroll 0 0 transparent;
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 20px;
+    margin: 5px 0;
+    position: relative;
+    width: 20px;
+}
+.dock_tool_pinyin {
+    background-position: -80px 0;
+}
+.dock_tool_sound {
+    background-position: 0 0;
+    margin-left: 10px;
+}
+.dock_tool_setting{
+    background-position: -60px 0;
+}
+.dock_tool_setting:hover{
+	background-position: -60px -20px;
+}
+.dock_tool_theme {
+    background-position: -40px 0;
+    margin-left: 10px;
+}
+.dock_tool_theme:hover {
+	background-position: -40px -20px;
+}	
+.dock_tool_start {
+   	background-position: -105px 0;
+    height: 40px;
+    margin: -8px 0 0 2px;
+    width: 40px;
+}
+.dock_tool_start:hover {
+    background-position: -145px 0;
+}
+.dock_item_list {
+    float: left;
+    height: 425px;
+    overflow: hidden;
+    width: 100%;
+}
+.noteDiv{
+	position: absolute;
+	top:0;
+	right:73px;
+	width:340px;
+	height:100%;
+	overflow:hidden;
+	border-left:#b3b3b3 1px solid;
+	border-left: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 2px 0 2px -2px #B2B9C9 inset;
+}
+.note_toogle{
+	position: absolute;
+	bottom:0;
+	right:73px;
+	width: 46px;
+	height: 46px;
+	display: none;
+}
+.note_toogle_a{
+	width: 46px;
+	height: 46px;
+	display: block;
+	cursor: pointer;
+	background: url("./images/desktop/notebar_bg.png") no-repeat -409px -14px;
+}
+.note_toogle_a:hover{
+	background-position: -454px -14px;
+}
+.note_top{
+	background: url("./images/desktop/notebar_bg.png") no-repeat 0 0;
+	height:6px;
+	width: 100%;
+}
+.note_bottom{
+	background: url("./images/desktop/notebar_bg.png") no-repeat 0 -7px;
+	height:6px;
+	position: absolute;
+	bottom: 0;
+	width:100%;
+}
+.note_body{
+	background: url("./images/desktop/notebar_bg_body.png") repeat-y;
+}
+#note-place{
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+	
+.noteToolBar{
+	background: url("./images/desktop/notebar_bg.png") no-repeat scroll 0 -278px transparent;
+    bottom: 6px;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 1px;
+    padding: 0 0 0 5px;
+    position: absolute;
+    width: 100%;
+}
+
+.noteToolBar .button{
+	display: block;
+	height: 22px;
+	width: 26px;
+	float:right;
+	cursor:pointer;
+	margin-top: 6px;
+	margin-left: 10px;
+}
+.noteToolBar .toggle{
+	background-image: url("./images/desktop/notebar_bg.png");
+	background-position: -177px -37px;
+}
+.noteToolBar .toggle:hover{
+	background-position: -177px -16px;
+}
+.noteToolBar .setting{
+	background-image: url("./images/desktop/notebar_bg.png");
+	background-position: -106px -37px;
+}
+.noteToolBar .setting:hover{
+	background-position: -106px -16px;
+}
+.noteToolBar .toggleShow{
+	background-position: -211px -5px;
+}
+/*通知区域*/
+.widget{
+	margin: 0 0 5px 1px;
+}
+.widget-header{
+	height: 32px;
+	line-height: 32px;
+	color: #FFFFFF;
+	background: url("./images/desktop/notebar_bg.png") no-repeat 0 -68px;
+	font-weight: bold;
+	padding: 0 0 0 16px;
+	position: relative;
+}
+.widget-tools{
+	position: absolute;
+	right:5px;
+	top:0;
+}
+.widget-close{
+	width: 22px;height: 22px;
+	background: url("./images/desktop/notebar_bg.png") no-repeat -79px -37px;
+	display: inline-block;
+	cursor: pointer;
+}
+.widget-close:hover{
+	background-position: -79px -15px;
+}
+.widget-con{
+	color: #FFFFFF;
+	padding: 2px;
+}
+.widget-bottom{
+	height: 32px;
+	line-height: 32px;
+	color: #FFFFFF;
+	background: url("./images/desktop/notebar_bg.png") no-repeat 0 -224px;
+}
+.popmenu{
+	position: absolute;
+	width:378px;
+	left:100px;
+	top:100px;
+	z-index: 50;
+	display: none;
+}
+.popmenu_tip{
+	position: absolute;
+	left:0;
+	width:11px;
+	height:15px;
+	background: url("./images/desktop/pop_header.png") 0 -14px no-repeat;
+}
+.popmenu_tip_top{
+	top:25px;
+}
+.popmenu_tip_btm{
+	bottom: 25px;
+}
+.popmenu_header{
+	height:12px;
+	background: url("./images/desktop/pop_header.png") no-repeat;
+}
+.popmenu_body{
+	min-height: 50px;
+	overflow: auto;
+	background: url("./images/desktop/pop_body.png") 0 0 repeat-y;
+	padding: 10px 0 0 15px;
+}
+.popmenu_footer{
+	height:12px;
+	background: url("./images/desktop/pop_header.png") 0 -50px no-repeat ;
+}
+.moveApp{
+	width: 58px;
+	height: 58px;
+	position: absolute;
+	left:0px;
+	top:0px;
+	cursor:pointer;
+	z-index: 99999;
+}
+.ui_maskLayer {
+    background: none repeat scroll 0 0 black;
+    cursor: default;
+    display: none;
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    filter:alpha(opacity=0);
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.ui_maskLayerBody {
+    height: 100%;
+    width: 100%;
+}
+.context_menu_container {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #B8CBCB;
+    box-shadow: 2px 2px 5px #666666;
+    overflow: hidden;
+    padding: 1px;
+}
+.context_menu_item_list, .context_menu_item_container, .context_menu_flashitem_item {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+.context_menu_item {
+    color: #000000;
+    display: block;
+    height: 25px;
+    line-height: 24px;
+    overflow: hidden;
+    padding: 0 5px;
+    position: relative;
+    text-decoration: none;
+}
+.context_menu {
+    display: none;
+    overflow: hidden;
+    position: absolute;
+    width: 140px;
+    z-index: 999999;
+}
+.context_menu_item:hover,.context_menu_item_hover .context_menu_item{color:#fff;background:#348ccc;text-decoration:none}
+.context_menu_separator {
+    background: url("./images/desktop/context_menu_separator.gif") repeat-x scroll left center transparent;
+    display: block;
+    height: 7px;
+    margin: 0 3px;
+}
+.context_menu_item_subicon {
+    background: url("./images/desktop/portal_all_png.png") no-repeat scroll -120px -458px transparent;
+    height: 16px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 16px;
+}
+.themeSetting_area {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+    background-color: #FFFFFF;
+}
+div.wallpaper_settingButton, a.themeSetting_settingButton {
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    height: 140px;
+    margin: 5px 10px 0;
+    width: 160px;
+}
+.themeSetting_settingButton_icon {
+    border-radius: 5px 5px 5px 5px;
+    height: 110px;
+    margin: 5px auto;
+    width: 150px;
+}
+
+.themeSetting_settingButton:hover {
+    background-color: #CBE7FC;
+}	
+.themeSetting_settingButton_text {
+    margin: 5px 0 0;
+    text-align: center;
+}
+a.themeSetting_selected{
+	background-color:#AAD8FC;
+}
+/*开始菜单*/
+.taskbar_start_menu_container {
+    bottom: 4px;
+    color: #FFFFFF;
+    display: none;
+    height: 240px;
+    left: 72px;
+    position: absolute;
+    z-index: 300063;
+}
+.taskbar_start_menu_body {
+    background-position: -33px -69px;
+    min-height: 70px;
+    overflow: hidden;
+    padding: 0 0 7px;
+    width: 182px;
+}
+.startMenuImg {
+    background-image: url("./images/desktop/startmenu.png");
+}
+.taskbar_start_menu {
+    font-family: Tahoma,Geneva,sans-serif;
+    font-size: 12px;
+    margin: 2px 0 0;
+    padding: 0;
+}
+.taskbar_start_menu li {
+    cursor: pointer;
+    line-height: 22px;
+    list-style: none outside none;
+    padding: 4px 10px 6px 15px;
+}
+.taskbar_start_menu li:hover{
+	background: url("./images/desktop/startmenu.png") repeat scroll -264px -153px transparent;
+}
+.taskbar_start_menu li a {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.taskbar_start_menu_selfinfo {
+    height: 30px;
+    padding: 5px 0 4px 5px;
+}
+.taskbar_start_menu_nick {
+    color: #4CE4FF;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    font-size: 14px;
+    height: 18px;
+    margin: 5px 0 0 10px;
+    overflow: hidden;
+    width: 95px;
+}
+.startMenuTopControl_lock {
+    background-position: -190px -355px;
+    display: none;
+    float: left;
+    height: 24px;
+    margin-left: 5px;
+    width: 24px;
+}
+.taskbar_start_menu_body .logout_botton {
+    background-position: -60px -355px;
+    display: block;
+    height: 35px;
+    margin: auto;
+    width: 35px;
+}
+.taskbar_start_menu_body .logout_botton:hover {
+	background-position: -23px -355px;
+}
+.startMenuImg {
+    background-image: url("./images/desktop/startmenu.png");
+}
+ol, ul, dl {
+    margin-left: 2em;
+}
+
+#debug_text{
+	width: 500px; height: 342px; position: absolute; left: 500px;background-color: #fff11e;overflow:auto;z-index:100000000;display:none;
+}
+/*slider*/
+.menuListInner{
+	margin: 20px 0;
+    position: relative;
+    width: 100%;height: 100%;
+}
+.stripViewer {
+    clear: both;
+    height: 460px;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    width: 700px;
+}
+.stripViewer .panelContainer {
+    left: 0;
+    list-style-type: none;
+    position: relative;
+    top: 0;
+    width: 100%;
+}
+.stripViewer .panelContainer .panel {
+    float: left;
+    height: 100%;
+    position: relative;
+    width: 750px;
+}
+.stripNavL {
+	left: 0;
+}
+.stripNavR {
+	right: 0;
+}
+.stripNavL a, .stripNavR a {
+    display: block;
+    height: 45px;
+    width: 45px;
+}
+.stripNavLa,.stripNavRa{
+	background-image: url("./images/desktop/desktop_all.png");
+	background-repeat: no-repeat;
+}
+.stripNavLa{
+	width:45px;height:45px;
+	background-position: -55px -6px;
+}
+.stripNavLa:hover{
+	background-position: -55px -51px;
+}
+.stripNavRa{
+	width:45px;height:45px;
+	background-position: -101px -6px;
+}
+.stripNavRa:hover{
+	background-position: -101px -51px;
+}
+.stripNavL, .stripNavR {
+    position: absolute;
+    text-indent: -9000em;
+    top: 230px;
+}
+.stripNav{
+	text-align: center;
+}
+.stripNav a {
+	display: inline-block;
+	width:16px;height:16px;
+	background: url("./images/desktop/desktop_all.png") -239px -17px no-repeat transparent;
+	outline: none;
+}
+.stripNav a.current {
+	background-position:-221px -17px;
+}
+.stripNav ul li{
+	list-style-type:none;
+	float: left;
+}
+.tip_div{
+	bottom: 68px;
+    height: 160px;
+    position: absolute;
+    right: 28px;
+    width: 258px;
+    display: none;
+}
+.tip_div .tip_div_inner{
+	position: relative;
+	height:100%;
+	background: url("./images/desktop/desktop_all.png") 0 -147px no-repeat transparent;
+}
+.tip_div .tip_div_main{
+	padding:20px 0 0 10px;
+	color:#FFFFFF;
+}
+.tip_div .tip_div_close{
+	width: 30px;height:30px;
+	background-image: url("./images/desktop/desktop_all.png");
+	background-repeat: no-repeat;
+	background-position: -5px -307px;
+	position: absolute;right:5px;top:5px;
+}
+.tip_div .tip_div_close:hover{
+	background-position: -33px -307px;
+}

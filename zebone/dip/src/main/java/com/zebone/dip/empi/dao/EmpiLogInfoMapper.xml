@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.empi.dao.EmpiLogInfoMapper" >
+    <resultMap id="BaseResultMap" type="com.zebone.dip.empi.vo.EmpiLogInfo" >
+        <id column="ID_" property="id" jdbcType="VARCHAR" />
+        <result column="OPER_STATE" property="operState" jdbcType="VARCHAR" />
+        <result column="EMPI" property="empi" jdbcType="VARCHAR" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="SEX" property="sex" jdbcType="VARCHAR" />
+        <result column="BIRTHDAY" property="birthday" jdbcType="DATE" />
+        <result column="AGE" property="age" jdbcType="DECIMAL" />
+        <result column="PHOTO" property="photo" jdbcType="BLOB" />
+        <result column="NATIONALITY" property="nationality" jdbcType="VARCHAR" />
+        <result column="NATION" property="nation" jdbcType="VARCHAR" />
+        <result column="MARITAL_STATUS" property="maritalStatus" jdbcType="VARCHAR" />
+        <result column="MOBILE_NUMBER" property="mobileNumber" jdbcType="VARCHAR" />
+        <result column="TEL_NUMBER" property="telNumber" jdbcType="VARCHAR" />
+        <result column="PROFESSION" property="profession" jdbcType="VARCHAR" />
+        <result column="WORK_UNIT" property="workUnit" jdbcType="VARCHAR" />
+        <result column="CONTACTS" property="contacts" jdbcType="VARCHAR" />
+        <result column="CONTACTS_MOBILE" property="contactsMobile" jdbcType="VARCHAR" />
+        <result column="PERMANENT_ADDRESS" property="permanentAddress" jdbcType="VARCHAR" />
+        <result column="PERMANENT_CODE" property="permanentCode" jdbcType="VARCHAR" />
+        <result column="PERMANENT_HOUSE_NO" property="permanentHouseNo" jdbcType="VARCHAR" />
+        <result column="PERMANENT_ZIPCODE" property="permanentZipcode" jdbcType="VARCHAR" />
+        <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+        <result column="ADDRESS_CODE" property="addressCode" jdbcType="VARCHAR" />
+        <result column="ADDRESS_HOUSE_NO" property="addressHouseNo" jdbcType="VARCHAR" />
+        <result column="ADDRESS_ZIPCODE" property="addressZipcode" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+        <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="EmpiCount" type="com.zebone.dip.empi.vo.EmpiCount" >
+        <result column="COUNT" property="count" jdbcType="VARCHAR" />
+        <result column="DEPT_CODE" property="orgCode" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="operateList" parameterType="string" resultMap="BaseResultMap">
+        select EMPI, OPER_STATE, CREATE_TIME, DEPT_CODE
+        from E_RESIDENT_INFO_LOG where EMPI = #{empiNo,jdbcType=VARCHAR}
+        ORDER BY CREATE_TIME ASC
+    </select>
+
+    <select id="operateTotalCount" parameterType="string" resultType="int">
+        select count(ID_)
+        from E_RESIDENT_INFO_LOG where EMPI = #{empiNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getEmpiCountList" resultMap="EmpiCount" parameterType="com.zebone.dip.empi.vo.EmpiCount">
+        SELECT COUNT(A.DEPT_CODE) COUNT, A.DEPT_CODE FROM E_RESIDENT_CARD A
+        <where>
+            A.DEPT_CODE IS NOT NULL
+            <if test="startDt !=null and startDt !=''">
+                AND TRUNC (A.CREATE_DATE) >= TO_DATE (#{startDt,jdbcType=VARCHAR}, 'yyyy/mm/dd')
+            </if>
+            <if test="endDt !=null and endDt !=''">
+                <![CDATA[
+				AND TRUNC (A.CREATE_DATE) <= TO_DATE (#{endDt,jdbcType=VARCHAR}, 'yyyy/mm/dd')
+				]]>
+            </if>
+            <if test="cardType != null and cardType !=''">
+                AND A.CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+            </if>
+            <if test="orgCode != null and orgCode !=''">
+                AND A.DEPT_CODE = #{orgCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+        GROUP BY A.DEPT_CODE
+    </select>
+
+    <select id="getEmpiCountListNum" resultType="int" parameterType="com.zebone.dip.empi.vo.EmpiCount">
+        SELECT COUNT(*) FROM (SELECT COUNT(A.DEPT_CODE) COUNT, A.DEPT_CODE FROM E_RESIDENT_CARD A
+        <where>
+            A.DEPT_CODE IS NOT NULL
+            <if test="startDt !=null and startDt !=''">
+                AND TRUNC (A.CREATE_DATE) >= TO_DATE (#{startDt,jdbcType=VARCHAR}, 'yyyy/mm/dd')
+            </if>
+            <if test="endDt !=null and endDt !=''">
+                <![CDATA[
+				AND TRUNC (A.CREATE_DATE) <= TO_DATE (#{endDt,jdbcType=VARCHAR}, 'yyyy/mm/dd')
+				]]>
+            </if>
+            <if test="cardType != null and cardType !=''">
+                AND A.CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+            </if>
+            <if test="orgCode != null and orgCode !=''">
+                AND A.DEPT_CODE = #{orgCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+        GROUP BY A.DEPT_CODE) ORDER BY DEPT_CODE
+    </select>
+
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.analyze.dao.DocAnalyzedMapper">
+	<resultMap id="DocumentInfo" type="com.zebone.dnode.engine.analyze.vo.DocumentInfo">
+		<result column="ID_"                property="id" jdbcType="VARCHAR"/>
+		<result column="CREATE_TIME" 	    property="createTimie" jdbcType="VARCHAR"/>
+		<result column="EMPI_ID"            property="empiId" jdbcType="VARCHAR"/>
+		<result column="DOC_XML"            property="docxml" jdbcType="CLOB"/>
+		<result column="DOC_OPER_STATE"     property="operatorState" jdbcType="VARCHAR"/>
+		<result column="DOC_ORG"            property="organ" jdbcType="VARCHAR"/>
+		<result column="DOC_REGISTER_STATE" property="registerState" jdbcType="VARCHAR"/>
+		<result column="DOC_TYPE_CODE"      property="typeCode" jdbcType="VARCHAR"/>
+		<result column="DOC_NO"             property="no" jdbcType="VARCHAR"/>
+		<result column="DOC_PARSE_STATE"    property="parseState" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!-- 查询出没有解析的文档 -->
+	<select id="getNoAnalyzedDoc" parameterType="string" resultMap="DocumentInfo">
+	<![CDATA[
+		SELECT
+		    ID_,
+		    CREATE_TIME,
+		    EMPI_ID,
+		    DOC_XML,
+		    DOC_OPER_STATE,
+		    DOC_ORG,
+		    DOC_REGISTER_STATE,
+		    DOC_TYPE_CODE,
+		    DOC_NO,
+		    DOC_PARSE_STATE
+		FROM
+		    D_DOC_STORAGE
+		WHERE
+		   (DOC_REGISTER_STATE = '1' OR DOC_REGISTER_STATE = '3')   AND ( DOC_PARSE_STATE = '0' OR DOC_PARSE_STATE = '2')
+		   AND MOD(SEQ,#{threadCount,jdbcType=INTEGER}) = #{threadNo,jdbcType=INTEGER}
+		AND rownum <= #{count,jdbcType=INTEGER}
+	]]>
+	</select>
+	
+	<select id="getNoAnalyzedDocByDocOrgCode" parameterType="string" resultMap="DocumentInfo">
+	<![CDATA[
+		SELECT
+		    ID_,
+		    CREATE_TIME,
+		    EMPI_ID,
+		    DOC_XML,
+		    DOC_OPER_STATE,
+		    DOC_ORG,
+		    DOC_REGISTER_STATE,
+		    DOC_TYPE_CODE,
+		    DOC_NO,
+		    DOC_PARSE_STATE
+		FROM
+		    D_DOC_STORAGE
+		WHERE
+		    DOC_ORG = #{docOrgCode} AND
+		   (DOC_REGISTER_STATE = '1' OR DOC_REGISTER_STATE = '3')   AND ( DOC_PARSE_STATE = '0' OR DOC_PARSE_STATE = '2')
+		AND rownum <= #{count,jdbcType=INTEGER}
+	]]>
+	</select>
+	<update id="updateParseState">
+		UPDATE D_DOC_STORAGE SET DOC_PARSE_STATE = #{parseState,jdbcType=VARCHAR} WHERE ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

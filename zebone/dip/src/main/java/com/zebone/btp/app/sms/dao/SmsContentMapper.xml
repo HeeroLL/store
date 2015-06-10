@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.sms.dao.SmsContentMapper">
+	<resultMap id="SmsContentResultMap" type="com.zebone.btp.app.sms.pojo.SmsContent">
+		<id column="SMS_CONTENT_ID" property="smsContentId" jdbcType="VARCHAR"/>
+		<result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+		<result column="SENDER_ID" property="senderId" jdbcType="VARCHAR"/>
+		<result column="SEND_TIME" property="sendTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<sql id="column_list">
+		SMS_CONTENT_ID, CONTENT, SENDER_ID, SEND_TIME
+	</sql>
+	<select id="findById" resultMap="SmsContentResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_SMS_CONTENT
+		where SMS_CONTENT_ID = #{smsContentId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from BTP_SMS_CONTENT
+		where SMS_CONTENT_ID = #{smsContentId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.btp.app.sms.pojo.SmsContent">
+		insert into BTP_SMS_CONTENT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="smsContentId != null">
+				SMS_CONTENT_ID,
+			</if>
+			<if test="content != null">
+				CONTENT,
+			</if>
+			<if test="senderId != null">
+				SENDER_ID,
+			</if>
+			<if test="sendTime != null">
+				SEND_TIME,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="smsContentId != null">
+				#{smsContentId,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="senderId != null">
+				#{senderId,jdbcType=VARCHAR},
+			</if>
+			<if test="sendTime != null">
+				#{sendTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.btp.app.sms.pojo.SmsContent">
+		update BTP_SMS_CONTENT
+		<set>
+			<if test="content != null">
+				CONTENT = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="senderId != null">
+				SENDER_ID = #{senderId,jdbcType=VARCHAR},
+			</if>
+			<if test="sendTime != null">
+				SEND_TIME = #{sendTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where SMS_CONTENT_ID = #{smsContentId,jdbcType=VARCHAR}
+	</update>
+</mapper>

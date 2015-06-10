@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zebone.notice.dao.AttachmentMapper">
+    <resultMap id="attachmentResultMap" type="com.zebone.notice.vo.Attachment">
+        <id column="A_ID" jdbcType="VARCHAR" property="aId"/>
+        <result column="N_ID" jdbcType="VARCHAR" property="nId"/>
+        <result column="ATTACHMENT_NAME" jdbcType="VARCHAR" property="attachmentName"/>
+        <result column="ATTACHMENT_SIZE" jdbcType="DECIMAL" property="attachmentSize"/>
+        <result column="ATTACHMENT_IMAGE" jdbcType="VARCHAR" property="attachmentImage"/>
+        <result column="ATTACHMENT_PATH" jdbcType="VARCHAR" property="attachmentPath"/>
+        <result column="ORDER_NUMBER" jdbcType="INTEGER" property="orderNumber"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <select id="getAttachmentById" resultMap="attachmentResultMap">
+        SELECT * FROM AUX_ATTACHMENT WHERE A_ID = #{aId,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAttachmentByNID" resultMap="attachmentResultMap">
+          SELECT * FROM AUX_ATTACHMENT WHERE N_ID = #{nId,jdbcType=VARCHAR} ORDER BY ORDER_NUMBER
+    </select>
+    
+    <delete id="deleteAttachment">
+        DELETE FROM AUX_ATTACHMENT WHERE A_ID = #{aId,jdbcType=VARCHAR}
+    </delete>
+	
+	<delete id="deleteAllAttachment">
+        DELETE FROM AUX_ATTACHMENT WHERE N_ID = #{nId,jdbcType=VARCHAR}
+    </delete>
+    
+    <select id="getTotalSizeByNId" resultType="java.lang.Long">
+		SELECT SUM(ATTACHMENT_SIZE) FROM AUX_ATTACHMENT WHERE N_ID = #{nId,jdbcType=VARCHAR}
+	</select>
+    
+    <insert id="saveAttachment">
+        INSERT INTO AUX_ATTACHMENT (A_ID, N_ID, ATTACHMENT_NAME, ATTACHMENT_SIZE, ATTACHMENT_IMAGE, ATTACHMENT_PATH, ORDER_NUMBER, CREATE_TIME)
+        <foreach collection="array" item="item" index="index" separator=" UNION ALL "> 
+	    	SELECT #{item.aId}, #{item.nId}, #{item.attachmentName,jdbcType=VARCHAR}, #{item.attachmentSize,jdbcType=DECIMAL}, 
+	    		#{item.attachmentImage,jdbcType=VARCHAR}, #{item.attachmentPath,jdbcType=VARCHAR}, #{item.orderNumber,jdbcType=INTEGER},
+	    		#{item.createTime,jdbcType=TIMESTAMP} FROM DUAL
+	    </foreach>  
+    </insert>
+    
+    <update id="updateAttachment" parameterType="com.zebone.notice.vo.Attachment" >
+        UPDATE AUX_ATTACHMENT
+        <set>
+            <if test="nId != null" >
+                N_ID = #{nId,jdbcType=VARCHAR},
+            </if>
+            <if test="attachmentName != null" >
+                ATTACHMENT_NAME = #{attachmentName,jdbcType=VARCHAR},
+            </if>
+            <if test="attachmentSize != null" >
+                ATTACHMENT_SIZE = #{attachmentSize,jdbcType=DECIMAL},
+            </if>
+            <if test="attachmentImage != null" >
+                ATTACHMENT_IMAGE = #{attachmentImage,jdbcType=VARCHAR},
+            </if>
+            <if test="attachmentPath != null" >
+                ATTACHMENT_PATH = #{attachmentPath,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNumber != null" >
+                ORDER_NUMBER = #{orderNumber,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null" >
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            A_ID = #{aId,jdbcType=VARCHAR}
+    </update>
+</mapper>

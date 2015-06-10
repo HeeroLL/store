@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.dictionary.dao.PDictionaryMapper">
+	<resultMap id="PDictionaryResultMap" type="com.zebone.dip.dictionary.vo.PDictionary">
+		<id column="DICT_ID" property="dictId" jdbcType="VARCHAR"/>
+		<result column="DICT_NAME" property="dictName" jdbcType="VARCHAR"/>
+		<result column="DICT_CODE" property="dictCode" jdbcType="VARCHAR"/>
+		<result column="NAME_PINYIN" property="namePinyin" jdbcType="VARCHAR"/>
+		<result column="NAME_JIANPIN" property="nameJianpin" jdbcType="VARCHAR"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="DICTTYPE_ID" property="dicttypeId" jdbcType="VARCHAR"/>
+		<result column="IS_DELETED" property="isDeleted" jdbcType="CHAR"/>
+		<result column="ORDER_NO" property="orderNo" jdbcType="DECIMAL"/>
+	</resultMap>
+	<sql id="column_list">
+		DICT_ID, DICT_NAME, DICT_CODE, NAME_PINYIN, NAME_JIANPIN, REMARK, DICTTYPE_ID, IS_DELETED, 
+		ORDER_NO
+	</sql>
+	<select id="findById" resultMap="PDictionaryResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from B_DICTIONARY
+		where DICT_ID = #{dictId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from B_DICTIONARY
+		where DICT_ID = #{dictId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.dictionary.vo.PDictionary">
+		insert into B_DICTIONARY
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dictId != null">
+				DICT_ID,
+			</if>
+			<if test="dictName != null">
+				DICT_NAME,
+			</if>
+			<if test="dictCode != null">
+				DICT_CODE,
+			</if>
+			<if test="namePinyin != null">
+				NAME_PINYIN,
+			</if>
+			<if test="nameJianpin != null">
+				NAME_JIANPIN,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+			<if test="dicttypeId != null">
+				DICTTYPE_ID,
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED,
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dictId != null">
+				#{dictId,jdbcType=VARCHAR},
+			</if>
+			<if test="dictName != null">
+				#{dictName,jdbcType=VARCHAR},
+			</if>
+			<if test="dictCode != null">
+				#{dictCode,jdbcType=VARCHAR},
+			</if>
+			<if test="namePinyin != null">
+				#{namePinyin,jdbcType=VARCHAR},
+			</if>
+			<if test="nameJianpin != null">
+				#{nameJianpin,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="dicttypeId != null">
+				#{dicttypeId,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=CHAR},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.dip.dictionary.vo.PDictionary">
+		update B_DICTIONARY
+		<set>
+			<if test="dictName != null">
+				DICT_NAME = #{dictName,jdbcType=VARCHAR},
+			</if>
+			<if test="dictCode != null">
+				DICT_CODE = #{dictCode,jdbcType=VARCHAR},
+			</if>
+			<if test="namePinyin != null">
+				NAME_PINYIN = #{namePinyin,jdbcType=VARCHAR},
+			</if>
+			<if test="nameJianpin != null">
+				NAME_JIANPIN = #{nameJianpin,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="dicttypeId != null">
+				DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{isDeleted,jdbcType=CHAR},
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO = #{orderNo,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where DICT_ID = #{dictId,jdbcType=VARCHAR}
+	</update>
+	<!-- 查询字典信息列表（不分页） -->
+	<select id="searchDictStandardList" resultMap="PDictionaryResultMap" parameterType="com.zebone.dip.dictionary.vo.PDictionary">
+		select 
+		<include refid="column_list" /> 
+		from B_DICTIONARY
+		<where>
+			IS_DELETED = 0
+			and DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+			<if test="dictName!=null and dictName!=''">
+				and DICT_NAME like '%' || #{dictName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="dictCode!=null and dictCode!=''">
+				and DICT_CODE like '%' || #{dictCode,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>		
+		ORDER BY ORDER_NO ASC
+	</select>
+	<!-- 查询字典信息列表总数 -->	
+	<select id="searchDictStandardTotalCount" resultType="int" parameterType="com.zebone.dip.dictionary.vo.PDictionary">
+		select count (*)
+		from B_DICTIONARY
+		<where>
+			IS_DELETED = 0
+			and DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+			<if test="dictName!=null and dictName!=''">
+				and DICT_NAME like '%' || #{dictName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="dictCode!=null and dictCode!=''">
+				and DICT_CODE like '%' || #{dictCode,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>		
+	</select>
+	<select id="findMaxDictNo" resultType="int" parameterType="java.lang.String">
+		select count(*)
+		from B_DICTIONARY
+		where DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR} 
+	</select>
+	<select id="findDictStandardByTypeId" resultMap="PDictionaryResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list" /> 
+		from B_DICTIONARY where DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+	</select>
+	<select id="findDictStandardByOrderNo" resultMap="PDictionaryResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from B_DICTIONARY
+		where DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR} and ORDER_NO = #{orderNo,jdbcType=DECIMAL} and IS_DELETED = 0
+	</select>
+	<select id="findDictStandardForOrder" resultMap="PDictionaryResultMap">
+		SELECT
+		    B.DICT_ID,
+		    B.DICT_NAME,
+		    B.DICT_CODE,
+		    B.NAME_PINYIN,
+		    B.NAME_JIANPIN,
+		    B.REMARK,
+		    B.DICTTYPE_ID,
+		    B.IS_DELETED,
+		    B.ORDER_NO
+		FROM(SELECT
+		    	B_DICTIONARY.DICT_ID,
+			    B_DICTIONARY.DICT_NAME,
+			    B_DICTIONARY.DICT_CODE,
+			    B_DICTIONARY.NAME_PINYIN,
+			    B_DICTIONARY.NAME_JIANPIN,
+			    B_DICTIONARY.REMARK,
+			    B_DICTIONARY.DICTTYPE_ID,
+			    B_DICTIONARY.IS_DELETED,
+			    B_DICTIONARY.ORDER_NO
+			FROM
+		    	B_DICTIONARY		    
+			<where>
+				B_DICTIONARY.IS_DELETED = 0
+				and B_DICTIONARY.DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+				<if test="upOrdowm == 1">
+					and B_DICTIONARY.ORDER_NO <![CDATA[<]]> #{orderNo,jdbcType=DECIMAL}
+				</if>
+				<if test="upOrdowm == 2">
+					and B_DICTIONARY.ORDER_NO <![CDATA[>]]> #{orderNo,jdbcType=DECIMAL}
+				</if>
+			</where>
+			<if test="upOrdowm == 1">
+				order by B_DICTIONARY.ORDER_NO desc
+			</if>
+			<if test="upOrdowm == 2">
+				order by B_DICTIONARY.ORDER_NO asc
+			</if>
+			) B
+		WHERE ROWNUM = 1
+	</select>
+	<update id="removeDictStandardByIds">
+		UPDATE B_DICTIONARY SET IS_DELETED = '1' WHERE 
+		<foreach collection="list" item="item" index="index" separator="OR">
+			(DICT_ID = #{item,jdbcType=VARCHAR})
+		</foreach>
+	</update>
+	<select id="getDictStandardById" resultMap="PDictionaryResultMap" parameterType="java.lang.String">
+		SELECT 
+		<include refid="column_list" />
+		FROM B_DICTIONARY T 
+		WHERE T.DICTTYPE_ID = 
+		(SELECT M.DICTTYPE_ID FROM B_DICTIONARY M WHERE M.DICT_ID = #{dictId,jdbcType=VARCHAR})
+		AND T.IS_DELETED = '0'
+	</select>
+	<select id="getDictStandardByDictId" resultMap="PDictionaryResultMap" parameterType="java.lang.String">
+		SELECT 
+		<include refid="column_list" />
+		FROM B_DICTIONARY T 
+		WHERE T.DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+		AND T.IS_DELETED = '0'
+	</select>
+</mapper>

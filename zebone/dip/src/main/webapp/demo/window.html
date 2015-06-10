@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" href="../skin/default/desktop.css" type="text/css" id="deskTopCss" />
+<link rel="stylesheet" href="../skin/default/jcarousel.css" type="text/css" id="jcarouselCss" />
+<link rel="stylesheet" href="../skin/default/jquery.window.css" type="text/css" id="windowCss" />
+<script type="text/javascript" src="../js/jquery/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.mark.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-dialog.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-window.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.stopBubble.js"></script>
+<title>window</title>
+<script type="text/javascript">
+	var w;
+	$(function(){
+		w=new JWindow({
+		id:'w',
+		title:'窗口',
+		width:500,
+		height:400,
+		top:'100px',
+		left:(document.body.clientWidth-500)/2-10,
+		content:$('#window_content').html(),
+		appendTo:$(document.body)
+	});
+	w.active();
+	});
+	var openTab=function(){
+		w.addTab({
+			id:'tab1',
+			title:'新建tab页',
+			content:'新建选项卡'		
+		});
+	}
+</script>
+</head>
+<body>
+	<div id="window_content" style="display:none;">
+		<button onclick="openTab();">打开一个tab</button>
+	</div>
+</body>
+</html>

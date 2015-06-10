@@ -1,0 +1,36 @@
+[{
+	"id":0,
+	"text":"建立个人档案",
+	"url":"",
+	"parentId":null
+},{
+	"id":1,
+	"text":"建立高血压专档",
+	"url":"",
+	"parentId":null
+},{
+	"id":2,
+	"text":"高血压随访",
+	"url":"",
+	"parentId":1
+},{
+	"id":3,
+	"text":"建立糖尿病专档",
+	"url":"",
+	"parentId":null
+},{
+	"id":4,
+	"text":"糖尿病随访",
+	"url":"",
+	"parentId":3
+},{
+	"id":5,
+	"text":"老年人保健",
+	"url":"",
+	"parentId":null
+},{
+	"id":6,
+	"text":"成人健康体检",
+	"url":"",
+	"parentId":null
+}]

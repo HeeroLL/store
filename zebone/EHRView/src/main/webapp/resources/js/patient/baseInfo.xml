@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<healthRecord>
+<basicInfo>
+   <item key="name">张三</item>
+   <item key="sex">男</item>
+   <item key="birthday">1980-01-01</item>
+   <item key="keyNo">320626198001013453</item>
+   <item key="workUnit">中国移动江门分公司</item>
+   <item key="telNo">13800138000</item>
+   <item key="contactPer">赵六</item>
+   <item key="contactTel">13800138011</item>
+   <item key="permanentType">户籍</item>
+   <item key="nation">汉</item>
+   <item key="bloodType">O型</item>
+   <item key="rhNegative">是</item>
+   <item key="education">大学</item>
+   <item key="profession">专业技术人员</item>
+   <item key="marital">未婚</item>
+   <item key="paymentType">城镇职工基本医疗保险</item>
+   <item key="resident">翰林社区居委会</item>
+   <item key="registAddr">金梅花园4幢3单元212</item>
+   <item key="liveAddr">金梅花园4幢3单元212</item>
+</basicInfo>
+<fileInfo>
+   <item key="fileNo">SZ440304110705179</item>
+   <item key="paperFileNo">12789345</item>
+   <item key="filingOrg">龙尾社康中心</item>
+   <item key="filingName">王五</item>
+   <item key="doctor">王五</item>
+   <item key="filingDate">2010年9月18日</item>
+   <item key="manageOrg">湟里卫生院</item>
+   <item key="status">正常</item>
+   <item key="source">健康体检</item>
+</fileInfo>
+</healthRecord>

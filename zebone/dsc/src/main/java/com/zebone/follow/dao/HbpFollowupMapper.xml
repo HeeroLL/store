@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.follow.dao.HbpFollowupMapper" >
+	<resultMap id="HbpFollowupResultMap" type="com.zebone.follow.vo.HbpFollowup" >
+		<id column="HBPCARD_NO" property="hbpcardNo" jdbcType="CHAR" />
+		<id column="HBP_FU_NO" property="hbpFuNo" jdbcType="CHAR" />
+		<result column="SERVICE_ORG_CODE" property="serviceOrgCode" jdbcType="CHAR" />
+		<result column="CARD_TYPE_CODE" property="cardTypeCode" jdbcType="CHAR" />
+		<result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="RP_CODE" property="rpCode" jdbcType="CHAR" />
+		<result column="FU_VISIT_DATE" property="fuVisitDate" jdbcType="VARCHAR" />
+		<result column="FU_VISIT_TYPE_CODE" property="fuVisitTypeCode" jdbcType="CHAR" />
+		<result column="DRUG_COMPLIANCE_CODE" property="drugComplianceCode" jdbcType="CHAR" />
+		<result column="ADR_FLAG" property="adrFlag" jdbcType="CHAR" />
+		<result column="ADR_DESC" property="adrDesc" jdbcType="VARCHAR" />
+		<result column="FU_RESULT_EVU_CODE" property="fuResultEvuCode" jdbcType="CHAR" />
+		<result column="FU_VISIT_DATE_NEXT" property="fuVisitDateNext" jdbcType="VARCHAR" />
+		<result column="FU_DOCTOR_CODE" property="fuDoctorCode" jdbcType="CHAR" />
+		<result column="PAPERY_FN" property="paperyFn" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+		<result column="EMPI_NO" property="empiNo" jdbcType="VARCHAR" />
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="getHbpByEmpiId" resultMap="HbpFollowupResultMap" parameterType="java.lang.String">
+		SELECT A.FU_VISIT_DATE || ',' || 
+		       A.FU_DOCTOR_CODE || ',' ||
+		       A.SERVICE_ORG_CODE || ',' ||
+		       A.FU_VISIT_TYPE_CODE || ',' ||
+		       A.FU_RESULT_EVU_CODE || ',' ||
+		       A.DOC_NO || ',' || 
+		       A.FU_VISIT_TYPE_CODE AS CARD_NO
+		FROM TBL_HBP_FOLLOWUP A
+		WHERE A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} ORDER BY A.FU_VISIT_DATE DESC
+	</select>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.clear.dao.ClearLogMapper">
+	<resultMap id="ClearLogResultMap" type="com.zebone.dip.clear.vo.ClearLog">
+		<id column="ID_" property="id" jdbcType="CHAR"/>
+		<result column="TABLE_NAME" property="tableName" jdbcType="CHAR"/>
+		<result column="CLAER_TYPE" property="claerType" jdbcType="CHAR"/>
+		<result column="CLOUMN_NAME" property="cloumnName" jdbcType="CHAR"/>
+		<result column="ERR_CODE" property="errCode" jdbcType="CHAR"/>
+		<result column="ERR_DESC" property="errDesc" jdbcType="CHAR"/>
+		<result column="CLEAR_ID" property="clearId" jdbcType="CHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		ID_, TABLE_NAME, CLAER_TYPE, CLOUMN_NAME, ERR_CODE, ERR_DESC, CLEAR_ID
+	</sql>
+	<select id="findById" resultMap="ClearLogResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from P_CLEAR_LOG
+		where ID_ = #{id,jdbcType=CHAR}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from P_CLEAR_LOG
+		where ID_ = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.clear.vo.ClearLog">
+		insert into P_CLEAR_LOG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_,
+			</if>
+			<if test="tableName != null">
+				TABLE_NAME,
+			</if>
+			<if test="claerType != null">
+				CLAER_TYPE,
+			</if>
+			<if test="cloumnName != null">
+				CLOUMN_NAME,
+			</if>
+			<if test="errCode != null">
+				ERR_CODE,
+			</if>
+			<if test="errDesc != null">
+				ERR_DESC,
+			</if>
+			<if test="clearId != null">
+				CLEAR_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=CHAR},
+			</if>
+			<if test="tableName != null">
+				#{tableName,jdbcType=CHAR},
+			</if>
+			<if test="claerType != null">
+				#{claerType,jdbcType=CHAR},
+			</if>
+			<if test="cloumnName != null">
+				#{cloumnName,jdbcType=CHAR},
+			</if>
+			<if test="errCode != null">
+				#{errCode,jdbcType=CHAR},
+			</if>
+			<if test="errDesc != null">
+				#{errDesc,jdbcType=CHAR},
+			</if>
+			<if test="clearId != null">
+				#{clearId,jdbcType=CHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.dip.clear.vo.ClearLog">
+		update P_CLEAR_LOG
+		<set>
+			<if test="tableName != null">
+				TABLE_NAME = #{tableName,jdbcType=CHAR},
+			</if>
+			<if test="claerType != null">
+				CLAER_TYPE = #{claerType,jdbcType=CHAR},
+			</if>
+			<if test="cloumnName != null">
+				CLOUMN_NAME = #{cloumnName,jdbcType=CHAR},
+			</if>
+			<if test="errCode != null">
+				ERR_CODE = #{errCode,jdbcType=CHAR},
+			</if>
+			<if test="errDesc != null">
+				ERR_DESC = #{errDesc,jdbcType=CHAR},
+			</if>
+			<if test="clearId != null">
+				CLEAR_ID = #{clearId,jdbcType=CHAR},
+			</if>
+		</set>
+		where ID_ = #{id,jdbcType=CHAR}
+	</update>
+</mapper>

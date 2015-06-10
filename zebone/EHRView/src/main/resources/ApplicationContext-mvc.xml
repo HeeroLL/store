@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd  
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd  
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	
+	<context:component-scan base-package="com.zebone.**"/>
+	
+	<mvc:annotation-driven/>
+	
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
+	<!-- 将无法mapping到Controller的path交给default servlet handler处理 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- 配置SpringMVC @ResponseBody和@RequestBody注解 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<!-- 回应信息转换 -->
+		<property name="messageConverters">
+			<util:list id="beanList">
+				<ref bean="stringHttpMessageConverter" />
+				<ref bean="jsonHttpMessageConverter" />
+			</util:list>
+		</property>
+	</bean>
+
+	
+	
+	<bean id="jsonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/json;charset=utf-8</value>
+			</list>
+		</property>
+		<!-- 设置一个自定义 objectMapper，让Date类型的数据转成yyyy-MM-dd HH:mm:ss-->
+		<property name="objectMapper">
+			<bean class="org.codehaus.jackson.map.ObjectMapper">
+				<property name="dateFormat">
+					<bean class="java.text.SimpleDateFormat">
+						<constructor-arg value="yyyy-MM-dd HH:mm:ss" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>plain/text;charset=utf-8</value>
+			</list>
+		</property>
+	</bean>
+
+	
+	<!-- 如果需要记录Controller的异常，就打开这个注释 -->
+	<!--
+	<aop:config>
+		<aop:pointcut id="logpctController" expression="execution(* com.zebone..*Controller.*(..))"/>
+		<aop:aspect ref="logAspect">
+			<aop:after-throwing pointcut-ref="logpctController" method="interceptException" throwing="ex"/>  
+		</aop:aspect>
+	</aop:config>
+	-->
+</beans>  

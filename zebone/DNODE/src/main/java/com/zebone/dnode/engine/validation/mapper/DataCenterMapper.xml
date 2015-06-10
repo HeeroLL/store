@@ -1,0 +1,17 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.validation.mapper.DataCenterMapper">
+     
+		<!-- 唯一性检查-->
+	<select id="getOnlyCheck" resultType="int">
+		SELECT COUNT(*) FROM ${tableName}
+		WHERE ${tableField} = #{fieldValue,jdbcType=VARCHAR}
+		AND SOURCE_ORG = #{sourceOrg,jdbcType=VARCHAR}
+	</select> 
+	
+	<!-- 检查主数据中是有该值 -->
+	<select id="getMasterCheck" resultType="int">
+		SELECT COUNT(*) FROM ${tableName}
+		WHERE ${tableField} = #{fieldValue}
+	</select> 
+
+</mapper>

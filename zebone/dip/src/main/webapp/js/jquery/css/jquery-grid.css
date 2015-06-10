@@ -1,0 +1,168 @@
+@CHARSET "UTF-8";
+html,body{
+	height:100%;
+	_height:100%;
+}
+#grid{border:1px solid #9BBDEA;}
+.jgridDIV{
+	/*height: 100%;*/
+	/*border: 1px solid;*/		
+	text-align: center;
+	font-family: '微软雅黑' ;
+	font-size: 12px;
+}
+.jgridMain{
+	width: 100%;
+	_height:auto;
+	_overflow:hidden;
+}
+.jgridHeaderTable tr{
+	static;
+	height: 25px;	
+	background: url("../images/jquery-grid/grid-hrow.gif") repeat-x scroll 0 bottom #F9F9F9;
+    cursor: default;
+}
+.headerTdDiv{
+	position:relative;
+}
+.headerTdDiv span{
+	position:absolute;right:0;top:0;
+}
+.orderShow{
+	_float: right;
+	width: 20px;
+	height: 20px;
+	background: url("../images/jquery-grid/order-down.png") no-repeat;
+	display: inline;
+}
+.orderUpShow{
+	_float: right;
+	width: 20px;
+	height: 20px;
+	background: url("../images/jquery-grid/order-up.png") no-repeat;
+	display: inline;
+}
+.jgridDataDIV{
+	width: 100%;
+	text-align: left;
+	overflow: hidden;
+	overflow-y: auto;
+}
+.jHeaderAndDataDIV{
+	width: 100%;
+	text-align: left;
+	overflow: hidden;
+	overflow-x: auto;
+	_position:relative;
+}
+.jgridDataDIV table,.jgridDataDIV td,.jgridDataDIV tr{border: 1px solid #cccccc;}
+.jgridDataDIV table{
+	border-collapse: collapse;
+	table-layout: fixed;	
+}
+.jgridDataDIV table tr{
+	cursor: pointer;
+	height: 20px;		
+}
+.jgridDataDIV table tr td{
+	height: 20px;
+	/* 隐藏代码 */
+	overflow: hidden;
+	white-space: nowrap;
+	/*换行代码
+	word-wrap:break-word;
+	word-break:break-all;
+	*/
+}
+.grid-row-alt{
+	background:#EEEEFF;
+}
+.grid-row-over{
+	background:#D0E5F5;
+	cursor:default;
+}
+.grid-row-selected{
+	background: #FBEC88;
+}
+.jgridPage{
+	width: 100%;
+	border-top:1px solid #9BBDEA;
+	border-bottom:1px solid #9BBDEA;
+	background-color: #D1E0F5;	
+}
+.jgridPage div{
+	float:left;	
+	height: 20px;	
+	margin: 2px 5px 2px 5px;
+}
+.jgridPageButton{
+	border:1px solid #D1E0F5;
+	width: 20px;
+	cursor: pointer;	
+}
+.jgridPage div input{
+	width: 30px;
+	border: #ccc 1px solid;
+	text-align: center;	
+}
+.jgridPage div[name=first]{
+	background: url("../images/jquery-grid/first.png") no-repeat 4px;	
+}
+.jgridPage div[name=previous]{
+	background: url("../images/jquery-grid/previous.png") no-repeat 4px;	
+}
+.jgridPage div[name=next]{
+	background: url("../images/jquery-grid/next.png") no-repeat 4px;	
+}
+.jgridPage div[name=last]{
+	background: url("../images/jquery-grid/last.png") no-repeat 4px;	
+}
+.jgridPage div[name=refresh]{
+	background: url("../images/jquery-grid/refresh.png") no-repeat 4px;	
+}
+.jgridcrudBtn{
+	width: 100%;
+	/*background-color: #D1E0F5;*/
+	background: url("../images/jquery-grid/index-bottom-bg.png") repeat-x 0 100%;	
+	border-bottom: 1px solid #99BBE8;
+	text-align: right;
+    border-width: 0 0 1px;
+}
+.jgridcrudBtn input{
+	border: #9BBDEA 1px solid;	
+	font-family: '微软雅黑' ;
+	margin: 1px 2px 0px 2px;
+	background: url("../images/jquery-grid/header-bg2.png") 5px;
+}
+.jgridFormDIV{	
+	width: 100%;
+}
+.jgridTitle{
+	color:#11499A;
+	float: left;
+	line-height: 25px;
+	text-indent: 25px;	
+	background: url("../images/jquery-grid/grid.png") no-repeat 5px;
+}
+.JButtonClass{
+	background: url("../images/jquery-grid/btn-bg.gif") no-repeat 1px;
+	border: none;
+	width: 90px;
+	height: 25px;
+	cursor: pointer;
+	font-family: '微软雅黑 '; 
+	font-size: 12px;
+}
+.JButtonClass span{width: 100%; display: inline-block; text-align: center;padding-left: 5px;}
+.addSpan{
+	background: url("../images/jquery-grid/add.png") no-repeat 5px;
+}
+.removeSpan{
+	background: url("../images/jquery-grid/remove.png") no-repeat 5px;
+}
+.refreshSpan{
+	background: url("../images/jquery-grid/refresh1.png") no-repeat 5px;
+}
+.updateSpan{
+	background: url("../images/jquery-grid/update.png") no-repeat 5px;
+}

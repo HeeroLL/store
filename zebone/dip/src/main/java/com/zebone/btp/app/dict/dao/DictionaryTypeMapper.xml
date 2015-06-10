@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.dict.dao.DictionaryTypeMapper">
+	<resultMap id="DictionaryTypeResultMap" type="com.zebone.btp.app.dict.pojo.DictionaryType">
+		<id column="TYPE_ID" property="typeId" jdbcType="VARCHAR"/>
+		<result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR"/>
+		<result column="TYPE_CODE" property="typeCode" jdbcType="VARCHAR"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="IS_DELETE" property="isDelete" jdbcType="DECIMAL"/>
+		<result column="PARENT_ID" property="parentId" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		TYPE_ID, TYPE_NAME, TYPE_CODE, REMARK, IS_DELETED, PARENT_ID
+	</sql>
+	
+	<!-- 根据字典类型id查询字典类型信息 -->
+	<select id="findById" resultMap="DictionaryTypeResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_DICTIONARY_TYPE
+		where TYPE_ID = #{typeId,jdbcType=VARCHAR} and IS_DELETED = 0
+	</select>
+	
+	<!-- 获取所有字典类型 -->
+	<select id="findAllDictionaryType" resultMap="DictionaryTypeResultMap">
+		select 
+		<include refid="column_list"/>
+		from BTP_DICTIONARY_TYPE
+		where IS_DELETED = 0
+	</select>
+	
+	<!-- 查询父类型为空的字典类型 -->
+	<select id="findDictionaryTypeNoPid" resultMap="DictionaryTypeResultMap">
+		select 
+		<include refid="column_list"/>
+		from BTP_DICTIONARY_TYPE
+		where IS_DELETED = 0 and PARENT_ID is null
+	</select>
+	
+	<!-- 根据字典父类型获取字典类型 -->
+	<select id="findDictionaryTypeByParentId" resultMap="DictionaryTypeResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_DICTIONARY_TYPE
+		where IS_DELETED = 0 and PARENT_ID = #{parentId,jdbcType=VARCHAR}
+	</select>	
+	
+	<!-- 查询字典类型信息列表（分页） -->
+	<select id="findDictionaryTypePage" resultMap="DictionaryTypeResultMap" resultType="list" parameterType="com.zebone.btp.app.dict.pojo.DictionaryType">
+		select 
+		<include refid="column_list" /> 
+		from BTP_DICTIONARY_TYPE
+		<where>
+			IS_DELETED = 0
+			<if test="parentId!=null and parentId!=''" >
+				and PARENT_ID = #{parentId,jdbcType=VARCHAR}
+			</if>
+			<if test="parentId==null or parentId==''" >
+				and PARENT_ID is null
+			</if>
+			<if test="typeName!=null and typeName!=''">
+				and TYPE_NAME like '%' || #{typeName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="typeCode!=null and typeCode!=''">
+				and TYPE_CODE like '%' || #{typeCode,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>
+	</select>
+	<!-- 查询字典类型信息列表总数 -->	
+	<select id="findDictionaryTypeTotalPage" resultType="int" parameterType="com.zebone.btp.app.dict.pojo.DictionaryType">
+		select count (*)
+		from BTP_DICTIONARY_TYPE
+		<where>
+			IS_DELETED = 0
+			<if test="parentId!=null and parentId!=''" >
+				and PARENT_ID = #{parentId,jdbcType=VARCHAR}
+			</if>
+			<if test="parentId==null or parentId==''" >
+				and PARENT_ID is null
+			</if>
+			<if test="typeName!=null and typeName!=''">
+				and TYPE_NAME like '%' || #{typeName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="typeCode!=null and typeCode!=''">
+				and TYPE_CODE like '%' || #{typeCode,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>		
+	</select>
+	
+	<!-- 验证是否有相同的字典类型 -->
+	<select id="findDictionaryTypeForCheck" resultType="int" parameterType="com.zebone.btp.app.dict.pojo.DictionaryType">
+		select count(TYPE_ID)
+		from BTP_DICTIONARY_TYPE
+		<where> IS_DELETED = 0 
+			<if test="typeId!=null and typeId!=''">
+				and TYPE_ID != #{typeId,jdbcType=VARCHAR} 
+			</if>
+			<if test="typeName!=null and typeName!=''">
+				and TYPE_NAME = #{typeName,jdbcType=VARCHAR} 
+			</if>
+			<if test="typeCode!=null and typeCode!=''">
+				and TYPE_CODE = #{typeCode,jdbcType=VARCHAR} 
+			</if>
+		</where>
+	</select>
+	
+	<!-- 根据字典类型id删除一条字典类型信息 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from BTP_DICTIONARY_TYPE
+		where TYPE_ID = #{typeId,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 插入一条字典类型信息 -->
+	<insert id="insert" parameterType="com.zebone.btp.app.dict.pojo.DictionaryType">
+		insert into BTP_DICTIONARY_TYPE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="typeId != null">
+				TYPE_ID,
+			</if>
+			<if test="typeName != null">
+				TYPE_NAME,
+			</if>
+			<if test="typeCode != null">
+				TYPE_CODE,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED,
+			</if>
+			<if test="parentId != null">
+				PARENT_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="typeId != null">
+				#{typeId,jdbcType=VARCHAR},
+			</if>
+			<if test="typeName != null">
+				#{typeName,jdbcType=VARCHAR},
+			</if>
+			<if test="typeCode != null">
+				#{typeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=DECIMAL},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 根据字典类型id更新一条字典类型信息 -->
+	<update id="updateById" parameterType="com.zebone.btp.app.dict.pojo.DictionaryType">
+		update BTP_DICTIONARY_TYPE
+		<set>
+			<if test="typeName != null">
+				TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+			</if>
+			<if test="typeCode != null">
+				TYPE_CODE = #{typeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+			</if>
+			<if test="parentId != null">
+				PARENT_ID = #{parentId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where TYPE_ID = #{typeId,jdbcType=VARCHAR}
+	</update>
+
+    <select id="getDictionaryTypeForMasterData" resultMap="DictionaryTypeResultMap" resultType="list"
+            parameterType="java.lang.String">
+        select
+        <include refid="column_list"/>
+        from BTP_DICTIONARY_TYPE
+        <where>
+            IS_DELETED = 0
+            and TYPE_CODE like '%' || #{typeCode,jdbcType=VARCHAR} || '%'
+        </where>
+    </select>
+</mapper>

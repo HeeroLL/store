@@ -1,0 +1,17 @@
+{
+"success": "true",
+"total": 13,
+data:[{id:'AF',workerName:'Afghanistan'},
+	{id:'AL',workerName:'Albania'},
+	{id:'DZ',workerName:'Algeria'},
+	{id:'AS',workerName:'American Samoa'},
+	{id:'AD',workerName:'Andorra'},
+	{id:'AO',workerName:'Angola'},
+	{id:'AI',workerName:'Anguilla'},
+	{id:'AG',workerName:'Antigua & Barbuda'},
+	{id:'AR',workerName:'Argentina'},
+	{id:'AM',workerName:'Armenia'},
+	{id:'AW',workerName:'Aruba'},
+	{id:'zhangsan',workerName:'张三'},
+	{id:'lisi',workerName:'李四'}]
+}

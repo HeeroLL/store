@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.etl.adapter.dao.AdapterMapper">
+	<select id="getListById" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.NodeColumnInfo">
+		SELECT 
+			A.CLOUMN_ID AS columnId, 
+			A.XPATH AS path, 
+			A.FIELD_ID AS fieldId, 
+			B.TABLE_ID AS tableId, 
+			B.COLUMN_NAME AS columnName
+  		FROM P_DOC_MAPPING A
+  		LEFT JOIN P_FIELD_COLUMN_CONF B ON A.CLOUMN_ID = B.ID_  AND B.IS_DELETED = 0
+ 		WHERE 
+ 			A.DOC_ID = #{id}
+   			AND A.XPATH LIKE '/ClinicalDocument/structuredBody%'
+   			AND A.IS_FEILD = '1'
+		ORDER BY B.TABLE_ID
+	</select>
+	
+	<!-- 获取主从表 和 外键 相关信息 -->
+	<select id="getTableInfosById" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.TableInfo">
+		SELECT 
+			D.COLUMN_NAME AS colmn,
+			D.TABLE_ID AS tableId,
+			E.COLUMN_NAME AS col,
+			E.TABLE_ID AS tId,
+			C.CLOUMN_ID AS colId,
+			A.CLOUMN_ID AS columnId
+		FROM P_DOC_MAPPING2 A 
+		INNER JOIN P_DOC_MAPPING C ON A.MAPPING_ID = C.ID_ 
+		LEFT JOIN P_FIELD_COLUMN_CONF D ON A.CLOUMN_ID = D.ID_ AND D.IS_DELETED = 0 
+		LEFT JOIN P_FIELD_COLUMN_CONF E ON C.CLOUMN_ID = E.ID_ AND E.IS_DELETED = 0 
+		WHERE EXISTS 
+			(SELECT 'X' FROM P_DOC_MAPPING B WHERE A.MAPPING_ID = B.ID_ AND B.DOC_ID = #{id} 
+			AND B.IS_FEILD='1' AND B.XPATH LIKE '/ClinicalDocument/structuredBody%')
+	</select>
+	
+	<select id="getTableNameByTId" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.TableInfo">
+		SELECT 
+			T.ID_ AS tableId,
+			T.TABLE_NAME AS tableName
+		FROM P_FIELD_TABLE_CONF T WHERE T.ID_ IN ( ${id} ) AND T.IS_DELETED = 0
+	</select>
+	
+	<select id="getFieldConfById" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.FieldConf">
+		SELECT 
+			T.FIELD_TYPE AS fieldType,
+			T.FIELD_VALUE AS fieldValue
+		FROM P_FIELD_CONF T 
+		WHERE T.ID_ = #{fieldId} AND T.IS_DELETED = 0
+	</select>
+	
+	<select id="getDictByTypeIdAndCode" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.DictInfo">
+		SELECT 
+			T.DICT_NAME AS dictName
+		FROM 
+			P_DICTIONARY T 
+		WHERE 
+			T.DICTTYPE_ID = #{fieldValue} 
+			AND T.DICT_CODE = #{code} 
+			AND T.IS_DELETED = 0
+	</select>
+	
+	<select id="getTableInfoById" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.DictInfo">
+		SELECT T.TABLE_NAME AS dictName FROM P_MASTER_DATA T WHERE T.ID_ = #{fieldValue}
+	</select>
+	
+	<select id="getMainNameByCode" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.DictInfo">
+		SELECT MD_NAME AS dictName FROM ${tableName} WHERE MD_CODE = #{code}
+	</select>
+	
+	<select id="getMainTableInfo" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.DictInfo">
+		SELECT T.TABLE_NAME AS dictName FROM P_FIELD_TABLE_CONF T WHERE T.ID_ = #{tableId} AND T.IS_DELETED = 0
+	</select>
+	
+	<select id="getInfoBytId" parameterType="java.lang.String" resultType="com.zebone.dnode.etl.adapter.vo.DictInfo">
+		SELECT T.ID_ AS dictCode,T.COLUMN_NAME AS dictName FROM P_FIELD_COLUMN_CONF T WHERE T.IS_KEY = '1' AND T.TABLE_ID = #{tableId}
+	</select>
+</mapper>

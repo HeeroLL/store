@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.etl.dao.NodeAndJobRuleMapper">
+	<resultMap id="NodeAndJobRuleResultMap" type="com.zebone.dip.etl.vo.NodeAndJobRule">
+		<id column="NODE_ID" property="nodeId" jdbcType="VARCHAR"/>
+		<id column="JOB_ID" property="jobId" jdbcType="NUMERIC"/>		
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="com.zebone.dip.etl.vo.NodeAndJobRule">
+		INSERT INTO P_NODE_JOB_R 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="nodeId != null">
+				NODE_ID,
+			</if>
+			<if test="jobId != null">
+				JOB_ID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="nodeId != null">
+				#{nodeId,jdbcType=VARCHAR},
+			</if>
+			<if test="jobId != null">
+				#{jobId,jdbcType=NUMERIC},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<delete id="delete">
+		DELETE 
+		FROM  P_NODE_JOB_R 
+		WHERE NODE_ID = #{nodeId,jdbcType=VARCHAR} 
+		AND  JOB_ID = #{jobId,jdbcType=NUMERIC}
+	</delete>
+
+	<select id="getJobNameByNodeId" parameterType="string" resultType="string">
+		SELECT
+		    job.name
+		FROM
+		    P_NODE_JOB_R r
+		JOIN
+		    R_JOB job
+		ON
+		    job.ID_JOB = r.job_id
+		WHERE
+		    r.NODE_ID = #{nodeId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getJobIdByName" parameterType="string" resultType="integer">
+		SELECT
+		    job.ID_JOB
+		FROM
+		    R_JOB job
+		WHERE
+		    job.NAME = #{name,jdbcType=VARCHAR}
+	
+	</select>
+	<!-- 找到未部署的任务 -->
+	<select id="getJobForNotDeploy" resultType="string">
+		SELECT
+		   job.name
+		FROM
+		    R_JOB job
+		LEFT JOIN
+		    P_NODE_JOB_R r
+		ON
+		    r.JOB_ID = job.ID_JOB
+		WHERE
+		    r.JOB_ID IS NULL
+	</select>
+</mapper>

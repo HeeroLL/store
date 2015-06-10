@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+button{font-family: '微软雅黑 '; font-size: 12px;}
+.JButtonClass{
+	background: url("../images/jquery-button/btn-bg.gif") no-repeat 1px;
+	border: none;
+	width: 90px;
+	height: 25px;
+	cursor: pointer;
+}
+.JButtonClass span{width: 100%; display: inline-block; text-align: center;}

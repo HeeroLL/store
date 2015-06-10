@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	
+    <bean id="logDataSource" class="com.alibaba.druid.pool.DruidDataSource"	destroy-method="close" init-method="init" >
+		<property name="driverClassName" value="${log.jdbc.driver}" />
+		<property name="url" value="${log.jdbc.url}" />
+		<property name="username" value="${log.jdbc.username}" />
+		<property name="password" value="${log.jdbc.password}" />
+		<property name="initialSize" value="${log.jdbc.initialSize}" />
+		<property name="maxActive" value="${log.jdbc.maxActive}" />
+		<property name="validationQuery" value="${log.validationQuery}" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="25200000" />
+		<property name="filters" value="mergeStat" />
+	</bean>
+	<!-- 配置mybatis的 SqlSessionFactoryBean-->
+	<bean id="logSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="logDataSource" />
+		<!-- 设置mybatis的环境配置文件 -->
+		<property name="configLocation" value="classpath:mybatisConfig.xml" />
+	</bean>
+
+	<!-- 指定mybatis映射器的位置，spring自动扫描并将映射器生成代理放到spring上下文中 -->
+	<bean id="logMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.zebone"/>
+		<property name="annotationClass" value="com.zebone.btp.core.mybatis.LogMapper"/>
+		<property name="sqlSessionFactoryBeanName" value="logSqlSessionFactory"/>
+	</bean>
+	
+	<bean id="auditlogDbService" class="com.zebone.auditlog.service.impl.AuditlogDbServiceImpl" />
+</beans>

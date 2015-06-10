@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.operate.dao.OperationalGuidanceMapper">
+	<resultMap id="PNodeResultMap" type="com.zebone.dip.operate.vo.NodeRegister">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="NODE_NAME" property="nodeName1" jdbcType="VARCHAR"/>
+		<result column="NODE_DESC" property="nodeDesc" jdbcType="VARCHAR"/>
+		<result column="NODE_IP" property="nodeIp" jdbcType="VARCHAR"/>
+		<result column="MQ_QUEUE_URL" property="mqQueueUrl" jdbcType="VARCHAR"/>
+		<result column="NODE_STATE" property="nodeState" jdbcType="VARCHAR"/>
+		<result column="NODE_ORG" property="nodeOrg" jdbcType="VARCHAR"/>
+		<result column="node_org_name" property="nodeOrgName" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="PServiceResultMap" type="com.zebone.dip.operate.vo.ServiceRegister">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="SERVICE_NAME" property="serviceName" jdbcType="VARCHAR"/>
+		<result column="SERVICE_CODE" property="serviceCode" jdbcType="VARCHAR"/>
+		<result column="SERVICE_STATE" property="serviceState" jdbcType="VARCHAR"/>
+		<result column="SERVICE_TYPE" property="serviceType" jdbcType="VARCHAR"/>
+		<result column="SERVICE_FREQU" property="serviceFrequ" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="PSubscribeServiceResultMap" type="com.zebone.dip.operate.vo.SubscribeService">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="SERVICE_ID" property="serviceId" jdbcType="VARCHAR"/>
+		<result column="IS_HISTORY" property="isHistory" jdbcType="VARCHAR"/>
+		<result column="BEGIN_DATE" property="beginDate" jdbcType="VARCHAR"/>
+		<result column="END_DATE" property="endDate" jdbcType="VARCHAR"/>
+		<result column="IS_CURRENT" property="isCurrent" jdbcType="VARCHAR"/>
+		<result column="SUB_FREQU" property="subFrequ" jdbcType="VARCHAR"/>
+		<result column="IS_ORDER" property="isOrder" jdbcType="VARCHAR"/>
+		<result column="SUB_TIME" property="subTime" jdbcType="VARCHAR"/>
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR"/>
+		<result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR"/>
+		<result column="service_type" property="serviceType" jdbcType="VARCHAR"/>
+		<result column="node_name" property="nodeName" jdbcType="VARCHAR"/>
+		<result column="service_name" property="serviceName" jdbcType="VARCHAR"/>
+		<result column="IS_HISTORY_RUN" property="isHistoryRun" jdbcType="VARCHAR"/>
+		<result column="NODE_STATE" property="nodeState" jdbcType="VARCHAR"/>
+		<result column="SERVICE_STATE" property="serviceState" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="PSubscribeEventResultMap" type="com.zebone.dip.operate.vo.SubscribeEvent">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="SERVICE_ID" property="serviceId" jdbcType="VARCHAR"/>
+		<result column="SUB_TIME" property="subTime" jdbcType="VARCHAR"/>
+		<result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR"/>
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR"/>
+		<result column="EVENT_TIME" property="eventTime" jdbcType="VARCHAR"/>
+		<result column="EVENT_TYPE" property="eventType" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<select id="getNodesList" resultMap="PNodeResultMap" parameterType="java.lang.String" >
+	    select t.ID_,t.node_name,t.node_ip,t.mq_queue_url,t.NODE_STATE,
+	    (select a.mho_name from btp_mho a where a.is_deleted=0 and a.level_code = t.node_org ) as node_org from p_node_register t 
+	    where 1=1 
+	    <if test="nodeName != null and nodeName != '' ">
+	     and t.node_name like '%'|| #{nodeName,jdbcType=VARCHAR}|| '%'
+	    </if>
+	    <if test="orgLevelCode != null and orgLevelCode != '' ">
+	     and t.node_org = #{orgLevelCode,jdbcType=VARCHAR}
+	    </if>
+	 </select>
+	 
+	 <select id="getNodesListByName" resultMap="PNodeResultMap" parameterType="java.lang.String" >
+	    select * from p_node_register t  where t.node_name = #{nodeName,jdbcType=VARCHAR}
+	 </select>
+	 
+	 <select id="getNodesListByOrg" resultMap="PNodeResultMap" parameterType="java.lang.String" >
+	    select * from p_node_register t  where t.node_org = #{nodeOrg,jdbcType=VARCHAR}
+	 </select>
+	 
+	 <select id="getNodeInfoById" resultMap="PNodeResultMap" parameterType="java.lang.String" >
+	    select t.id_,t.node_name,t.node_desc,t.node_ip,t.mq_queue_url,t.node_state,t.node_org, 
+		(select a.mho_name from btp_mho a where a.is_deleted=0 and a.level_code = t.node_org ) as node_org_name
+	    from p_node_register t where t.id_ =  #{nodeId,jdbcType=VARCHAR}
+	 </select>
+	 
+	<insert id="insertNodeInfo" parameterType="com.zebone.dip.operate.vo.NodeRegister" >
+    insert into p_node_register
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="nodeName1 != null" >
+        NODE_NAME,
+      </if>
+      <if test="nodeDesc != null" >
+        NODE_DESC,
+      </if>
+      <if test="nodeIp != null" >
+        NODE_IP,
+      </if>
+      <if test="mqQueueUrl != null" >
+        MQ_QUEUE_URL,
+      </if>
+      <if test="nodeState != null" >
+        NODE_STATE,
+      </if>
+      <if test="nodeOrg != null" >
+        NODE_ORG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeName1 != null" >
+        #{nodeName1,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeDesc != null" >
+        #{nodeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeIp != null" >
+        #{nodeIp,jdbcType=VARCHAR},
+      </if>
+      <if test="mqQueueUrl != null" >
+        #{mqQueueUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeState != null" >
+        #{nodeState,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeOrg != null" >
+        #{nodeOrg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+   <update id="nodeChangeState" parameterType="java.lang.String" >
+    update p_node_register set NODE_STATE = #{nodeState,jdbcType=VARCHAR}
+    where ID_ = #{nodeId,jdbcType=VARCHAR}
+    </update>
+  
+    <update id="updateNodeInfo" parameterType="com.zebone.dip.operate.vo.NodeRegister" >
+    update p_node_register
+    <set >
+      <if test="id != null" >
+        ID_ = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeName1 != null" >
+        NODE_NAME = #{nodeName1,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeDesc != null" >
+        NODE_DESC = #{nodeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeIp != null" >
+        NODE_IP = #{nodeIp,jdbcType=VARCHAR},
+      </if>
+      <if test="mqQueueUrl != null" >
+        MQ_QUEUE_URL = #{mqQueueUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeState != null" >
+        NODE_STATE = #{nodeState,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeOrg != null" >
+        NODE_ORG = #{nodeOrg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteNodeInfo" parameterType="java.lang.String" >
+    delete from p_node_register
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+    <select id="getServiceInfoList" resultMap="PServiceResultMap" parameterType="com.zebone.dip.operate.vo.ServiceRegister" >
+	    select * from p_service_register t 
+	    <if test="serviceName != null and serviceName != '' ">
+	    where t.service_name like '%'|| #{serviceName,jdbcType=VARCHAR}|| '%'
+	    </if>
+	 </select>
+	 
+	 <select id="getServiceInfoCount" resultType="java.lang.Integer" parameterType="com.zebone.dip.operate.vo.ServiceRegister" >
+	    select count(*) from p_service_register t 
+	    <if test="serviceName != null and serviceName != '' ">
+	    where t.service_name like '%'|| #{serviceName,jdbcType=VARCHAR}|| '%'
+	    </if>
+	 </select>
+	 
+	 <select id="getServiceInfoById" resultMap="PServiceResultMap" parameterType="java.lang.String" >
+	    select * from p_service_register t where t.id_ =  #{serviceId,jdbcType=VARCHAR}
+	 </select>
+	 
+	 <select id="getServiceListByName" resultMap="PServiceResultMap" parameterType="java.lang.String" >
+	    select * from p_service_register t  where t.SERVICE_NAME = #{serviceName,jdbcType=VARCHAR}
+	 </select>
+	 
+	<update id="serviceChangeState" parameterType="java.lang.String" >
+    update p_service_register set SERVICE_STATE = #{serviceState,jdbcType=VARCHAR}
+    where ID_ = #{serviceId,jdbcType=VARCHAR}
+    </update>
+	 
+	<insert id="insertServiceInfo" parameterType="com.zebone.dip.operate.vo.ServiceRegister" >
+    insert into p_service_register
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="serviceName != null" >
+        SERVICE_NAME,
+      </if>
+      <if test="serviceCode != null" >
+        SERVICE_CODE,
+      </if>
+      <if test="serviceState != null" >
+        SERVICE_STATE,
+      </if>
+      <if test="serviceType != null" >
+        SERVICE_TYPE,
+      </if>
+      <if test="serviceFrequ != null" >
+        SERVICE_FREQU,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null" >
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCode != null" >
+        #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceState != null" >
+        #{serviceState,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceType != null" >
+        #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceFrequ != null" >
+        #{serviceFrequ,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+ <update id="updateServiceInfo" parameterType="com.zebone.dip.operate.vo.ServiceRegister" >
+    update p_service_register
+    <set >
+      <if test="id != null" >
+        ID_ = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null" >
+        SERVICE_NAME = #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCode != null" >
+        SERVICE_CODE = #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceState != null" >
+        SERVICE_STATE = #{serviceState,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceType != null" >
+        SERVICE_TYPE = #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceFrequ != null" >
+        SERVICE_FREQU = #{serviceFrequ,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  
+   <delete id="deleteServiceInfo" parameterType="java.lang.String" >
+    delete from p_service_register
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+ <select id="getSubscribeInfoList" resultMap="PSubscribeServiceResultMap" parameterType="com.zebone.dip.operate.vo.SubscribeService" >
+    select t.id_,
+    (select a.mho_name from btp_mho a where a.is_deleted=0 and a.level_code = t.org_code ) as org_code,
+    a.service_type,t.is_history,t.begin_date,t.end_date,t.sub_frequ ,b.node_name,a.service_name,t.is_current,a.service_state,b.node_state
+    from p_subscribe_service t 
+	left join p_service_register a on t.service_id=a.id_
+	left join p_node_register b on t.org_code=b.node_org
+	where 1=1 and t.user_id !='system'
+    <if test="orgCode != null and orgCode != '' ">
+    	and t.org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+    <if test="serviceType != null and serviceType != '' ">
+    	and a.service_type = #{serviceType,jdbcType=VARCHAR}
+    </if>
+ </select>
+ 
+ <select id="getSubscribeInfoCount" resultType="java.lang.Integer" parameterType="com.zebone.dip.operate.vo.SubscribeService" >
+    select count(*) from p_subscribe_service t 
+	left join p_service_register a on t.service_id=a.id_
+	left join p_node_register b on t.org_code=b.node_org
+	where 1=1 and t.user_id !='system'
+    <if test="orgCode != null and orgCode != '' ">
+    	and t.org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+    <if test="serviceType != null and serviceType != '' ">
+    	and a.service_type = #{serviceType,jdbcType=VARCHAR}
+    </if>
+ </select>
+ 
+ <select id="getAllService" resultMap="PServiceResultMap" parameterType="com.zebone.dip.operate.vo.ServiceRegister" >
+    select * from p_service_register t 
+ </select>
+ 
+ <select id="getAllSubServiceByOrg" resultMap="PSubscribeServiceResultMap" parameterType="java.lang.String" >
+    select *  from p_subscribe_service
+    where org_code = #{code,jdbcType=VARCHAR} and user_id != 'system'
+  </select>
+  
+  <delete id="deleteSubService" parameterType="java.lang.String" >
+    delete from p_subscribe_service
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  	<insert id="insertSubService" parameterType="com.zebone.dip.operate.vo.SubscribeService" >
+    insert into p_subscribe_service
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="serviceId != null" >
+        SERVICE_ID,
+      </if>
+      <if test="isHistory != null" >
+        IS_HISTORY,
+      </if>
+      <if test="beginDate != null" >
+        BEGIN_DATE,
+      </if>
+      <if test="endDate != null" >
+        END_DATE,
+      </if>
+      <if test="isCurrent != null" >
+        IS_CURRENT,
+      </if>
+      <if test="subFrequ != null" >
+        SUB_FREQU,
+      </if>
+      <if test="isOrder != null" >
+        IS_ORDER,
+      </if>
+      <if test="subTime != null" >
+        SUB_TIME,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="orgCode != null" >
+        ORG_CODE,
+      </if>
+      <if test="isHistoryRun != null" >
+        IS_HISTORY_RUN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceId != null" >
+        #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="isHistory != null" >
+        #{isHistory,jdbcType=VARCHAR},
+      </if>
+      <if test="beginDate != null" >
+        #{beginDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="isCurrent != null" >
+        #{isCurrent,jdbcType=VARCHAR},
+      </if>
+       <if test="subFrequ != null" >
+        #{subFrequ,jdbcType=VARCHAR},
+      </if>
+      <if test="isOrder != null" >
+        #{isOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="subTime != null" >
+        #{subTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isHistoryRun != null" >
+        #{isHistoryRun,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+   <select id="checkNodeSubscribe" resultType="java.lang.Integer" parameterType="java.lang.String" >
+	    select count(*) from p_node_register t inner join p_subscribe_service a on t.node_org=a.org_code 
+		where t.id_ = #{id,jdbcType=VARCHAR} and a.user_id!='system'
+	 </select>
+   
+   <select id="checkServiceSubscribe" resultType="java.lang.Integer" parameterType="java.lang.String" >
+	    select count(*) from p_service_register t inner join p_subscribe_service a on t.id_=a.service_id
+		where t.id_ = #{id,jdbcType=VARCHAR} and a.user_id!='system'
+	 </select>
+  
+   <select id="getNeedStopSub" resultMap="PSubscribeServiceResultMap" parameterType="java.lang.String" >
+    select * from p_subscribe_service t where not exists(select 'x' from p_subscribe_event a where t.id_=a.id_)
+	and t.is_current='1' 
+	<if test="levelCode != null" >
+        and t.org_code= #{levelCode,jdbcType=VARCHAR}
+    </if>
+    <if test="serviceId != null" >
+        and t.service_id= #{serviceId,jdbcType=VARCHAR}
+    </if>
+	
+  </select>
+  
+   <insert id="insertSubscribeEvents"  >
+    insert into P_SUBSCRIBE_EVENT (
+      ID_, 
+      SERVICE_ID, 
+      SUB_TIME, 
+      ORG_CODE, 
+      USER_ID, 
+      EVENT_TIME, 
+      EVENT_TYPE
+      )
+    <foreach collection="list" item="item" index="index" separator="UNION"> 
+    SELECT 
+      #{item.id,jdbcType=VARCHAR}, 
+      #{item.serviceId,jdbcType=VARCHAR}, 
+      #{item.subTime,jdbcType=VARCHAR}, 
+      #{item.orgCode,jdbcType=VARCHAR}, 
+      #{item.userId,jdbcType=VARCHAR}, 
+      #{item.eventTime,jdbcType=VARCHAR}, 
+      #{item.eventType,jdbcType=VARCHAR}
+      FROM DUAL  
+      </foreach>
+  </insert>
+  
+  <select id="getNeedStartSubByOrgCode" resultMap="PSubscribeEventResultMap" parameterType="java.lang.String" >
+    select * from p_subscribe_event t
+	inner join p_service_register a on t.service_id=a.id_ and a.service_state='1' 
+	where t.org_code =  #{levelCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getNeedStartSubByServiceId" resultMap="PSubscribeEventResultMap" parameterType="java.lang.String" >
+    select * from p_subscribe_event t
+  	inner join p_node_register a on t.org_code=a.node_org and a.node_state='1' 
+  	and t.service_id = #{serviceId,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="insertSubscribes"  >
+    insert into p_subscribe_service (
+      ID_, 
+      SERVICE_ID, 
+      IS_HISTORY, 
+      BEGIN_DATE, 
+      END_DATE, 
+      SUB_TIME, 
+      USER_ID,
+      ORG_CODE,
+      IS_CURRENT,
+      IS_HISTORY_RUN
+      )
+    <foreach collection="list" item="item" index="index" separator="UNION"> 
+    SELECT 
+      #{item.id,jdbcType=VARCHAR}, 
+      #{item.serviceId,jdbcType=VARCHAR}, 
+      #{item.isHistory,jdbcType=VARCHAR}, 
+      #{item.beginDate,jdbcType=VARCHAR}, 
+      #{item.endDate,jdbcType=VARCHAR}, 
+      #{item.subTime,jdbcType=VARCHAR}, 
+      #{item.userId,jdbcType=VARCHAR},
+      #{item.orgCode,jdbcType=VARCHAR}, 
+      #{item.isCurrent,jdbcType=VARCHAR}, 
+      #{item.isHistoryRun,jdbcType=VARCHAR}
+      FROM DUAL  
+      </foreach>
+  </insert>
+  
+    <delete id="deleteSubscribeEvents"  >
+    delete from P_SUBSCRIBE_EVENT
+    where ID_ in (
+	    <foreach collection="list" item="item" index="index" separator=","> 
+	     #{item.id,jdbcType=VARCHAR}
+	    </foreach>
+    )
+  	</delete>
+  	
+  	<select id="getNodeInfoByLevelCode" resultMap="PNodeResultMap" parameterType="java.lang.String" >
+	    select * from p_node_register t where t.node_org =  #{levelCode,jdbcType=VARCHAR}
+	 </select>
+	 
+	 <select id="getOrgByName" resultMap="PNodeResultMap" parameterType="java.lang.String" >
+	    select t.mho_id as id,t.mho_name as node_org_name ,t.level_code as node_org from btp_mho t 
+	    where t.is_deleted=0 and t.mho_name like '%'|| #{name,jdbcType=VARCHAR} ||'%'
+	 </select>
+  
+</mapper>

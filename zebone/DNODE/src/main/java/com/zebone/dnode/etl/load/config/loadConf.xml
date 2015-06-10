@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<loadConfig>
+	<load id="load001">
+
+		<sql id="v1">
+			 select * from C_TBL_PSON_ALLERGY_HT_100
+		</sql>
+		
+	    <sql id="v2">
+	    	 select * from C_TBL_PSON_DISABILITY_HT_100
+	    </sql>
+	    
+		
+		<sql id="v4">
+		   select * from C_TBL_PSON_EXPOSURE_HT_100
+		</sql>
+		
+		<sql id="v5">
+			select * from C_TBL_PSON_GENETIC_HT_100
+		</sql>
+		
+		
+		<sql id ="v6">
+			select * from C_TBL_PSON_HEALTH_RECORD_100
+		</sql>
+		
+		<sql id ="v7">
+		    select * from C_TBL_PSON_LIFE_ENV_100
+		</sql>
+		
+		<sql id="v8">
+			select * from C_TBL_PSON_RTUM_HT_100
+		</sql>
+		
+		<sql id="v9">
+			select * from C_TBL_PSON_TRANSFUSION_HT_100
+		</sql>
+		
+		<sql id="v10">
+			select * from C_TBL_PSON_DISEASES_OPE_HT_100
+		</sql>
+		
+		<sql id="v11">
+		   select * from C_TBL_PSON_FAMILY_HT_100
+		</sql>
+		
+		<tableMapping fid="v1" target="">
+			<columnMapping from="HR_NO" to="TBL_PSON_ALLERGY_HT.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="ALLERGEN_CODE" to="TBL_PSON_ALLERGY_HT.ALLERGEN_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+		</tableMapping>
+		
+		
+		<tableMapping fid="v2" target="">
+			<columnMapping from="HR_NO" to="TBL_PSON_DISABILITY_HT.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="DISABILITY_CODE" to="TBL_PSON_DISABILITY_HT.DISABILITY_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+		</tableMapping>
+		
+		
+		 <tableMapping fid="v4" target="">
+			<columnMapping from="HR_NO" to="TBL_PSON_EXPOSURE_HT.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="EXPOSURE_TYPE_CODE" to="TBL_PSON_EXPOSURE_HT.EXPOSURE_TYPE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+
+		</tableMapping>
+		
+		
+		<tableMapping fid="v5" target="">
+			<columnMapping from="HR_NO" to="TBL_PSON_GENETIC_HT.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="GENETIC_HISTORY_DESC" to="TBL_PSON_GENETIC_HT.GENETIC_HISTORY_DESC">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+		</tableMapping>
+		
+		<tableMapping fid="v6" target="">
+			<columnMapping from="HR_NO" to="TBL_PSON_HEALTH_RECORD.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="CARD_TYPE_CODE" to="TBL_PSON_HEALTH_RECORD.CARD_TYPE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="CARD_NO" to="TBL_PSON_HEALTH_RECORD.CARD_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="NAME" to="TBL_PSON_HEALTH_RECORD.NAME">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="GENDER_CODE" to="TBL_PSON_HEALTH_RECORD.GENDER_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="BIRTHDAY" to="TBL_PSON_HEALTH_RECORD.BIRTHDAY">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="IDCARD_NO" to="TBL_PSON_HEALTH_RECORD.IDCARD_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="IDCARD_TYPE_CODE" to="TBL_PSON_HEALTH_RECORD.IDCARD_TYPE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+		
+			<columnMapping from="WORK_UNIT" to="TBL_PSON_HEALTH_RECORD.WORK_UNIT">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="PHONENO" to="TBL_PSON_HEALTH_RECORD.PHONENO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="LINKMAN_NAME" to="TBL_PSON_HEALTH_RECORD.LINKMAN_NAME">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="LINKMAN_PHONENO" to="TBL_PSON_HEALTH_RECORD.LINKMAN_PHONENO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="PERMANENT_FLAG" to="TBL_PSON_HEALTH_RECORD.PERMANENT_FLAG">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="NATION_CODE" to="TBL_PSON_HEALTH_RECORD.NATION_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="ABO_TYPE_CODE" to="TBL_PSON_HEALTH_RECORD.ABO_TYPE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="RH_TYPE_CODE" to="TBL_PSON_HEALTH_RECORD.RH_TYPE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="EDU_DEGREE_CODE" to="TBL_PSON_HEALTH_RECORD.EDU_DEGREE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="VOCATION_CODE" to="TBL_PSON_HEALTH_RECORD.VOCATION_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="CITIZENSHIP_CODE" to="TBL_PSON_HEALTH_RECORD.CITIZENSHIP_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="RELIGION_CODE" to="TBL_PSON_HEALTH_RECORD.RELIGION_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="MARITAL_STATUS_CODE" to="TBL_PSON_HEALTH_RECORD.MARITAL_STATUS_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="PAYMENT_MODE_CODE" to="TBL_PSON_HEALTH_RECORD.PAYMENT_MODE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="PERMANENET_ADDR_CODE" to="TBL_PSON_HEALTH_RECORD.PERMANENET_ADDR_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="PERMANENET_ADDR" to="TBL_PSON_HEALTH_RECORD.PERMANENET_ADDR">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="RESIDENTIAL_ADDR_CODE" to="TBL_PSON_HEALTH_RECORD.RESIDENTIAL_ADDR_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="RESIDENTIAL_ADDR" to="TBL_PSON_HEALTH_RECORD.RESIDENTIAL_ADDR">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="PAPERY_FN" to="TBL_PSON_HEALTH_RECORD.PAPERY_FN">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="FILING_ORG_CODE" to="TBL_PSON_HEALTH_RECORD.FILING_ORG_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="FILING_EMP_CODE" to="TBL_PSON_HEALTH_RECORD.FILING_EMP_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="RP_CODE" to="TBL_PSON_HEALTH_RECORD.RP_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="FILING_TIME" to="TBL_PSON_HEALTH_RECORD.FILING_TIME">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="MANAGEMENT_ORG_CODE" to="TBL_PSON_HEALTH_RECORD.MANAGEMENT_ORG_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="FILE_STATUS" to="TBL_PSON_HEALTH_RECORD.FILE_STATUS">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="FILE_SOURCE_CODE" to="TBL_PSON_HEALTH_RECORD.FILE_SOURCE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+		</tableMapping>
+		
+		
+		<tableMapping fid="v7" target="">
+			<columnMapping from="HR_NO" to="TBL_PSON_LIFE_ENV.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="EXHAUST_VENT_FLAG" to="TBL_PSON_LIFE_ENV.EXHAUST_VENT_FLAG">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="EXHAUST_VENT_CODE" to="TBL_PSON_LIFE_ENV.EXHAUST_VENT_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="WARTER_TYPE_CODE" to="TBL_PSON_LIFE_ENV.WARTER_TYPE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="WARTER_TYPE_OTHER" to="TBL_PSON_LIFE_ENV.WARTER_TYPE_OTHER">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>		
+			<columnMapping from="FUEL_TYPE_CODE" to="TBL_PSON_LIFE_ENV.FUEL_TYPE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="TOILET_TYPE_CODE" to="TBL_PSON_LIFE_ENV.TOILET_TYPE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="LIVESTOCK_BAR_CODE" to="TBL_PSON_LIFE_ENV.LIVESTOCK_BAR_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="FUEL_TYPE_OTHER" to="TBL_PSON_LIFE_ENV.FUEL_TYPE_OTHER">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+		</tableMapping>
+		
+		<tableMapping fid="v8" target="">
+			<columnMapping from="HR_NO" to="TBL_PSON_RTUM_HT.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="RTRM_OCCR_TIME" to="TBL_PSON_RTUM_HT.RTRM_OCCR_TIME">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="RTUM_NAME" to="TBL_PSON_RTUM_HT.RTUM_NAME">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+		</tableMapping>
+		
+		
+		<tableMapping fid="v9" target="">
+			<columnMapping from="HR_NO" to="TBL_PSON_TRANSFUSION_HT.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="TRANSFUSION_TIME" to="TBL_PSON_TRANSFUSION_HT.TRANSFUSION_TIME">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="TRANSFUSION_CAUSE" to="TBL_PSON_TRANSFUSION_HT.TRANSFUSION_CAUSE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+		</tableMapping>
+		
+		
+		<tableMapping fid="v10" target="">
+			<columnMapping from="HR_NO" to="TBL_PSON_DISEASES_HT.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="DIESEASE_TYPE_CODE" to="TBL_PSON_DISEASES_HT.DIESEASE_TYPE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="DIAG_DATE" to="TBL_PSON_DISEASES_HT.DIAG_DATE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			
+			<columnMapping from="HR_NO" to="TBL_PSON_OPERATION_HT.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="RELATIONSHIP_CODE" to="TBL_PSON_OPERATION_HT.OPERAT_TIME">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="FAMILY_DIESEASE_TYPE_CODE" to="TBL_PSON_OPERATION_HT.OPERAT_HISTORY">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			
+		</tableMapping>
+		
+		
+		<tableMapping fid="v11" target="">
+			<columnMapping from="HR_NO" to="TBL_PSON_FAMILY_HT.HR_NO">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="RELATIONSHIP_CODE" to="TBL_PSON_FAMILY_HT.RELATIONSHIP_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+			<columnMapping from="FAMILY_DIESEASE_TYPE_CODE" to="TBL_PSON_FAMILY_HT.FAMILY_DIESEASE_TYPE_CODE">
+				<covert tclass="" />  <!--自定义转化类,映射过程中，进行数据转化 -->
+			</columnMapping>
+		</tableMapping>
+		
+	</load>
+</loadConfig>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.dictionary.dao.DipDictionaryMapper">
+	<sql id="dipdict_cols">
+		dict_id, dict_name, dict_code, name_pinyin, name_jianpin, remark, dicttype_id
+	</sql>
+	
+	<insert id="addDipDictionary" parameterType="com.zebone.dip.dictionary.vo.DipDictionary">
+		insert into P_DICTIONARY 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dict_id != null">
+				dict_id,
+			</if>
+			<if test="dict_name != null">
+				dict_name,
+			</if>
+			<if test="dict_code != null">
+				dict_code,
+			</if>
+			<if test="name_pinyin != null">
+				name_pinyin,
+			</if>
+			<if test="name_jianpin != null">
+				name_jianpin,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="dicttype_id != null">
+				dicttype_id,
+			</if>
+			<if test="1==1">
+            	timestamp,
+            </if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dict_id != null">
+				#{dict_id},
+			</if>
+			<if test="dict_name != null">
+				#{dict_name},
+			</if>
+			<if test="dict_code != null">
+				#{dict_code},
+			</if>
+			<if test="name_pinyin != null">
+				#{name_pinyin},
+			</if>
+			<if test="name_jianpin != null">
+				#{name_jianpin},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="dicttype_id != null">
+				#{dicttype_id},
+			</if>
+			<if test="1==1">
+            	CURRENT_TIMESTAMP,
+            </if>
+		</trim>
+	</insert>
+	
+	<update id="updateDipDictionary" parameterType="com.zebone.dip.dictionary.vo.DipDictionary">
+		update P_DICTIONARY 
+		<set>
+			<if test="dict_name != null">
+				dict_name = #{dict_name, jdbcType=VARCHAR},
+			</if>
+			<if test="dict_code != null">
+				dict_code = #{dict_code, jdbcType=VARCHAR},
+			</if>
+			<if test="name_pinyin != null">
+				name_pinyin = #{name_pinyin, jdbcType=VARCHAR},
+			</if>
+			<if test="name_jianpin != null">
+				name_jianpin = #{name_jianpin, jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark, jdbcType=VARCHAR},
+			</if>
+			<if test="dicttype_id != null">
+				dicttype_id = #{dicttype_id, jdbcType=VARCHAR},
+			</if>
+			<if test="order_no != null">
+				order_no = #{order_no, jdbcType=VARCHAR},
+			</if>
+			<if test="1==1">
+            	timestamp=CURRENT_TIMESTAMP,
+            </if>
+		</set>
+		where dict_id = #{dict_id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="deleteDipDictionaryByIds">
+		update P_DICTIONARY set is_deleted = 1, timestamp=CURRENT_TIMESTAMP	where dict_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+	<delete id="deleteDipDictionaryByIdsOld">
+		delete from P_DICTIONARY where dict_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="findDipDictionaryById" parameterType="string" resultType="com.zebone.dip.dictionary.vo.DipDictionary">
+		select <include refid="dipdict_cols" /> from P_DICTIONARY 
+		where dict_id = #{dict_id, jdbcType=VARCHAR} 
+	</select>
+	
+	<select id="searchDipDictionary" parameterType="com.zebone.dip.dictionary.vo.DipDictionary" resultType="com.zebone.dip.dictionary.vo.DipDictionary">
+		select <include refid="dipdict_cols" /> from P_DICTIONARY 
+		<where>
+			IS_DELETED = 0 and dicttype_id = #{dicttype_id, jdbcType=VARCHAR}
+			<if test="dict_name!=null and dict_name!=''">
+				and dict_name like '%' || #{dict_name,jdbcType=VARCHAR} || '%' escape '/'
+			</if>
+			<if test="dict_code!=null and dict_code!=''">
+				and dict_code like '%' || #{dict_code,jdbcType=VARCHAR} || '%' escape '/'
+			</if>
+			<if test="name_pinyin!=null and name_pinyin!=''">
+				and name_pinyin like '%' || #{name_pinyin,jdbcType=VARCHAR} || '%' escape '/'
+			</if>
+			<if test="name_jianpin!=null and name_jianpin!=''">
+				and name_jianpin like '%' || #{name_jianpin,jdbcType=VARCHAR} || '%' escape '/'
+			</if>
+		</where>		
+		ORDER BY dict_code DESC
+	</select>
+	<select id="searchDipDictionaryCount" parameterType="com.zebone.dip.dictionary.vo.DipDictionary" resultType="int">
+		select count(dict_id) from P_DICTIONARY 
+		<where>
+			IS_DELETED = 0 and dicttype_id = #{dicttype_id, jdbcType=VARCHAR}
+			<if test="dict_name!=null and dict_name!=''">
+				and dict_name like '%' || #{dict_name,jdbcType=VARCHAR} || '%' escape '/'
+			</if>
+			<if test="dict_code!=null and dict_code!=''">
+				and dict_code like '%' || #{dict_code,jdbcType=VARCHAR} || '%' escape '/'
+			</if>
+			<if test="name_pinyin!=null and name_pinyin!=''">
+				and name_pinyin like '%' || #{name_pinyin,jdbcType=VARCHAR} || '%' escape '/'
+			</if>
+			<if test="name_jianpin!=null and name_jianpin!=''">
+				and name_jianpin like '%' || #{name_jianpin,jdbcType=VARCHAR} || '%' escape '/'
+			</if>
+		</where>		
+	</select>
+	
+	
+	<select id="getDipDictionaryByParentId" parameterType="string" resultType="com.zebone.dip.dictionary.vo.DipDictionary">
+		select <include refid="dipdict_cols" /> from P_DICTIONARY where dicttype_id=#{dicttype_id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="checkDicTypeChildrenDicBeforeDelete" resultType="int">
+		select count(dict_id) from P_DICTIONARY where IS_DELETED = 0 and dicttype_id in
+	 	<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>  
+	</select>
+
+    <select id="getDictNameListByType" parameterType="string" resultType="com.zebone.dip.md.vo.NameCode">
+        select A.DICT_NAME as name,A.DICT_CODE as code from P_DICTIONARY A, P_DICTIONARY_TYPE B
+        where A.DICTTYPE_ID = B.TYPE_ID and b.type_code = #{typeCode, jdbcType=VARCHAR} and A.IS_DELETED = 0
+    </select>
+    
+    <select id="getDipDictionaryByDictNameLikes" parameterType="string" resultType="com.zebone.dip.dictionary.vo.DipDictionary">
+	     select * from (
+		    select dict_id, dict_name, dict_code, dicttype_id from P_DICTIONARY where DICT_NAME like '%' || #{dict_name, jdbcType=VARCHAR} ||'%'
+		 )
+		 where ROWNUM &lt;= 20
+	</select>
+    <select id="getDictByCode" parameterType="string" resultType="com.zebone.dip.md.vo.NameCode">
+    	select A.DICT_NAME as name,A.DICT_CODE as code from P_DICTIONARY A, P_DICTIONARY_TYPE B
+        where A.DICTTYPE_ID = B.TYPE_ID and b.standard_code = #{typeCode, jdbcType=VARCHAR} and A.IS_DELETED = 0
+    </select>
+    <select id="findDipDictionaryByTypeAndId" parameterType="string" resultType="com.zebone.dip.md.vo.NameCode">
+    	select A.DICT_NAME as name,A.DICT_CODE as code from P_DICTIONARY A, P_DICTIONARY_TYPE B
+        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+        and B.STANDARD_CODE = #{type, jdbcType=VARCHAR}
+        and A.DICT_CODE = #{code, jdbcType=VARCHAR}
+    </select>
+</mapper>

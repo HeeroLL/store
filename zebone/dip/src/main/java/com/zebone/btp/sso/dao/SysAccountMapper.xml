@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.sso.dao.SysAccountMapper">
+	<!-- 子系统账号信息Map -->
+	<resultMap id="sysAccountInfoResultMap" type="com.zebone.btp.sso.pojo.SysAccountInfo">
+		<id column="ACCOUNT_ID" property="accountId" jdbcType="VARCHAR"/>
+		<result column="ACCOUNT" property="account" jdbcType="VARCHAR"/>
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+		<result column="SYS_ID" property="sysId" jdbcType="VARCHAR"/>
+		<result column="SSO_ACCOUNT_ID" property="ssoAccountId" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!-- 查询的字段信息 -->
+	<sql id="sysaccount_sql_base">
+		select * from sso_sys_account
+	</sql>
+	<!-- 查询条件 -->
+	<sql id="sysaccount_sql_where">
+		where 1=1
+		<if test="sysId != null">
+			and sys_id=#{sysId}
+		</if>
+		<if test="ssoAccountId != null">
+			and sso_account_id=#{ssoAccountId}
+		</if>
+		<if test="account != null">
+			and account=#{account}
+		</if>
+	</sql>
+	<!-- 查询记录数 -->
+	<sql id="sysaccount_sql_count">
+		select count(*) from sso_sys_account <include refid="sysaccount_sql_where"/>
+	</sql>
+	<!-- 查询一条子系统账号信息 -->
+	<select id="findSysAccountInfoById" resultMap="sysAccountInfoResultMap" parameterType="java.lang.String">
+		<include refid="sysaccount_sql_base" /> where account_id = #{accountId}
+	</select>
+	<!-- 查询一条子系统账号信息 -->
+	<select id="getSysAccountInfo" resultMap="sysAccountInfoResultMap" parameterType="java.lang.String">
+		<include refid="sysaccount_sql_base" /> where sso_account_id = #{param1} and sys_id = #{param2}
+	</select>
+	<!-- 分页查询子系统账号信息 -->
+	<select id="searchSysAccountInfo" resultMap="sysAccountInfoResultMap" parameterType="java.lang.String">
+		<include refid="sysaccount_sql_base" /> <include refid="sysaccount_sql_where"/>
+	</select>
+	<!-- 查询子系统账号信息总数 -->
+	<select id="getTotalCount" resultType="int" parameterType="com.zebone.btp.sso.pojo.SysAccountInfo">
+		<include refid="sysaccount_sql_count" />
+	</select>
+	<!-- 删除子系统账号信息 -->
+	<delete id="deleteSysAccountInfo" parameterType="java.lang.String">
+		delete from sso_sys_account where account_id = #{accountId}
+	</delete>
+	<!-- 插入一条子系统账号信息 -->
+	<insert id="saveSysAccountInfo" parameterType="com.zebone.btp.sso.pojo.SysAccountInfo">
+		insert into sso_sys_account (account_id,account,password,sys_id,sso_account_id)
+		values (#{accountId},#{account,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{sysId,jdbcType=VARCHAR},
+			#{ssoAccountId,jdbcType=VARCHAR})
+	</insert>
+	<!-- 修改一条子系统账户信息 -->
+	<update id="updateSysAccountInfo" parameterType="com.zebone.btp.sso.pojo.SysAccountInfo">
+		update sso_sys_account set account=#{account,jdbcType=VARCHAR}, password=#{password,jdbcType=VARCHAR},sys_id=#{sysId,jdbcType=VARCHAR},
+			sso_account_id=#{ssoAccountId,jdbcType=VARCHAR} where account_id = #{accountId}
+	</update>
+	<!-- 批量修改子系统账户所属认证账户id -->
+	<update id="updateSsoAccountId" parameterType="java.lang.String">
+		update sso_sys_account set sso_account_id=#{param1}	where account_id = #{param2}
+	</update>
+</mapper>

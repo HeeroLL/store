@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd ">
+
+	<context:component-scan base-package="com.zebone.pubsub.server" />
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="classpath:ServerSysconfig.properties" />
+	</bean>
+
+	<bean id="dataSource_wrc" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${wrc.jdbc.driver}" />
+		<property name="url" value="${wrc.jdbc.url}" />
+		<property name="username" value="${wrc.jdbc.username}" />
+		<property name="password" value="${wrc.jdbc.password}" />
+		<property name="initialSize" value="${wrc.jdbc.initialSize}" />
+		<property name="maxActive" value="${wrc.jdbc.maxActive}" />
+		<property name="maxIdle" value="${wrc.jdbc.maxIdle}" />
+		<property name="minIdle" value="${wrc.jdbc.minIdle}" />
+	</bean>
+
+
+	<bean id="dataSource_dip" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${dip.jdbc.driver}" />
+		<property name="url" value="${dip.jdbc.url}" />
+		<property name="username" value="${dip.jdbc.username}" />
+		<property name="password" value="${dip.jdbc.password}" />
+		<property name="initialSize" value="${dip.jdbc.initialSize}" />
+		<property name="maxActive" value="${dip.jdbc.maxActive}" />
+		<property name="maxIdle" value="${dip.jdbc.maxIdle}" />
+		<property name="minIdle" value="${dip.jdbc.minIdle}" />
+	</bean>
+
+	<bean id="jdbcTemplateWRC" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource_wrc" />
+	</bean>
+
+	<bean id="jdbcTemplateDIP" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource_dip" />
+	</bean>
+
+
+	<jaxws:client id="docQuery" serviceClass="com.zebone.webservice.cxf.log.DocQuery"
+		address="${docQueryUrl}" />
+
+	<bean id="activeMqConPool" class="com.zebone.mq.activemq.GenActiveMqConPool"
+		init-method="initPool">
+		<property name="brokerURL" value="tcp://192.168.30.5:61616" />
+		<property name="minIdle" value="5" />
+	</bean>
+
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="pubsub" />
+			</set>
+		</property>
+	</bean>
+
+	<!-- 定义事物管理 -->
+	<!-- <bean id="transactionManager_wrc" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+		<property name="dataSource" ref="dataSource_wrc" /> </bean> -->
+</beans>

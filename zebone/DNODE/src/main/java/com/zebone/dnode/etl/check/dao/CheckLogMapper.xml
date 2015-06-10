@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.etl.check.dao.CheckLogMapper">
+    <insert id="saveCheckLog" parameterType="com.zebone.dnode.etl.check.pojo.CheckLogObj">
+        insert into P_CLEAN_CHECK_LOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID_,
+            </if>
+            <if test="nodeName != null">
+                NODE_NAME,
+            </if>
+            <if test="tableName != null">
+                TABLE_NAME,
+            </if>
+            <if test="columnName != null">
+                COLOUN_NAME,
+            </if>
+            <if test="columnValue != null">
+                COLUMN_VALUE,
+            </if>
+            <if test="ruleNo != null">
+                RULE_NO,
+            </if>
+            <if test="checkType != null">
+                CHECK_TYPE,
+            </if>
+            <if test="checkFlag != null">
+                CHECK_FLAG,
+            </if>
+            <if test="checkDesc != null">
+                CHECK_DESC,
+            </if>
+            <if test="mainId != null">
+                MAIN_ID,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="nodeName != null">
+                #{nodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="tableName != null">
+                #{tableName,jdbcType=VARCHAR},
+            </if>
+            <if test="columnName != null">
+                #{columnName,jdbcType=VARCHAR},
+            </if>
+            <if test="columnValue != null">
+                #{columnValue,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleNo != null">
+                #{ruleNo,jdbcType=VARCHAR},
+            </if>
+            <if test="checkType != null">
+                #{checkType,jdbcType=VARCHAR},
+            </if>
+            <if test="checkFlag != null">
+                #{checkFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="checkDesc != null">
+                #{checkDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="mainId != null">
+                #{mainId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

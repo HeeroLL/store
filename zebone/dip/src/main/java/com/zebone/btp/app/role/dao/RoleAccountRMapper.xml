@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.role.dao.RoleAccountRMapper">
+	<resultMap id="RoleAccountRResultMap" type="com.zebone.btp.app.role.vo.RoleAccountR">
+		<result column="ROLE_ID" property="roleId" jdbcType="VARCHAR"/>
+		<result column="PERSONNEL_ID" property="personnelId" jdbcType="VARCHAR"/>
+		<result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR"/>
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<sql id="column_list">
+		ROLE_ID,PERSONNEL_ID,CREATOR_ID,CREATE_TIME
+	</sql>
+	<insert id="insert" parameterType="com.zebone.btp.app.role.vo.RoleAccountR">
+		insert into BTP_ACCOUNT_ROLE_R
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">
+				ROLE_ID,
+			</if>
+			<if test="personnelId != null">
+				PERSONNEL_ID,
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">
+				#{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="personnelId != null">
+				#{personnelId,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from BTP_ACCOUNT_ROLE_R
+		where PERSONNEL_ID = #{personnelId,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByRoleId" parameterType="java.lang.String">
+		delete from BTP_ACCOUNT_ROLE_R
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</delete>
+	<select id="findById" resultMap="RoleAccountRResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_ACCOUNT_ROLE_R
+		where PERSONNEL_ID = #{personnelId,jdbcType=VARCHAR}
+	</select>
+</mapper>

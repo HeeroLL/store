@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.register.dao.StoreServiceMapper" >
+
+    <select id="getWebUrl" parameterType="Map" resultType="java.lang.String">
+		SELECT WEB_URL FROM R_STORE_SERVICE WHERE
+		SERVICE_TYPE = #{serviceType,jdbcType=VARCHAR} AND SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR}
+	</select>
+</mapper>

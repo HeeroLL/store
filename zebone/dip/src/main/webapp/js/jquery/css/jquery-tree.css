@@ -1,0 +1,41 @@
+@CHARSET "UTF-8";
+html, body{
+	height: 100%;	
+}
+#jtree{
+	padding: 5px 0px 0px 0px;
+	overflow: auto;
+}
+#jtree ul{
+	line-height: 20px;
+	margin:auto;
+	padding: 0px;
+}
+#jtree li{
+	list-style: none;
+	width: 100%;
+}
+#jtree ul li{	
+	padding:0px 0px 0px 20px;
+	list-style: none;
+	width: 100%;
+}
+#jtree span{
+	cursor:pointer;
+	padding-left: 20px;	
+	white-space:nowrap;
+	display:inline-block;
+	height: 25px;
+}
+#jtree span b{
+	font-weight: normal;
+}
+#jtree ul span[name=folder]{	
+	background: url("../images/jquery-tree/folder-closed.gif") no-repeat;
+}
+#jtree ul li span[name=leaf]{
+	background: url("../images/jquery-tree/file.gif") no-repeat;
+}
+#jtree li span[name=leaf]{
+	background: url("../images/jquery-tree/file.gif") no-repeat;
+}

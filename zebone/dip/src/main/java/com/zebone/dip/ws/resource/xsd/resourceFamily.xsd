@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="request">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="head"/>
+        <xs:element ref="body"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="head">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="requestId" minOccurs="0"/>
+        <xs:element ref="tradeNo"/>
+        <xs:element ref="orgCode"/>
+        <xs:element ref="authorizationCode" minOccurs="0"/>
+        <xs:element ref="systemCode" minOccurs="0"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="requestId" type="xs:string"/>
+  <xs:element name="tradeNo" type="xs:string"/>
+  <xs:element name="orgCode" >
+  	<xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="22"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="authorizationCode" type="xs:string"/>
+  <xs:element name="systemCode" type="xs:string"/>
+  <xs:element name="body">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="item"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="item">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="famiCode"/>
+        <xs:element ref="landlordName" minOccurs="0"/>
+        <xs:element ref="landlordTEL" minOccurs="0"/>
+        <xs:element ref="householdName" minOccurs="0"/>
+        <xs:element ref="housePopuNumber" minOccurs="0"/>
+        <xs:element ref="residentPopuNumber" minOccurs="0"/>
+        <xs:element ref="liveType" minOccurs="0"/>
+        <xs:element ref="totalArea" minOccurs="0"/>
+        <xs:element ref="perArea" minOccurs="0"/>
+        <xs:element ref="familyTEL" minOccurs="0"/>
+        <xs:element ref="paperFileNo" minOccurs="0"/>
+        <xs:element ref="housingPropertyCode" minOccurs="0"/>
+        <xs:element ref="housingNumber" minOccurs="0"/>
+        <xs:element ref="housingLightingCode" minOccurs="0"/>
+        <xs:element ref="familyOrgCode" />
+        <xs:element ref="doctorCode" minOccurs="0"/>
+        <xs:element ref="familyAddrCode" minOccurs="0"/>
+        <xs:element ref="familyAddr" minOccurs="0"/>
+        <xs:element ref="housingCode" minOccurs="0"/>
+        <xs:element ref="kitchenCode" minOccurs="0"/>
+        <xs:element ref="kitchenVentCode" minOccurs="0"/>
+        <xs:element ref="familyProCode" minOccurs="0"/>
+        <xs:element ref="waterCode" minOccurs="0"/>
+        <xs:element ref="fuelCode" minOccurs="0"/>
+        <xs:element ref="toiletsCode" minOccurs="0"/>
+        <xs:element ref="livestockCode" minOccurs="0"/>
+        <xs:element ref="elecDeviceCode" minOccurs="0"/>
+        <xs:element ref="vehicleCode" minOccurs="0"/>
+        <xs:element ref="econStatusCode" minOccurs="0"/>
+        <xs:element ref="perMonthIncomeCode" minOccurs="0"/>
+        <xs:element ref="famiTotalPay" minOccurs="0"/>
+        <xs:element ref="famiFoodPay" minOccurs="0"/>
+        <xs:element ref="garDisposalCode" minOccurs="0"/>
+        <xs:element ref="sewageDiposalCode" minOccurs="0"/>
+        <xs:element ref="cultureSportCode" minOccurs="0"/>
+        <xs:element ref="fileDate" />
+        <xs:element ref="fileDoctorCode" />
+        <xs:element ref="inputDate" />
+        <xs:element ref="inputUserCode" />
+        <xs:element ref="familyTypeCode" minOccurs="0"/>
+        <xs:element ref="familyMainProblem" minOccurs="0"/>
+        <xs:element ref="remark" minOccurs="0"/>
+        <xs:element minOccurs="1" ref="members"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="famiCode">
+    <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="32"/>
+    	</xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="landlordName">
+    <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="50"/>
+    	</xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="landlordTEL">
+   <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="20"/>
+    	</xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="householdName">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="50"/>
+    	</xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="housePopuNumber">
+     <xs:simpleType >
+    	<xs:restriction base="xs:integer">
+    	 	 <xs:minInclusive value="0"/>
+    		 <xs:maxInclusive value="99"/>
+    	</xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="residentPopuNumber">
+      <xs:simpleType >
+    	<xs:restriction base="xs:integer">
+    		 <xs:minInclusive value="0"/>
+    		 <xs:maxInclusive value="99"/>
+    	</xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="liveType">
+      <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		 <xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="totalArea">
+       <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		 <xs:pattern value="\d{1,5}|\d{1,5}\.\d{1,2}"/>
+    		 <xs:minLength value="4"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="perArea">
+        <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		 <xs:pattern value="\d{1,5}|\d{1,5}\.\d{1,2}"/>
+    		 <xs:minLength value="4"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="familyTEL">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="20"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="paperFileNo">
+    <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="32"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="housingPropertyCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="housingNumber">
+     <xs:simpleType >
+    	<xs:restriction base="xs:integer">
+    		 <xs:maxExclusive value="100"/>
+    	</xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="housingLightingCode">
+      <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="familyOrgCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="22"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="doctorCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="20"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="familyAddrCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    	    <xs:length value="12"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="familyAddr">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="70"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="housingCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="kitchenCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="kitchenVentCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="familyProCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="waterCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="2"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="fuelCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="toiletsCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="2"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="livestockCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="elecDeviceCode">
+   <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="vehicleCode">
+    <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="econStatusCode">
+    <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="perMonthIncomeCode">
+    <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="famiTotalPay">
+       <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		 <xs:pattern value="\d{1,7}|\d{1,7}\.\d{1,2}"/>
+    		 <xs:minLength value="4"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="famiFoodPay">
+       <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		 <xs:pattern value="\d{1,7}|\d{1,7}\.\d{1,2}"/>
+    		 <xs:minLength value="4"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="garDisposalCode">
+      <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="sewageDiposalCode">
+      <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="cultureSportCode">
+      <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="20"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="fileDate">
+     <xs:simpleType >
+    	<xs:restriction base="xs:date">
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="fileDoctorCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="20"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="inputDate">
+     <xs:simpleType >
+    	<xs:restriction base="xs:date">
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="inputUserCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="20"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="familyTypeCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="2"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="familyMainProblem">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="members">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="member" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+   <xs:element name="member">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="orderNumber" minOccurs="0"/>
+        <xs:element ref="householdCode" />
+        <xs:element ref="name" />
+        <xs:element ref="idcardType" />
+        <xs:element ref="cardNo"/>
+        <xs:element ref="sex" />
+        <xs:element ref="birthDate" />
+        <xs:element ref="educationDegree" />
+        <xs:element ref="careerCode" />
+        <xs:element ref="marriageCode" />
+        <xs:element ref="remark" minOccurs="0"/>
+        <xs:element ref="state" />
+      </xs:all>
+    </xs:complexType>   
+  </xs:element>
+  
+  <xs:element name="orderNumber">
+    <xs:simpleType>
+    	<xs:restriction base="xs:integer">
+    		<xs:maxExclusive value="100"/>
+    	</xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="householdCode">
+   <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="2"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="name">
+    <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="50"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="idcardType">
+   <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="2"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="cardNo">
+    <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="18"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="sex">
+    <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="birthDate">
+   <xs:simpleType >
+    	<xs:restriction base="xs:date">
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="educationDegree">
+    <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="2"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="careerCode">
+   <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="15"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="marriageCode">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="2"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="state">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:length value="1"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+  <xs:element name="remark">
+     <xs:simpleType >
+    	<xs:restriction base="xs:string">
+    		<xs:minLength value="1"/>
+    		<xs:maxLength value="200"/>
+    	</xs:restriction>
+    </xs:simpleType> 
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,327 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+#container{
+color: #333333;
+cursor: default;
+font: 12px/1.5 tahoma,helvetica,clean,sans-serif;
+}
+.window {
+    background: url("../../images/blank.gif") repeat scroll 0 0 transparent;
+}
+.window {
+    display: block;
+    left: -999999px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    top: -999999px;
+    border: 1px solid  #a5c5a2;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 2px 2px 5px #8692A1;
+    opacity: 0.9;
+    filter: alpha(opacity = 90);
+}
+.window_current{
+	opacity: 1;
+    filter: alpha(opacity = 100);
+    box-shadow: 0 5px 20px #d6ded4;
+}
+.window_outer {
+    bottom: 0;
+    left: 0;
+    /*padding: 10px;*/
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;height: 100%;
+}
+.window_inner {
+    height: 100%;
+    position: relative;
+    width: 100%;
+    -webkit-box-shadow:5px 5px 7px #474949;
+    -webkit-border-bottom-right-radius: 15px;
+}
+.window_content {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+}
+.window_titleBar {
+    background: url("./images/window-corners.png") repeat-x right -64px;
+    border-radius: 3px 3px 0 0;
+    cursor: default;
+    height: 25px;
+    overflow: hidden;
+}
+.window_current .window_titleBar {
+    background-image: url("./images/window-corners.png");
+    background-position:right -64px;
+	background-repeat:repeat-x;
+}
+.window_titleBar{
+    border-radius: 3px 3px 0 0;
+    cursor: default;
+    height: 25px;
+}
+.window_titleBar .j-panel-tools {
+    right: 6px;
+    top: 6px;
+}
+.windowTabBar{
+	list-style: none outside none;
+}
+.windowTabBar li{
+    float:left;
+    margin: 0 0 0 1px;
+    min-width: 84px;
+    position: relative;
+}
+.windowTabBar .tabClose{
+	background: url("./images/jquery-tab/close.gif") no-repeat scroll 0 0 transparent;
+    cursor: pointer;
+    display: block;
+    height: 16px;
+    position: absolute;
+    right: 1px;
+    top: 5px;
+    width: 16px;
+    z-index: 1200;
+    display:none;
+}
+.windowTabBar li:hover .tabClose{
+	display:block;
+}
+.windowTabBar .tabClose:hover{
+	background-position:0 -15px;
+}
+.windowTabBar .window_tab_active a,.windowTabBar .window_tab_active a span,.windowTabBar a:hover,.windowTabBar a:hover span{
+    background-image: url("./images/window_tab_bg.png");
+    background-repeat:no-repeat;
+}
+.windowTabBar a{
+    padding-right: 11px;
+    height: 25px;
+    display: block;
+}
+.windowTabBar a span{
+	height: 25px;
+	text-align: center;
+	line-height: 25px;
+	display: block;
+}
+.windowTabBar .window_tab_active a,.windowTabBar .window_tab_active a:hover{
+	background-position: right -39px;
+}
+.windowTabBar .window_tab_active a span,.windowTabBar .window_tab_active a:hover span{
+	background-position: 0 0;
+}
+.windowTabBar a:hover{
+	background-position: right -113px;
+}
+.windowTabBar a:hover span{
+	background-position: 0 -76px;
+}
+.window_current .titleText, .window_current a.titleText {
+    color: #393836;
+}
+.window_current .titleText, .window_current a.titleText {
+    color: #168d03;
+}
+.window_title {
+    height: 25px;
+    text-align: center;
+}
+.titleText, a.titleText {
+    color: #6D6D6D;
+    font-weight: bold;
+}
+.window_title {
+    height: 25px;
+    text-align: center;
+}
+.titleText, a.titleText {
+    color: #6D6D6D;
+    font-weight: bold;
+}
+.window_title {
+    letter-spacing: 1px;
+    line-height: 25px;
+    overflow: hidden;
+}
+a.window_action_button {
+    background-image: url("./images/window.png");
+    _background-image: url("./images/window.gif");
+    background-repeat:no-repeat;
+    height: 30px;
+    width: 32px;
+}
+a.window_min {
+    cursor: pointer;
+    float: right;
+    margin-left: 4px;
+}
+a.window_max {
+    cursor: pointer;
+    float: right;
+    margin-left: 0;
+}
+a.window_restore {
+    cursor: pointer;
+    float: right;
+    margin-left: 0;
+}
+a.window_close {
+	display:block;
+    cursor: pointer;
+    float: right;
+    margin-left: 0;
+    width:36px;
+}
+:link, *:visited {
+    text-decoration: none;
+}
+a {
+    color: #45649E;
+    font: 12px/1.5 tahoma,helvetica,clean,sans-serif;
+}
+
+a.window_close {
+    background-position: -101px -1px;
+}
+a.window_close:hover{
+	background-position: -101px -32px;
+}
+a.window_max {
+    background-position: -33px -1px;
+}
+a.window_max:hover {
+    background-position: -33px -32px;
+}
+a.window_min {
+    background-position: 0 -1px;
+}
+a.window_min:hover {
+    background-position: 0 -32px;
+}
+a.window_restore {
+    background-position: -66px -1px;
+}
+a.window_restore:hover {
+    background-position: -66px -32px;
+}
+
+.ui_button {
+    background: url("./images/portal_all_png.png") no-repeat scroll 0 -220px transparent;
+    color: #333333;
+    cursor: pointer;
+    float: right;
+    height: 23px;
+    line-height: 23px;
+    margin-left: 10px;
+    text-align: center;
+    width: 66px;
+}
+.window_bodyOuter {
+    background-color:#CED9E7;
+}
+.window_bodyOuter {
+    border-top: 1px solid #CCCCCC;
+    bottom: 0;
+    position: absolute;
+    top: 25px;
+    width: 100%;
+}
+.window_bodyArea {
+    background-color: #fff;
+    bottom: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.iframeApp{
+	background-color: transparent;
+    height: 100%;
+    left: 0;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.j-win-e ,.j-win-s ,.j-win-w ,.j-win-n ,.j-win-sw ,.j-win-es ,.j-win-wn ,.j-win-ne{
+	overflow: hidden; background: url("../../images/blank.gif") repeat scroll 0% 0% transparent;
+	font-size: 0;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+}
+.j-win-e {
+    cursor: e-resize;
+    height: 100%;
+    right: -2px;
+    width: 4px;
+    top:0;
+}
+.j-win-s {
+    bottom: 0;
+    cursor: s-resize;
+    height: 2px;
+    width: 100%;
+}
+.j-win-w {
+	background-position: -1px 0;
+    background-repeat: repeat-x; 
+    cursor: w-resize;
+    height: 100%;
+    width: 4px;
+    top:0;
+}
+.j-win-n {
+    cursor: n-resize;
+    height: 6px;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+.j-win-sw, .j-win-es, .j-win-wn, .j-win-ne {
+    height: 6px;
+    width: 6px;
+}
+.j-win-sw {
+    bottom: 0;
+    cursor: sw-resize;
+    left: 0;
+}
+.j-win-es {
+    bottom: 0;
+    cursor: se-resize;
+    right: 0;
+}
+.j-win-wn {
+    cursor: nw-resize;
+    left: 0;
+    top: 0;
+}
+.j-win-ne {
+    cursor: ne-resize;
+    right: 0;
+    top: 0;
+}
+.iframeDragResizeMask {
+    background: none repeat scroll 0 0 #000000;
+    cursor: default;
+    display: none;
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    filter: alpha(opacity = 0);
+    position: absolute;
+    top: 0;
+    width: 100%;
+}

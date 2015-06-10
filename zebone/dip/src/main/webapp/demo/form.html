@@ -1,0 +1,375 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/icons.css" />
+<link rel="stylesheet" type="text/css" href="../skin/default/main.css" id="main-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-grid.css"  id="grid-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-dialog.css" id="dialog-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery.checkForm.css" id="checkform-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-button.css" id="button-css"/>
+<script type="text/javascript" src="../js/jquery/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.mark.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-dialog.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-grid.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-checkForm.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.stopBubble.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-button.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.form.js"></script>
+<title>demo</title>
+<style type="">
+h2{ border-bottom: 1px solid;}
+</style>
+<script type="text/javascript">
+</script>
+</head>
+<body>
+<div class="container">
+	<div class="c_nw"><div class="c_ne"><div class="c_n"></div></div></div>
+	<span class="title-l">
+		<span class="title-r">
+			<b class="icon"></b><span class="title-span">医疗人员身份信息</span>
+		</span>
+	</span>
+	<div class="tools-panel"></div>
+	<div class="c_w">
+		<div class="c_e">
+			<div class="c_content">
+				<table cellspacing="10" style="width: 100%;">
+					<tbody><tr>
+						<td align="right" style="width: 65px;">姓名：</td>
+						<td align="left" style="width: 120px;">
+							<input type="hidden" name="workerId" id="workerId"/>
+							<input type="text" maxlength="10" onblur="onblurEdit(this);" style="width: 95%; border: 1px solid rgb(204, 204, 204);" validate="string|1-20" title="姓名" name="workerName"/>
+						</td>
+						
+						<td align="right" style="width: 65px;">出生日期：</td>
+						<td align="left" style="width: 120px;">
+							<input type="text" class="Wdate" style="width: 95%; border: 1px solid rgb(204, 204, 204);" validate="date|1-20" title="出生日期" onclick="WdatePicker({skin:'whyGreen'});" name="dateOfBirth" id="dateOfBirth"/>
+						</td>
+					</tr>
+					
+					<tr>
+						<td align="right" style="width: 65px;">性别：</td>
+						<td align="left" style="width: 120px;">
+							<select validate="select" style="width: 99%; border: 1px solid rgb(204, 204, 204);" title="性别" name="workerDenger">
+								
+									<option value="-1">请选择</option>
+								
+									<option value="0">未知的性别</option>
+								
+									<option value="1">男</option>
+								
+									<option value="2">女</option>
+								
+									<option value="9">未说明的性别</option>
+								
+							</select>
+						</td>
+						
+						<td align="right" style="width: 65px;">手机号码：</td>
+						<td align="left" style="width: 120px;">
+							<input type="text" style="width: 95%; border: 1px solid rgb(204, 204, 204);" validate="mobile|0-20" title="手机号码" name="workerMobile" id="workerMobile"/>
+						</td>
+					</tr>
+						
+					<tr>
+						<td align="right" style="width: 65px;">办公电话：</td>
+						<td align="left" style="width: 120px;">
+							<input type="text" style="width: 95%; border: 1px solid rgb(204, 204, 204);" validate="phone|0-18" title="办公电话" name="workerPhone" id="workerPhone"/>
+						</td>
+						
+						<td align="right" style="width: 65px;">籍贯：</td>
+						<td align="left" style="width: 120px;">
+							<select style="width: 99%;" title="籍贯" name="workerNativePlace">
+								<option value="-1">请选择</option>
+									
+										<option value="110000000000">北京市</option>
+									
+										<option value="130000000000">河北省</option>
+									
+										<option value="120000000000">天津市</option>
+									
+										<option value="140000000000">山西省</option>
+									
+										<option value="150000000000">内蒙古自治区</option>
+									
+										<option value="230000000000">黑龙江省</option>
+									
+										<option value="340000000000">安徽省</option>
+									
+										<option value="370000000000">山东省</option>
+									
+										<option value="510000000000">四川省</option>
+									
+										<option value="520000000000">贵州省</option>
+									
+										<option value="630000000000">青海省</option>
+									
+										<option value="620000000000">甘肃省</option>
+									
+										<option value="420000000000">湖北省</option>
+									
+										<option value="640000000000">宁夏回族自治区</option>
+									
+										<option value="444">4444</option>
+									
+										<option value="210000000000">辽宁省</option>
+									
+										<option value="220000000000">吉林省</option>
+									
+										<option value="310000000000">上海市</option>
+									
+										<option value="320000000000">江苏省</option>
+									
+										<option value="330000000000">浙江省</option>
+									
+										<option value="350000000000">福建省</option>
+									
+										<option value="360000000000">江西省</option>
+									
+										<option value="410000000000">河南省</option>
+									
+										<option value="460000000000">海南省</option>
+									
+										<option value="430000000000">湖南省</option>
+									
+										<option value="440000000000">广东省</option>
+									
+										<option value="450000000000">广西壮族自治区</option>
+									
+										<option value="500000000000">重庆市</option>
+									
+										<option value="530000000000">云南省</option>
+									
+										<option value="540000000000">西藏自治区</option>
+									
+										<option value="610000000000">陕西省</option>
+									
+										<option value="650000000000">新疆维吾尔自治区</option>
+									
+							</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<td align="right" style="width: 65px;">文化程度：</td>
+						<td align="left" style="width: 120px;">
+							<select style="width: 99%;" title="文化程度" name="workerEducation">
+								<option value="-1">请选择</option>
+									
+										<option value="1">博士</option>
+									
+										<option value="2">硕士</option>
+									
+										<option value="3">本科</option>
+									
+										<option value="4">专科</option>
+									
+										<option value="5">高中</option>
+									
+							</select>
+						</td>
+						
+						<td align="right" style="width: 65px;">政治面貌：</td>
+						<td align="left" style="width: 120px;">
+							<select style="width: 99%;" title="政治面貌" name="politicalStatus">
+								<option value="-1">请选择</option>
+									
+										<option value="1">党员</option>
+									
+										<option value="4">非民主党派</option>
+									
+										<option value="3">民主党派</option>
+									
+										<option value="2">团员</option>
+									
+							</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<td align="right" style="width: 65px;">职称：</td>
+						<td align="left" style="width: 120px;">
+							<select style="width: 99%;" title="职称" name="workerProfessional">
+								<option value="-1">请选择</option>
+									
+										<option value="1">主任医师</option>
+									
+										<option value="2">副主任医师</option>
+									
+										<option value="3">主管医生</option>
+									
+										<option value="4">住院医师</option>
+									
+										<option value="5">主任护师</option>
+									
+										<option value="6">副主任护师</option>
+									
+										<option value="7">主管护师</option>
+									
+										<option value="8">护师</option>
+									
+										<option value="9">护士</option>
+									
+							</select>
+						</td>
+						
+						<td align="right" style="width: 65px;">民族：</td>
+						<td align="left" style="width: 120px;">
+							<select style="width: 99%;" title="民族" name="workerNation">
+								<option value="-1">请选择</option>
+										<option selected="selected" value="1">汉族</option>
+										<option value="12">侗族</option>
+										<option value="13">瑶族</option>
+										<option value="14">白族</option>
+										<option value="15">土家族</option>
+										<option value="17">哈萨克族</option>
+										<option value="18">傣族</option>
+										<option value="20">傈僳族</option>
+										<option value="21">佤族</option>
+										<option value="22">畲族</option>
+										<option value="23">高山族</option>
+										<option value="24">拉祜族</option>
+										<option value="25">水族</option>
+										<option value="26">东乡族</option>
+										<option value="27">纳西族</option>
+										<option value="35">撒拉族</option>
+										<option value="16">哈尼族</option>
+										<option value="36">毛难族</option>
+										<option value="37">仡佬族</option>
+										<option value="38">锡伯族</option>
+										<option value="39">阿昌族</option>
+										<option value="40">普米族</option>
+										<option value="41">塔吉克族</option>
+										<option value="43">乌孜别克族</option>
+										<option value="44">俄罗斯族</option>
+										<option value="45">鄂温克族</option>
+										<option value="46">德昂族</option>
+										<option value="2">蒙古族</option>
+										<option value="3">回族</option>
+										<option value="4">藏族</option>
+										<option value="5">维吾尔族</option>
+										<option value="6">苗族</option>
+										<option value="7">彝族</option>
+										<option value="8">壮族</option>
+										<option value="9">布依族</option>
+										<option value="10">朝鲜族</option>
+										<option value="19">黎族</option>
+										<option value="28">景颇族</option>
+										<option value="56">基诺族</option>
+										<option value="29">柯尔克孜族</option>
+										<option value="30">土族</option>
+										<option value="31">达斡尔族</option>
+										<option value="32">仫佬族</option>
+										<option value="33">羌族</option>
+										<option value="47">保安族</option>
+										<option value="48">裕固族</option>
+										<option value="34">布朗族</option>
+										<option value="42">怒族</option>
+										<option value="49">京族</option>
+										<option value="50">塔塔尔族</option>
+										<option value="51">独龙族</option>
+										<option value="52">鄂伦春族</option>
+										<option value="53">赫哲族</option>
+										<option value="54">门巴族</option>
+										<option value="55">珞巴族</option>
+										<option value="11">满族</option>
+									
+							</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<td align="right" style="width: 65px;">QQ号： </td>
+						<td align="left" style="width: 120px;">
+							<input type="text" maxlength="15" style="width: 95%; border: 1px solid rgb(204, 204, 204);" validate="number|0-20" title="QQ号" name="workerQq" id="workerQq"/>
+						</td>
+						
+						<td align="right" style="width: 65px;">MSN：</td>
+						<td align="left" style="width: 120px;">
+							<input type="text" validate="email|0-20" style="width: 95%; border: 1px solid rgb(204, 204, 204);" title="MSN" name="workerMsn" id="workerMsn"/>
+						</td>
+					</tr>
+					
+					<tr>
+						<td align="right" style="width: 65px;">email：</td>
+						<td align="left" style="width: 120px;">
+							<input type="text" style="width: 95%; border: 1px solid rgb(204, 204, 204);" validate="email|0-20" title="email" name="workerEmail" id="workerEmail"/>
+						</td>
+					</tr>
+					
+					<tr>
+						<td align="right" style="width: 65px;">联系地址：</td>
+						<td colspan="3"><input type="text" maxlength="30" validate="string|0-100" style="width: 98%; border: 1px solid rgb(204, 204, 204);" title="联系地址" name="workerAddress"></td>
+					</tr>
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="c_sw"><div class="c_se"><div class="c_s"></div></div></div>
+</div>
+<div class="container" style="width:300px;">
+	<div class="c_nw"><div class="c_ne"><div class="c_n"></div></div></div>
+	<span class="title-l">
+		<span class="title-r">
+			<b class="icon"></b><span class="title-span">账号信息</span>
+		</span>
+	</span>
+	<div class="tools-panel"></div>
+	<div class="c_w">
+		<div class="c_e">
+			<div class="c_content">
+				<table style="text-align: center; width: 100%; height: 70px;">
+						<tbody><tr>
+							<td align="right">登录账号：</td>
+							<td align="left">
+								<input type="text" maxlength="25" title="登录账号" validate="string|3-25" style="width: 110px; border: 1px solid rgb(204, 204, 204);" name="userAccountUpdate" id="userAccountUpdate"/>
+								<input type="hidden" name="userIdUpdate" id="userIdUpdate" value="402882e43241b69101324289c3450004"/>
+							</td>
+						</tr>
+						<tr>
+							<td align="right">到期时间：</td>
+							<td align="left">
+								<input type="text" class="Wdate" validate="date|0-14" onclick="WdatePicker({skin:'whyGreen'});" title="到期时间" style="width: 110px; border: 1px solid rgb(204, 204, 204);" name="userCancelDateUpdate"/>
+							</td>
+						</tr>
+					</tbody></table>
+			</div>
+		</div>
+	</div>
+	<div class="c_sw"><div class="c_se"><div class="c_s"></div></div></div>
+</div>
+<div class="container" style="width:300px;">
+	<div class="c_nw"><div class="c_ne"><div class="c_n"></div></div></div>
+	<span class="title-l">
+		<span class="title-r">
+			<b class="icon"></b><span class="title-span">角色分配</span>
+		</span>
+	</span>
+	<div class="tools-panel"></div>
+	<div class="c_w">
+		<div class="c_e">
+			<div class="c_content">
+				<table align="center" style="width: 160px;" id="roleAssignUpdate">
+					<tbody><tr><td style="text-align: left;"><input type="checkbox" checked="checked" id="402882e434d17b3c0134d17f9bc40001"/>武进区普通用户</td></tr><tr><td style="text-align: left;"><input type="checkbox" id="4028814d321d8fb701321d936b550000"/>系统管理员</td></tr><tr><td style="text-align: left;"><input type="checkbox" id="402881863a445aaa013a4d5408a40044"/>重性精神病管理员</td></tr></tbody></table>
+			</div>
+		</div>
+	</div>
+	<div class="c_sw"><div class="c_se"><div class="c_s"></div></div></div>
+</div>
+<div class="button-bar" style="text-align: center;">
+	<a class="btn" href="javascript:void(0);">
+		<span class="btn-left">
+			<span class="btn-text icon-save">保存</span>
+		</span>
+	</a>
+	<a class="btn" href="javascript:void(0);">
+		<span class="btn-left">
+			<span class="btn-text icon-cancel">取消</span>
+		</span>
+	</a>
+</div>
+</body>
+</html>

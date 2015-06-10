@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+button{font-family: '微软雅黑 '; font-size: 12px;}
+.JDialogBtnDIV .JButtonClass{
+	border: 0;	
+	width: 90px;
+	height: 23px;
+	margin-left: 2px;
+    margin-top: 0;
+	background: url("./images/button_bg_88.png") no-repeat ;
+	text-align:center;
+	cursor: pointer;
+}
+.JDialogBtnDIV .JButtonClass_hover{
+	background-position:0 -23px;
+}
+.JButtonClass span{width: 100%; display: inline-block; text-align: center;}
+JButtonClass_large{
+	width: 150px;
+	background: url("./images/button_bg_148.png") no-repeat ;
+}

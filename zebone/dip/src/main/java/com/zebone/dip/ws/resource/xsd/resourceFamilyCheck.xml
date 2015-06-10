@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checks >
+	<check field="requestHead.orgCode" fieldName="家庭上传机构">
+		<rule>
+			<type>masterdata:[dataSource,WJD01.001]</type>		
+		</rule>
+	</check>
+	<check field="body.family.liveType" fieldName="居住类型">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.005]</type>		
+		</rule>
+	</check>
+	<check field="body.family.housingPropertyCode" fieldName="住房性质">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.006]</type>		
+		</rule>
+	</check>
+	<check field="body.family.housingLightingCode" fieldName="住房采光">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.007]</type>		
+		</rule>
+	</check>
+	<check field="body.family.familyOrgCode" fieldName="管理机构">
+		<rule>
+			<type>masterdata:[dataSource,WJD01.001]</type>		
+		</rule>
+	</check>
+	<check field="body.family.doctorCode" fieldName="责任医生">
+		<rule>
+			<type>user:[dataSource,{body.family.familyOrgCode}]</type>		
+		</rule>
+	</check>
+	<check field="body.family.familyAddrCode" fieldName="家庭地址编码">
+		<rule>
+			<type>masterdata:[dataSource,WJD01.004]</type>		
+		</rule>
+	</check>
+	<check field="body.family.housingCode" fieldName="房屋类型">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.008]</type>		
+		</rule>
+	</check>
+	<check field="body.family.kitchenCode" fieldName="厨房">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.009]</type>		
+		</rule>
+	</check>
+	<check field="body.family.kitchenVentCode" fieldName="厨房排风设施">
+		<rule>
+			<type>dic:[dataSource,CV03.00.302]</type>		
+		</rule>
+	</check>
+	<check field="body.family.familyProCode" fieldName="家庭属性代码">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.010]</type>		
+		</rule>
+	</check>
+	<check field="body.family.waterCode" fieldName="饮水">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.011]</type>		
+		</rule>
+	</check>
+	<check field="body.family.fuelCode" fieldName="燃料">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.012]</type>		
+		</rule>
+	</check>
+	<check field="body.family.toiletsType" fieldName="家庭卫生厕所">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.013]</type>		
+		</rule>
+	</check>
+	<check field="body.family.livestockCode" fieldName="禽畜栏位置代码">
+		<rule>
+			<type>dic:[dataSource,DE03.00.049.00]</type>		
+		</rule>
+	</check>
+	<check field="body.family.elecDeviceCode" fieldName="家用电器代码">
+		<rule>
+			<type>dic:[dataSource,EXV00.00.009]</type>		
+		</rule>
+	</check>
+	<check field="body.family.vehicleCode" fieldName="交通工具">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.014]</type>		
+		</rule>
+	</check>
+	<check field="body.family.econStatusCode" fieldName="经济状况">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.015]</type>		
+		</rule>
+	</check>
+	<check field="body.family.perMonthIncomeCode" fieldName="人均月收入">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.016]</type>		
+		</rule>
+	</check>
+	<check field="body.family.garDisposalCode" fieldName="垃圾处理">
+		<rule>
+			<type>dic:[dataSource,EXV00.00.008]</type>		
+		</rule>
+	</check>
+	<check field="body.family.sewageDiposalCode" fieldName="污水处理">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.017]</type>		
+		</rule>
+	</check>
+	<check field="body.family.cultSportCode" fieldName="文体设备 ">
+		<rule>
+			<type>dicList:[dataSource,JXV00.00.018]</type>		
+		</rule>
+	</check>
+	<check field="body.family.fileDoctorCode" fieldName="建档医生">
+		<rule>
+			<type>user:[dataSource,{body.family.familyOrgCode}]</type>		
+		</rule>
+	</check>
+	<check field="body.family.inputUserCode" fieldName="登 记 人">
+		<rule>
+			<type>user:[dataSource,{body.family.familyOrgCode}]</type>		
+		</rule>
+	</check>
+	<check field="body.family.familyTypeCode" fieldName="家庭类型代码">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.019]</type>		
+		</rule>
+	</check>
+
+	<check field="body.family.members.familyMemberList.householdCode" fieldName="家庭成员与户主关系代码">
+		<rule>
+			<type>dic:[dataSource,GB/T4761]</type>		
+		</rule>
+	</check>
+	<check field="body.family.members.familyMemberList.idcardType" fieldName="家庭成员身份证件类别代码">
+		<rule>
+			<type>dic:[dataSource,CV02.01.101]</type>		
+		</rule>
+	</check>
+	<check field="body.family.members.familyMemberList.sex" fieldName="家庭成员性别代码">
+		<rule>
+			<type>dic:[dataSource,GB/T2261.1]</type>		
+		</rule>
+	</check>
+	<check field="body.family.members.familyMemberList.educationDegree" fieldName="家庭成员文化程度代码">
+		<rule>
+			<type>dic:[dataSource,GB/T4658]</type>		
+		</rule>
+	</check>
+	<check field="body.family.members.familyMemberList.careerCode" fieldName="家庭成员职业代码">
+		<rule>
+			<type>dic:[dataSource,GB/T6565]</type>		
+		</rule>
+	</check>
+	<check field="body.family.members.familyMemberList.marriageCode" fieldName="家庭成员婚姻代码">
+		<rule>
+			<type>dic:[dataSource,GB/T2261.2]</type>		
+		</rule>
+	</check>
+	<check field="body.family.members.familyMemberList.state" fieldName="家庭成员个人状态代码">
+		<rule>
+			<type>dic:[dataSource,JXV00.00.020]</type>		
+		</rule>
+	</check>
+</checks>

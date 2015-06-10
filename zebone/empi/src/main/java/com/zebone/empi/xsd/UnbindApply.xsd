@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="request">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="orgCode"/>
+                <xs:element ref="name"/>
+                <xs:element ref="sex"/>
+                <xs:element ref="birthday"/>
+                <xs:element ref="photo"/>
+                <xs:element ref="nation"/>
+                <xs:element ref="permanent_address"/>
+                <xs:element ref="first_cardNo"/>
+                <xs:element ref="first_cardType"/>
+                <xs:element ref="sec_cardNo"/>
+                <xs:element ref="sec_cardType"/>
+                <xs:element ref="sec_cardOrg"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="orgCode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="22" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="name">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="50" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="sex">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:length value="1" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="birthday">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1"/>
+                <xs:maxLength value="8" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="photo">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="nation">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:length value="2" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="permanent_address">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1"/>
+                <xs:maxLength value="70" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="first_cardType">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="first_cardNo">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="sec_cardType">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="sec_cardNo">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="sec_cardOrg">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+</xs:schema>

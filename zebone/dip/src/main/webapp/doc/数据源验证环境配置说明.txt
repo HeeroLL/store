@@ -1,0 +1,14 @@
+中心数据库  【CENTRE_TEST】 
+
+用户名：centre_test   密码：centre_test
+
+牛塘卫生院【NL_TEST】
+用户名:nl_test  密码：nl_test
+
+湟里卫生院【HUANGL_TEST】
+用户名：huangl_test  密码：huangl_test
+
+横林卫生院【HENGL_TEST 】
+
+用户名：hengl_test    密码：hengl_test
+

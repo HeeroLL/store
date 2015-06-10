@@ -1,0 +1,71 @@
+a:link, a:visited {
+    color: #333333;
+    text-decoration: none;
+}
+a:hover,a:active{
+	color: #0B99FF;
+    text-decoration: underline;
+}
+.topbar{
+	background: url("../img/bar.png") repeat-x scroll 0 0 transparent;
+    height: 21px;
+}
+.logo{
+    background: url("../img/icons/Web Browser.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    display: block;
+    float: left;
+    font-weight: bold;
+    height: 16px;
+    line-height: 16px;
+    margin: 0 10px;
+    padding: 0 0 0 16px;
+}
+.info{
+	float:right;
+}
+.toplink{
+	float:right;
+}
+.toplink .home{
+    background: url("../img/icons/home.png") no-repeat scroll 0 0;
+    display: block;
+    height: 16px;
+    line-height: 16px;
+    margin: 0 15px;
+    padding-left: 16px;
+}
+.basic_info{
+	height:81px;
+	background: url("../img/head.png") no-repeat scroll 0 0 #c3def3;
+	margin-top: -10px;
+}
+.tabpanel{
+	height:100%;
+	position:relative;
+}
+.tabbar_left{
+	width:28px;
+	border-color: #99BCE8;
+    border-style: solid;
+    border-width: 0 0 1px 1px ;
+	height:100%;
+	position: absolute;left:0;top:0;
+}
+
+.tabBody{
+	width:222px;height:100%;
+	position: absolute;left:28px;top:0;
+	border-top:0;
+}
+.mainpanel{
+	height:100%;
+}
+.detail{
+	background: url("../img/icons/down.png") no-repeat scroll right 1px transparent;
+    padding-right: 16px;
+}
+.container .detail{
+	position: absolute;
+    right: 20px;
+    top: 12px;
+}

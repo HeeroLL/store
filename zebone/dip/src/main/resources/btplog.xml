@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<log>
+	<!-- 程序会通过id+method作为获得日志节点的key，method可以为空 -->
+	<!-- 通过这个key同样可以在btplog.keywords.properties文件中定义每个操作的描述，系统会自动记录到数据库中（定义时增加在前面增加 log. ） -->
+	<!--
+		class:			日志元素的根节点
+		id:				指定实现类的类名（包名+类名）
+		method:			即哪个方法需要记录日志
+		modelId:		业务方法所属模块id
+		opflag:			操作标识（1、新增 2、修改 3、删除 4、查询）
+		paramIndex:		需要记录到数据库中若干属性所属对象所在方法参数的索引(即该参数是方法的第几个参数，从0计数)，默认值0，不必填
+		serviceId:		标示业务id的字段名，通常是主键
+
+		updateBeanId：	(修改专用，其他情况不必填)标示通过哪个spring的bean可以调用查询获得修改以前的值
+		updateMethod：	(修改专用，其他情况不必填)调用查询的方法名
+	-->
+	<!--
+		field:		需要记录信息的字段元素
+		name：		字段名
+	-->
+	<class id="com.zebone.btp.app.role.service.impl.RoleServiceImpl" method="updateById" modelId="1002"
+		opflag="2" paramIndex="0" serviceId="roleId"
+		updateBeanId="roleService" updateMethod="findById">
+		<field name="name" />
+		<field name="updateTime" />
+	</class>
+
+	<class id="com.zebone.btp.app.role.service.impl.RoleServiceImpl" method="insert" modelId="1002" opflag="1"
+		serviceId="roleId">
+		<field name="name" />
+		<field name="isPublicRole" />
+		<field name="creatorId" />
+		<field name="updateTime" />
+	</class>
+
+	<!-- 字典管理 start -->
+	<class id="com.zebone.btp.app.dict.service.impl.DictionaryServiceImpl" method="insertDictionary" modelId="4490cde795c04029826f0cdc92e25150" serviceId="dictId" opflag="1">
+		<field name="dictName"></field>
+		<field name="dictCode"></field>
+		<field name="remark"></field>
+	</class>
+
+	<class id="com.zebone.btp.app.dict.service.impl.DictionaryServiceImpl" method="updateDictionary" modelId="4490cde795c04029826f0cdc92e25150" serviceId="dictId" opflag="2"
+		updateBeanId="dictionaryService" updateMethod="getDictionaryById">
+		<field name="dictName"></field>
+		<field name="dictCode"></field>
+		<field name="remark"></field>
+	</class>
+
+	<class id="com.zebone.btp.app.dict.service.impl.DictionaryServiceImpl" method="deleteDictionary" modelId="4490cde795c04029826f0cdc92e25150" opflag="3">
+	</class>
+
+	<class id="com.zebone.btp.app.dict.service.impl.DictionaryTypeServiceImpl" method="insertDictionaryType" modelId="4490cde795c04029826f0cdc92e25150" serviceId="typeId" opflag="1">
+		<field name="typeName"></field>
+		<field name="typeCode"></field>
+		<field name="remark"></field>
+		<field name="parentId"></field>
+	</class>
+
+	<class id="com.zebone.btp.app.dict.service.impl.DictionaryTypeServiceImpl" method="updateDictionaryType" modelId="4490cde795c04029826f0cdc92e25150" serviceId="typeId" opflag="2"
+		updateBeanId="dictionaryTypeService" updateMethod="getDictionaryTypeById">
+		<field name="typeName"></field>
+		<field name="typeCode"></field>
+		<field name="remark"></field>
+		<field name="parentId"></field>
+	</class>
+
+	<class id="com.zebone.btp.app.dict.service.impl.DictionaryTypeServiceImpl" method="deleteDictionaryType" modelId="4490cde795c04029826f0cdc92e25150" opflag="3">
+	</class>
+	<!-- 字典管理 end -->
+
+		<!-- 医疗人员start -->
+	<class id="com.zebone.btp.app.personnel.service.impl.PersonnelServiceImpl" method="savePersonnel" modelId="d09845911cdf4726a4ea0bc88bb77994" opflag="1"
+		serviceId="personnelId">
+		<field name="personnelId" />
+		<field name="fullname" />
+		<field name="fullnamePinyin" />
+		<field name="fullnameJianpin" />
+		<field name="alias" />
+		<field name="sex" />
+		<field name="nation" />
+		<field name="nativePlace" />
+		<field name="birthday" />
+		<field name="jobTitle" />
+		<field name="education" />
+		<field name="politicalStatus" />
+		<field name="address" />
+		<field name="email" />
+		<field name="phone" />
+		<field name="mobile" />
+		<field name="isMobileHide" />
+		<field name="qq" />
+		<field name="status" />
+		<field name="creatorId" />
+		<field name="createTime" />
+		<field name="updateTime" />
+		<field name="operatorId" />
+		<field name="loginName" />
+		<field name="password" />
+		<field name="isAccountEnable" />
+		<field name="enableDate" />
+		<field name="disableDate" />
+	</class>
+
+	<class id="com.zebone.btp.app.personnel.service.impl.PersonnelServiceImpl" method="updatePersonnel" modelId="d09845911cdf4726a4ea0bc88bb77994"
+		opflag="2" paramIndex="0" serviceId="personnelId"
+		updateBeanId="personnelService" updateMethod="getPersonnelInfoOnly">
+		<field name="personnelId" />
+		<field name="fullname" />
+		<field name="fullnamePinyin" />
+		<field name="fullnameJianpin" />
+		<field name="alias" />
+		<field name="sex" />
+		<field name="nation" />
+		<field name="nativePlace" />
+		<field name="birthday" />
+		<field name="jobTitle" />
+		<field name="education" />
+		<field name="politicalStatus" />
+		<field name="address" />
+		<field name="email" />
+		<field name="phone" />
+		<field name="mobile" />
+		<field name="isMobileHide" />
+		<field name="qq" />
+		<field name="status" />
+		<field name="updateTime" />
+		<field name="operatorId" />
+		<field name="loginName" />
+		<field name="password" />
+		<field name="isAccountEnable" />
+		<field name="enableDate" />
+		<field name="disableDate" />
+	</class>
+	<!-- 删除工作人员 -->
+	<class id="com.zebone.btp.app.personnel.service.impl.PersonnelServiceImpl" method="deletePersonnel" modelId="d09845911cdf4726a4ea0bc88bb77994"  opflag="3">
+	</class>
+	<!-- 账号停用启用 -->
+	<class id="com.zebone.btp.app.personnel.service.impl.PersonnelServiceImpl" method="isAccountEnableModify" modelId="d09845911cdf4726a4ea0bc88bb77994" opflag="2" >
+	</class>
+	<!-- 密码初始化 -->
+	<class id="com.zebone.btp.app.personnel.service.impl.PersonnelServiceImpl" method="passwordInitialization" modelId="d09845911cdf4726a4ea0bc88bb77994" opflag="2"  >
+	</class>
+	<!-- 医疗人员end -->
+
+	<!-- 模块管理与模块授权start -->
+	<class id="com.zebone.btp.app.module.service.impl.BtpModuleServiceImpl" method="saveBtpModuleInfo" modelId="d47a769b61bc48ef98a70d3a97a2d82b"
+		opflag="1" serviceId="moduleId">
+		<field name="moduleName"/>
+		<field name="url"/>
+		<field name="maxicon"/>
+		<field name="minicon"/>
+		<field name="remark"/>
+		<field name="isSys"/>
+	</class>
+	<class id="com.zebone.btp.app.module.service.impl.BtpModuleServiceImpl" method="updateBtpModuleInfo" modelId="d47a769b61bc48ef98a70d3a97a2d82b"
+		opflag="2" serviceId="moduleId"
+		updateBeanId="btpModuleService" updateMethod="getBtpModuleById">
+		<field name="moduleName"/>
+		<field name="url"/>
+		<field name="maxicon"/>
+		<field name="minicon"/>
+		<field name="remark"/>
+		<field name="isSys"/>
+	</class>
+	<class id="com.zebone.btp.app.module.service.impl.BtpModuleServiceImpl" method="removeModuleInfo" modelId="d47a769b61bc48ef98a70d3a97a2d82b" opflag="3">
+		<field name="moduleId"/>
+	</class>
+	<class id="com.zebone.btp.app.authorize.service.impl.AuthorizeServiceImpl" method="saveBtpModuleMho" modelId="7aef23cfef9d4f66a8bb7d4fbfb4fba8"
+		opflag="1" serviceId="mhoId">
+		<field name="moduleId"/>
+	</class>
+	<class id="com.zebone.btp.app.authorize.service.impl.AuthorizeServiceImpl" method="saveBtpRoleModuleR" modelId="9107e21dcdd4444f8aea737db9e3b128"
+		opflag="1" serviceId="roleId">
+		<field name="moduleId"/>
+	</class>
+	<!-- 模块管理与模块授权end -->
+	
+		<!-- 医疗机构-->
+  <class id="mhoService" method="updateById" modelId="0f6aa7fef6154d1cb76200e7cc071add"
+		opflag="2" paramIndex="0" serviceId="roleId"
+		updateBeanId="mhoService" updateMethod="findById">
+		<field name="mhoName" />
+		<field name="typeCode" />
+		<field name="isNcms" />
+		<field name="isDesignatedHospital" />
+		<field name="manager" />
+		<field name="phone" />
+		<field name="address" />
+		<field name="remark" />
+		<field name="updateTime" />
+		<field name="operatorId" />
+	</class>
+	
+	<class id="mhoService" method="insert" modelId="0f6aa7fef6154d1cb76200e7cc071add" opflag="1"
+		serviceId="mhoId">
+		<field name="mhoId" />
+		<field name="mhoCode" />
+		<field name="levelCode" />
+		<field name="parentId" />
+		<field name="mhoName" />
+		<field name="typeCode" />
+		<field name="isNcms" />
+		<field name="isDesignatedHospital" />
+		<field name="manager" />
+		<field name="phone" />
+		<field name="address" />
+		<field name="remark" />
+		<field name="creatorId" />
+		<field name="createTime" />
+	</class>
+
+	<class id="mhoService" method="deleteById" modelId="0f6aa7fef6154d1cb76200e7cc071add"  opflag="3">
+	</class>
+	<!-- 医疗机构管理 -->
+	
+</log>

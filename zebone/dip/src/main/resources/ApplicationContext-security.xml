@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<!--
+		负责在系统启动的时候装载安全配置信息
+	 -->
+	<bean id="chainDefinitionSectionMetaSource" class="com.zebone.btp.security.ChainDefinitionSectionMetaSource">
+		<!-- 原则上不需要配置这个属性，因为这些过滤器配置会从数据库中得到，这里的配置会和数据里面的安全配置追加到一起。 -->
+		<property name="filterChainDefinitions">
+			<value>
+				/**/sso/** = anon <!-- sso链接都无需shiro认证 -->
+				/ssoLogin.zb = anon <!-- sso登录无需shiro认证 -->
+				/login.zb = anon
+				/home.zb = authc
+				/logout.zb = anon
+				#/file/** = anon
+				/securityTest.zb = roles[admin]
+				/**/*.zb = authc
+				/ws/resourceData = anon
+        </value>
+		</property>
+	</bean>
+
+	<bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- shiro的核心安全接口 -->
+		<property name="securityManager" ref="securityManager" />
+		<!-- 要求登录时的链接 -->
+		<property name="loginUrl" value="/login.zb" />
+		<!-- 登陆成功后要跳转的连接 -->
+		<property name="successUrl" value="/home.zb" />
+		<!-- 未授权时要跳转的连接 -->
+		<property name="unauthorizedUrl" value="/unauthorized.jsp" />
+		<property name="filters">
+			<util:map>
+				<entry key="authc">
+					<bean
+						class="org.apache.shiro.web.filter.authc.PassThruAuthenticationFilter" />
+				</entry>
+			</util:map>
+		</property>
+		<property name="filterChainDefinitionMap" ref="chainDefinitionSectionMetaSource" />
+	</bean>
+	<!--
+		SecurityManager是Shiro架构核心，负责协调内部的安全组件工作。
+ 	-->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="shiroDataBaseRealm"/>
+		<property name="sessionManager" ref="sessionManager"/>
+	</bean>
+
+	<!--
+		负责取得授权信息和认证信息的类
+	-->
+	<bean id="shiroDataBaseRealm" class="com.zebone.btp.security.ShiroDataBaseRealm">
+		<!-- 如果是基于服务器端单点登录的话，这边密码不需加密，因为客户端系统导入给服务端系统的密码即为密文
+		<property name="credentialsMatcher">
+			密码是使用MD5加密，在验证密码时要将用户录入的密码进行MD5加密后在比较。
+			<bean class="org.apache.shiro.authc.credential.Md5CredentialsMatcher"/>
+		</property>
+		-->
+	</bean>
+	<!-- SessionManager负责创建及管理用户Session生命周期 -->
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<!--
+			Session失效时间设置。单位是毫秒 。如果不设置此值，那么默认为30分钟
+			<property name="globalSessionTimeout" value="600000"/>
+		-->
+		<property name="sessionDAO">
+			<!-- 使用本地Session模式，不使用web容器来管理session -->
+			<bean class="org.apache.shiro.session.mgt.eis.MemorySessionDAO"/>
+		</property>
+	</bean>
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+</beans>

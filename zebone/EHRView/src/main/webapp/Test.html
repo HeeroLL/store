@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="resources/js/jquery/jquery-1.6.1.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var nowDate = new Date();
+		var birthday = "19880804";
+		
+		var year = birthday.substring(0,4);
+		var month = birthday.substring(4,6);
+		var day = birthday.substring(6,8);
+		//alert(year+":"+month+":"+day);
+		var myBirthday = new Date(year, month, day);
+		
+
+		var milli=nowDate-myBirthday;
+		var milliPerYear=1000*60*60*24*365.26;
+		
+		var dayNew = new Date(milliPerYear);
+		
+		var yearFractional = milli/milliPerYear;
+		var ceilYear = Math.ceil(yearFractional);
+		
+		var periodDay1 = myBirthday.getTime()+milliPerYear*5;
+		var tempDay1 = new Date(periodDay1);
+		
+		alert(tempDay1.getFullYear());
+		//alert(dayNew);
+		//alert(ceilYear);
+		
+		//alert(fillZero(1));
+		
+	})
+	
+	function fillZero(foo){
+		if(foo.toString().length==1){
+			return "0"+foo;
+		}
+	}
+</script>
+</head>
+<body>
+
+</body>
+</html>

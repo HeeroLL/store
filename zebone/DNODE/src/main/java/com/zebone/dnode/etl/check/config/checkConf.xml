@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<verifyConf>
+    <verify>
+        <table name="O_TBL_PSON_ALLERGY_HT">
+            <column name="ALLERGEN_CODE">
+                <!--正则表达式校验规则，type为RegexCheck,参数为正则表达式-->
+                <check type="RegexCheck" param=".*"/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_DISABILITY_HT">
+            <column name="DISABILITY_CODE">
+                <!--正则表达式校验规则，type为RegexCheck,参数为正则表达式-->
+                <check type="RegexCheck" param=".*"/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_DISEASES_OPE_HT">
+            <column name="DIESEASE_TYPE_CODE">
+                <!--正则表达式校验规则，type为RegexCheck,参数为正则表达式-->
+                <check type="RegexCheck" param=".*"/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_EXPOSURE_HT">
+            <column name="EXPOSURE_TYPE_CODE">
+                <!--正则表达式校验规则，type为RegexCheck,参数为正则表达式-->
+                <check type="RegexCheck" param=".*"/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_GENETIC_HT">
+            <column name="GENETIC_HISTORY_DESC">
+                <!--正则表达式校验规则，type为RegexCheck,参数为正则表达式-->
+                <check type="RegexCheck" param=".*"/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_HEALTH_RECORD">
+            <column name="CARD_TYPE_CODE">
+                <!--正则表达式校验规则，type为RegexCheck,参数为正则表达式-->
+                <check type="RegexCheck" param=".*"/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_LIFE_ENV">
+            <column name="EXHAUST_VENT_CODE">
+                <!--正则表达式校验规则，type为RegexCheck,参数为正则表达式-->
+                <check type="RegexCheck" param=".*"/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_RTUM_HT">
+            <column name="RTUM_NAME">
+                <!--正则表达式校验规则，type为RegexCheck,参数为正则表达式-->
+                <check type="RegexCheck" param=".*"/>
+            </column>
+        </table>
+        <table name="O_TBL_PSON_TRANSFUSION_HT">
+            <column name="TRANSFUSION_CAUSE">
+                <!--正则表达式校验规则，type为RegexCheck,参数为正则表达式-->
+                <check type="RegexCheck" param=".*"/>
+            </column>
+        </table>
+        
+        <table name="O_TBL_PSON_FAMILY_HT">
+            <column name="RELATIONSHIP_CODE">
+                <!--正则表达式校验规则，type为RegexCheck,参数为正则表达式-->
+                <check type="RegexCheck" param=".*"/>
+            </column>
+        </table>
+        
+        
+    </verify>
+</verifyConf>

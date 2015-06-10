@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<specialDocumentList>
+   <item>
+   	   <code>11</code>
+   	   <name>高血压</name>
+       <time>2012-10-1</time>
+       <org>卫生院</org>
+   </item>
+   <item>
+       <code>12</code>
+       <name>糖尿病</name>
+       <time>2012-10-1</time>
+       <org>卫生院</org>
+   </item>
+</specialDocumentList>

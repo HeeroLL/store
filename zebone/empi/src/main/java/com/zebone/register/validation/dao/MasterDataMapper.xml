@@ -1,0 +1,40 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.validation.mapper.MasterDataMapper">
+    
+    <!-- 根据字典类型id获取字典信息 -->
+	<select id="getDicByDicTypeId" resultType="dicValue">
+		SELECT 
+			DICT_NAME AS dicName,
+			DICT_CODE AS dicCode
+		FROM P_DICTIONARY 
+		WHERE 
+		DICTTYPE_ID = #{dicTypeId}
+	</select>
+	
+	<!-- 根据字典类型id获取字典类型信息-->
+	<select id="getDicTypeByTypeId" resultType="dicType">
+		SELECT 
+			TYPE_NAME AS typeName
+		FROM P_DICTIONARY_TYPE 
+		WHERE 
+		TYPE_ID = #{typeId}
+	</select>
+	
+	<!-- 根据主键获取主数据所在的表 -->
+	<select id="getTableFieldById" resultType="masterData">
+	   SELECT TABLE_NAME AS tableName 
+       FROM  
+       	   P_MASTER_DATA 
+       WHERE 
+       	   ID_ = #{id}
+	</select>
+	
+	
+	<!-- 检查主数据中是有该值 -->
+	<select id="getMasterCheck" resultType="int">
+		SELECT COUNT(*) FROM ${tableName}
+		WHERE ${tableField} = #{fieldValue}
+	</select> 
+	
+	
+</mapper>

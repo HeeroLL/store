@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.mho.dao.MhoMapper">
+	<resultMap id="MhoResultMap" type="com.zebone.btp.app.mho.vo.Mho">
+		<id column="MHO_ID" property="mhoId" jdbcType="VARCHAR"/>
+		<result column="MHO_NAME" property="mhoName" jdbcType="VARCHAR"/>
+		<result column="MHO_CODE" property="mhoCode" jdbcType="VARCHAR"/>
+		<result column="LEVEL_CODE" property="levelCode" jdbcType="VARCHAR"/>
+		<result column="PARENT_ID" property="parentId" jdbcType="VARCHAR"/>
+		<result column="PARENT_NAME" property="parentName" jdbcType="VARCHAR"/>
+		<result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+		<result column="AREA" property="area" jdbcType="VARCHAR"/>
+		<result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+		<result column="TYPE_CODE" property="typeCode" jdbcType="VARCHAR"/>
+		<result column="ORDER_NO" property="orderNo" jdbcType="DECIMAL"/>
+		<result column="MANAGER" property="manager" jdbcType="VARCHAR"/>
+		<result column="IS_DELETED" property="isDeleted" jdbcType="DECIMAL"/>
+		<result column="CATEGORY" property="category" jdbcType="VARCHAR"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="HOSPITAL_NATURE" property="hospitalNature" jdbcType="VARCHAR"/>
+		<result column="HOSPITAL_GRADE" property="hospitalGrade" jdbcType="VARCHAR"/>
+		<result column="HOSPITAL_TYPE" property="hospitalType" jdbcType="VARCHAR"/>
+		<result column="IS_DESIGNATED_HOSPITAL" property="isDesignatedHospital" jdbcType="DECIMAL"/>
+		<result column="IS_NCMS" property="isNcms" jdbcType="DECIMAL"/>
+		<result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR"/>
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="OPERATOR_ID" property="operatorId" jdbcType="VARCHAR"/>
+		<result column="POST" property="post" jdbcType="VARCHAR"/>
+		<result column="WEBSITE" property="website" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		MHO_ID, MHO_NAME, MHO_CODE, LEVEL_CODE, PARENT_ID, ADDRESS, AREA, PHONE, TYPE_CODE, 
+		ORDER_NO, MANAGER, IS_DELETED, REMARK, HOSPITAL_NATURE, HOSPITAL_GRADE, 
+		HOSPITAL_TYPE, IS_DESIGNATED_HOSPITAL, IS_NCMS, CREATOR_ID, CREATE_TIME, UPDATE_TIME, 
+		OPERATOR_ID, POST, WEBSITE
+	</sql>
+	<sql id="column_list1">
+       a.mho_id,a.parent_id,a.level_code,a.mho_name,b.mho_name as parentName,a.type_code,a.hospital_nature,a.hospital_grade
+	</sql>
+	<select id="findMaxLevelCode" resultType="String" parameterType="java.lang.String">
+		select 
+		max(a.LEVEL_CODE)
+		from BTP_MHO a
+		where a.IS_DELETED = 0 and a.PARENT_ID =#{parentId,jdbcType=VARCHAR} 
+	</select>
+
+	<select id="findLevelCodeByMid" resultType="String" parameterType="java.lang.String">
+		select 
+		a.LEVEL_CODE
+		from BTP_MHO a
+		where a.IS_DELETED = 0 and a.MHO_ID = #{mhoId,jdbcType=VARCHAR}
+	</select>
+	<select id="findLevelCodeByMhoId" resultType="String" parameterType="java.lang.String">
+		select 
+		a.LEVEL_CODE
+		from BTP_MHO a
+		where a.IS_DELETED = 0 and a.MHO_ID = #{mhoId,jdbcType=VARCHAR}
+	</select>
+    <select id="findMhoName" resultType="String" parameterType="java.lang.String">
+		select 
+		a.MHO_NAME
+		from BTP_MHO a
+		where a.IS_DELETED = 0 and a.MHO_Name = #{mhoName,jdbcType=VARCHAR}
+	</select>
+	<select id="findAllMhoInfo" resultMap="MhoResultMap">
+		select t.MHO_ID, t.PARENT_ID,t.MHO_NAME,t.LEVEL_CODE 
+		from   BTP_MHO t 
+		where  t.IS_DELETED = 0 and t.LEVEL_CODE LIKE '%'|| #{levelCode,jdbcType=VARCHAR}||'%' order by t.ORDER_NO,t.MHO_NAME 
+	</select>
+	<select id="findLevelCodeByPid" resultMap="MhoResultMap" parameterType="java.lang.String">
+		select 
+		a.LEVEL_CODE
+		from BTP_MHO a
+		where a.IS_DELETED = 0 and a.PARENT_ID = #{parentId,jdbcType=VARCHAR}
+	</select>
+	<select id="findMhoByParentId" resultMap="MhoResultMap" parameterType="java.lang.String">
+		select 
+		a.MHO_ID
+		from BTP_MHO a
+		where a.IS_DELETED = 0 and a.PARENT_ID = #{parentId,jdbcType=VARCHAR}
+	</select>
+	<select id="findMhoCodeById" resultMap="MhoResultMap" parameterType="java.lang.String">
+		select 
+		a.MHO_CODE
+		from BTP_MHO a
+		where a.PARENT_ID = #{parentId,jdbcType=VARCHAR}
+	</select>
+		<select id="findByLevelCode" resultMap="MhoResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_MHO a
+		where a.IS_DELETED = 0 and a.LEVEL_CODE LIKE '%'|| #{levelCode,jdbcType=VARCHAR}||'%'
+	</select>
+	
+	<select id="queryMhoList" resultMap="MhoResultMap" parameterType="com.zebone.btp.app.mho.vo.Mho">
+		select 
+		<include refid="column_list1"/>
+		from BTP_MHO a,BTP_MHO b
+			<where>
+			a.IS_DELETED = 0 and a.PARENT_ID=b.MHO_ID
+			<if test="mhoName !='' and mhoName !=null">
+				and a.MHO_NAME like '%' || #{mhoName,jdbcType=VARCHAR} || '%'
+			</if>
+            <if test="levelCode !='' and levelCode !=null">
+				and a.LEVEL_CODE like '%' || #{levelCode,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="typeCode !='' and typeCode !=null">
+				and a.TYPE_CODE =#{typeCode,jdbcType=VARCHAR} 
+			</if>
+			<if test="mhoId !='' and mhoId !=null">
+				and a.PARENT_ID =#{mhoId,jdbcType=VARCHAR} 
+			</if>
+
+		</where>
+	</select>
+	<select id="queryMhoCount" resultType="int" parameterType="com.zebone.btp.app.mho.vo.Mho" >
+		select count(a.MHO_ID)
+		from BTP_MHO a,BTP_MHO b 
+		<where>
+			a.IS_DELETED = 0 and a.PARENT_ID=b.MHO_ID
+			<if test="mhoName !='' and mhoName !=null">
+				and a.MHO_NAME like '%' || #{mhoName,jdbcType=VARCHAR} || '%'
+			</if>
+            <if test="levelCode !='' and levelCode !=null">
+				and a.LEVEL_CODE =#{levelCode,jdbcType=VARCHAR} 
+			</if>
+			<if test="typeCode !='' and typeCode !=null">
+				and a.TYPE_CODE =#{typeCode,jdbcType=VARCHAR} 
+			</if>
+			<if test="mhoId !='' and mhoId !=null">
+				and a.PARENT_ID =#{mhoId,jdbcType=VARCHAR} 
+			</if>
+
+		</where>
+	</select>
+	<!-- 根据人员id，得到此人员所属的医疗机构 -->
+	<select id="getMhoByPersonnelId" parameterType="string" resultMap="MhoResultMap">
+		SELECT
+		    mho.*
+		FROM
+		    BTP_MHO mho
+		JOIN
+		    BTP_PERSONNEL_MHO_R r
+		ON
+		    mho.MHO_ID = r.MHO_ID
+		WHERE
+		    r.PERSONNEL_ID = #{personnelId,jdbcType=VARCHAR}
+		AND mho.IS_DELETED = 0
+	</select>
+	
+	<select id="findById" resultMap="MhoResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_MHO
+		where MHO_ID = #{mhoId,jdbcType=VARCHAR}
+	</select>
+	<update id="deleteById" parameterType="java.lang.String">
+		update BTP_MHO t set t.IS_DELETED = 1 
+		where t.MHO_ID = #{mhoId,jdbcType=VARCHAR}
+	</update>
+	<insert id="insert" parameterType="com.zebone.btp.app.mho.vo.Mho">
+		insert into BTP_MHO
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="mhoId != null">
+				MHO_ID,
+			</if>
+			<if test="mhoName != null">
+				MHO_NAME,
+			</if>
+			<if test="mhoCode != null">
+				MHO_CODE,
+			</if>
+			<if test="levelCode != null">
+				LEVEL_CODE,
+			</if>
+			<if test="parentId != null">
+				PARENT_ID,
+			</if>
+			<if test="address != null">
+				ADDRESS,
+			</if>
+			<if test="area != null">
+				AREA,
+			</if>
+			<if test="phone != null">
+				PHONE,
+			</if>
+			<if test="typeCode != null">
+				TYPE_CODE,
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO,
+			</if>
+			<if test="manager != null">
+				MANAGER,
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+			<if test="hospitalNature != null">
+				HOSPITAL_NATURE,
+			</if>
+			<if test="hospitalGrade != null">
+				HOSPITAL_GRADE,
+			</if>
+			<if test="hospitalType != null">
+				HOSPITAL_TYPE,
+			</if>
+			<if test="isDesignatedHospital != null">
+				IS_DESIGNATED_HOSPITAL,
+			</if>
+			<if test="isNcms != null">
+				IS_NCMS,
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME,
+			</if>
+			<if test="operatorId != null">
+				OPERATOR_ID,
+			</if>
+			<if test="post != null">
+				POST,
+			</if>
+			<if test="website != null">
+				WEBSITE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="mhoId != null">
+				#{mhoId,jdbcType=VARCHAR},
+			</if>
+			<if test="mhoName != null">
+				#{mhoName,jdbcType=VARCHAR},
+			</if>
+			<if test="mhoCode != null">
+				#{mhoCode,jdbcType=VARCHAR},
+			</if>
+			<if test="levelCode != null">
+				#{levelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="area != null">
+				#{area,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="typeCode != null">
+				#{typeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo,jdbcType=DECIMAL},
+			</if>
+			<if test="manager != null">
+				#{manager,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="hospitalNature != null">
+				#{hospitalNature,jdbcType=VARCHAR},
+			</if>
+			<if test="hospitalGrade != null">
+				#{hospitalGrade,jdbcType=VARCHAR},
+			</if>
+			<if test="hospitalType != null">
+				#{hospitalType,jdbcType=VARCHAR},
+			</if>
+			<if test="isDesignatedHospital != null">
+				#{isDesignatedHospital,jdbcType=DECIMAL},
+			</if>
+			<if test="isNcms != null">
+				#{isNcms,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="operatorId != null">
+				#{operatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="post != null">
+				#{post,jdbcType=VARCHAR},
+			</if>
+			<if test="website != null">
+				#{website,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.btp.app.mho.vo.Mho">
+		update BTP_MHO
+		<set>
+			<if test="mhoName != null">
+				MHO_NAME = #{mhoName,jdbcType=VARCHAR},
+			</if>
+			<if test="mhoCode != null">
+				MHO_CODE = #{mhoCode,jdbcType=VARCHAR},
+			</if>
+			<if test="levelCode != null">
+				LEVEL_CODE = #{levelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				PARENT_ID = #{parentId,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				ADDRESS = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="area != null">
+				AREA = #{area,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="typeCode != null">
+				TYPE_CODE = #{typeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO = #{orderNo,jdbcType=DECIMAL},
+			</if>
+			<if test="manager != null">
+				MANAGER = #{manager,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="hospitalNature != null">
+				HOSPITAL_NATURE = #{hospitalNature,jdbcType=VARCHAR},
+			</if>
+			<if test="hospitalGrade != null">
+				HOSPITAL_GRADE = #{hospitalGrade,jdbcType=VARCHAR},
+			</if>
+			<if test="hospitalType != null">
+				HOSPITAL_TYPE = #{hospitalType,jdbcType=VARCHAR},
+			</if>
+			<if test="isDesignatedHospital != null">
+				IS_DESIGNATED_HOSPITAL = #{isDesignatedHospital,jdbcType=DECIMAL},
+			</if>
+			<if test="isNcms != null">
+				IS_NCMS = #{isNcms,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="operatorId != null">
+				OPERATOR_ID = #{operatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="post != null">
+				POST = #{post,jdbcType=VARCHAR},
+			</if>
+			<if test="website != null">
+				WEBSITE = #{website,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where MHO_ID = #{mhoId,jdbcType=VARCHAR}
+	</update>
+</mapper>

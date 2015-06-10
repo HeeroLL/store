@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.dictionary.dao.PDictValueMapper">
+	<resultMap id="PDictValueResultMap" type="com.zebone.dip.dictionary.vo.PDictValue">
+		<id column="VALUE_ID" property="valueId" jdbcType="VARCHAR"/>
+		<result column="DICT_NAME" property="dictName" jdbcType="VARCHAR"/>
+		<result column="DICT_CODE" property="dictCode" jdbcType="VARCHAR"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="DICTTYPE_ID" property="dicttypeId" jdbcType="VARCHAR"/>
+		<result column="DICT_ID" property="dictId" jdbcType="VARCHAR"/>
+		<result column="DICT_BASE_CODE" property="dictBaseCode" jdbcType="VARCHAR"/>
+		<result column="IS_DELETED" property="isDeleted" jdbcType="CHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		VALUE_ID, DICT_NAME, DICT_CODE, REMARK, DICTTYPE_ID, DICT_ID, DICT_BASE_CODE, IS_DELETED
+	</sql>
+	<select id="findById" resultMap="PDictValueResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from P_DICT_VALUE
+		where VALUE_ID = #{valueId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from P_DICT_VALUE
+		where VALUE_ID = #{valueId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.dictionary.vo.PDictValue">
+		insert into P_DICT_VALUE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="valueId != null">
+				VALUE_ID,
+			</if>
+			<if test="dictName != null">
+				DICT_NAME,
+			</if>
+			<if test="dictCode != null">
+				DICT_CODE,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+			<if test="dicttypeId != null">
+				DICTTYPE_ID,
+			</if>
+			<if test="dictId != null">
+				DICT_ID,
+			</if>
+			<if test="dictBaseCode != null">
+				DICT_BASE_CODE,
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="valueId != null">
+				#{valueId,jdbcType=VARCHAR},
+			</if>
+			<if test="dictName != null">
+				#{dictName,jdbcType=VARCHAR},
+			</if>
+			<if test="dictCode != null">
+				#{dictCode,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="dicttypeId != null">
+				#{dicttypeId,jdbcType=VARCHAR},
+			</if>
+			<if test="dictId != null">
+				#{dictId,jdbcType=VARCHAR},
+			</if>
+			<if test="dictBaseCode != null">
+				#{dictBaseCode,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=CHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.dip.dictionary.vo.PDictValue">
+		update P_DICT_VALUE
+		<set>
+			<if test="dictName != null">
+				DICT_NAME = #{dictName,jdbcType=VARCHAR},
+			</if>
+			<if test="dictCode != null">
+				DICT_CODE = #{dictCode,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="dicttypeId != null">
+				DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR},
+			</if>
+			<if test="dictId != null">
+				DICT_ID = #{dictId,jdbcType=VARCHAR},
+			</if>
+			<if test="dictBaseCode != null">
+				DICT_BASE_CODE = #{dictBaseCode,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{isDeleted,jdbcType=CHAR},
+			</if>
+		</set>
+		where VALUE_ID = #{valueId,jdbcType=VARCHAR}
+	</update>
+	<!-- 查询字典信息列表（不分页） -->
+	<select id="searchDictDsList" resultMap="PDictValueResultMap" parameterType="com.zebone.dip.dictionary.vo.PDictValue">
+		select 
+		<include refid="column_list" /> 
+		from P_DICT_VALUE
+		<where>
+			IS_DELETED = 0
+			and DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+			<if test="dictName!=null and dictName!=''">
+				and DICT_NAME like '%' || #{dictName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="dictCode!=null and dictCode!=''">
+				and DICT_CODE like '%' || #{dictCode,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>
+	</select>
+	<!-- 查询字典信息列表总数 -->	
+	<select id="searchDictDsCount" resultType="int" parameterType="com.zebone.dip.dictionary.vo.PDictValue">
+		select count (*)
+		from P_DICT_VALUE
+		<where>
+			IS_DELETED = 0
+			and DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+			<if test="dictName!=null and dictName!=''">
+				and DICT_NAME like '%' || #{dictName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="dictCode!=null and dictCode!=''">
+				and DICT_CODE like '%' || #{dictCode,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>		
+	</select>
+	<update id="removeDictDsByIds">
+		UPDATE P_DICT_VALUE SET IS_DELETED = '1' WHERE 
+		<foreach collection="list" item="item" index="index" separator="OR">
+			(VALUE_ID = #{item,jdbcType=VARCHAR})
+		</foreach>
+	</update>
+	<select id="getDictDsByDictTypeId" resultMap="PDictValueResultMap" parameterType="java.lang.String">
+		SELECT 
+		<include refid="column_list" />
+ 		FROM P_DICT_VALUE T 
+ 		WHERE T.IS_DELETED = '0' AND T.DICTTYPE_ID = #{dicttypeId,jdbcType=VARCHAR}
+	</select>
+</mapper>

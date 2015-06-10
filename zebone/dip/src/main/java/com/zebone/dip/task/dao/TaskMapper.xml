@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.task.dao.TaskMapper">
+	<resultMap id="PTaskResultMap" type="com.zebone.dip.task.vo.Task">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="TASK_CODE" property="taskCode" jdbcType="VARCHAR"/>
+		<result column="TASK_DESC" property="taskDesc" jdbcType="VARCHAR"/>
+		<result column="TASK_STATE" property="taskState" jdbcType="VARCHAR"/>
+		<result column="TASK_DEPLOY" property="taskDeploy" jdbcType="VARCHAR"/>
+		<result column="TASK_FREQ" property="taskFreq" jdbcType="VARCHAR"/>
+		<result column="TASK_TIME" property="taskTime" jdbcType="VARCHAR"/>
+		<result column="TASK_TYPE" property="taskType" jdbcType="VARCHAR"/>
+		<result column="TASK_NODE" property="taskNode" jdbcType="VARCHAR"/>
+		<result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR"/>
+		<result column="TASK_FREQ_SM" property="taskFreqSm" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		ID_, TASK_CODE, TASK_DESC, TASK_STATE, TASK_DEPLOY, TASK_FREQ, TASK_TIME, TASK_TYPE, 
+		TASK_NODE,TASK_FREQ_SM
+	</sql>
+	<insert id="insert" parameterType="com.zebone.dip.task.vo.Task">
+		insert into P_TASK
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_,
+			</if>
+			<if test="taskCode != null">
+				TASK_CODE,
+			</if>
+			<if test="taskDesc != null">
+				TASK_DESC,
+			</if>
+			<if test="taskState != null">
+				TASK_STATE,
+			</if>
+			<if test="taskDeploy != null">
+				TASK_DEPLOY,
+			</if>
+			<if test="taskFreq != null">
+				TASK_FREQ,
+			</if>
+			<if test="taskTime != null">
+				TASK_TIME,
+			</if>
+			<if test="taskType != null">
+				TASK_TYPE,
+			</if>
+			<if test="taskNode != null">
+				TASK_NODE,
+			</if>
+			<if test="taskFreqSm != null">
+				TASK_FREQ_SM,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="taskCode != null">
+				#{taskCode,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDesc != null">
+				#{taskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="taskState != null">
+				#{taskState,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDeploy != null">
+				#{taskDeploy,jdbcType=VARCHAR},
+			</if>
+			<if test="taskFreq != null">
+				#{taskFreq,jdbcType=VARCHAR},
+			</if>
+			<if test="taskTime != null">
+				#{taskTime,jdbcType=VARCHAR},
+			</if>
+			<if test="taskType != null">
+				#{taskType,jdbcType=VARCHAR},
+			</if>
+			<if test="taskNode != null">
+				#{taskNode,jdbcType=VARCHAR},
+			</if>
+			<if test="taskFreqSm != null">
+				#{taskFreqSm,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.dip.task.vo.Task">
+		update P_TASK
+		<set>
+			<if test="taskCode != null">
+				TASK_CODE = #{taskCode,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDesc != null">
+				TASK_DESC = #{taskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="taskState != null">
+				TASK_STATE = #{taskState,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDeploy != null">
+				TASK_DEPLOY = #{taskDeploy,jdbcType=VARCHAR},
+			</if>
+			<if test="taskFreq != null">
+				TASK_FREQ = #{taskFreq,jdbcType=VARCHAR},
+			</if>
+			<if test="taskTime != null">
+				TASK_TIME = #{taskTime,jdbcType=VARCHAR},
+			</if>
+			<if test="taskType != null">
+				TASK_TYPE = #{taskType,jdbcType=VARCHAR},
+			</if>
+			<if test="taskNode != null">
+				TASK_NODE = #{taskNode,jdbcType=VARCHAR},
+			</if>
+			<if test="taskFreqSm != null">
+				TASK_FREQ_SM = #{taskFreqSm,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="searchListPTask" resultMap="PTaskResultMap" parameterType="com.zebone.dip.task.vo.Task">
+		SELECT T.ID_,T.TASK_CODE,T.TASK_DESC,T.TASK_STATE,T.TASK_DEPLOY,T.TASK_FREQ,T.TASK_TIME,
+		T.TASK_TYPE,M.NODE_NAME AS TASK_NODE FROM P_TASK T
+		LEFT JOIN P_NODE M ON T.TASK_NODE = M.ID_ AND M.DEL_FLAG = '1' 
+		<where>
+			T.DEL_FLAG = '1' 
+			<if test="taskCode != '' and taskCode != null">
+				AND T.TASK_CODE = #{taskCode,jdbcType=VARCHAR}
+			</if>
+			<if test="taskState != '' and taskState != null">
+				AND T.TASK_STATE = #{taskState,jdbcType=VARCHAR}
+			</if>
+			<if test="taskDeploy != '' and taskDeploy != null">
+				AND T.TASK_DEPLOY = #{taskDeploy,jdbcType=VARCHAR}
+			</if>
+			<if test="taskNode != '' and taskNode != null">
+				AND T.TASK_NODE = #{taskNode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	
+	<select id="searchTotalCountPTask" resultType="int" parameterType="com.zebone.dip.task.vo.Task">
+		SELECT COUNT(T.ID_) FROM P_TASK T
+		LEFT JOIN P_NODE M ON T.TASK_NODE = M.ID_ AND M.DEL_FLAG = '1' 
+		<where>
+			T.DEL_FLAG = '1' 
+			<if test="taskCode != '' and taskCode != null">
+				AND T.TASK_CODE = #{taskCode,jdbcType=VARCHAR}
+			</if>
+			<if test="taskState != '' and taskState != null">
+				AND T.TASK_STATE = #{taskState,jdbcType=VARCHAR}
+			</if>
+			<if test="taskDeploy != '' and taskDeploy != null">
+				AND T.TASK_DEPLOY = #{taskDeploy,jdbcType=VARCHAR}
+			</if>
+			<if test="taskNode != '' and taskNode != null">
+				AND T.TASK_NODE = #{taskNode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="getCountTaskByNodeId" resultType="int" parameterType="java.lang.String">
+		SELECT COUNT(T.ID_) FROM P_TASK T 
+		WHERE T.DEL_FLAG = '1' AND T.TASK_NODE = #{taskNode,jdbcType=VARCHAR}
+	</select>
+	<select id="getTaskInfoById" resultMap="PTaskResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from P_TASK
+		where ID_ = #{id,jdbcType=VARCHAR} and DEL_FLAG = '1'
+	</select>
+	<insert id="saveTaskInfo" parameterType="com.zebone.dip.task.vo.Task">
+		insert into P_TASK
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_,
+			</if>
+			<if test="taskCode != null">
+				TASK_CODE,
+			</if>
+			<if test="taskDesc != null">
+				TASK_DESC,
+			</if>
+			<if test="taskState != null">
+				TASK_STATE,
+			</if>
+			<if test="taskDeploy != null">
+				TASK_DEPLOY,
+			</if>
+			<if test="taskFreq != null">
+				TASK_FREQ,
+			</if>
+			<if test="taskTime != null">
+				TASK_TIME,
+			</if>
+			<if test="taskType != null">
+				TASK_TYPE,
+			</if>
+			<if test="taskNode != null">
+				TASK_NODE,
+			</if>
+			<if test="delFlag != null">
+				DEL_FLAG,
+			</if>
+			<if test="taskFreqSm != null">
+				TASK_FREQ_SM,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="taskCode != null">
+				#{taskCode,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDesc != null">
+				#{taskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="taskState != null">
+				#{taskState,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDeploy != null">
+				#{taskDeploy,jdbcType=VARCHAR},
+			</if>
+			<if test="taskFreq != null">
+				#{taskFreq,jdbcType=VARCHAR},
+			</if>
+			<if test="taskTime != null">
+				#{taskTime,jdbcType=VARCHAR},
+			</if>
+			<if test="taskType != null">
+				#{taskType,jdbcType=VARCHAR},
+			</if>
+			<if test="taskNode != null">
+				#{taskNode,jdbcType=VARCHAR},
+			</if>
+			<if test="delFlag != null">
+				#{delFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="taskFreqSm != null">
+				#{taskFreqSm,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateTaskInfo" parameterType="com.zebone.dip.task.vo.Task">
+		UPDATE P_TASK T 
+		SET T.TASK_CODE = #{taskCode,jdbcType=VARCHAR},T.TASK_DESC = #{taskDesc,jdbcType=VARCHAR},
+		T.TASK_FREQ = #{taskFreq,jdbcType=VARCHAR},T.TASK_TYPE = #{taskType,jdbcType=VARCHAR},
+		<if test="taskFreqSm != null">
+			T.TASK_FREQ_SM = #{taskFreqSm,jdbcType=VARCHAR},
+		</if>
+		T.TASK_NODE = #{taskNode,jdbcType=VARCHAR}
+		WHERE T.ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateTaskState" parameterType="com.zebone.dip.task.vo.Task">
+		UPDATE P_TASK T 
+		SET T.TASK_DEPLOY = #{taskDeploy,jdbcType=VARCHAR}
+		WHERE T.ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="getStateTaskById" resultType="int" parameterType="java.lang.String">
+		SELECT COUNT(T.ID_) FROM P_TASK T WHERE T.ID_ = #{id,jdbcType=VARCHAR} AND T.TASK_DEPLOY = '1'
+	</select>
+	<update id="updateBatchTaskByIds">
+		UPDATE P_TASK T SET T.DEL_FLAG = '0'  WHERE 
+		<foreach collection="list" item="item" index="index" separator="OR">
+			(T.ID_ = #{item,jdbcType=VARCHAR})
+		</foreach>
+	</update>
+	<delete id="deleteTaskById" parameterType="java.lang.String">
+		delete from P_TASK
+		where ID_ = #{id,jdbcType=VARCHAR} and TASK_TYPE = '4'
+	</delete>
+</mapper>

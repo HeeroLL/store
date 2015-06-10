@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--前置机名称 和 任务启动策略 -->
+<nodeConfig  name="node1" policy="0 0/15 * * * ?">
+
+<dataSource name="服务器端" >
+<url>jdbc:oracle:thin:@192.168.1.6:1521:ZB</url>
+<userName>ETL</userName>
+<password>ETL</password>
+</dataSource>
+
+
+
+<dataSource name="客户端" >
+<url>jdbc:oracle:thin:@192.168.1.6:1521:ZB</url>
+<userName>DC</userName>
+<password>DC</password>
+</dataSource>
+
+
+<!--抽取设置-->
+<extract>
+
+<table fromName="TBL_PSON_HEALTH_RECORD"  toName="O_TBL_PSON_HEALTH_RECORD_100" desc="个人健康档案表" >
+
+<!--来源数据源 -->
+<fromDataSource>客户端</fromDataSource>
+<!--目标数据源-->
+<toDataSource>服务器端</toDataSource>
+
+<!--时间戳，获取当天增量的业务数据，如果是全量数据，此处应该为空 -->
+<fromTime>20131114000000</fromTime>
+<toTime>20131114081616</toTime>
+</table>
+
+
+<table fromName="TBL_PSON_LIFE_ENV"  toName="O_TBL_PSON_LIFE_ENV_100" desc="个人健康档案生活表" >
+
+<!--来源数据源 -->
+<fromDataSource>客户端</fromDataSource>
+<!--目标数据源-->
+<toDataSource>服务器端</toDataSource>
+
+<!--时间戳，获取当天增量的业务数据，如果是全量数据，此处应该为空 -->
+<fromTime>20131114000000</fromTime>
+<toTime>20131114081616</toTime>
+</table>
+
+
+<table fromName="TBL_PSON_ALLERGY_HT"  toName="O_TBL_PSON_ALLERGY_HT_100" desc="个人健康档案生活表" >
+
+<!--来源数据源 -->
+<fromDataSource>客户端</fromDataSource>
+<!--目标数据源-->
+<toDataSource>服务器端</toDataSource>
+
+<!--时间戳，获取当天增量的业务数据，如果是全量数据，此处应该为空 -->
+<fromTime>20131114000000</fromTime>
+<toTime>20131114081616</toTime>
+</table>
+
+
+<table fromName="TBL_PSON_DISABILITY_HT"  toName="O_TBL_PSON_DISABILITY_HT_100" desc="个人健康档案生活表" >
+
+<!--来源数据源 -->
+<fromDataSource>客户端</fromDataSource>
+<!--目标数据源-->
+<toDataSource>服务器端</toDataSource>
+
+<!--时间戳，获取当天增量的业务数据，如果是全量数据，此处应该为空 -->
+<fromTime>20131114000000</fromTime>
+<toTime>20131114081616</toTime>
+</table>
+
+
+<table fromName="TBL_PSON_EXPOSURE_HT"  toName="O_TBL_PSON_EXPOSURE_HT_100" desc="个人健康档案生活表" >
+
+<!--来源数据源 -->
+<fromDataSource>客户端</fromDataSource>
+<!--目标数据源-->
+<toDataSource>服务器端</toDataSource>
+
+<!--时间戳，获取当天增量的业务数据，如果是全量数据，此处应该为空 -->
+<fromTime>20131114000000</fromTime>
+<toTime>20131114081616</toTime>
+</table>
+
+
+
+<table fromName="TBL_PSON_GENETIC_HT"  toName="O_TBL_PSON_GENETIC_HT_100" desc="个人健康档案生活表" >
+
+<!--来源数据源 -->
+<fromDataSource>客户端</fromDataSource>
+<!--目标数据源-->
+<toDataSource>服务器端</toDataSource>
+
+<!--时间戳，获取当天增量的业务数据，如果是全量数据，此处应该为空 -->
+<fromTime>20131114000000</fromTime>
+<toTime>20131114081616</toTime>
+</table>
+
+
+<table fromName="TBL_PSON_RTUM_HT"  toName="O_TBL_PSON_RTUM_HT_100" desc="个人健康档案生活表" >
+
+<!--来源数据源 -->
+<fromDataSource>客户端</fromDataSource>
+<!--目标数据源-->
+<toDataSource>服务器端</toDataSource>
+
+<!--时间戳，获取当天增量的业务数据，如果是全量数据，此处应该为空 -->
+<fromTime>20131114000000</fromTime>
+<toTime>20131114081616</toTime>
+</table>
+
+
+
+<table fromName="TBL_PSON_TRANSFUSION_HT"  toName="O_TBL_PSON_TRANSFUSION_HT_100" desc="个人健康档案生活表" >
+
+<!--来源数据源 -->
+<fromDataSource>客户端</fromDataSource>
+<!--目标数据源-->
+<toDataSource>服务器端</toDataSource>
+
+<!--时间戳，获取当天增量的业务数据，如果是全量数据，此处应该为空 -->
+<fromTime>20131114000000</fromTime>
+<toTime>20131114081616</toTime>
+</table>
+
+
+
+<table fromName="TBL_PSON_FAMILY_HT"  toName="O_TBL_PSON_FAMILY_HT_100" desc="个人健康档案生活表" >
+
+<!--来源数据源 -->
+<fromDataSource>客户端</fromDataSource>
+<!--目标数据源-->
+<toDataSource>服务器端</toDataSource>
+
+<!--时间戳，获取当天增量的业务数据，如果是全量数据，此处应该为空 -->
+<fromTime>20131114000000</fromTime>
+<toTime>20131114081616</toTime>
+</table>
+
+
+
+
+</extract>
+
+</nodeConfig>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.check.dao.CheckConfMapper">
+	<select id="getCheckConfAll" resultType="com.zebone.dip.check.vo.CheckConf">
+		select 
+			a.doc_name as docName,
+			b.id_ as id,
+			a.id_ as docId,
+			b.is_select as isSelect,
+			b.is_repeat as isRepeat,
+			b.is_data_format as isDataFormat,
+			b.is_busi_format as isBusiFormat,
+			b.is_only as isOnly,
+			b.is_value as isValue,
+			b.blank0 as blank0,
+			b.blank1 as blank1
+		from p_doc_conf a
+		left join p_check_conf b on a.id_ = b.doc_id 
+		order by a.doc_type_code
+	</select>
+	<delete id="delete">
+		delete from p_check_conf
+	</delete>
+	<insert id="saveBatch">
+		insert into p_check_conf(id_,doc_id,is_select,is_repeat,is_data_format,is_busi_format,is_only,is_value)
+		<foreach collection="list" item="item" index="index" separator="union all">
+			select #{item.id,jdbcType=VARCHAR}, #{item.docId,jdbcType=VARCHAR}, #{item.isSelect,jdbcType=VARCHAR}, 
+		      #{item.isRepeat,jdbcType=VARCHAR},  #{item.isDataFormat,jdbcType=VARCHAR}, 
+		      #{item.isBusiFormat,jdbcType=VARCHAR}, #{item.isOnly,jdbcType=VARCHAR}, #{item.isValue,jdbcType=VARCHAR} from dual
+		</foreach>
+	</insert>
+</mapper>

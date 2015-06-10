@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="request">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="head"/>
+        <xs:element ref="body"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="head">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="requestId" minOccurs="0"/>
+        <xs:element ref="tradeNo"/>
+        <xs:element ref="orgCode"/>
+        <xs:element ref="authorizationCode" minOccurs="0"/>
+        <xs:element ref="systemCode" minOccurs="0"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+	<xs:element name="requestId" type="xs:string" />
+	<xs:element name="tradeNo">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="1" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="orgCode" >
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="22"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="authorizationCode" type="xs:string" />
+	<xs:element name="systemCode" type="xs:string" />
+  <xs:element name="body">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="item"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="item">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="userCode"  minOccurs="1"/>
+        <xs:element ref="userName" minOccurs="0" />
+        <xs:element ref="alias" minOccurs="0" />
+        <xs:element ref="idType" minOccurs="0" />
+        <xs:element ref="idNo" minOccurs="0" />
+        <xs:element ref="medicalOrgan" minOccurs="1" />
+        <xs:element ref="sex" minOccurs="0"/>  
+        <xs:element ref="nationalityCode" minOccurs="0" />
+        <xs:element ref="nationality" minOccurs="0" />
+        <xs:element ref="nativePlace" minOccurs="0" />
+        <xs:element ref="birthday" minOccurs="0" />
+        <xs:element ref="maritalStatus" minOccurs="0" />
+        <xs:element ref="deptCode" minOccurs="0" />
+        <xs:element ref="jobCategory" minOccurs="0" />
+        <xs:element ref="postCode" minOccurs="0" />
+        <xs:element ref="positionalTitles"  minOccurs="0" />
+        <xs:element ref="politicalStatus" minOccurs="0" />
+        <xs:element ref="addressCode" minOccurs="0" />
+        <xs:element ref="address" minOccurs="0" />
+        <xs:element ref="tel" minOccurs="0" />
+        <xs:element ref="mobile" minOccurs="0" />
+        <xs:element ref="email" minOccurs="0" />
+        <xs:element ref="qq" minOccurs="0" />
+        <xs:element ref="msn" minOccurs="0" />
+        <xs:element ref="entryDate" minOccurs="0" />
+        <xs:element ref="qualificationDate" minOccurs="0" />
+        <xs:element ref="certificateNo" minOccurs="0" />
+        <xs:element ref="school" minOccurs="0" />
+        <xs:element ref="profession" minOccurs="0" />
+        <xs:element ref="education" minOccurs="0" />
+        <xs:element ref="degree" minOccurs="0" />
+        <xs:element ref="diplomaNo" minOccurs="0" />
+        <xs:element ref="degreeCertificateNo" minOccurs="0" />
+        <xs:element ref="graduationDate" minOccurs="0" />
+        <xs:element ref="schoolSystem" minOccurs="0" />
+        <xs:element ref="healthCondition" minOccurs="0" />
+        <xs:element ref="firstWorkDate" minOccurs="0" />
+        <xs:element ref="resume" minOccurs="0" />
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="userCode">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="userName">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="alias">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="idType">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="2" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="idNo">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="18" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="medicalOrgan">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="22"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="sex">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="nationalityCode">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+           <xs:length value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="nationality">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+           <xs:length value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="nativePlace">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+		    <xs:minLength value="1"/>
+			<xs:maxLength value="12"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="birthday">
+    <xs:simpleType>
+		<xs:restriction base="xs:date">
+    	</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="maritalStatus">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="2" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="deptCode">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="22" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="jobCategory">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="3" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="postCode">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="positionalTitles">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="politicalStatus">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="2" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="addressCode">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="12" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="address">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="70" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="tel">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="20" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="mobile">
+    <xs:simpleType>
+		<xs:restriction base="xs:decimal">
+			<xs:pattern value="[1][358][0-9]{9}"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="email">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="70" />
+			<xs:pattern value="[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+"/>	
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="qq">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="20" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="msn">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="50" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="entryDate">
+    <xs:simpleType>
+		<xs:restriction base="xs:date">
+    	</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="qualificationDate">
+    <xs:simpleType>
+		<xs:restriction base="xs:date">
+    	</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="certificateNo">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="50" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="school">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="50" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="profession">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="6" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="education">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="2" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="degree">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:length value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="diplomaNo">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="30" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="degreeCertificateNo">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="30" />
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="graduationDate">
+    <xs:simpleType>
+		<xs:restriction base="xs:date">
+    	</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="schoolSystem">
+    <xs:simpleType>
+		<xs:restriction base="xs:integer">
+		  <xs:maxInclusive value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="healthCondition">
+    <xs:simpleType>
+		<xs:restriction base="xs:integer">
+			<xs:maxInclusive value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="firstWorkDate">
+    <xs:simpleType>
+		<xs:restriction base="xs:date">
+    	</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+  <xs:element name="resume">
+    <xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+  </xs:element>
+</xs:schema>

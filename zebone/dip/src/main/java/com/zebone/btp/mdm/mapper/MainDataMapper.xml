@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.mdm.mapper.MainDataMapper">
+
+	<resultMap id="mainDataTypeResult" type="MainDataType">
+		<id property="mdtId" column="mdt_id" />
+		<result property="mdtCode" column="mdt_code" />
+		<result property="mdtName" column="mdt_name" />
+		<result property="mdtType" column="mdt_type" />
+		<result property="mdtTablename" column="mdt_tablename" />
+		<result property="mdtFields" column="mdt_fields" />
+		<result property="mdtComments" column="mdt_comments" />
+		<result property="mdtFieldsType" column="mdt_fieldstype" />
+		<result property="mdtVisible" column="mdt_visible" />
+		<result property="mdtDel" column="mdt_del" />
+		<result property="mdtCorres" column="mdt_corres" />
+		<result property="mdtParentId" column="mdt_parentid" />
+	</resultMap>
+
+	<sql id="mdt_col_list">
+		mdt_id, mdt_code, mdt_name, mdt_type, mdt_tablename, mdt_fields,
+		mdt_comments, mdt_fieldstype, mdt_visible, mdt_del, mdt_corres,
+		mdt_parentid
+	</sql>
+
+	<!-- 查询单个MainDataType -->
+	<select id="findByCode" parameterType="string"
+		resultMap="mainDataTypeResult">
+		select
+		<include refid="mdt_col_list" />
+		from BTP_MD_TYPE where mdt_del = 0 and mdt_code = #{id}
+	</select>
+
+	<!-- 查询MainDataType列表 -->
+	<select id="queryMDTList" parameterType="MainDataType"
+		resultMap="mainDataTypeResult">
+		select
+		<include refid="mdt_col_list" />
+		from BTP_MD_TYPE where mdt_del = 0
+	</select>
+
+	<!-- 查询MainDataType列表 分页 -->
+	<select id="queryMDTPageList" parameterType="MainDataType"
+		resultMap="mainDataTypeResult">
+		select
+		<include refid="mdt_col_list" />
+		from BTP_MD_TYPE
+		<where>
+			<if test="mdtDel != null and mdtDel != '' ">
+				AND mdt_code is not null AND mdt_del =
+				#{mdtDel,jdbcType=VARCHAR}
+			</if>
+			<if test="mdtCode != null and mdtCode != '' ">
+				AND mdt_code = #{mdtCode,jdbcType=VARCHAR}
+			</if>
+			<if test="mdtType != null and mdtType != '' ">
+				AND mdt_type = #{mdtType,jdbcType=VARCHAR}
+			</if>
+			<if test="mdtName != null and mdtName != '' ">
+				AND mdt_name LIKE '%'||#{mdtName,jdbcType=VARCHAR}||'%'
+			</if>
+		</where>
+		ORDER BY mdt_code
+	</select>
+
+	<!-- 查询符合条件的列表总数 -->
+	<select id="queryMDT2otal" parameterType="MainDataType"
+		resultType="int">
+		select count(1) from BTP_MD_TYPE
+		<where>
+			<if test="mdtDel != null and mdtDel != '' ">
+				AND mdt_code is not null AND mdt_del =
+				#{mdtDel,jdbcType=VARCHAR}
+			</if>
+			<if test="mdtCode != null and mdtCode != '' ">
+				AND mdt_code = #{mdtCode,jdbcType=VARCHAR}
+			</if>
+			<if test="mdtCode != null and mdtCode != '' ">
+				AND mdt_code = #{mdtCode,jdbcType=VARCHAR}
+			</if>
+			<if test="mdtType != null and mdtType != '' ">
+				AND mdt_type = #{mdtType,jdbcType=VARCHAR}
+			</if>
+			<if test="mdtName != null and mdtName != '' ">
+				AND mdt_name LIKE '%'||#{mdtName,jdbcType=VARCHAR}||'%'
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询实体列表公共方法 分页 -->
+	<select id="queryDetailObject" parameterType="DBQuery"
+		statementType="PREPARED" resultType="map">
+		select ${dbFields} from ${dbName}
+		<where>
+			<if test="mdName != null and mdName != '' ">
+				AND ${mdName} LIKE
+				'%'||#{mdNameValue,jdbcType=VARCHAR}||'%'
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询实体总数公共方法 -->
+	<select id="queryDetailObjectTotal" parameterType="DBQuery"
+		resultType="int">
+		select count(1) from ${dbName}
+		<where>
+			<if test="mdName != null and mdName != '' ">
+				AND ${mdName} LIKE
+				'%'||#{mdNameValue,jdbcType=VARCHAR}||'%'
+			</if>
+		</where>
+	</select>
+
+	<!-- 动态SQL之批量删除数据 公共方法 -->
+	<delete id="removeMDBatch" parameterType="DBQuery">
+		delete from ${dbName} where ${dbFields} in
+		<foreach item="item" index="index" collection="idList" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 动态SQL之根据ID查询  -->
+	<select id="queryDetailObjectByID" parameterType="DBQuery"
+		statementType="PREPARED" resultType="map">
+		select ${dbFields} from ${dbName} where ${primaryKeyField} =
+		#{primaryKeyValue}
+	</select>
+
+	<!-- 动态SQL之插入数据  -->
+	<insert id="addMDData" statementType="PREPARED"
+		parameterType="DBQuery">
+		insert into ${dbName} (${dbFields}) values
+		<foreach item="item" index="index" collection="valueList"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</insert>
+
+	<!-- 动态SQL之根据ID删除数据 -->
+	<delete id="deleteMDData" parameterType="DBQuery">
+		delete from ${dbName} where ${primaryKeyField} =
+		#{primaryKeyValue}
+	</delete>
+
+	<!-- 插入类型数据  -->
+	<insert id="addMDTData" statementType="PREPARED"
+		parameterType="MainDataType">
+		insert into BTP_MD_TYPE (
+		<include refid="mdt_col_list" />
+		) values (#{mdtId}, #{mdtCode}, #{mdtName}, #{mdtType},
+		#{mdtTablename}, #{mdtFields}, #{mdtComments}, #{mdtFieldsType},
+		#{mdtVisible}, #{mdtDel}, #{mdtCorres}, #{mdtParentId})
+	</insert>
+
+	<!-- 类型表中ID最大字段值-->
+	<select id="getMaxCode" resultType="string">
+		select max(mdt_code) from BTP_MD_TYPE
+	</select>
+
+	<!-- 查询类型表中type和对应的name-->
+	<select id="queryTypeList" parameterType="MainDataType"
+		resultMap="mainDataTypeResult">
+		select
+		<include refid="mdt_col_list" />
+		from BTP_MD_TYPE where mdt_del = 0 and mdt_parentid = 'root'
+	</select>
+
+	<!-- 类型表中type最大字段值-->
+	<select id="getMaxTypeValue" resultType="string">
+		select max(mdt_type) from BTP_MD_TYPE where mdt_parentid =
+		'root'
+	</select>
+
+	<!-- 插入type  -->
+	<sql id="mdt_type_list">
+		mdt_id, mdt_name, mdt_type, mdt_del, mdt_parentid
+	</sql>
+
+	<insert id="addMDType" statementType="PREPARED"
+		parameterType="MainDataType">
+		insert into BTP_MD_TYPE (
+		<include refid="mdt_type_list" />
+		) values (#{mdtId}, #{mdtName}, #{mdtType}, #{mdtDel},
+		#{mdtParentId})
+	</insert>
+
+	<!-- 根据Code更新主数据字段信息 -->
+	<update id="updateMDTByCode" parameterType="MainDataType">
+		update BTP_MD_TYPE
+		<set>
+			<if test="mdtFields != null">
+				mdt_fields = #{mdtFields,jdbcType=VARCHAR},
+			</if>
+			<if test="mdtFieldsType != null">
+				mdt_fieldstype = #{mdtFieldsType,jdbcType=VARCHAR},
+			</if>
+			<if test="mdtComments != null">
+				mdt_comments = #{mdtComments,jdbcType=VARCHAR},
+			</if>
+			<if test="mdtVisible != null">
+				mdt_visible = #{mdtVisible,jdbcType=VARCHAR},
+			</if>
+			<if test="mdtCorres != null">
+				mdt_corres = #{mdtCorres,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where mdt_code = #{mdtCode,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 对应的表是否有数据 -->
+	<select id="queryDataExists" parameterType="DBQuery"
+		resultType="int">
+		select count(1) from ${dbName}
+	</select>
+
+	<!-- 删除id对应的数据 -->
+	<delete id="removeMDType" parameterType="DBQuery">
+		delete from BTP_MD_TYPE where mdt_id = #{id,jdbcType=VARCHAR}
+	</delete>
+</mapper>

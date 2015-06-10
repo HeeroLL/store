@@ -1,0 +1,306 @@
+@CHARSET "UTF-8";
+html,body{
+	height: 100%;	
+}
+body,div,p,td, input{
+	font-family: '微软雅黑' ;
+	font-size: 12px;
+}
+.JDialogDIV{}
+.JDialogDIV .nw,.JDialogDIV .ne,.JDialogDIV .n,.JDialogDIV .sw,.JDialogDIV .se,.JDialogDIV .s{
+	background-image: url("./images/jquery-dialog/dialog_bg1.png");
+	_background-image: url("./images/jquery-dialog/dialog_bg1.gif");
+	background-repeat: no-repeat;
+}
+.JDialogDIV .nw{
+    padding-left: 13px;
+	background-position:0 0;
+	height: 29px;
+}
+.JDialogDIV .ne{
+    padding-right: 13px;
+	background-position:right -32px;
+}
+.JDialogDIV .n{
+	background-position:right -64px;
+	background-repeat:repeat-x;
+    color: #000000;
+    font: 14px/20px Arial,sans-serif;
+    height: 29px;
+    margin: 0;
+    overflow: hidden;
+    padding: 0 0 0 60px;
+    text-align: center;
+}
+.JDialogDIV .w,.JDialogDIV .e{
+	background-image: url("./images/jquery-dialog/dialog_bg2.png");
+	_background-image: url("./images/jquery-dialog/dialog_bg2.gif");
+	background-repeat: repeat-y;
+}
+.JDialogDIV .w{
+	padding-left:1px;
+	background-position: 0 0;
+}
+.JDialogDIV .e{
+	height:100%;
+	padding-right:3px;
+	background-position:right 0;
+}
+.JDialogDIV .content{
+	background: none repeat scroll 0 0 #FFFFFF;
+    color: #000000;
+	height:100%;
+	overflow: auto;
+	position: relative;
+}
+.JDialogDIV .sw{
+	background-position:0 -100px;
+	font-size: 2px;
+    height: 25px;
+    padding-left: 13px;
+}
+.JDialogDIV .se{
+	background-position:right -125px;
+	font-size: 2px;
+    height: 25px;
+    padding-right: 13px;
+}
+.JDialogDIV .s{
+	background-position:0 -150px;
+	background-repeat:repeat-x;
+	font-size: 12px;
+    height: 25px;
+    line-height: 25px;
+    overflow: hidden;
+	text-align:center;
+}
+.DmainDIV{
+}
+.iconDIV{
+	float: left;
+	width: 50px;
+	height:100%;
+}
+.JDialogMainDIV{
+	float: left;
+	text-align: center;
+	overflow: auto;
+}
+.g-win-e ,.g-win-s ,.g-win-w ,.g-win-n ,.g-win-sw ,.g-win-es ,.g-win-wn ,.g-win-ne{
+	background-image:url(./images/jquery-dialog/dialog_bg1.png);
+	_background-image:url(./images/jquery-dialog/bg_ie6.gif);
+	background-repeat: no-repeat;
+	font-size: 0;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    z-index: 1000;
+}
+.g-win-w, .g-win-e {
+    background-position: -5px 0;
+    background-repeat: repeat-y !important;
+}
+.g-win-e {
+   /* cursor: e-resize;*/
+    height: 100%;
+    right: -2px;
+    width: 4px;
+}
+.g-win-s {
+	background-image: url("./images/jquery-dialog/dialog_bg2.png");
+	background-repeat: repeat-x;
+    background-position: 0 -31px;
+    bottom: 0;
+    /*cursor: s-resize;*/
+    height: 2px;
+    width: 100%;
+}
+.g-win-w {
+	background-position: -1px 0;
+    background-repeat: repeat-x; 
+    /*cursor: w-resize;*/
+    height: 100%;
+    width: 4px;
+}
+.g-win-n {
+	background-image: url("../images/jquery-dialog/dialog_bg2.png");
+    background-position: 0 -494px;
+    /*cursor: n-resize;*/
+    height: 6px;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+.g-win-sw, .g-win-es, .g-win-wn, .g-win-ne {
+    height: 6px;
+    width: 6px;
+}
+.g-win-sw {
+    background-position: -11px -97px;
+    bottom: 0;
+    cursor: sw-resize;
+    left: 0;
+}
+.g-win-es {
+    background-position: -28px -97px;
+    bottom: 0;
+    cursor: se-resize;
+    right: 0;
+}
+.g-win-wn {
+    background-position: -11px 0;
+    cursor: nw-resize;
+    left: 0;
+    top: 0;
+}
+.g-win-ne {
+    background-position: -28px 0;
+    /*cursor: ne-resize;*/
+    right: 0;
+    top: 0;
+}
+
+.JDialogMainTable{
+	width: 99%;
+	height: 100%;	
+	text-align: center;
+	vertical-align: middle;
+}
+.JDialogTitleDIV{
+	/*height: 29px;
+    overflow: hidden;
+    position: absolute;
+    text-align: left;
+    width: 100%;
+    background-image: url("./images/jquery-dialog/dialog_bg2.png");
+    background-repeat: repeat-x;
+    background-position: 0 0;
+    overflow: hidden;
+    position: absolute;
+    text-align: left;
+    width: 100%;
+    z-index: 901;*/
+}
+.j-ico{
+	margin: 7px 5px 0;
+	background-repeat: no-repeat;
+	display: block;
+    float: left;
+    height: "16px";
+	width: "16px";
+}
+.j-tle{
+	line-height: 22px;
+	cursor: default;
+    float: none;
+    font-weight: bold;
+    white-space: nowrap;
+    text-align: left;
+}
+.j-title{
+	color: #FFFFFF;
+    font-weight: bold;
+    height: 22px;
+    left: 5px;
+    line-height: 22px;
+    position: absolute;
+    text-align: left;
+    top: 4px;
+}
+.tools-panel{
+	position: absolute;
+    right: 5px;
+    text-align: left;
+    top: 7px;
+}
+.tools-panel a{
+	background-image: url("./images/jquery-dialog/buttons.gif");
+    background-repeat:no-repeat;
+    height: 15px;
+    width: 15px;
+    display: inline-block;
+    margin: 0 7px 0 0;
+}
+.tools-panel a:hover{
+	background-image: url("./images/jquery-dialog/buttons_over.gif");
+}
+.j-min{
+	background-position: 0 -15px;
+}
+.j-max{
+	background-position: 0 -30px;
+}
+.j-max-restore{
+	background-position: 0 -30px;
+}
+.j-close{
+	background-position: 0 0;
+}
+.JDialogBtnDIV{
+	text-align: center;
+	height: 30px;
+}
+.bordertop_w,.bordertop_ne,.bordertop_n,.borderbtm_sw,.borderbtm_se,.borderbtm_s{
+	background-image: url("./images/jquery-dialog/dialog_bg1.png");
+	_background-image: url("./images/jquery-dialog/dialog_bg1.gif");
+	background-repeat: no-repeat;
+}
+.bordertop_w{
+	height:6px;
+	padding-left: 13px;
+	background-position: 0 -201px;
+}
+.bordertop_ne{
+	height:6px;
+	padding-right: 13px;
+	background-position:right -207px;
+}
+.bordertop_n{
+	height:6px;
+	padding-right: 13px;
+	background-position: 0 -213px;
+	background-repeat: repeat-x;
+}
+.borderbtm_sw{
+	height:6px;
+	padding-left: 13px;
+	background-position: 0 -228px;
+	overflow: hidden;
+}
+.borderbtm_se{
+	height:6px;
+	padding-right: 13px;
+	background-position:right -234px;
+}
+.borderbtm_s{
+	height:6px;
+	padding-right: 13px;
+	background-position: 0 -240px;
+	background-repeat: repeat-x;
+}
+.JDialogBtnDIV input{
+	border: #9BBDEA 1px solid;		
+	margin: 5px;
+	display:inline;
+	background: url("../images/jquery-dialog/header-bg2.png");
+	cursor: pointer;
+}
+.JDialogMaskDIV{
+	background-color: #000000;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.JDialogBtnDIV .JButtonClass{
+	border: 0;	
+	width: 76px;
+	height: 23px;
+	margin: 2px;
+	background: url("./images/button_bg.png") no-repeat ;
+	text-align:center;
+	cursor: pointer;
+}
+.JDialogBtnDIV .JButtonClass_hover{
+	background-position:0 -23px;
+}

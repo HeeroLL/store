@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zebone.register.validation.dao.PSysregisterMapper">
+    <resultMap id="BaseResultMap" type="com.zebone.register.validation.domain.PSysregister">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="SYSTEMCODE" jdbcType="VARCHAR" property="systemcode"/>
+        <result column="SYSTEMNAME" jdbcType="VARCHAR" property="systemname"/>
+        <result column="ORGANCODE" jdbcType="VARCHAR" property="organcode"/>
+        <result column="DISABLED" jdbcType="CHAR" property="disabled"/>
+    </resultMap>
+    
+    <select id="findAllPSysregister" resultMap="BaseResultMap">
+          SELECT * FROM P_SYSREGISTER 
+    </select>
+    
+    <select id="getJurisdiction" resultType="int" parameterType="string">
+          select count(*) from P_SYSREGISTER t 
+          where t.organcode=#{docOrgCode,jdbcType=VARCHAR}, and t.disabled='0' and t.systemcode=#{sysCode,jdbcType=VARCHAR}
+    </select>
+    
+
+    <insert id="savePSysregister" parameterType="com.zebone.register.validation.domain.PSysregister" >
+        INSERT INTO P_SYSREGISTER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                ID,
+            </if>
+            <if test="systemcode != null" >
+                SYSTEMCODE,
+            </if>
+            <if test="systemname != null" >
+                SYSTEMNAME,
+            </if>
+            <if test="organcode != null" >
+                ORGANCODE,
+            </if>
+            <if test="disabled != null" >
+                DISABLED,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="systemcode != null" >
+                #{systemcode,jdbcType=VARCHAR},
+            </if> 
+            <if test="systemname != null" >
+                #{systemname,jdbcType=VARCHAR},
+            </if> 
+            <if test="organcode != null" >
+                #{organcode,jdbcType=VARCHAR},
+            </if> 
+            <if test="disabled != null" >
+                #{disabled,jdbcType=CHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updatePSysregister" parameterType="com.zebone.register.validation.domain.PSysregister" >
+        UPDATE P_SYSREGISTER
+        <set>
+            <if test="id != null" >
+                ID = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="systemcode != null" >
+                SYSTEMCODE = #{systemcode,jdbcType=VARCHAR},
+            </if>
+            <if test="systemname != null" >
+                SYSTEMNAME = #{systemname,jdbcType=VARCHAR},
+            </if>
+            <if test="organcode != null" >
+                ORGANCODE = #{organcode,jdbcType=VARCHAR},
+            </if>
+            <if test="disabled != null" >
+                DISABLED = #{disabled,jdbcType=CHAR},
+            </if>
+        </set>
+        WHERE 
+    </update>
+</mapper>

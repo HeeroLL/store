@@ -1,0 +1,301 @@
+@CHARSET "UTF-8";
+html,body{
+	height:100%;
+	_height:100%;
+}
+.jgridDIV{
+	font-family: '微软雅黑' ;
+	font-size: 12px;
+	border:1px solid #9BBDEA;
+	background-color: #fdfdfd;
+}
+.jgridMain{
+	width: 100%;
+	_height:auto;
+	_overflow:hidden;
+}
+.jgridHeaderTable{
+	border-collapse: collapse;
+	table-layout:fixed;
+}
+.jgridHeaderTable table,.jgridHeaderTable tr,.jgridHeaderTable td,.jgridHeaderTable th,.jgridDataDIV table,.jgridDataDIV td,.jgridDataDIV tr{
+	  border: 1px solid #c7c6cb;
+}
+.jHeaderDIV{
+	background: url("./images/column-header-bg.gif") repeat-x 0 0 #F9F9F9;
+}
+.headerTdDiv{
+	color: #333333;
+    font-weight: bold;
+    position: relative;
+}
+.header td{text-indent: 0;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+.headerTdDiv span{
+	position:absolute;right:3px;top:4px;cursor: pointer;
+}
+.orderShow{
+	_float: right;
+	width: 16px;
+	height: 16px;
+	background: url("./images/order-down.png") no-repeat;
+	display: inline;
+}
+.orderUpShow{
+	_float: right;
+	width: 16px;
+	height: 16px;
+	background: url("./images/order-up.png") no-repeat;
+	display: inline;
+}
+.jgridDataDIV,.j-card-div{
+	width: 100%;
+	text-align: left;
+	overflow: hidden;
+	overflow-y: auto;
+}
+.j-card-inner{
+	overflow: hidden;
+}
+.jHeaderAndDataDIV{
+	width: 100%;
+	text-align: left;
+	overflow: hidden;
+	overflow-x: auto;
+	_position:relative;
+}
+.jgridDataDIV table{
+	border-collapse: collapse;
+	table-layout: fixed;	
+}
+.jgridDataDIV table tr{
+	cursor: pointer;
+	height: 20px;		
+}
+.jgridDataDIV table tr td{
+	height: 20px;
+	/* 隐藏代码 */
+	overflow: hidden;
+	white-space: nowrap;
+	/*换行代码
+	word-wrap:break-word;
+	word-break:break-all;
+	*/
+	color:#333333;
+}
+.grid-row-alt{
+	background:#F4F4F4;
+}
+.grid-row-over{
+	background:#DFE8F6;
+	cursor:default;
+}
+.grid-row-selected{
+	background: #FBEC88;
+}
+
+
+.jgridPage{
+	border-top:1px solid #9BBDEA;
+	height:25px;
+	background: url("./images/jquery-grid/grid_page_bg.png") repeat-x;	
+}
+.jgridPage div{
+	float:left;	
+	margin: 1px 5px 2px 2px;
+}
+.jgridPageButton{
+	border:0;
+	width: 17px;height:17px;
+	cursor: pointer;
+	background: url("./images/jquery-grid/page.png") no-repeat;	
+}
+.jgridPage .countEveryPage,.jgridPage .goToPageNo{
+	width: 30px;
+	border: #ccc 1px solid;
+	text-align: center;
+	height:13px;
+	margin: 2px;	
+}
+.page_first{
+	background-position: -6px -4px;	
+}
+.page_prev{
+	background-position: -29px -4px;	
+}
+.page_next{
+	background-position: -52px -4px;
+}
+.page_last{
+	background-position: -75px -4px;	
+}
+.page_refresh{
+	background-position: -98px -3px;
+}
+/*hover*/
+.first_hover{
+	background-position: -6px -27px;
+}
+.previous_hover{
+	background-position: -29px -27px;	
+}
+.next_hover{
+	background-position: -52px -27px;
+}
+.last_hover{
+	background-position: -75px -27px;
+}
+.refresh_hover{
+	background-position: -98px -27px;
+}
+/*disable*/
+.first_disable{
+	background-position: -6px -51px;
+}
+.previous_disable{
+	background-position: -29px -51px;	
+}
+.next_disable{
+	background-position: -52px -51px;
+}
+.last_disable{
+	background-position: -75px -51px;
+}
+.pageGo{
+	width:28px;
+	height:21px;
+	border:none;
+	cursor:pointer;
+	background: url("../../images/icons/go.gif") no-repeat scroll 0 0 transparent;
+}
+
+.titleBar{
+	height:25px;
+	background: url("./images/sky_blue_grid.gif") repeat-x scroll 0 0 transparent;
+	border-bottom: 1px solid #9BBDEA;
+}
+.jgridToolBar{
+	height:24px;
+	background: url("./images/toolbar-bg.gif") repeat-x #E4E4E4;
+	border-top: 1px solid #99BCE8;
+	border-bottom: 1px solid #99BCE8;
+	text-align: left;
+	padding: 1px;
+}
+.jgridToolBar input{
+	border: #9BBDEA 1px solid;	
+	font-family: '微软雅黑' ;
+	margin: 1px 2px 0px 2px;
+	background: url("../images/header-bg2.png") 5px;
+}
+.jgridToolBar label{
+	float: right;
+	color: #04408C;
+	margin: 3px;
+}
+.jgridFormDIV{	
+	width: 100%;
+}
+.jgridTitle{
+	background: url("../../js/jquery/images/jquery-grid/grid.png") no-repeat scroll 5px 50% transparent;
+    color: #11499A;
+    float: left;
+    line-height: 25px;
+    margin-right: 5px;
+    text-indent: 25px;
+}
+.jgridToolBar .JButtonClass{
+	border: none;
+	width: 90px;
+	height: 25px;
+	cursor: pointer;
+	font-family: '微软雅黑 '; 
+	font-size: 12px;
+	background: url("./images/dots-small_2x2.png") repeat;
+}
+.jgridToolBar .JButtonClass_large{
+	height: 24px\9;
+}
+.jgridToolBar .JButtonClass_hover,.jgridToolBar .JButtonClass_large_hover{
+	background: url("./images/grid_button_hover.png") repeat-x;
+	border:1px solid #44bfec;
+	border-radius:5px;
+}
+.JButtonClass span{
+	width:100%; display: inline-block; text-align: center;padding-left: 5px;height: 16px;
+    line-height: 16px;
+}
+.pop{
+	position: absolute;
+}
+.pop_nw{
+	height:30px;padding-left:8px;
+	background: url("./images/pop_bg.gif") no-repeat 0 0;
+}
+.pop_ne{
+	height:30px;padding-right:8px;
+	background: url("./images/pop_bg.gif") no-repeat right -30px;
+}
+.pop_n{
+	height:30px;
+	background: url("./images/pop_bg.gif") repeat-x 0 -60px;
+}
+.pop_w{
+	border-left: 1px solid #5AA4E0;
+}
+.pop_e{
+	border-right: 1px solid #5AA4E0;
+}
+.pop_content{
+	background-color: #FFFFFF;
+}
+.pop_sw{
+	padding-left:8px;
+	background: url("./images/pop_bg.gif") no-repeat 0 -96px;
+}
+.pop_se{
+	padding-right:8px;
+	background: url("./images/pop_bg.gif") no-repeat right -105px;
+}
+.pop_s{
+	height:9px;
+	background: url("./images/pop_bg.gif") repeat-x 0 -114px;
+}
+.pop_title{
+	position: absolute;
+	left:6px;
+	top:6px;
+}
+/*card*/
+.grid-temp{
+	display: none;
+}
+.j-grid-card{
+	margin: 5px;float: left;
+}
+.jgridcrudBtn{
+	width: 100%;
+	border-bottom: 1px solid #44bfec;
+	text-align: left;
+    border-width: 0 0 1px;
+    background: url("./images/dots-small_2x2.png") repeat;
+}
+.jgridHeaderTable tr{
+	height: 25px;	
+	background: url("./images/jquery-grid/sky_blue_grid.gif") repeat 0 0 #F9F9F9;
+}
+
+.jgridcrudBtn .JButtonClass {
+    background: url("./images/dots-small_2x2.png") repeat;
+    border: medium none;
+    cursor: pointer;
+    font-family: '微软雅黑 ';
+    font-size: 12px;
+    height: 25px;
+    width: 90px;
+}
+
+.jgridcrudBtn .JButtonClass_hover{
+	background: url("./images/jquery-grid/grid_button_hover.png") repeat-x;
+	border:1px solid #44bfec;
+}
+

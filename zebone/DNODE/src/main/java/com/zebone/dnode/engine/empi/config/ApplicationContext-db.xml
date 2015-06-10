@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<description>数据库相关配置</description>
+	
+	<!-- ↓====================↓EMPI连接配置↓==========================↓ -->
+	<!--定义数据源 数据源的ID在代码中被引用，因此不能随意修改名字-->
+	<bean id="dataSource_empi" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${empi.jdbc.driver}" />
+		<property name="url" value="${empi.jdbc.url}" />
+		<property name="username" value="${empi.jdbc.username}" />
+		<property name="password" value="${empi.jdbc.password}" />
+		<property name="initialSize" value="${empi.jdbc.initialSize}" />
+		<property name="maxActive" value="${empi.jdbc.maxActive}" />
+		<property name="maxIdle" value="${empi.jdbc.maxIdle}" />
+		<property name="minIdle" value="${empi.jdbc.minIdle}" />
+	</bean>
+	
+	<tx:annotation-driven  transaction-manager="transactionManager_empi"/>	
+	
+	<!-- 定义事物管理 -->
+	<bean id="transactionManager_empi" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource_empi" />
+	</bean>
+
+	<!-- 配置mybatis的 SqlSessionFactoryBean-->
+	<bean id="sqlSessionFactory_empi" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource_empi" />
+		<!-- 设置mybatis的环境配置文件 -->
+		<property name="configLocation" value="classpath:mybatisConfig.xml" />
+		<property name="typeAliasesPackage" value="com.zebone.empi"/>
+	</bean>
+
+	<!-- 指定mybatis映射器的位置，spring自动扫描并将映射器生成代理放到spring上下文中 -->
+	<bean id="MapperScannerConfigurerEmpi" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.zebone.dnode.engine.empi.dao"/>
+		<property name="annotationClass" value="com.zebone.btp.core.mybatis.EmpiMapper"/>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory_empi"/>
+	</bean>
+	
+	
+	<bean id="jdbcTemplateEMPI" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource_empi" />
+	</bean>
+	 
+</beans>

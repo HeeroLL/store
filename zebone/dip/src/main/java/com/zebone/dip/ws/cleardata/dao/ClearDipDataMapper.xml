@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.ws.cleardata.dao.ClearDipDataMapper" >
+
+  <select id="getTableNameLic" parameterType="string"  resultType="String">
+     SELECT DISTINCT TABLE_NAME FROM P_PARSE_TABLE_LOG WHERE EMPI_NO=#{empiNo,jdbcType=VARCHAR}
+  </select>
+
+    <select id="getDocNoLic" parameterType="string"  resultType="String">
+     SELECT DISTINCT DOC_NO FROM P_PARSE_TABLE_LOG WHERE EMPI_NO=#{empiNo,jdbcType=VARCHAR}
+  </select>
+
+    <delete id="deleteParseTableInfo" parameterType="java.lang.String" >
+        delete from P_PARSE_TABLE_LOG
+        where EMPI_NO= #{empiNo,jdbcType=VARCHAR}
+    </delete>
+</mapper>

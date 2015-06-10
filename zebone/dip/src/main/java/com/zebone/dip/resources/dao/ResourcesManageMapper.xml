@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.resources.dao.ResourcesManageMapper" >
+  <resultMap id="MasterMedicalOrg" type="com.zebone.dip.resources.vo.MdMedicalOrg" >
+    <id column="ID_" property="id" jdbcType="VARCHAR" />
+    <result column="MD_CODE" property="orgCode" jdbcType="VARCHAR" />
+    <result column="MD_NAME" property="orgName" jdbcType="VARCHAR" />
+    <result column="PARENT_ORGAN_CODE" property="orgParentCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResourceDept" type="com.zebone.dip.resources.vo.ResourceDept" >
+    <id column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+    <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
+    <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR" />
+    <result column="DEPT_DESC" property="deptDesc" jdbcType="VARCHAR" />
+    <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+    <result column="PARENT_DEPT_CODE" property="parentDeptCode" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+    <result column="INPUT_ORG_CODE" property="inputOrgCode" jdbcType="VARCHAR" />
+    <result column="INPUT_USER_CODE" property="inputUserCode" jdbcType="VARCHAR" />
+      <result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+      <result column="TOWN_CODE" property="townCode" jdbcType="VARCHAR" />
+      <result column="COMMUNITY_CODE" property="communityCode" jdbcType="VARCHAR" />
+      <result column="MEDICAL_ORG_CODE" property="medicalOrgCode" jdbcType="VARCHAR" />
+      <result column="CLASSIFIED_CODE" property="classifiedCode" jdbcType="VARCHAR" />
+      <result column="DEPT_CLASSIFY_CODE" property="deptClassifyCode" jdbcType="VARCHAR" />
+      <result column="HOSPITAL_INTERNAL_CODE" property="hospInternalCode" jdbcType="VARCHAR" />
+      <result column="CLINIC_INHOSPITAL_CODE" property="clinicHospCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResourceUser" type="com.zebone.dip.resources.vo.ResourceUser" >
+    <id column="U_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="DEPARTMENT_CODE" property="departmentCode" jdbcType="VARCHAR" />
+    <result column="POST_CODE" property="postCode" jdbcType="VARCHAR" />
+    <result column="POSITIONAL_TITLES_CODE" property="positionalTitlesCode" jdbcType="VARCHAR" />
+    <result column="SEX_CODE" property="sexCode" jdbcType="VARCHAR" />
+    <result column="RESUME" property="resume" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResourceFamily" type="com.zebone.dip.resources.vo.ResourceFamily" >
+    <id column="FAMI_ID" property="famiId" jdbcType="VARCHAR" />
+    <result column="FAMI_CODE" property="famiCode" jdbcType="VARCHAR" />
+    <result column="LANDLORD_NAME" property="landlordName" jdbcType="VARCHAR" />
+    <result column="LANDLORD_TEL" property="landlordTel" jdbcType="VARCHAR" />
+    <result column="HOUSEHOLD_NAME" property="householdName" jdbcType="VARCHAR" />
+    <result column="HOUSE_POPU_NUMBER" property="housePopuNumber" jdbcType="VARCHAR" />
+    <result column="RESIDENT_POPU_NUMBER" property="residentPopuNumber" jdbcType="VARCHAR" />
+    <result column="LIVE_TYPE" property="liveType" jdbcType="VARCHAR" />
+    <result column="TOTAL_AREA" property="totalArea" jdbcType="VARCHAR" />
+    <result column="PER_AREA" property="perArea" jdbcType="VARCHAR" />
+    <result column="FAMILY_TEL" property="familyTel" jdbcType="VARCHAR" />
+    <result column="PAPER_FILE_NO" property="paperFileNo" jdbcType="VARCHAR" />
+    <result column="HOUSING_PROPERTY_CODE" property="housingPropertyCode" jdbcType="VARCHAR" />
+    <result column="HOUSING_NUMBER" property="housingNumber" jdbcType="VARCHAR" />
+    <result column="HOUSING_LIGHTING_CODE" property="housingLightingCode" jdbcType="VARCHAR" />
+    <result column="FAMILY_ORG_CODE" property="familyOrgCode" jdbcType="VARCHAR" />
+    <result column="DOCTOR_CODE" property="doctorCode" jdbcType="VARCHAR" />
+    <result column="FAMILY_ADDR_CODE" property="familyAddrCode" jdbcType="VARCHAR" />
+    <result column="FAMILY_ADDR" property="familyAddr" jdbcType="VARCHAR" />
+    <result column="HOUSING_CODE" property="housingCode" jdbcType="VARCHAR" />
+    <result column="KITCHEN_CODE" property="kitchenCode" jdbcType="VARCHAR" />
+    <result column="KITCHEN_VENT__CODE" property="kitchenVentCode" jdbcType="VARCHAR" />
+    <result column="FAMILY_PRO__CODE" property="familyProCode" jdbcType="VARCHAR" />
+    <result column="WATER_CODE" property="waterCode" jdbcType="VARCHAR" />
+    <result column="FUEL_CODE" property="fuelCode" jdbcType="VARCHAR" />
+    <result column="TOILETS_TYPE" property="toiletsType" jdbcType="VARCHAR" />
+    <result column="LIVESTOCK_CODE" property="livestockCode" jdbcType="VARCHAR" />
+    <result column="ELEC_DEVICE_CODE" property="elecDeviceCode" jdbcType="VARCHAR" />
+    <result column="VEHICLE_CODE" property="vehicleCode" jdbcType="VARCHAR" />
+    <result column="ECON_STATUS_CODE" property="econStatusCode" jdbcType="VARCHAR" />
+    <result column="PER_MONTH_INCOME_CODE" property="perMonthIncomeCode" jdbcType="VARCHAR" />
+    <result column="FAMI_TOTAL_PAY" property="famiTotalPay" jdbcType="VARCHAR" />
+    <result column="FAMI_FOOD_PAY" property="famiFoodPay" jdbcType="VARCHAR" />
+    <result column="GAR_DISPOSAL_CODE" property="garDisposalCode" jdbcType="VARCHAR" />
+    <result column="SEWAGE_DIPOSAL_CODE" property="sewageDiposalCode" jdbcType="VARCHAR" />
+    <result column="CULT_SPORT_CODE" property="cultSportCode" jdbcType="VARCHAR" />
+    <result column="FILE_DATE" property="fileDate" jdbcType="VARCHAR" />
+    <result column="FILE_DOCTOR_CODE" property="fileDoctorCode" jdbcType="VARCHAR" />
+    <result column="INPUT_DATE" property="inputDate" jdbcType="VARCHAR" />
+    <result column="INPUT_USER_CODE" property="inputUserCode" jdbcType="VARCHAR" />
+    <result column="FAMILY_TYPE_CODE" property="familyTypeCode" jdbcType="VARCHAR" />
+    <result column="FAMILY_MAIN_PROBLEM" property="familyMainProblem" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResourceFamilyMember" type="com.zebone.dip.resources.vo.ResourceFamilyMember" >
+    <id column="ID_" property="familyMemberId" jdbcType="VARCHAR" />
+    <result column="FAMI_ID" property="famiId" jdbcType="VARCHAR" />
+    <result column="ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="HOUSEHOLD_CODE" property="householdCode" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="IDCARD_TYPE" property="idcardType" jdbcType="VARCHAR" />
+    <result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="BIRTH_DATE" property="birthDate" jdbcType="VARCHAR" />
+    <result column="EDUCATION_DEGREE" property="educationDegree" jdbcType="VARCHAR" />
+    <result column="CAREER_CODE" property="careerCode" jdbcType="VARCHAR" />
+    <result column="MARRIAGE_CODE" property="marriageCode" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="FAMI_NO" property="famiNo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+    <select id="getMasterMedOrg" resultMap="MasterMedicalOrg" parameterType="java.lang.String" >
+	    select * from BIZ_MEDICAL_ORGAN where IS_DELETED = 0
+	 </select>
+	 
+	 <select id="getMasterMedOrgByName" resultMap="MasterMedicalOrg" parameterType="java.lang.String" >
+	    select * from BIZ_MEDICAL_ORGAN where IS_DELETED = 0 and MD_NAME like '%' || #{name,jdbcType=VARCHAR} || '%'
+	 </select>
+	 
+	 <select id="getMasterAdmOrg" resultMap="MasterMedicalOrg" parameterType="java.lang.String" >
+	    select md_name as orgName from BIZ_ADMINISTRATIVE_DIVISION where IS_DELETED = 0 and md_code =#{code,jdbcType=VARCHAR}
+	 </select>
+	 
+	 <select id="getDeptInfoByCode" resultMap="BaseResourceDept" parameterType="java.lang.String" >
+	    select * from P_RESOURCE_DEPT_INFO where dept_code = #{deptCode,jdbcType=VARCHAR}
+	 </select>
+	 
+	 <select id="getDeptInfoList" resultMap="BaseResourceDept" parameterType="com.zebone.dip.resources.vo.ResourceDept" >
+		select a.dept_id,
+		       a.dept_name,
+		       a.dept_code,
+		       a.dept_desc,
+               a.CITY_CODE, a.TOWN_CODE,a.COMMUNITY_CODE,a.MEDICAL_ORG_CODE,
+               a.CLASSIFIED_CODE, a.DEPT_CLASSIFY_CODE,a.HOSPITAL_INTERNAL_CODE,a.CLINIC_INHOSPITAL_CODE,
+		       (select t.dept_name from P_RESOURCE_DEPT_INFO t 
+		       		where t.dept_code=a.parent_dept_code 
+		       			  <if test="orgCode != null and orgCode != '' ">
+							 and t.org_code = #{orgCode,jdbcType=VARCHAR}
+						  </if>
+				) as PARENT_DEPT_CODE
+		  from P_RESOURCE_DEPT_INFO a
+		 where 1=1 
+		 	<if test="deptName != null and deptName != '' ">
+				and (a.dept_name like '%' || #{deptName,jdbcType=VARCHAR} || '%' or a.dept_code like '%' || #{deptName,jdbcType=VARCHAR} || '%')
+			</if>
+			<if test="orgCode != null and orgCode != '' ">
+				and a.org_code = #{orgCode,jdbcType=VARCHAR}
+			</if>
+	 </select>
+	 
+	 <select id="getDeptInfoCount" resultType="java.lang.Integer" parameterType="com.zebone.dip.resources.vo.ResourceDept" >
+		select count(a.dept_id)
+		  from P_RESOURCE_DEPT_INFO a
+		 where 1=1 
+		 	<if test="deptName != null and deptName != '' ">
+				and (a.dept_name like '%' || #{deptName,jdbcType=VARCHAR} || '%' or a.dept_code like '%' || #{deptName,jdbcType=VARCHAR} || '%')
+			</if>
+			<if test="orgCode != null and orgCode != '' ">
+				and a.org_code = #{orgCode,jdbcType=VARCHAR}
+			</if>
+	 </select>
+	 
+	 <select id="getUserInfoList" resultMap="BaseResourceUser" parameterType="com.zebone.dip.resources.vo.ResourceUser" >
+		select 
+		   t.u_id,
+	       t.name,
+	       (select A.DICT_NAME  from P_DICTIONARY A, P_DICTIONARY_TYPE B
+	        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+	        and B.STANDARD_CODE = 'GB/T2261.1'
+	        and A.DICT_CODE = t.sex_code) as sex_code,
+	       (select dept.DEPT_NAME from P_RESOURCE_DEPT_INFO dept 
+	       		where dept.dept_code = t.department_code
+			     <if test="medicalOrganCode != null and medicalOrganCode != '' ">
+				   and dept.org_code = #{medicalOrganCode,jdbcType=VARCHAR}
+				 </if>
+	       	) as department_code,
+	       	(select A.DICT_NAME  from P_DICTIONARY A, P_DICTIONARY_TYPE B
+	        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+	        and B.STANDARD_CODE = 'EXV00.00.068'
+	        and A.DICT_CODE = t.POST_CODE) as POST_CODE,
+	        (select A.DICT_NAME  from P_DICTIONARY A, P_DICTIONARY_TYPE B
+	        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+	        and B.STANDARD_CODE = 'CV08.30.005'
+	        and A.DICT_CODE = t.POSITIONAL_TITLES_CODE) as  POSITIONAL_TITLES_CODE,
+	       t.RESUME
+		  from p_resource_user_info t
+		 where 1 = 1
+		 <if test="name != null and name != '' ">
+		   and t.name like '%' || #{name,jdbcType=VARCHAR} || '%'
+		 </if>
+		 <if test="departmentCode != null and departmentCode != '' ">
+		   and t.department_code = #{departmentCode,jdbcType=VARCHAR}
+		 </if>
+		 <if test="medicalOrganCode != null and medicalOrganCode != '' ">
+		   and t.medical_organ_code = #{medicalOrganCode,jdbcType=VARCHAR}
+		 </if>
+		 <if test="postCode != null and postCode != '' ">
+		   and t.post_code = #{postCode,jdbcType=VARCHAR}
+		 </if>
+	 </select>
+	 
+	 <select id="getUserInfoCount" resultType="java.lang.Integer" parameterType="com.zebone.dip.resources.vo.ResourceUser" >
+		select 
+		   count(*)
+		  from p_resource_user_info t
+		 where 1 = 1
+		 <if test="name != null and name != '' ">
+		   and t.name like '%' || #{name,jdbcType=VARCHAR} || '%'
+		 </if>
+		 <if test="departmentCode != null and departmentCode != '' ">
+		   and t.department_code = #{departmentCode,jdbcType=VARCHAR}
+		 </if>
+		 <if test="medicalOrganCode != null and medicalOrganCode != '' ">
+		   and t.medical_organ_code = #{medicalOrganCode,jdbcType=VARCHAR}
+		 </if>
+		 <if test="postCode != null and postCode != '' ">
+		   and t.post_code = #{postCode,jdbcType=VARCHAR}
+		 </if>
+	 </select>
+	 
+	 <select id="getFamilyInfoList" resultMap="BaseResourceFamily" parameterType="com.zebone.dip.resources.vo.ResourceFamily" >
+		 select t.fami_id,
+		       t.fami_code,
+		       t.household_name,
+		       (select A.DICT_NAME  from P_DICTIONARY A, P_DICTIONARY_TYPE B
+		        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+		        and B.STANDARD_CODE = 'JXV00.00.005'
+		        and A.DICT_CODE = t.live_type) as live_type,
+		       t.family_addr,
+		  	   (select t.name  from p_resource_user_info t 
+		 		where t.code=t.doctor_code and t.medical_organ_code=#{familyOrgCode,jdbcType=VARCHAR}) as doctor_code
+		  from p_resource_family_info t
+		 where 1 = 1
+		 <if test="householdName != null and householdName != '' ">
+		   and t.household_name like '%' || #{householdName,jdbcType=VARCHAR} || '%'
+		 </if>
+		 <if test="familyAddr != null and familyAddr != '' ">
+		   and t.family_addr like '%' || #{familyAddr,jdbcType=VARCHAR} || '%'
+		 </if>
+		 <if test="familyOrgCode != null and familyOrgCode != '' ">
+		   and t.family_org_code = #{familyOrgCode,jdbcType=VARCHAR}
+		 </if>
+	 </select>
+	 
+	 <select id="getFamilyInfoCount" resultType="java.lang.Integer" parameterType="com.zebone.dip.resources.vo.ResourceFamily" >
+		 select count(*)
+		  from p_resource_family_info t
+		 where 1 = 1
+		 <if test="landlordName != null and landlordName != '' ">
+		   and t.landlord_name like '%' || #{landlordName,jdbcType=VARCHAR} || '%'
+		 </if>
+		 <if test="familyAddr != null and familyAddr != '' ">
+		   and t.family_addr like '%' || #{familyAddr,jdbcType=VARCHAR} || '%'
+		 </if>
+		 <if test="familyOrgCode != null and familyOrgCode != '' ">
+		   and t.family_org_code = #{familyOrgCode,jdbcType=VARCHAR}
+		 </if>
+	 </select>
+	 <select id="getDeptByOrgCode" resultMap="BaseResourceDept" parameterType="java.lang.String" >
+		select 
+		       a.dept_name,
+		       a.dept_code
+		  from P_RESOURCE_DEPT_INFO a
+		 where 1=1 
+		 	<if test="name != null and name != '' ">
+				and a.dept_name like '%' || #{name,jdbcType=VARCHAR} || '%' 
+			</if>
+			<if test="orgCode != null and orgCode != '' ">
+				and a.org_code = #{orgCode,jdbcType=VARCHAR}
+			</if>
+	 </select>
+	 
+	 <select id="getFamilyInfoByFamilyId" resultMap="BaseResourceFamily" parameterType="java.lang.String" >
+		select *
+		  from p_resource_family_info a
+		 where a.FAMI_ID =  #{familyId,jdbcType=VARCHAR}
+	 </select>
+	 
+	 <select id="getFamilyMembers" resultMap="BaseResourceFamilyMember" parameterType="java.lang.String" >
+		select 
+		   t.order_number,
+	       (select A.DICT_NAME  from P_DICTIONARY A, P_DICTIONARY_TYPE B
+	        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+	        and B.STANDARD_CODE = 'GB/T4761'
+	        and A.DICT_CODE = t.household_code) as household_code,
+	       t.name,
+	       (select A.DICT_NAME  from P_DICTIONARY A, P_DICTIONARY_TYPE B
+	        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+	        and B.STANDARD_CODE = 'GB/T2261.1'
+	        and A.DICT_CODE = t.sex) as sex,
+	       t.birth_date,
+	       (select A.DICT_NAME  from P_DICTIONARY A, P_DICTIONARY_TYPE B
+	        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+	        and B.STANDARD_CODE = 'GB/T4658'
+	        and A.DICT_CODE = t.education_degree) as education_degree,
+	       (select A.DICT_NAME  from P_DICTIONARY A, P_DICTIONARY_TYPE B
+	        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+	        and B.STANDARD_CODE = 'GB/T6565'
+	        and A.DICT_CODE = t.career_code) as career_code,
+	        (select A.DICT_NAME  from P_DICTIONARY A, P_DICTIONARY_TYPE B
+	        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+	        and B.STANDARD_CODE = 'GB/T2261.2'
+	        and A.DICT_CODE = t.marriage_code) as marriage_code,
+	       t.remark,
+	       (select A.DICT_NAME  from P_DICTIONARY A, P_DICTIONARY_TYPE B
+	        where A.DICTTYPE_ID = B.TYPE_ID  and A.IS_DELETED = 0
+	        and B.STANDARD_CODE = 'JXV00.00.020'
+	        and A.DICT_CODE = t.state) as state
+		  from p_resource_family_members t
+		 where t.FAMI_ID =  #{familyId,jdbcType=VARCHAR} and t.state!='4' order by t.order_number
+	 </select>
+
+	<select id="getFamilyDoctorByOrgAndCode" resultMap="MasterMedicalOrg" parameterType="java.lang.String" >
+		 select t.name as orgName from p_resource_user_info t 
+		 where t.code=#{doctorCode,jdbcType=VARCHAR} and t.medical_organ_code=#{orgCode,jdbcType=VARCHAR}
+	</select>
+</mapper>

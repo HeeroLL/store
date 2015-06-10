@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<!-- 切面类定义 -->
+	<bean id="auditlogAspect" class="com.zebone.auditlog.aop.AuditlogAspect">
+	</bean>
+
+	<!-- aop配置 -->
+	<aop:config>
+		<aop:pointcut id="auditlogpct"  expression="execution(* com.zebone..*Service.*(..))"/>
+		<aop:aspect ref="auditlogAspect">
+			<aop:around method="logging" pointcut-ref="auditlogpct" />
+		</aop:aspect>
+	</aop:config>
+
+	<!-- 切面拦截项配置 -->
+	<bean id="logMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- Key填写类名全称+.+方法名 -->
+				<entry key="com.zebone.xxx.interface.method">
+					<bean class="com.zebone.auditlog.vo.AuditLog">
+						<!-- 操作源IP：不填为从登录信息中获取，value中填写字段名会从第一个参数的该字段读取数据 -->
+						<property name="sourceIp" value=""/>
+						<!-- 操作机构ID：不填为从登录信息中获取，value中填写字段名会从第一个参数的该字段读取数据 -->
+						<property name="orgCode" value=""/>
+						<!-- 操作机构名称：不填为从登录信息中获取，value中填写字段名会从第一个参数的该字段读取数据 -->
+						<property name="orgName" value=""/>
+						<!-- 操作机构人姓名：不填为从登录信息中获取，value中填写字段名会从第一个参数的该字段读取数据 -->
+						<property name="personName" value=""/>
+						<!-- 操作机构人账号：不填为从登录信息中获取，value中填写字段名会从第一个参数的该字段读取数据 -->
+						<property name="personAccount" value=""/>
+						<!-- 操作对象：不填为空，value中填写字段名会从第一个参数的该字段读取数据 -->
+						<property name="optObject" value=""/>
+						<!-- 事件类型ID：必填项，每个模块写死 -->
+						<property name="eventTypeId" value=""/>
+						<!-- 操作类型Id：必填项，每个操作写死 -->
+						<property name="optTypeId" value=""/>
+						<!-- 描述：如有固定的描述，在这写死 -->
+						<property name="description" value=""/>
+					</bean>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<import resource="classpath:ApplicationContext-auditlog-dict.xml"/>
+</beans>

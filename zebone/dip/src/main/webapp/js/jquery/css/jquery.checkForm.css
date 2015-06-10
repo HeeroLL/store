@@ -1,0 +1,240 @@
+.ketchup-error-container {
+  display: none;
+  position: absolute;
+  width: 0;
+  filter: alpha(opacity=80);
+  opacity:0.8;   
+  z-index: 10000;
+  _margin-top:15px;
+}
+
+.ketchup-error-container ol {
+  font-size: 12px;
+  color: #111;
+  font-weight:bold;
+  background: #ffec84;
+  padding-left: 5px;
+  width:125px;
+  /*padding: 10px;
+  border-radius: 5px;
+  background: rgba(255, 236, 132, 0.6); 
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;*/
+  list-style: none;
+  line-height: 16px;
+  margin:0;
+}
+
+.ketchup-error-container span {
+  display: block;
+  width: 0; 
+  height: 0; 
+  border-left: 0 solid transparent; 
+  border-right: 15px solid transparent;
+  _border-right:tomato;
+  _filter:chroma(color=tomato);
+  border-top: 10px solid #f86969;
+  border-top: 10px solid rgba(104, 155, 248, 0.6);
+  border-bottom: 0;
+  margin-left: 10px;
+}
+.error-elmt{border:1px solid #FF0000;}
+.BGDIV{
+	background-color: #EEF7FE;
+	width: 100%; 
+	height: 100%; 
+	overflow:hidden; 
+	overflow-y: auto;
+}
+.tabTable{
+	margin: 5px;	
+}
+.tabTable tr td{
+	text-align: center;
+	height: 25px;	
+}
+.tabTable tr td img{
+	border: #ccc 1px solid;
+}
+.tabTable tr td input[type=text],.tabTable tr td select{
+	width: 100%;
+	border: #ccc 1px solid;
+}
+.dafmTable{
+	width: 800px;
+}
+.dafmTable tr td{
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+	height: 25px;	
+}
+.dafmTable tr td input[type=text]{
+	width: 300px;
+	border: none;
+	background-color: transparent;
+	border-bottom: #000 1px solid;
+	text-align: center;
+}
+.tabTable2{
+	margin: 5px 5px 0px 5px;
+	background-color: #9BBDEA;	
+}
+.recordTD{
+	height: 25px;	
+	background-color: #EEF7FE;
+}
+.tabTableRecord{
+	margin-left:5px; 
+	background-color: #9BBDEA;
+}
+.header{
+	width: 100%;
+	height: 25px; 
+	background: url("../../../images/index-bottom-bg.png");
+	line-height: 25px; 
+	/*color: #11499A;*/
+	text-indent: 10px;
+}
+.recordTD td{
+	text-align:center;
+}
+.recordTD td input[type=text ],.recordTD td select{
+	width: 98%;
+	border: #ccc 1px solid;
+}
+.add{
+	display: none;
+	margin: 1px 2px 2px 15px;
+	height: 20px;
+	float: left;
+	cursor: pointer;
+	border: #9BBDEA 1px solid;
+	text-indent: 0px;
+	width:50px;	
+	line-height: 20px;
+	padding-right: 5px;
+	text-align: right;
+	background: url('../../../images/add.png') no-repeat 2px;
+	border-radius: 5px;
+}
+.add:hover{
+	border-color:#005bb7;
+}
+.remove{
+	display: none;
+	margin: 1px 2px 2px 5px;
+	height: 20px;
+	float: left;
+	cursor: pointer;
+	border: #9BBDEA 1px solid;
+	text-indent: 0px;
+	width:50px;	
+	line-height: 20px;
+	padding-right: 5px;
+	text-align: right;	
+	background: url('../../../images/remove.png') no-repeat 4px;
+	border-radius: 5px;
+}
+.radioDIV{
+	float: left;
+}
+.tempTemplate{
+	display: none;
+}
+.yy_tr,.yy_td{
+border-top:1px solid #9BBDEA;
+background-color: #EEF7FE;
+}
+.remove_record{
+ 	background: url("../../../images/remove.png") no-repeat scroll 2px 50% transparent;
+    display: block;
+    float: right;
+    height: 22px;
+    width: 12px;
+    cursor:pointer;
+}
+.last_place{
+    display: block;
+    float: right;
+    height: 22px;
+    width: 12px;
+}
+/*form中的td*/
+.td_0,.td_50,.td_100{
+	font-weight:bold;
+	text-align:center;
+}
+/*不同宽度的td*/
+.td_50{
+	width:50px;
+}
+.td_100{
+	width:100px;
+}
+/*宽度700的表格*/
+.table_700{
+	width:700px;margin:0 auto;
+}
+/*左侧浮动的元素*/
+.l_div{
+	float:left;
+}
+/*边框为0的表格*/
+.no_border,.no_border tr,.no_border tr td{
+	border:0;
+}
+label{
+	cursor: pointer;
+    float: left;
+    width: 100px;
+}
+label:hover{background-color:#BFE0FF;}
+/*td中嵌套table需要边框的*/
+.inner_table_r{
+padding:0px;border:0px;
+}
+.inner_table_r table{
+width:100%;
+}
+.inner_table_r table,.inner_table_r tr{
+border:0px;
+}
+.inner_table_r tr td{
+border-right: 1px;
+}
+/*left:0p*/
+.l0{
+border-left:0px;
+}
+.t0{
+border-top:0px;
+}
+.wrapper_top,.wrapper_btm{
+	width:130px;height:12px;
+}
+.wrapper_top{
+	background: url("../images/tip/top130.gif") no-repeat;
+}
+.wrapper_btm{
+	background: url("../images/tip/bottom130.gif") no-repeat;
+}
+.tip_top,.tip_btm{
+	height:16px;
+	padding-left:37px;
+	display:none;
+}
+.tip{
+	position: absolute;
+	width:16px;height:20px;
+	margin-top: 35px;
+	background: url("../images/tip/left_top.gif") no-repeat;
+}
+.right_top{
+	margin-top: 35px;
+	background: url("../images/tip/left_top.gif") no-repeat;
+}
+.right_btm{
+	margin-top: 8px;
+	background: url("../images/tip/left_bottom.gif") no-repeat;
+}

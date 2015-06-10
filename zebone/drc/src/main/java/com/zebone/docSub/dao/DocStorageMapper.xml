@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.docSub.dao.DocStorageMapper" >
+
+    <select id="getDocContentByDocNo" parameterType="java.lang.String" resultType="String" >
+        SELECT DOC_XML
+        FROM D_DOC_STORAGE
+        WHERE DOC_NO =  #{docNo,jdbcType=VARCHAR}
+    </select>
+
+</mapper>
+
+
+
+
+

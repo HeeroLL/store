@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskConfig>
+
+	<!--任务事件 ,执行任务前 执行任务结束 -->
+
+	<!--牛塘 -->
+	<taskProcess id="p001" policy="" startTask="a001">
+		<!--流程启动策略 -->
+		<taskInstance taskId="a001" pramaMap="" />
+		<taskInstance taskId="a002" pramaMap="" />
+		<taskInstance taskId="a003" pramaMap="" />
+	</taskProcess>
+
+ 
+	<task id="a001">
+		<!--任务实例 -->
+		<taskExecute class="com.zebone.dnode.etl.check.job.CheckJob" pramaMap="checkService:checkService#checkConfig:checkConfig#orgCode:100" /><!--任务执行类 -->
+		<taskEnd taskStart="a002" />
+	</task>
+
+
+	<task id="a002">
+		<!--任务实例 -->
+		<taskExecute class="com.zebone.dnode.etl.convert.job.ConvertJob" pramaMap="convertService:convertService#convertConfig:convertConfig#orgCode:100"/><!--任务执行类 -->
+		<taskEnd taskStart="a003" />
+	</task>
+
+	<task id="a003">
+		<!--任务实例 -->
+		<taskExecute class="com.zebone.dnode.etl.load.job.LoadJob" pramaMap="loadService:loadService#loadConfig:loadConfig#orgCode:100" /><!--任务执行类 -->
+		<taskEnd taskStart="a004" />
+	</task>
+	
+	<task id="a004">
+		<!--任务实例 -->
+		<taskExecute class="com.zebone.dnode.etl.adapter.job.AdapterJob" pramaMap="adapterService:adapterService#orgCode:100" /><!--任务执行类 -->
+	</task>
+
+</taskConfig>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.etl.adapter.dao.AdaptDocMapper" >
+  <resultMap id="BaseResultMap" type="com.zebone.dnode.etl.adapter.vo.AdaptDoc" >
+    <result column="ID_" property="id" jdbcType="VARCHAR" />
+    <result column="NODE_NAME" property="nodeName" jdbcType="VARCHAR" />
+    <result column="DOC_FLAG" property="docFlag" jdbcType="VARCHAR" />
+    <result column="OPER_FLAG" property="operFlag" jdbcType="VARCHAR" />
+    <result column="UPLOAD_FLAG" property="uploadFlag" jdbcType="VARCHAR" />
+    <result column="UPLOAD_DESC" property="uploadDesc" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+    <result column="DOC_XML" property="docXml" jdbcType="CLOB" javaType="string"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID_, NODE_NAME, DOC_FLAG, OPER_FLAG, UPLOAD_FLAG, UPLOAD_DESC, CREATE_TIME
+  </sql>
+  <sql id="Blob_Column_List" >
+    DOC_XML
+  </sql>
+  <insert id="insert" parameterType="com.zebone.dnode.etl.adapter.vo.AdaptDoc" >
+    insert into P_ADAPT_DOC (ID_, NODE_NAME, DOC_FLAG, 
+      OPER_FLAG, UPLOAD_FLAG, UPLOAD_DESC, 
+      CREATE_TIME, DOC_XML)
+    values (#{id,jdbcType=VARCHAR}, #{nodeName,jdbcType=VARCHAR}, #{docFlag,jdbcType=VARCHAR}, 
+      #{operFlag,jdbcType=VARCHAR}, #{uploadFlag,jdbcType=VARCHAR}, #{uploadDesc,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{docXml,jdbcType=CLOB})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zebone.dnode.etl.adapter.vo.AdaptDoc" >
+    insert into P_ADAPT_DOC
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="nodeName != null" >
+        NODE_NAME,
+      </if>
+      <if test="docFlag != null" >
+        DOC_FLAG,
+      </if>
+      <if test="operFlag != null" >
+        OPER_FLAG,
+      </if>
+      <if test="uploadFlag != null" >
+        UPLOAD_FLAG,
+      </if>
+      <if test="uploadDesc != null" >
+        UPLOAD_DESC,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="docXml != null" >
+        DOC_XML,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeName != null" >
+        #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="docFlag != null" >
+        #{docFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="operFlag != null" >
+        #{operFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadFlag != null" >
+        #{uploadFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadDesc != null" >
+        #{uploadDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="docXml != null" >
+        #{docXml,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK"/>
+<link rel="stylesheet" type="text/css" href="../css/icons.css"/>
+<link rel="stylesheet" type="text/css" href="../skin/grey/main.css" id="main-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/grey/jquery-grid.css"  id="grid-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/grey/jquery-dialog.css" id="dialog-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/grey/jquery.checkForm.css" id="checkform-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/grey/jquery-button.css" id="button-css"/>
+<link rel="stylesheet" type="text/css" href="../js/jquery/css/jquery.zTree.css" id=""/>
+<script type="text/javascript" src="../js/jquery/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.ztree.min.js"></script>
+<title>zTree</title>
+<script type="text/javascript">
+        <!--
+        var setting = {    
+            check:{
+                enable:true
+            },
+            /*data: {
+                simpleData: {
+                    enable: true
+                }
+            }*/
+            data:    {
+                simpleData:{
+                    enable:true
+                }
+            },
+            callback:{
+                onCheck:onCheck
+            }
+            
+        };
+                    
+        var zNodes =[
+            { id:1, pId:0, name:"随意勾选 1", open:false},
+            { id:11, pId:1, name:"随意勾选 1-1", open:true},
+            { id:111, pId:11, name:"随意勾选 1-1-1"},
+            { id:112, pId:11, name:"随意勾选 1-1-2"},
+            { id:12, pId:1, name:"随意勾选 1-2", open:true},
+            { id:121, pId:12, name:"随意勾选 1-2-1"},
+            { id:122, pId:12, name:"随意勾选 1-2-2"},
+            { id:2, pId:0, name:"随意勾选 2",  open:false},
+            { id:21, pId:2, name:"随意勾选 2-1"},
+            { id:22, pId:2, name:"随意勾选 2-2", open:true},
+            { id:221, pId:22, name:"随意勾选 2-2-1"},
+            { id:222, pId:22, name:"随意勾选 2-2-2"},
+            { id:23, pId:2, name:"随意勾选 2-13"}
+        ];
+        
+            
+            
+
+    
+        
+        $(document).ready(function(){
+            $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        });
+            
+            function onCheck(e,treeId,treeNode){
+            var treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+            nodes=treeObj.getCheckedNodes(true),
+            v="";
+            for(var i=0;i<nodes.length;i++){
+            v+=nodes[i].name + ",";
+            alert(nodes[i].id); //获取选中节点的值
+            }
+            
+            
+            }
+            
+        //-->
+</script>
+</head>
+
+<body>
+
+
+<div class="zTreeDemoBackground left">
+        <ul id="treeDemo" class="ztree"></ul>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.sso.dao.SsoAccountMapper">
+	<!-- 单点登录系统账号信息Map -->
+	<resultMap id="ssoAccountInfoResultMap" type="com.zebone.btp.sso.pojo.SsoAccountInfo">
+		<id column="ACCOUNT_ID" property="accountId" jdbcType="VARCHAR"/>
+		<result column="ACCOUNT" property="account" jdbcType="VARCHAR"/>
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+		<result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+		<result column="MOBILE" property="mobile" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!-- 查询的字段信息 -->
+	<sql id="ssoaccount_sql_base">
+		select * from sso_account
+	</sql>
+	<!-- 查询条件 -->
+	<sql id="ssoaccount_sql_where">
+		where 1=1
+		<if test="mobile != null">
+			and mobile=#{mobile}
+		</if>
+		<if test="account != null">
+			and account=#{account}
+		</if>
+	</sql>
+	<!-- 查询记录数 -->
+	<sql id="ssoaccount_sql_count">
+		select count(*) from sso_account <include refid="ssoaccount_sql_where"/>
+	</sql>
+	<!-- 根据accountId查询一条单点登录系统账号信息 -->
+	<select id="findSsoAccountInfoById" resultMap="ssoAccountInfoResultMap" parameterType="java.lang.String">
+		<include refid="ssoaccount_sql_base" /> where account_id = #{accountId}
+	</select>
+	<!-- 根据用户名查询一条单点登录系统账号信息 -->
+	<select id="getSsoAccountInfoByAccount" resultMap="ssoAccountInfoResultMap" parameterType="java.lang.String">
+		<include refid="ssoaccount_sql_base" /> where account = #{account}
+	</select>
+	<!-- 分页查询单点登录系统账号信息 -->
+	<select id="searchSsoAccountInfo" resultMap="ssoAccountInfoResultMap" parameterType="com.zebone.btp.sso.pojo.SsoAccountInfo">
+		<include refid="ssoaccount_sql_base" /> <include refid="ssoaccount_sql_where"/>
+	</select>
+	<!-- 查询单点登录系统账号信息总数 -->
+	<select id="getTotalCount" resultType="int" parameterType="com.zebone.btp.sso.pojo.SsoAccountInfo">
+		<include refid="ssoaccount_sql_count" />
+	</select>
+	<!-- 删除单点登录系统账号信息 -->
+	<delete id="deleteSsoAccountInfo" parameterType="java.lang.String">
+		delete from sso_account where account_id = #{accountId}
+	</delete>
+	<!-- 插入一条单点登录系统账号信息 -->
+	<insert id="saveSsoAccountInfo" parameterType="com.zebone.btp.sso.pojo.SsoAccountInfo">
+		insert into sso_account (account_id,account,password,email,mobile,description)
+		values (#{accountId},#{account,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},
+			#{mobile,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR})
+	</insert>
+	<!-- 修改一条单点登录系统账户信息 -->
+	<update id="updateSsoAccountInfo" parameterType="com.zebone.btp.sso.pojo.SsoAccountInfo">
+		update sso_account set password=#{password,jdbcType=VARCHAR},email=#{email,jdbcType=VARCHAR},
+			mobile=#{mobile,jdbcType=VARCHAR},description=#{description,jdbcType=VARCHAR} where account_id = #{accountId}
+	</update>
+</mapper>

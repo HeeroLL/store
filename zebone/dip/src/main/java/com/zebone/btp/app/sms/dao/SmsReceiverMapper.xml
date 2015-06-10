@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.sms.dao.SmsReceiverMapper">
+	<resultMap id="SmsReceiverResultMap" type="com.zebone.btp.app.sms.pojo.SmsReceiver">
+		<id column="SMS_RECEIVER_ID" property="smsReceiverId" jdbcType="VARCHAR"/>
+		<result column="SMS_CONTENT_ID" property="smsContentId" jdbcType="VARCHAR"/>
+		<result column="MOBILE_NO" property="mobileNo" jdbcType="VARCHAR"/>
+		<result column="RECEIVER_ID" property="receiverId" jdbcType="VARCHAR"/>
+		<result column="RECEIVER_NAME" property="receiverName" jdbcType="VARCHAR"/>
+		<result column="SEND_TIME" property="sendTime" jdbcType="TIMESTAMP"/>
+		<result column="REVEIVE_TIME" property="reveiveTime" jdbcType="TIMESTAMP"/>
+		<result column="STATE" property="state" jdbcType="DECIMAL"/>
+		<result column="STATE_DESC" property="stateDesc" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		SMS_RECEIVER_ID, SMS_CONTENT_ID, MOBILE_NO, RECEIVER_ID, RECEIVER_NAME, SEND_TIME, 
+		REVEIVE_TIME, STATE, STATE_DESC
+	</sql>
+	<select id="findById" resultMap="SmsReceiverResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from BTP_SMS_RECEIVER
+		where SMS_RECEIVER_ID = #{smsReceiverId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from BTP_SMS_RECEIVER
+		where SMS_RECEIVER_ID = #{smsReceiverId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.btp.app.sms.pojo.SmsReceiver">
+		insert into BTP_SMS_RECEIVER
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="smsReceiverId != null">
+				SMS_RECEIVER_ID,
+			</if>
+			<if test="smsContentId != null">
+				SMS_CONTENT_ID,
+			</if>
+			<if test="mobileNo != null">
+				MOBILE_NO,
+			</if>
+			<if test="receiverId != null">
+				RECEIVER_ID,
+			</if>
+			<if test="receiverName != null">
+				RECEIVER_NAME,
+			</if>
+			<if test="sendTime != null">
+				SEND_TIME,
+			</if>
+			<if test="reveiveTime != null">
+				REVEIVE_TIME,
+			</if>
+			<if test="state != null">
+				STATE,
+			</if>
+			<if test="stateDesc != null">
+				STATE_DESC,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="smsReceiverId != null">
+				#{smsReceiverId,jdbcType=VARCHAR},
+			</if>
+			<if test="smsContentId != null">
+				#{smsContentId,jdbcType=VARCHAR},
+			</if>
+			<if test="mobileNo != null">
+				#{mobileNo,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverId != null">
+				#{receiverId,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverName != null">
+				#{receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="sendTime != null">
+				#{sendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="reveiveTime != null">
+				#{reveiveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=DECIMAL},
+			</if>
+			<if test="stateDesc != null">
+				#{stateDesc,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.btp.app.sms.pojo.SmsReceiver">
+		update BTP_SMS_RECEIVER
+		<set>
+			<if test="smsContentId != null">
+				SMS_CONTENT_ID = #{smsContentId,jdbcType=VARCHAR},
+			</if>
+			<if test="mobileNo != null">
+				MOBILE_NO = #{mobileNo,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverId != null">
+				RECEIVER_ID = #{receiverId,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverName != null">
+				RECEIVER_NAME = #{receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="sendTime != null">
+				SEND_TIME = #{sendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="reveiveTime != null">
+				REVEIVE_TIME = #{reveiveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="state != null">
+				STATE = #{state,jdbcType=DECIMAL},
+			</if>
+			<if test="stateDesc != null">
+				STATE_DESC = #{stateDesc,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where SMS_RECEIVER_ID = #{smsReceiverId,jdbcType=VARCHAR}
+	</update>
+</mapper>

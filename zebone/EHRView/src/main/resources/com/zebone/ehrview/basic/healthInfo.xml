@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<healthInfo>
+   <item key="allergyHistory">青霉素</item>
+   <item key="exposeHistory">化学物、毒物</item>
+   <item key="diseaseHistory">冠心病</item>
+   <item key="operationHistory">骨或软骨移植术</item>
+</healthInfo>

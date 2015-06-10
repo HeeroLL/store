@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.follow.dao.HcMapper" >
+	<resultMap id="BaseResultMap" type="com.zebone.follow.vo.Hc" >
+		<id column="HC_NO" property="hcNo" jdbcType="CHAR" />
+		<result column="SERVICE_ORG_CODE" property="serviceOrgCode" jdbcType="CHAR" />
+		<result column="CARD_TYPE_CODE" property="cardTypeCode" jdbcType="CHAR" />
+		<result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="HC_DATE" property="hcDate" jdbcType="VARCHAR" />
+		<result column="RP_CODE" property="rpCode" jdbcType="VARCHAR" />
+		<result column="HEALTH_EVAL_FLAG" property="healthEvalFlag" jdbcType="CHAR" />
+		<result column="HEALTH_EVAL_DESC" property="healthEvalDesc" jdbcType="VARCHAR" />
+		<result column="HEALTH_EDU_CODE" property="healthEduCode" jdbcType="CHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+		<result column="EMPI_NO" property="empiNo" jdbcType="VARCHAR" />
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="getHcByEmpiId" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT A.HC_DATE || ',' || A.RP_CODE || ',' || A.SERVICE_ORG_CODE || ',' ||
+			A.HEALTH_EVAL_FLAG || ',' || A.HEALTH_EDU_CODE || ',' || A.DOC_NO AS CARD_NO
+		FROM TBL_HC A
+		WHERE A.EMPI_NO = #{empiNo,jdbcType=VARCHAR} ORDER BY A.HC_DATE DESC
+	</select>
+</mapper>

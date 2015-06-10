@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.clear.dao.ClearConfMapper">
+	<resultMap id="ClearConfResultMap" type="com.zebone.dip.clear.vo.ClearConf">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="TABLE_ID" property="tableId" jdbcType="VARCHAR"/>
+		<result column="DEPLOY_FLAG" property="deployFlag" jdbcType="VARCHAR"/>
+		<result column="AGAIN_FLAG" property="againFlag" jdbcType="VARCHAR"/>
+		<result column="TASK_ID" property="taskId" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		ID_, TABLE_ID, DEPLOY_FLAG, AGAIN_FLAG, TASK_ID
+	</sql>
+	<select id="findById" resultMap="ClearConfResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from P_CLEAR_CONF
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from P_CLEAR_CONF
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.clear.vo.ClearConf">
+		insert into P_CLEAR_CONF
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_,
+			</if>
+			<if test="tableId != null">
+				TABLE_ID,
+			</if>
+			<if test="deployFlag != null">
+				DEPLOY_FLAG,
+			</if>
+			<if test="againFlag != null">
+				AGAIN_FLAG,
+			</if>
+			<if test="taskId != null">
+				TASK_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="tableId != null">
+				#{tableId,jdbcType=VARCHAR},
+			</if>
+			<if test="deployFlag != null">
+				#{deployFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="againFlag != null">
+				#{againFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="taskId != null">
+				#{taskId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.dip.clear.vo.ClearConf">
+		update P_CLEAR_CONF
+		<set>
+			<if test="tableId != null">
+				TABLE_ID = #{tableId,jdbcType=VARCHAR},
+			</if>
+			<if test="deployFlag != null">
+				DEPLOY_FLAG = #{deployFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="againFlag != null">
+				AGAIN_FLAG = #{againFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="taskId != null">
+				TASK_ID = #{taskId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="getClearConfById" resultMap="ClearConfResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from P_CLEAR_CONF
+		where TABLE_ID = #{tableId,jdbcType=VARCHAR}
+	</select>
+</mapper>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zebone.auditlog.dao.AuditLogMapper">
+    <resultMap id="auditlogResultMap" type="com.zebone.auditlog.vo.AuditLog">
+        <id column="LOG_ID" jdbcType="VARCHAR" property="logId"/>
+        <result column="SOURCE_IP" jdbcType="VARCHAR" property="sourceIp"/>
+        <result column="ORG_CODE" jdbcType="VARCHAR" property="orgCode"/>
+        <result column="ORG_NAME" jdbcType="VARCHAR" property="orgName"/>
+        <result column="PERSON_NAME" jdbcType="VARCHAR" property="personName"/>
+        <result column="PERSON_ACCOUNT" jdbcType="VARCHAR" property="personAccount"/>
+        <result column="OPT_OBJECT" jdbcType="VARCHAR" property="optObject"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="CREATE_DATE" jdbcType="VARCHAR" property="createDate"/>
+        <result column="EVENT_TYPE_ID" jdbcType="VARCHAR" property="eventTypeId"/>
+        <result column="EVENT_TYPE" jdbcType="VARCHAR" property="eventType"/>
+        <result column="OPT_TYPE_ID" jdbcType="VARCHAR" property="optTypeId"/>
+        <result column="OPT_TYPE" jdbcType="VARCHAR" property="optType"/>
+        <result column="RESULT" jdbcType="VARCHAR" property="result"/>
+        <result column="DESCRIPTION" jdbcType="CLOB" property="description"/>
+    </resultMap>
+    
+	<sql id="auditlog_sql_base">
+		SELECT * FROM AUDIT_LOG
+	</sql>
+	<!-- 查询条件 -->
+	<sql id="auditlog_sql_where">
+		WHERE 1=1
+		<if test="personName != null and personName != ''">
+			AND PERSON_NAME LIKE '%' || #{personName} || '%' 
+		</if>
+		<if test="beginDate != null and beginDate != ''">
+			AND CREATE_DATE <![CDATA[ >= ]]> #{beginDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND CREATE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+		<if test="eventTypeId != null and eventTypeId != ''">
+			AND EVENT_TYPE_ID=#{eventTypeId}
+		</if>
+		<if test="optTypeId != null and optTypeId != ''">
+			AND OPT_TYPE_ID=#{optTypeId}
+		</if>
+		<if test="result != null and result != ''">
+			AND RESULT=#{result}
+		</if>
+		<if test="orgCode != null and orgCode != ''">
+			AND ORG_CODE=#{orgCode}
+		</if>
+	</sql>
+    
+    <select id="getAuditLogById" resultMap="auditlogResultMap">
+        SELECT
+            *
+        FROM
+             AUDIT_LOG
+        WHERE            
+            LOG_ID = #{logId,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAuditlogList" resultMap="auditlogResultMap" parameterType="com.zebone.auditlog.vo.AuditLog">
+          <include refid="auditlog_sql_base" /> <include refid="auditlog_sql_where" /> ORDER BY CREATE_TIME DESC
+    </select>
+    
+    <select id="getTotalCount" resultType="int">
+		SELECT COUNT(*) FROM AUDIT_LOG <include refid="auditlog_sql_where" />
+	</select>
+	
+    <insert id="saveAuditLog" parameterType="com.zebone.auditlog.vo.AuditLog" >
+        INSERT INTO AUDIT_LOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logId != null" >
+                LOG_ID,
+            </if>
+            <if test="sourceIp != null" >
+                SOURCE_IP,
+            </if>
+            <if test="orgCode != null" >
+                ORG_CODE,
+            </if>
+            <if test="orgName != null" >
+                ORG_NAME,
+            </if>
+            <if test="personName != null" >
+                PERSON_NAME,
+            </if>
+            <if test="personAccount != null" >
+                PERSON_ACCOUNT,
+            </if>
+            <if test="optObject != null" >
+                OPT_OBJECT,
+            </if>
+            <if test="createTime != null" >
+                CREATE_TIME,
+            </if>
+            <if test="createDate != null" >
+                CREATE_DATE,
+            </if>
+            <if test="eventTypeId != null" >
+                EVENT_TYPE_ID,
+            </if>
+            <if test="eventType != null" >
+                EVENT_TYPE,
+            </if>
+            <if test="optTypeId != null" >
+                OPT_TYPE_ID,
+            </if>
+            <if test="optType != null" >
+                OPT_TYPE,
+            </if>
+            <if test="result != null" >
+                RESULT,
+            </if>
+            <if test="description != null" >
+                DESCRIPTION,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logId != null" >
+                #{logId,jdbcType=VARCHAR},
+            </if> 
+            <if test="sourceIp != null" >
+                #{sourceIp,jdbcType=VARCHAR},
+            </if> 
+            <if test="orgCode != null" >
+                #{orgCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="orgName != null" >
+                #{orgName,jdbcType=OTHER},
+            </if> 
+            <if test="personName != null" >
+                #{personName,jdbcType=OTHER},
+            </if> 
+            <if test="personAccount != null" >
+                #{personAccount,jdbcType=VARCHAR},
+            </if> 
+            <if test="optObject != null" >
+                #{optObject,jdbcType=VARCHAR},
+            </if> 
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="createDate != null" >
+                #{createDate,jdbcType=VARCHAR},
+            </if> 
+            <if test="eventTypeId != null" >
+                #{eventTypeId,jdbcType=VARCHAR},
+            </if> 
+            <if test="eventType != null" >
+                #{eventType,jdbcType=OTHER},
+            </if> 
+            <if test="optTypeId != null" >
+                #{optTypeId,jdbcType=VARCHAR},
+            </if> 
+            <if test="optType != null" >
+                #{optType,jdbcType=OTHER},
+            </if> 
+            <if test="result != null" >
+                #{result,jdbcType=VARCHAR},
+            </if> 
+            <if test="description != null" >
+                #{description,jdbcType=CLOB},
+            </if> 
+        </trim>
+    </insert>
+</mapper>

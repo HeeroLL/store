@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified">
+	<xs:element name="request">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="head" />
+				<xs:element ref="body" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="head">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="requestId" minOccurs="0" />
+				<xs:element ref="tradeNo" />
+				<xs:element ref="orgCode" />
+				<xs:element ref="authorizationCode" minOccurs="0" />
+				<xs:element ref="systemCode" minOccurs="0" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="requestId" type="xs:string" />
+	<xs:element name="tradeNo">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="1" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="authorizationCode" type="xs:string" />
+	<xs:element name="systemCode" type="xs:string" />
+	<xs:element name="body">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="item" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="item">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="deptCode" minOccurs="0"/>
+				<xs:element ref="deptName" minOccurs="0" />
+				<xs:element ref="deptDesc" minOccurs="0" />
+				<xs:element ref="orgCode"  minOccurs="1"/>
+				<xs:element ref="parentDeptCode" minOccurs="0" />
+                <xs:element ref="cityCode" minOccurs="0"/>
+                <xs:element ref="townCode" minOccurs="0"/>
+                <xs:element ref="communityCode" minOccurs="0"/>
+                <xs:element ref="medicalOrgCode" minOccurs="0"/>
+                <xs:element ref="classifiedCode"  minOccurs="0"/>
+                <xs:element ref="clinicHospCode" minOccurs="0"/>
+                <xs:element ref="deptClassifyCode" minOccurs="0"/>
+                <xs:element ref="hospInternalCode" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="deptCode">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="1" />
+				<xs:maxLength value="22" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="deptName">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="1" />
+				<xs:maxLength value="50" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="deptDesc">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="1" />
+				<xs:maxLength value="100" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="parentDeptCode">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="1" />
+				<xs:maxLength value="22" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="orgCode">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="22"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+    <xs:element name="cityCode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="6" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="townCode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="3" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="communityCode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="3" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="medicalOrgCode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="2" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="classifiedCode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:length value="1" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="clinicHospCode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:length value="1" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="deptClassifyCode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="4" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="hospInternalCode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" />
+                <xs:maxLength value="2" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+</xs:schema>

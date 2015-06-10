@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.dictionary.dao.PDictionaryTypeMapper">
+	<resultMap id="PDictionaryTypeResultMap" type="com.zebone.dip.dictionary.vo.PDictionaryType">
+		<id column="TYPE_ID" property="typeId" jdbcType="VARCHAR"/>
+		<result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR"/>
+		<result column="TYPE_CODE" property="typeCode" jdbcType="VARCHAR"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="IS_DELETED" property="isDeleted" jdbcType="CHAR"/>
+		<result column="PARENT_ID" property="parentId" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		TYPE_ID, TYPE_NAME, TYPE_CODE, REMARK, IS_DELETED, PARENT_ID
+	</sql>
+	<select id="findById" resultMap="PDictionaryTypeResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from B_DICTIONARY_TYPE
+		where TYPE_ID = #{typeId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from B_DICTIONARY_TYPE
+		where TYPE_ID = #{typeId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.zebone.dip.dictionary.vo.PDictionaryType">
+		insert into B_DICTIONARY_TYPE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="typeId != null">
+				TYPE_ID,
+			</if>
+			<if test="typeName != null">
+				TYPE_NAME,
+			</if>
+			<if test="typeCode != null">
+				TYPE_CODE,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED,
+			</if>
+			<if test="parentId != null">
+				PARENT_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="typeId != null">
+				#{typeId,jdbcType=VARCHAR},
+			</if>
+			<if test="typeName != null">
+				#{typeName,jdbcType=VARCHAR},
+			</if>
+			<if test="typeCode != null">
+				#{typeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=CHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.zebone.dip.dictionary.vo.PDictionaryType">
+		update B_DICTIONARY_TYPE
+		<set>
+			<if test="typeName != null">
+				TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+			</if>
+			<if test="typeCode != null">
+				TYPE_CODE = #{typeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{isDeleted,jdbcType=CHAR},
+			</if>
+			<if test="parentId != null">
+				PARENT_ID = #{parentId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where TYPE_ID = #{typeId,jdbcType=VARCHAR}
+	</update>
+	<select id="searchDictTypeStandardList" resultMap="PDictionaryTypeResultMap" parameterType="com.zebone.dip.dictionary.vo.PDictionaryType">
+		select 
+		<include refid="column_list" /> 
+		from B_DICTIONARY_TYPE
+		<where>
+			IS_DELETED = 0
+			<if test="typeName!=null and typeName!=''">
+				and TYPE_NAME like '%' || #{typeName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="typeCode!=null and typeCode!=''">
+				and TYPE_CODE like '%' || #{typeCode,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>
+	</select>
+	<select id="searchDictTypeStandardTotalCount" resultType="int" parameterType="com.zebone.dip.dictionary.vo.PDictionaryType">
+		select count(*)
+		from B_DICTIONARY_TYPE
+		<where>
+			IS_DELETED = 0
+			<if test="typeName!=null and typeName!=''">
+				and TYPE_NAME like '%' || #{typeName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="typeCode!=null and typeCode!=''">
+				and TYPE_CODE like '%' || #{typeCode,jdbcType=VARCHAR} || '%'
+			</if>
+		</where>
+	</select>
+	<select id="getPdictStandardInfo" resultMap="PDictionaryTypeResultMap">
+		select 
+		<include refid="column_list" /> 
+		from B_DICTIONARY_TYPE WHERE IS_DELETED = 0
+	</select>
+	<select id="getDictTypeStandardById" parameterType="java.lang.String" resultMap="PDictionaryTypeResultMap">
+		select 
+		<include refid="column_list" /> 
+		from B_DICTIONARY_TYPE WHERE TYPE_ID = #{typeId,jdbcType=VARCHAR} AND IS_DELETED = 0
+	</select>
+	<insert id="saveDictTypeStardInfo" parameterType="com.zebone.dip.dictionary.vo.PDictionaryType">
+		insert into B_DICTIONARY_TYPE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="typeId != null">
+				TYPE_ID,
+			</if>
+			<if test="typeName != null">
+				TYPE_NAME,
+			</if>
+			<if test="typeCode != null">
+				TYPE_CODE,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED,
+			</if>
+			<if test="parentId != null">
+				PARENT_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="typeId != null">
+				#{typeId,jdbcType=VARCHAR},
+			</if>
+			<if test="typeName != null">
+				#{typeName,jdbcType=VARCHAR},
+			</if>
+			<if test="typeCode != null">
+				#{typeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=DECIMAL},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateDictTypeStardInfo" parameterType="com.zebone.dip.dictionary.vo.PDictionaryType">
+		update B_DICTIONARY_TYPE
+		<set>
+			<if test="typeName != null and typeName !=''">
+				TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+			</if>
+			<if test="typeCode != null and typeCode !=''">
+				TYPE_CODE = #{typeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null and remark !=''">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null and isDeleted !=''">
+				IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+			</if>
+			<if test="parentId != null and parentId !=''">
+				PARENT_ID = #{parentId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where TYPE_ID = #{typeId,jdbcType=VARCHAR}
+	</update>
+	<select id="getCountDictCodeByTypeId" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(*) FROM B_DICTIONARY T WHERE T.IS_DELETED = 0 AND T.DICTTYPE_ID = #{typeId,jdbcType=VARCHAR}
+	</select>
+	<update id="removeDictTypeStandardByIds">
+		UPDATE B_DICTIONARY_TYPE SET IS_DELETED = '1' WHERE 
+		<foreach collection="list" item="item" index="index" separator="OR">
+			(TYPE_ID = #{item,jdbcType=VARCHAR})
+		</foreach>
+	</update>
+	<select id="findDictTypeStandardForCheck" resultType="int" parameterType="com.zebone.dip.dictionary.vo.PDictionaryType">
+		select count(TYPE_ID)
+		from B_DICTIONARY_TYPE
+		<where> IS_DELETED = 0 
+			<if test="typeId!=null and typeId!=''">
+				and TYPE_ID != #{typeId,jdbcType=VARCHAR} 
+			</if>
+			<if test="typeName!=null and typeName!=''">
+				and TYPE_NAME = #{typeName,jdbcType=VARCHAR} 
+			</if>
+			<if test="typeCode!=null and typeCode!=''">
+				and TYPE_CODE = #{typeCode,jdbcType=VARCHAR} 
+			</if>
+		</where>
+	</select>
+</mapper>

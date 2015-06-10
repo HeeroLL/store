@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.node.dao.NodeMapper">
+	<resultMap id="PNodeResultMap" type="com.zebone.dip.node.vo.Node">
+		<id column="ID_" property="id" jdbcType="VARCHAR"/>
+		<result column="NODE_DESC" property="nodeDesc" jdbcType="VARCHAR"/>
+		<result column="NODE_STATE" property="nodeState" jdbcType="VARCHAR"/>
+		<result column="NODE_IP" property="nodeIp" jdbcType="VARCHAR"/>
+		<result column="NODE_NAME" property="nodesName" jdbcType="VARCHAR"/>
+		<result column="NODE_NET" property="nodeNet" jdbcType="VARCHAR"/>
+		<result column="NODE_RUN" property="nodeRun" jdbcType="VARCHAR"/>
+		<result column="NODE_PORT" property="nodePort" jdbcType="VARCHAR"/>
+		<result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		ID_, NODE_DESC, NODE_STATE, NODE_IP, NODE_NAME, NODE_NET, NODE_RUN,DEL_FLAG,NODE_PORT
+	</sql>
+	<select id="findById" resultMap="PNodeResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="column_list"/>
+		from P_NODE
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</select>
+	<select id="searchListPNode" resultMap="PNodeResultMap" parameterType="com.zebone.dip.node.vo.Node">
+		SELECT <include refid="column_list"/> FROM P_NODE T
+		<where>
+			T.DEL_FLAG = '1'
+			<if test="nodesName != '' and nodesName != null">
+				AND T.NODE_NAME LIKE '%' || #{nodesName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="nodeState !='' and nodeState != null">
+				AND T.NODE_STATE = #{nodeState,jdbcType=VARCHAR}
+			</if>
+			<if test="nodeIp != '' and nodeIp != null">
+				AND T.NODE_IP = #{nodeIp,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="searchTotalCountPNode" resultType="int" parameterType="com.zebone.dip.node.vo.Node">
+		SELECT COUNT(T.ID_) FROM P_NODE T
+		<where>
+			T.DEL_FLAG = '1'
+			<if test="nodesName != '' and nodesName != null">
+				AND T.NODE_NAME LIKE '%' || #{nodesName,jdbcType=VARCHAR} || '%'
+			</if>
+			<if test="nodeState !='' and nodeState != null">
+				AND T.NODE_STATE = #{nodeState,jdbcType=VARCHAR}
+			</if>
+			<if test="nodeIp != '' and nodeIp != null">
+				AND T.NODE_IP = #{nodeIp,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="getNodeInfoById" resultMap="PNodeResultMap" parameterType="java.lang.String">
+		SELECT <include refid="column_list"/> FROM P_NODE T WHERE T.DEL_FLAG = '1'
+		AND T.ID_ = #{id,jdbcType=VARCHAR}
+	</select>
+	<insert id="saveNodeBaseInfo" parameterType="com.zebone.dip.node.vo.Node">
+		insert into P_NODE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID_,
+			</if>
+			<if test="nodeDesc != null">
+				NODE_DESC,
+			</if>
+			<if test="nodeState != null">
+				NODE_STATE,
+			</if>
+			<if test="nodeIp != null">
+				NODE_IP,
+			</if>
+			<if test="nodesName != null">
+				NODE_NAME,
+			</if>
+			<if test="nodeNet != null">
+				NODE_NET,
+			</if>
+			<if test="nodeRun != null">
+				NODE_RUN,
+			</if>
+			<if test="nodePort != null">
+				NODE_PORT,
+			</if>
+			<if test="delFlag != null">
+				DEL_FLAG,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeDesc != null">
+				#{nodeDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeState != null">
+				#{nodeState,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeIp != null">
+				#{nodeIp,jdbcType=VARCHAR},
+			</if>
+			<if test="nodesName != null">
+				#{nodesName,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeNet != null">
+				#{nodeNet,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeRun != null">
+				#{nodeRun,jdbcType=VARCHAR},
+			</if>
+			<if test="nodePort != null">
+				#{nodePort,jdbcType=VARCHAR},
+			</if>
+			<if test="delFlag != null">
+				#{delFlag,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateNodeBaseInfo" parameterType="com.zebone.dip.node.vo.Node">
+		UPDATE P_NODE T
+		SET T.NODE_DESC = #{nodeDesc,jdbcType=VARCHAR},T.NODE_NAME = #{nodesName,jdbcType=VARCHAR},
+		T.NODE_IP = #{nodeIp,jdbcType=VARCHAR},T.NODE_PORT = #{nodePort,jdbcType=VARCHAR}
+		WHERE T.ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="getCountNodeById" resultType="int" parameterType="java.lang.String">
+		SELECT COUNT(T.ID_) FROM P_NODE T
+		WHERE T.DEL_FLAG = '1' AND T.NODE_STATE = '1' AND T.ID_ = #{id,jdbcType=VARCHAR}
+	</select>
+	<update id="updateBatchNodeByNodeId">
+		UPDATE P_NODE SET DEL_FLAG = '0' WHERE 
+		<foreach collection="list" item="item" index="index" separator="OR">
+			(ID_ = #{item,jdbcType=VARCHAR})
+		</foreach>
+	</update>
+	<select id="getAllNodeInfo" resultMap="PNodeResultMap">
+		SELECT T.ID_,T.NODE_NAME FROM P_NODE T WHERE T.DEL_FLAG = '1'
+	</select>
+	<update id="updateNodeState" parameterType="com.zebone.dip.node.vo.Node">
+		UPDATE P_NODE T 
+		SET T.NODE_STATE = #{nodeState,jdbcType=VARCHAR}
+		WHERE T.ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateById" parameterType="com.zebone.dip.node.vo.Node">
+		update P_NODE
+		<set>
+			<if test="nodeDesc != null">
+				NODE_DESC = #{nodeDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeState != null">
+				NODE_STATE = #{nodeState,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeIp != null">
+				NODE_IP = #{nodeIp,jdbcType=VARCHAR},
+			</if>
+			<if test="nodesName != null">
+				NODE_NAME = #{nodesName,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeNet != null">
+				NODE_NET = #{nodeNet,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeRun != null">
+				NODE_RUN = #{nodeRun,jdbcType=VARCHAR},
+			</if>
+			<if test="nodePort != null">
+				NODE_PORT = #{nodePort,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

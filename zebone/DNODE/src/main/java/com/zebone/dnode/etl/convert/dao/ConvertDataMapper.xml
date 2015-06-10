@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.etl.convert.dao.ConvertDataMapper">
+    <resultMap id="ConvertDataObj" type="com.zebone.dnode.etl.convert.pojo.ConvertDataObj">
+        <result column="ID_" property="id" jdbcType="VARCHAR"/>
+        <result column="COL_DATA" property="columnData" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getConvertDataLic" parameterType="Map" resultMap="ConvertDataObj">
+        SELECT ID_, ${columnName} COL_DATA FROM ${tableName} WHERE CLEAN_FLAG is null AND CHECK_FLAG = '1'
+        <if test="startTime != null" >
+            AND TO_CHAR(E_CREATE_TIME,'YYYY/MM/DD') >= '${startTime}'
+        </if>
+        <if test="endTime != null" >
+            AND TO_CHAR(E_CREATE_TIME,'YYYY/MM/DD') &lt;= '${endTime}'
+        </if>
+    </select>
+
+    <update id="updateCleanFlag" parameterType="Map">
+        UPDATE ${tableName} set CLEAN_FLAG = ${cleanFlag} WHERE ID_ = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getColumnNameLic" parameterType="Map" resultType="string">
+        SELECT COLUMN_NAME FROM USER_TAB_COLS WHERE TABLE_NAME = '${tableName}'
+        AND COLUMN_NAME <![CDATA[<>]]> 'CLEAN_FLAG' AND COLUMN_NAME <![CDATA[<>]]> 'E_CREATE_TIME'
+    </select>
+
+    <insert id="saveConvertData" parameterType="Map">
+        insert into ${cleanTableName} (${cleanFieldName}) VALUES (${cleanFieldVal})
+    </insert>
+</mapper>

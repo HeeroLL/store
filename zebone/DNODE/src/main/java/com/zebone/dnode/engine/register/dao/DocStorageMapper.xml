@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.register.dao.DocStorageMapper">
+	<resultMap id="DocStorageResultMap" type="com.zebone.dnode.engine.register.vo.DocStorage" >
+		<id column="ID_" property="id" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+		<result column="EMPI_ID" property="empiId" jdbcType="VARCHAR" />
+		<result column="DOC_OPER_STATE" property="docOperState" jdbcType="VARCHAR" />
+		<result column="DOC_ORG" property="docOrg" jdbcType="VARCHAR" />
+		<result column="DOC_REGISTER_STATE" property="docRegisterState" jdbcType="VARCHAR" />
+		<result column="DOC_TYPE_CODE" property="docTypeCode" jdbcType="VARCHAR" />
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+		<result column="DOC_XML" property="docXml" jdbcType="CLOB" />
+		<result column="DOC_PARSE_STATE" property="docParseState" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="getDocStorageList" resultMap="DocStorageResultMap">
+	<![CDATA[
+		SELECT *
+		 FROM D_DOC_STORAGE T
+		WHERE (T.DOC_REGISTER_STATE = '0'
+		   OR T.DOC_REGISTER_STATE = '2')
+		   AND MOD(T.SEQ,#{threadCount,jdbcType=INTEGER}) = #{threadNo,jdbcType=INTEGER}
+		  AND ROWNUM < 50
+	]]>
+	</select>
+	
+	<select id="getDocStorageListByDocOrgCode" resultMap="DocStorageResultMap">
+	<![CDATA[
+		SELECT *
+		 FROM D_DOC_STORAGE T
+		WHERE (T.DOC_REGISTER_STATE = '0'
+		   OR T.DOC_REGISTER_STATE = '2')
+		   AND T.DOC_ORG = #{docOrgCode}
+		  AND ROWNUM < 50
+	]]>
+	</select>
+	
+	<update id="updateDocRegisterState" parameterType="com.zebone.dnode.engine.register.vo.DocStorage">
+		UPDATE D_DOC_STORAGE A
+		SET 
+			A.DOC_REGISTER_STATE =#{docRegisterState,jdbcType=VARCHAR}, 
+			A.EMPI_ID =#{empiId,jdbcType=VARCHAR}
+		WHERE A.ID_ = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

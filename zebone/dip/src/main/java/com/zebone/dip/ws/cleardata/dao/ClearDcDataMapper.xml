@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dip.ws.cleardata.dao.ClearDcDataMapper" >
+    <delete id="deleteDocLogInfo" parameterType="java.lang.String" >
+        delete from D_DOC_STORAGE_LOG
+        where DOC_NO= #{docNo,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteDocInfo" parameterType="java.lang.String" >
+        delete from D_DOC_STORAGE
+        where DOC_NO= #{docNo,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteParseInfo" parameterType="java.lang.String" >
+        delete from ${tableName}
+        where EMPI_NO= #{empiNo,jdbcType=VARCHAR}
+    </delete>
+</mapper>

@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK"/>
+<link rel="stylesheet" type="text/css" href="../css/icons.css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/main.css" id="common-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-grid.css"  id="grid-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-dialog.css" id="dialog-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery.checkForm.css" id="checkform-css"/>
+<link rel="stylesheet" type="text/css" href="../skin/default/jquery-button.css" id="button-css"/>
+<script type="text/javascript" src="../js/jquery/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.mark.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-dialog.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-grid.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-checkForm.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.stopBubble.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-button.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery.form.js"></script>
+<title>dialog</title>
+<script type="text/javascript">
+var d;
+$.fn.runCode = function () {
+	var code = $('#'+this.attr('name')).html();
+	new Function(code).call(window);
+	return this;
+};
+$(function(){
+	$('a').click(function(){
+		$(this).runCode();
+	});
+});
+</script>
+</head>
+<body>
+jquery-dialog.js<br/>
+<h2>dialog</h2>
+<hr/>
+<pre xmlns="">
+<code  id="dialog_code">
+	d=new JDialog({
+		title : 'dialog',
+		width : 750,
+		height :300,
+		content:$('#cHTML').html(),
+		buttons: [{
+	 			text: '保存',
+	 			id: 'P_save',	 			
+	 			handler: function(){
+					d.mask('正在保存数据，请稍候...');
+	 			}
+	 		},{
+	 			text: '关闭',
+	 			id: 'P_close',
+	 			handler: function(){
+	 				d.closeDialog();
+	 			}
+	 		}]
+	});
+</code>
+</pre>
+<a href="###"  name="dialog_code">运行Dialog</a><br/>
+<h2>tip.短暂提示</h2>
+<hr/>
+<pre xmlns="">
+<code id="tip_code">
+	JDialog.tip('保存成功！');
+</code>
+</pre>
+<a href="###"  name="tip_code">运行Dialogtip</a>
+<div id="cHTML" style="display:none;">
+	<div class="container">
+		<div class="c_nw"><div class="c_ne"><div class="c_n"></div></div></div>
+		<span class="title-l">
+			<span class="title-r">
+				<b class="icon"></b><span class="title-span">容器标题</span>
+			</span>
+		</span>
+		<div class="tools-panel"></div>
+		<div class="c_w">
+			<div class="c_e">
+				<div class="c_content">
+					容器内容
+				</div>
+			</div>
+		</div>
+		<div class="c_sw"><div class="c_se"><div class="c_s"></div></div></div>
+	</div>
+</div>
+</body>
+</html>

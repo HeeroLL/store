@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/cache
+       http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+			<value>classpath:ehcache.xml</value>
+		</property>
+	</bean>
+
+	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName">
+			<value>default_cache</value>
+		</property>
+	</bean>
+
+	<!-- service层的方法缓存切面配置 -->
+	<bean id="methodCacheAspect" class="com.zebone.btp.cache.MethodCacheAspect">
+		<property name="cache" ref="ehcache" />
+	</bean>
+	
+	<!-- 字典缓存 -->
+	<aop:config>
+		<aop:aspect id="dictAspect" ref="methodCacheAspect">
+		<aop:after-returning method="flushCache"
+				pointcut="execution(* com.zebone.btp.app.dict.service.*Service.save* (..))
+					or execution(* com.zebone.btp.app.dict.service.*Service.del* (..))
+					or execution(* com.zebone.btp.app.dict.service.*Service.inisert* (..))
+					or execution(* com.zebone.btp.app.dict.service.*Service.dictionaryOrder (..))
+					or execution(* com.zebone.btp.app.dict.service.*Service.orderDictionaryByTypeId* (..))"/>
+					
+			<aop:around method="findFromCache"
+				pointcut="execution(* com.zebone.btp.app.dict.service.*Service.get* (..)) 
+					or execution(* com.zebone.btp.app.dict.service.*Service.find* (..))" />
+		</aop:aspect>
+	</aop:config>
+	<!-- 医疗人员缓存 -->
+	<aop:config>
+		<aop:aspect id="personnelAspect" ref="methodCacheAspect">
+		<aop:after-returning method="flushCache"
+				pointcut="execution(* com.zebone.btp.app.personnel.service.*Service.save* (..))
+					or execution(* com.zebone.btp.app.personnel.service.*Service.del* (..))
+					or execution(* com.zebone.btp.app.personnel.service.*Service.update (..))
+					or execution(* com.zebone.btp.app.personnel.service.*Service.oneselfModifySave (..))
+					or execution(* com.zebone.btp.app.personnel.service.*Service.passwordInitialization (..))
+					or execution(* com.zebone.btp.app.personnel.service.*Service.isAccountEnableModify (..))
+					"/>					
+			<aop:around method="findFromCache"
+				pointcut="execution(* com.zebone.btp.app.personnel.service.*Service.get* (..)) 
+					or execution(* com.zebone.btp.app.personnel.service.*Service.find* (..))" />
+		</aop:aspect>
+	</aop:config>
+</beans>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.dnode.engine.empi.dao.ResidentCardMapper">
+    <resultMap id="CardResultMap" type="com.zebone.dnode.engine.empi.vo.ResidentCard">
+        <id column="ID_" property="id" jdbcType="VARCHAR"/>
+        <result column="EMPI" property="empi" jdbcType="VARCHAR"/>
+        <result column="CARD_NO" property="cardNo" jdbcType="VARCHAR"/>
+        <result column="CARD_TYPE" property="cardType" jdbcType="VARCHAR"/>
+        <result column="CARD_SERIAL_NO" property="cardSerialNo" jdbcType="VARCHAR"/>
+        <result column="CARD_ORG" property="cardOrg" jdbcType="VARCHAR"/>
+        <result column="CARD_LEVEL" property="cardLevel" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="CARD_STATUS" property="cardStatus" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getResidentCardByEmpi" resultMap="CardResultMap" parameterType="string" >
+        select *
+        from E_RESIDENT_CARD
+        where EMPI= #{empiNo,jdbcType=VARCHAR}
+    </select>
+</mapper>

@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.app.personnel.dao.PersonnelMapper">
+	<resultMap id="PersonnelMhoRResultMap" type="com.zebone.btp.app.personnel.vo.PersonnelMhoR">
+		<id column="MHO_ID" property="mhoId" jdbcType="VARCHAR"/>
+		<id column="PERSONNEL_ID" property="personnelId" jdbcType="VARCHAR"/>
+		<result column="PERSONNEL_TYPE" property="personnelType" jdbcType="VARCHAR"/>
+		<result column="DEPARTMENT" property="department" jdbcType="VARCHAR"/>
+		<result column="DEPT_PERSONNEL_CODE" property="deptPersonnelCode" jdbcType="VARCHAR"/>
+		<result column="PMR_CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="PMR_CREATOR_ID" property="creatorId" jdbcType="VARCHAR"/>
+		<result column="IS_PART_TIME" property="isPartTime" jdbcType="DECIMAL"/>
+		
+		<result column="FULLNAME" property="fullname" jdbcType="VARCHAR"/>
+		<result column="SEX" property="sex" jdbcType="VARCHAR"/>
+		<result column="JOB_TITLE" property="jobTitle" jdbcType="VARCHAR"/>
+		<result column="IS_ACCOUNT_ENABLE" property="isAccountEnable" jdbcType="DECIMAL"/>
+		<result column="MHO_NAME" property="mhoName" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	
+	<resultMap id="PersonnelResultMap" type="com.zebone.btp.app.personnel.vo.Personnel">
+		<id column="PERSONNEL_ID" property="personnelId" jdbcType="VARCHAR"/>
+		<result column="PERSONNEL_CODE" property="personnelCode" jdbcType="VARCHAR"/>
+		<result column="FULLNAME" property="fullname" jdbcType="VARCHAR"/>
+		<result column="FULLNAME_PINYIN" property="fullnamePinyin" jdbcType="VARCHAR"/>
+		<result column="FULLNAME_JIANPIN" property="fullnameJianpin" jdbcType="VARCHAR"/>
+		<result column="ALIAS" property="alias" jdbcType="VARCHAR"/>
+		<result column="SEX" property="sex" jdbcType="VARCHAR"/>
+		<result column="NATION" property="nation" jdbcType="VARCHAR"/>
+		<result column="NATIVE_PLACE" property="nativePlace" jdbcType="VARCHAR"/>
+		<result column="BIRTHDAY" property="birthday" jdbcType="TIMESTAMP"/>
+		<result column="JOB_TITLE" property="jobTitle" jdbcType="VARCHAR"/>
+		<result column="EDUCATION" property="education" jdbcType="VARCHAR"/>
+		<result column="POLITICAL_STATUS" property="politicalStatus" jdbcType="VARCHAR"/>
+		<result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+		<result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+		<result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+		<result column="MOBILE" property="mobile" jdbcType="VARCHAR"/>
+		<result column="IS_MOBILE_HIDE" property="isMobileHide" jdbcType="VARCHAR"/>
+		<result column="QQ" property="qq" jdbcType="VARCHAR"/>
+		<result column="STATUS" property="status" jdbcType="VARCHAR"/>
+		<result column="ORDER_NO" property="orderNo" jdbcType="DECIMAL"/>
+		<result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR"/>
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="IS_DELETED" property="isDeleted" jdbcType="DECIMAL"/>
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="OPERATOR_ID" property="operatorId" jdbcType="VARCHAR"/>
+		<result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR"/>
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+		<result column="IS_ACCOUNT_ENABLE" property="isAccountEnable" jdbcType="DECIMAL"/>
+		<result column="ENABLE_DATE" property="enableDate" jdbcType="TIMESTAMP"/>
+		<result column="DISABLE_DATE" property="disableDate" jdbcType="TIMESTAMP"/>
+		<result column="SKIN" property="skin" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="column_list">
+		PMR.MHO_ID, PMR.PERSONNEL_ID, PMR.PERSONNEL_TYPE, 
+		PMR.DEPARTMENT, PMR.DEPT_PERSONNEL_CODE, P.CREATE_TIME, P.CREATOR_ID, 
+		PMR.IS_PART_TIME,M.MHO_NAME,P.FULLNAME,P.SEX,P.JOB_TITLE,P.IS_ACCOUNT_ENABLE,SKIN
+	</sql>
+	
+	<!-- 通过医疗机构id获得该结构下的工作人员 -->
+	<select id="findPersonByMhoId" resultMap="PersonnelMhoRResultMap" resultType="list"
+			parameterType="string">
+		SELECT 
+		<include refid="column_list"/>
+		FROM BTP_PERSONNEL P
+		INNER JOIN BTP_PERSONNEL_MHO_R PMR ON P.PERSONNEL_ID=PMR.PERSONNEL_ID 
+		INNER JOIN BTP_MHO M ON M.MHO_ID=PMR.MHO_ID AND M.IS_DELETED = 0
+		WHERE P.IS_DELETED = 0 AND M.MHO_ID = #{mhoId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 通过PersonnelMhoR对象获得该结构下的工作人员 -->
+	<select id="findPersonByPersonMhoR" resultMap="PersonnelMhoRResultMap" resultType="list"
+			parameterType="com.zebone.btp.app.personnel.vo.PersonnelMhoR">
+		SELECT 
+		<include refid="column_list"/>
+		FROM BTP_PERSONNEL P
+		INNER JOIN BTP_PERSONNEL_MHO_R PMR ON P.PERSONNEL_ID=PMR.PERSONNEL_ID 
+		INNER JOIN BTP_MHO M ON M.MHO_ID=PMR.MHO_ID AND M.IS_DELETED = 0 
+		<where>
+			P.IS_DELETED = 0 
+			<if test="mhoId != null and mhoId != '' ">
+				AND M.MHO_ID = #{mhoId,jdbcType=VARCHAR}
+			</if>
+			<if test="deptPersonnelCode != null and deptPersonnelCode != '' ">
+				AND PMR.DEPT_PERSONNEL_CODE LIKE '%'||#{deptPersonnelCode,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="fullname != null and fullname != '' ">
+				AND P.FULLNAME LIKE  '%'||#{fullname,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="jobTitle != null and jobTitle != '' ">
+				AND P.JOB_TITLE = #{jobTitle,jdbcType=VARCHAR}
+			</if>
+			<if test="personnelType != null and personnelType != '' ">
+				AND PMR.PERSONNEL_TYPE = #{personnelType,jdbcType=VARCHAR}
+			</if>
+		</where>
+		ORDER BY P.FULLNAME
+	</select>
+	
+	<!-- 通过PersonnelMhoR对象获得该结构下的工作人员总数 -->
+	<select id="findPersonCountByPersonMhoR" resultType="int"
+			parameterType="com.zebone.btp.app.personnel.vo.PersonnelMhoR">
+		SELECT COUNT(*)
+		FROM BTP_PERSONNEL P
+		INNER JOIN BTP_PERSONNEL_MHO_R PMR ON P.PERSONNEL_ID=PMR.PERSONNEL_ID 
+		INNER JOIN BTP_MHO M ON M.MHO_ID=PMR.MHO_ID AND M.IS_DELETED = 0 
+		<where>
+			P.IS_DELETED = 0 
+			<if test="mhoId != null and mhoId != '' ">
+				AND M.MHO_ID = #{mhoId,jdbcType=VARCHAR}
+			</if>
+			<if test="deptPersonnelCode != null and deptPersonnelCode != '' ">
+				AND PMR.DEPT_PERSONNEL_CODE LIKE '%'||#{deptPersonnelCode,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="fullname != null and fullname != '' ">
+				AND P.FULLNAME LIKE  '%'||#{fullname,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="jobTitle != null and jobTitle != '' ">
+				AND P.JOB_TITLE = #{jobTitle,jdbcType=VARCHAR}
+			</if>
+			<if test="personnelType != null and personnelType != '' ">
+				AND PMR.PERSONNEL_TYPE = #{personnelType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 保存工作人员基本信息 -->
+	<insert id="savePersonnel" parameterType="com.zebone.btp.app.personnel.vo.Personnel">
+		insert into BTP_PERSONNEL
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="personnelId != null">
+				PERSONNEL_ID,
+			</if>
+			<if test="personnelCode != null">
+				PERSONNEL_CODE,
+			</if>
+			<if test="fullname != null">
+				FULLNAME,
+			</if>
+			<if test="fullnamePinyin != null">
+				FULLNAME_PINYIN,
+			</if>
+			<if test="fullnameJianpin != null">
+				FULLNAME_JIANPIN,
+			</if>
+			<if test="alias != null">
+				ALIAS,
+			</if>
+			<if test="sex != null">
+				SEX,
+			</if>
+			<if test="nation != null">
+				NATION,
+			</if>
+			<if test="nativePlace != null">
+				NATIVE_PLACE,
+			</if>
+			<if test="birthday != null">
+				BIRTHDAY,
+			</if>
+			<if test="jobTitle != null">
+				JOB_TITLE,
+			</if>
+			<if test="education != null">
+				EDUCATION,
+			</if>
+			<if test="politicalStatus != null">
+				POLITICAL_STATUS,
+			</if>
+			<if test="address != null">
+				ADDRESS,
+			</if>
+			<if test="email != null">
+				EMAIL,
+			</if>
+			<if test="phone != null">
+				PHONE,
+			</if>
+			<if test="mobile != null">
+				MOBILE,
+			</if>
+			<if test="isMobileHide != null">
+				IS_MOBILE_HIDE,
+			</if>
+			<if test="qq != null">
+				QQ,
+			</if>
+			<if test="status != null">
+				STATUS,
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO,
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED,
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME,
+			</if>
+			<if test="operatorId != null">
+				OPERATOR_ID,
+			</if>
+			<if test="loginName != null">
+				LOGIN_NAME,
+			</if>
+			<if test="password != null">
+				PASSWORD,
+			</if>
+			<if test="isAccountEnable != null">
+				IS_ACCOUNT_ENABLE,
+			</if>
+			<if test="enableDate != null">
+				ENABLE_DATE,
+			</if>
+			<if test="disableDate != null">
+				DISABLE_DATE,
+			</if>
+			<if test="skin != null">
+				SKIN,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="personnelId != null">
+				#{personnelId,jdbcType=VARCHAR},
+			</if>
+			<if test="personnelCode != null">
+				#{personnelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="fullname != null">
+				#{fullname,jdbcType=VARCHAR},
+			</if>
+			<if test="fullnamePinyin != null">
+				#{fullnamePinyin,jdbcType=VARCHAR},
+			</if>
+			<if test="fullnameJianpin != null">
+				#{fullnameJianpin,jdbcType=VARCHAR},
+			</if>
+			<if test="alias != null">
+				#{alias,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null">
+				#{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="nativePlace != null">
+				#{nativePlace,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				#{birthday,jdbcType=TIMESTAMP},
+			</if>
+			<if test="jobTitle != null">
+				#{jobTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="education != null">
+				#{education,jdbcType=VARCHAR},
+			</if>
+			<if test="politicalStatus != null">
+				#{politicalStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="isMobileHide != null">
+				#{isMobileHide,jdbcType=VARCHAR},
+			</if>
+			<if test="qq != null">
+				#{qq,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=DECIMAL},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="operatorId != null">
+				#{operatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="loginName != null">
+				#{loginName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="isAccountEnable != null">
+				#{isAccountEnable,jdbcType=DECIMAL},
+			</if>
+			<if test="enableDate != null">
+				#{enableDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="disableDate != null">
+				#{disableDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="skin != null">
+				#{skin,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 更新人员基本信息 -->
+	<update id="updatePersonnelById" parameterType="com.zebone.btp.app.personnel.vo.Personnel">
+		update BTP_PERSONNEL
+		<set>
+			<if test="personnelCode != null">
+				PERSONNEL_CODE = #{personnelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="fullname != null">
+				FULLNAME = #{fullname,jdbcType=VARCHAR},
+			</if>
+			<if test="fullnamePinyin != null">
+				FULLNAME_PINYIN = #{fullnamePinyin,jdbcType=VARCHAR},
+			</if>
+			<if test="fullnameJianpin != null">
+				FULLNAME_JIANPIN = #{fullnameJianpin,jdbcType=VARCHAR},
+			</if>
+			<if test="alias != null">
+				ALIAS = #{alias,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				SEX = #{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null">
+				NATION = #{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="nativePlace != null">
+				NATIVE_PLACE = #{nativePlace,jdbcType=VARCHAR},
+			</if>
+				BIRTHDAY = #{birthday,jdbcType=TIMESTAMP},
+			<if test="jobTitle != null">
+				JOB_TITLE = #{jobTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="education != null">
+				EDUCATION = #{education,jdbcType=VARCHAR},
+			</if>
+			<if test="politicalStatus != null">
+				POLITICAL_STATUS = #{politicalStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				ADDRESS = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				MOBILE = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="isMobileHide != null">
+				IS_MOBILE_HIDE = #{isMobileHide,jdbcType=VARCHAR},
+			</if>
+			<if test="qq != null">
+				QQ = #{qq,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				STATUS = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO = #{orderNo,jdbcType=DECIMAL},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+			</if>
+				UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+			<if test="operatorId != null">
+				OPERATOR_ID = #{operatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="loginName != null">
+				LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				PASSWORD = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="isAccountEnable != null">
+				IS_ACCOUNT_ENABLE = #{isAccountEnable,jdbcType=DECIMAL},
+			</if>
+			<if test="skin != null">
+				SKIN = #{skin,jdbcType=VARCHAR},
+			</if>
+			<if test="enableDate != null">
+				ENABLE_DATE = #{enableDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="disableDate != null">
+				DISABLE_DATE = #{disableDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where PERSONNEL_ID = #{personnelId,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 保存机构与医疗人员的关系 -->
+	<insert id="savePersonnelMhoR" parameterType="com.zebone.btp.app.personnel.vo.PersonnelMhoR">
+		insert into BTP_PERSONNEL_MHO_R
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="mhoId != null">
+				MHO_ID,
+			</if>
+			<if test="personnelId != null">
+				PERSONNEL_ID,
+			</if>
+			<if test="personnelType != null">
+				PERSONNEL_TYPE,
+			</if>
+			<if test="department != null">
+				DEPARTMENT,
+			</if>
+			<if test="deptPersonnelCode != null">
+				DEPT_PERSONNEL_CODE,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID,
+			</if>
+			<if test="isPartTime != null">
+				IS_PART_TIME,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="mhoId != null">
+				#{mhoId,jdbcType=VARCHAR},
+			</if>
+			<if test="personnelId != null">
+				#{personnelId,jdbcType=VARCHAR},
+			</if>
+			<if test="personnelType != null">
+				#{personnelType,jdbcType=VARCHAR},
+			</if>
+			<if test="department != null">
+				#{department,jdbcType=VARCHAR},
+			</if>
+			<if test="deptPersonnelCode != null">
+				#{deptPersonnelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="isPartTime != null">
+				#{isPartTime,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 根据工作人员id删除机构与医疗人员的关系 -->
+	<delete id="deletePersonnelMhoRByPersonnelId">
+		delete BTP_PERSONNEL_MHO_R 
+		where PERSONNEL_ID in (
+		<foreach collection="list" index="index" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</delete>
+	
+	<!-- 逻辑删除医疗工作人员 -->
+	<update id="deletePersonnelByPersonnelId">
+		update BTP_PERSONNEL set IS_DELETED = 1 
+		where PERSONNEL_ID in ( 
+		<foreach collection="list" index="index" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</update>
+	
+	<!-- 根据工作人员id删除角色与账号的关系 -->
+	<delete id="deleteAccountRoleRByPersonnelId">
+		delete BTP_ACCOUNT_ROLE_R 
+		where PERSONNEL_ID in (
+		<foreach collection="list" index="index" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</delete>
+	
+	<!-- 根据工作人员id查询具体信息 -->
+	<select id="getPersonnelInfo" resultMap="PersonnelResultMap" resultType="com.zebone.btp.app.personnel.vo.Personnel"
+			parameterType="string">
+		SELECT *
+		FROM BTP_PERSONNEL P
+		WHERE  P.PERSONNEL_ID = #{personnelId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 根据工作人员id查询工作人员与医疗机构关系信息 -->
+	<select id="getPersonnelMhoRInfo" resultMap="PersonnelMhoRResultMap" resultType="list" parameterType="string">
+		SELECT
+		    PMR.PERSONNEL_ID,
+		    PMR.MHO_ID,
+		    M.MHO_NAME,
+		    PMR.PERSONNEL_TYPE,
+		    PMR.DEPARTMENT,
+		    PMR.DEPT_PERSONNEL_CODE,
+		    PMR.CREATE_TIME AS PMR_CREATE_TIME,
+		    PMR.CREATOR_ID  AS PMR_CREATOR_ID,
+		    PMR.IS_PART_TIME
+		FROM
+		    BTP_PERSONNEL_MHO_R PMR
+		INNER JOIN
+			BTP_MHO M ON M.IS_DELETED = 0 AND PMR.MHO_ID=M.MHO_ID
+		WHERE
+		    PMR.PERSONNEL_ID = #{personnelId,  jdbcType=VARCHAR}
+	</select>
+	<!-- 根据登录名，查询出医疗人员信息 ,只查询为删除的和没有停用的-->
+	<select id="getPersonnelByLoginName" parameterType="string" resultMap="PersonnelResultMap">
+		SELECT * FROM BTP_PERSONNEL WHERE LOGIN_NAME = #{loginName,jdbcType=VARCHAR} AND IS_DELETED = 0 AND IS_ACCOUNT_ENABLE = 1
+	</select>
+	
+	<!-- 账号停用启用转换 -->
+	<update id="isAccountEnableModify" parameterType="com.zebone.btp.app.personnel.vo.Personnel">
+		update BTP_PERSONNEL set IS_ACCOUNT_ENABLE = #{isAccountEnable,  jdbcType=VARCHAR} 
+		where PERSONNEL_ID = #{personnelId,  jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 校验账号是否存在-->
+	<select id="checkLoginName" parameterType="string" resultMap="PersonnelResultMap">
+		SELECT * FROM BTP_PERSONNEL WHERE LOGIN_NAME = #{loginName,jdbcType=VARCHAR} AND IS_DELETED = 0 
+	</select>
+
+	<!-- 初始化密码 -->
+	<update id="passwordInitialization" parameterType="com.zebone.btp.app.personnel.vo.Personnel" >
+		update BTP_PERSONNEL set PASSWORD = #{password,  jdbcType=VARCHAR} 
+		where PERSONNEL_ID = #{personnelId,  jdbcType=VARCHAR}
+	</update>
+	<!-- 通过机构码验证机构下是否存在工作人员 -->
+	<select id="getPersonList" resultMap="PersonnelMhoRResultMap" parameterType="java.lang.String">
+		select  t.PERSONNEL_ID,t.MHO_ID
+		from BTP_PERSONNEL_MHO_R t,BTP_MHO b
+		where t.MHO_ID=b.MHO_ID and b.LEVEL_CODE LIKE '%'|| #{levelCode,jdbcType=VARCHAR}||'%'
+	</select>
+	
+	<!-- 保存工作人员与角色的关系 -->
+	<insert id="saveRoleAccountR" parameterType="com.zebone.btp.app.role.vo.RoleAccountR">
+		insert into BTP_ACCOUNT_ROLE_R
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">
+				ROLE_ID,
+			</if>
+			<if test="personnelId != null">
+				PERSONNEL_ID,
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">
+				#{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="personnelId != null">
+				#{personnelId,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 修改人员基本信息，不涉及账号 -->
+	<update id="oneselfModifySave" parameterType="com.zebone.btp.app.personnel.vo.Personnel">
+		update BTP_PERSONNEL
+		<set>
+			<if test="personnelCode != null">
+				PERSONNEL_CODE = #{personnelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="fullname != null">
+				FULLNAME = #{fullname,jdbcType=VARCHAR},
+			</if>
+			<if test="fullnamePinyin != null">
+				FULLNAME_PINYIN = #{fullnamePinyin,jdbcType=VARCHAR},
+			</if>
+			<if test="fullnameJianpin != null">
+				FULLNAME_JIANPIN = #{fullnameJianpin,jdbcType=VARCHAR},
+			</if>
+			<if test="alias != null">
+				ALIAS = #{alias,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				SEX = #{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null">
+				NATION = #{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="nativePlace != null">
+				NATIVE_PLACE = #{nativePlace,jdbcType=VARCHAR},
+			</if>
+				BIRTHDAY = #{birthday,jdbcType=TIMESTAMP},
+			<if test="jobTitle != null">
+				JOB_TITLE = #{jobTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="education != null">
+				EDUCATION = #{education,jdbcType=VARCHAR},
+			</if>
+			<if test="politicalStatus != null">
+				POLITICAL_STATUS = #{politicalStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				ADDRESS = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				MOBILE = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="isMobileHide != null">
+				IS_MOBILE_HIDE = #{isMobileHide,jdbcType=VARCHAR},
+			</if>
+			<if test="qq != null">
+				QQ = #{qq,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				STATUS = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO = #{orderNo,jdbcType=DECIMAL},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+			</if>
+				UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+			<if test="operatorId != null">
+				OPERATOR_ID = #{operatorId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where PERSONNEL_ID = #{personnelId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updatePersonnelSkin">
+		UPDATE BTP_PERSONNEL SET SKIN=#{skin,jdbcType=VARCHAR} WHERE PERSONNEL_ID = #{personnelId,jdbcType=VARCHAR}
+	</update>
+</mapper>

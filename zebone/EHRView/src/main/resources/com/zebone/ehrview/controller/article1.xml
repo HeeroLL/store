@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<healthRecord>
+	<patientInfo>
+	   <item key="cardType">市民卡</item>
+	   <item key="cardNo">4342132</item>
+	   <item key="name">宋思明</item>
+	   <item key="idCardType">身份证</item>
+	   <item key="idCardNo">3291234341341873</item>
+	</patientInfo>
+	
+	
+	<hypertension>
+	   <item key="discoverType">体检</item>
+	   <item key="discoverDate">2013-8-17</item>
+	   <item key="diagnoseDate">2014-01-01</item>
+	   <item key="diagnoseOrg">江苏南京卫生局</item>
+	   <item key="heKnows">测试过但不清楚</item>
+	   <item key="hypertensionType">原发型</item>
+	   <item key="systolicPressure">170</item>
+	   <item key="diastolicPressure">80</item>
+	   <item key="levelClass">二级高血压</item>
+	   <item key="manageClass">三级管理（重点组）</item>
+	</hypertension>
+	
+	<complication>
+		<item key="diseaseName">中风</item>
+	</complication>
+	
+	<followUps>
+		<item date="2010-11-11" doctor="李香" org="黄丽卫生院" type="家庭" comment="控制满意" id="1"></item>
+		<item date="2010-4-21" doctor="李香" org="日本卫生院" type="美国家庭" comment="控制不满意" id="2"></item>
+	</followUps>
+</healthRecord>

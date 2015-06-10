@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.store.dao.DocStorageLogMapper" >
+	<resultMap id="DocStorageLogResultMap" type="com.zebone.store.vo.DocStorageLog" >
+		<id column="ID_" property="id" jdbcType="VARCHAR" />
+		<result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+		<result column="EMPI_ID" property="empiId" jdbcType="VARCHAR" />
+		<result column="DOC_OPER_STATE" property="docOperState" jdbcType="VARCHAR" />
+		<result column="DOC_ORG" property="docOrg" jdbcType="VARCHAR" />
+		<result column="DOC_REGISTER_STATE" property="docRegisterState" jdbcType="VARCHAR" />
+		<result column="DOC_TYPE_CODE" property="docTypeCode" jdbcType="VARCHAR" />
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+		<result column="DOC_XML" property="docXml" jdbcType="CLOB" />
+		<result column="DOC_PARSE_STATE" property="docParseState" jdbcType="VARCHAR" />
+		<result column="DOC_VERSION" property="docVersion" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="DocStorageLog_Column_List" >
+		ID_, PARENT_ID, CREATE_TIME, EMPI_ID, DOC_OPER_STATE, DOC_ORG, DOC_REGISTER_STATE, DOC_TYPE_CODE, 
+		DOC_NO, DOC_XML,DOC_PARSE_STATE,DOC_VERSION
+	</sql>
+	
+	<insert id="insert" parameterType="com.zebone.store.vo.DocStorageLog">
+		INSERT INTO D_DOC_STORAGE_LOG
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="id !='' and id != null">
+			ID_,
+		</if>
+		<if test="parentId !='' and parentId != null">
+			PARENT_ID,
+		</if>   
+		<if test="createTime !='' and createTime != null">
+			CREATE_TIME,
+		</if> 
+		<if test="empiId !='' and empiId != null">
+			EMPI_ID,
+		</if> 
+		<if test="docXml !='' and docXml != null">
+			DOC_XML,
+		</if> 
+		<if test="docOperState !='' and docOperState != null">
+			DOC_OPER_STATE,
+		</if> 
+		<if test="docOrg !='' and docOrg != null">
+			DOC_ORG,
+		</if> 
+	   	<if test="docRegisterState !='' and docRegisterState != null">
+	   	   DOC_REGISTER_STATE,
+	   	</if>
+		<if test="docTypeCode !='' and docTypeCode != null">
+			DOC_TYPE_CODE,
+		</if> 
+		<if test="docNo !='' and docNo != null">
+			DOC_NO,
+		</if> 
+		<if test="docParseState !='' and docParseState != null">
+			DOC_PARSE_STATE,
+		</if>
+		<if test="docVersion !='' and docVersion != null">
+			DOC_VERSION,
+		</if>
+		</trim>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides="," >
+		<if test="id !='' and id != null">
+		   #{id,jdbcType=VARCHAR},
+		</if>
+		<if test="parentId !='' and parentId != null">
+		   #{parentId,jdbcType=VARCHAR},
+		</if>
+		<if test="createTime !='' and createTime != null">
+		   #{createTime,jdbcType=VARCHAR},
+		</if>
+		<if test="empiId !='' and empiId != null">
+		   #{empiId,jdbcType=VARCHAR},
+		</if>
+		<if test="docXml !='' and docXml != null">
+		   #{docXml,jdbcType=CLOB},
+		</if>
+		<if test="docOperState !='' and docOperState != null">
+		   #{docOperState,jdbcType=VARCHAR},
+		</if>
+		<if test="docOrg !='' and docOrg != null">
+		   #{docOrg,jdbcType=VARCHAR},
+		</if>
+	    <if test="docRegisterState !='' and docRegisterState != null">
+	   	   #{docRegisterState,jdbcType=VARCHAR},
+	    </if>
+		<if test="docTypeCode !='' and docTypeCode != null">
+		   #{docTypeCode,jdbcType=VARCHAR},
+		</if>
+		<if test="docNo !='' and docNo != null">
+		   #{docNo,jdbcType=VARCHAR},
+		</if>
+		<if test="docParseState !='' and docParseState != null">
+		   #{docParseState,jdbcType=VARCHAR},
+		</if>
+		<if test="docVersion !='' and docVersion != null">
+			#{docVersion,jdbcType=VARCHAR},
+		</if>
+		</trim>
+	</insert>
+</mapper>

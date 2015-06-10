@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.btp.sso.dao.SysRegMapper">
+	<!-- 系统信息Map -->
+	<resultMap id="sysRegInfoResultMap" type="com.zebone.btp.sso.pojo.SysRegInfo">
+		<id column="REG_ID" property="regId" jdbcType="VARCHAR"/>
+		<result column="SYS_ID" property="sysId" jdbcType="VARCHAR"/>
+		<result column="SYS_NAME" property="sysName" jdbcType="VARCHAR"/>
+		<result column="SYS_URL" property="sysUrl" jdbcType="VARCHAR"/>
+		<result column="SYS_LOGOUTURL" property="sysLogoutUrl" jdbcType="VARCHAR"/>
+		<result column="SYS_IMG" property="sysImg" jdbcType="VARCHAR"/>
+		<result column="SYS_DESCRPTION" property="sysDescription" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!-- 查询的字段信息 -->
+	<sql id="sysreg_sql_base">
+		select * from sso_sys_reg
+	</sql>
+	<!-- 查询条件 -->
+	<sql id="sysreg_sql_where">
+		where 1=1
+		<if test="sysId != null">
+			and sys_id=#{sysId}
+		</if>
+		<if test="sysName != null">
+			and sys_name=#{sysName}
+		</if>
+	</sql>
+	<!-- 查询记录数 -->
+	<sql id="sysreg_sql_count">
+		select count(*) from sso_sys_reg <include refid="sysreg_sql_where"/>
+	</sql>
+	<!-- 查询一条系统信息 -->
+	<select id="findSysRegInfoById" resultMap="sysRegInfoResultMap" parameterType="java.lang.String">
+		<include refid="sysreg_sql_base" /> where reg_id = #{regId}
+	</select>
+	<!-- 分页查询系统信息 -->
+	<select id="searchSysRegInfo" resultMap="sysRegInfoResultMap" parameterType="com.zebone.btp.sso.pojo.SysRegInfo">
+		<include refid="sysreg_sql_base" /> <include refid="sysreg_sql_where"/>
+	</select>
+	<!-- 根据单点登录账号id，获取该账户所有的子系统信息列表 -->
+	<select id="getSysAccountInfoList" resultMap="sysRegInfoResultMap" parameterType="java.lang.String">
+		select reg.* from sso_sys_reg reg inner join sso_sys_account acc on reg.sys_id=acc.sys_id
+			where acc.sso_account_id=#{ssoAccountId}
+	</select>
+	<!-- 查询系统信息总数 -->
+	<select id="getTotalCount" resultType="int" parameterType="com.zebone.btp.sso.pojo.SysRegInfo">
+		<include refid="sysreg_sql_count" />
+	</select>
+	<!-- 删除系统信息 -->
+	<delete id="deleteSysRegInfo" parameterType="java.lang.String">
+		delete from sso_sys_reg where reg_id = #{regId}
+	</delete>
+	<!-- 插入一条系统信息 -->
+	<insert id="saveSysRegInfo" parameterType="com.zebone.btp.sso.pojo.SysRegInfo">
+		insert into sso_sys_reg (reg_id,sys_id,sys_name,sys_url,sys_logouturl,sys_img,sys_descrption)
+		values (#{regId},#{sysId},#{sysName,jdbcType=VARCHAR},#{sysUrl,jdbcType=VARCHAR},#{sysLogoutUrl,jdbcType=VARCHAR},
+			#{sysImg,jdbcType=VARCHAR},#{sysDescription,jdbcType=VARCHAR})
+	</insert>
+	<!-- 修改一条子系统账户信息 -->
+	<update id="updateSysRegInfo" parameterType="com.zebone.btp.sso.pojo.SysAccountInfo">
+		update sso_sys_reg set sys_id=#{sysId,jdbcType=VARCHAR},sys_name=#{sysName,jdbcType=VARCHAR},sys_url=#{sysUrl,jdbcType=VARCHAR},
+			sys_logouturl=#{sysLogoutUrl,jdbcType=VARCHAR},sys_img=#{sysImg,jdbcType=VARCHAR},sys_descrption=#{sysDescription,jdbcType=VARCHAR} where reg_id = #{regId}
+	</update>
+</mapper>

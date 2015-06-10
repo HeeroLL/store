@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.register.dao.RegisterLogMapper" >
+	<resultMap id="RegisterLogResultMap" type="com.zebone.register.vo.RegisterLog" >
+		<id column="ID_" property="id" jdbcType="VARCHAR" />
+		<result column="MAIN_ID" property="mainId" jdbcType="VARCHAR" />
+		<result column="EMPI_ID" property="empiId" jdbcType="VARCHAR" />
+		<result column="DOC_DATA_SOURCE" property="docDataSource" jdbcType="VARCHAR" />
+		<result column="DOC_ORG" property="docOrg" jdbcType="VARCHAR" />
+		<result column="DOC_STATE" property="docState" jdbcType="VARCHAR" />
+		<result column="DOC_OPER_STATE" property="docOperState" jdbcType="VARCHAR" />
+		<result column="DOC_TYPE_CODE" property="docTypeCode" jdbcType="VARCHAR" />
+		<result column="DOC_NO" property="docNo" jdbcType="VARCHAR" />
+		<result column="DOC_WEB_URL" property="docWebUrl" jdbcType="VARCHAR" />
+		<result column="REGISTER_TIME" property="registerTime" jdbcType="VARCHAR" />
+		<result column="DOC_VERSION" property="docVersion" jdbcType="VARCHAR"/>
+	</resultMap>
+  
+	<sql id="RegisterLog_Column_List" >
+		ID_, MAIN_ID, EMPI_ID, DOC_DATA_SOURCE, DOC_ORG, DOC_STATE, DOC_OPER_STATE, DOC_TYPE_CODE, 
+		DOC_NO, DOC_WEB_URL, REGISTER_TIME,DOC_VERSION
+	</sql>
+	<insert id="insert" parameterType="com.zebone.register.vo.RegisterLog">
+		INSERT INTO R_REGISTER_LOG
+		  (ID_,
+		   MAIN_ID,
+		   EMPI_ID,
+		   DOC_DATA_SOURCE,
+		   DOC_ORG,
+		   DOC_STATE,
+		   DOC_OPER_STATE,
+		   DOC_TYPE_CODE,
+		   DOC_NO,
+		   DOC_WEB_URL,
+		   DOC_VERSION,
+		   REGISTER_TIME)
+		VALUES
+		  (#{id,jdbcType=VARCHAR},
+		   #{mainId,jdbcType=VARCHAR},
+		   #{empiId,jdbcType=VARCHAR},
+		   #{docDataSource,jdbcType=VARCHAR},
+		   #{docOrg,jdbcType=VARCHAR},
+		   #{docState,jdbcType=VARCHAR},
+		   #{docOperState,jdbcType=VARCHAR},
+		   #{docTypeCode,jdbcType=VARCHAR},
+		   #{docNo,jdbcType=VARCHAR},
+		   #{docWebUrl,jdbcType=VARCHAR},
+		   #{docVersion,jdbcType=VARCHAR},
+		   #{registerTime,jdbcType=VARCHAR})
+	</insert>
+</mapper>

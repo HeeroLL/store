@@ -1,0 +1,157 @@
+html,body{
+height:100%;
+_height:100%;
+margin:0;
+padding:0;
+}
+.atc-container{
+	box-shadow: 0 0 6px #888888;
+}
+.autocomplete-content { 
+	_background:none; _margin:0; /* IE6 fix: */ 
+	height: auto;
+    max-height: 300px;
+    overflow:auto;
+    _height:350px;  _margin:0; _overflow-x:hidden;/* IE6 specific: */
+}
+.autocomplete { 
+	border:1px solid #999; background:#FFF; cursor:default; text-align:left; max-height:350px; 
+	overflow:auto;
+	width: 100%; 
+	/*margin:-6px 6px 6px -6px;*/ 
+}
+.autocomplete .hover { background:#F0F0F0; }
+.autocomplete .selected { background:#FBEC88; }
+.autocomplete div { padding:2px 5px; white-space:nowrap; }
+.autocomplete strong { font-weight:normal; color:#3399FF; }
+.autocomplete,.paging{
+    -moz-border-radius: 0 0 5px 5px;
+    -moz-box-shadow: 0 3px 6px #AAAAAA;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: -moz-use-text-color #A4A4A4 #A4A4A4;
+    border-right: 1px solid #A4A4A4;
+    border-style: none solid solid;
+    border-width: medium 1px 1px;
+    overflow: auto;
+}
+.combo {
+    display: inline-block;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.combo-text{
+	background: url("./images/form/text-bg.gif") repeat-x scroll 0 0 white;
+    border:1px solid #B5B8C8;
+    font-size: 12px;
+    height: 20px;
+    line-height: 17px;
+    padding:1px 0 0 0;
+    vertical-align: baseline;
+}
+.autocomplete div { border-top:1px solid #EEE; }
+.autocomplete {border-collapse: collapse;}
+.autocomplete,.autocomplete td,.autocomplete tr{border: 1px solid #9BBDEA;}
+.autocomplete tr td {
+    height: 18px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.ffb-arrow 
+{
+	cursor: pointer;
+    display: inline-block;
+    width: 17px;
+    height: 22px;
+    overflow: hidden;
+    vertical-align: top;
+	background-image:url("./images/form/trigger.gif");
+	background-position: 0 0;
+	border-bottom: 1px solid #B5B8C8;
+}
+.ffb-arrow.over,.ffb-arrow-focus{ /* css sprite technique */
+	background-position:-17px 0;
+}
+.ffb-arrow.active { /* css sprite technique */
+	background-position:-34px 0;
+}
+.autoloading{
+	background: url("./images/loading_cycle.gif") no-repeat 0 0;
+}
+.paging{
+	height: 20px;
+	line-height: 20px;
+	border-left:1px solid #9BBDEA;
+	border-right:1px solid #9BBDEA;
+	border-bottom:1px solid #9BBDEA;
+	background-color: #FFFFFF;
+}
+.paging div{
+	float:left;
+}
+.paging .pageBarButton{
+	border:0;
+	width: 16px;height:16px;
+	cursor: pointer;
+	margin-left: 3px;
+	background-image: url("./images/page.gif");	
+	background-repeat:'no-repeat';
+	float: left;
+}
+.page_first{
+	background-position: 0 0;
+}
+.page_prev{
+	background-position: -16px 0;
+}
+.page_next{
+	background-position: -32px 0;
+}
+.page_last{
+	background-position: -48px 0;
+}
+/*disable*/
+.first_disable{
+	background-position: 0 -32px;
+	cursor:default;
+}
+.previous_disable{
+	background-position: -16px -32px;
+	cursor:default;
+}
+.next_disable{
+	background-position: -32px -32px;
+	cursor:default;
+}
+.last_disable{
+	background-position: -48px -32px;
+	cursor:default;	
+}
+.box{
+  width: 22px;
+  margin: 2px;
+  height: 10px;
+  line-height: 10px;
+}
+.paging .total{
+	float:right;
+}
+.complete_close{
+	background-image: url("./images/idialog.png");
+    background-repeat: no-repeat;
+	background-position: 0 -60px;
+	width: 34px;
+    height: 34px;
+    position: absolute;
+    right: -16px;
+    top: -16px;
+    text-indent: -9999em;
+    text-decoration: none;
+    display: block;
+    cursor:pointer;
+}
+.complete_close:hover{
+	background-position: 0 -94px;
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zebone.ehrview.dao.DipDictionaryTypeMapper">
+	
+ 	<sql id="dipDictTypeCol">
+		type_id, type_name, type_code, remark, is_deleted, parent_id, version
+	</sql>  
+  
+	<select id="getAllDipDictionaryType" resultType="com.zebone.ehrview.vo.DipDictionaryType">
+		select <include refid="dipDictTypeCol"/> from P_DICTIONARY_TYPE where IS_DELETED = 0 ORDER BY type_name ASC
+	</select>
+	 
+</mapper>
