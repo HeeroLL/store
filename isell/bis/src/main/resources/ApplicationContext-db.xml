@@ -9,6 +9,8 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
 	<description>数据库相关配置</description>
+	<tx:annotation-driven />
+	
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
@@ -54,5 +56,21 @@
 		<property name="basePackage" value="com.sell"/>
 		<property name="annotationClass" value="com.sell.core.mybatis.Mapper"/>
 	</bean>
-	
+	<!-- 声明式事务配置 -->
+	<aop:config>
+		<aop:advisor pointcut="execution(* com.sell..*Service.*(..))"
+			advice-ref="jtaTxAdvice" />
+	</aop:config>
+
+	<tx:advice id="jtaTxAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="search*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="NOT_SUPPORTED" />
+		</tx:attributes>
+	</tx:advice>
 </beans>

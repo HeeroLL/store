@@ -56,11 +56,6 @@
     	<appender-ref ref="consoleLog"/>
     </category>
     
-    <category name="com.soarmobile" additivity="false">  
-        <priority value="DEBUG" />         
-        <appender-ref ref="consoleLog"/> 
-    </category>
-    
     <!-- 关闭spring的log -->
 	<category name="org.springframework">
 		<priority value="ERROR" />

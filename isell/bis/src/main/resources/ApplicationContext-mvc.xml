@@ -22,19 +22,18 @@
 	<!-- 配置requestMapping -->
 	<bean
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-		<!-- 
 		<property name="interceptors">
 			<list>
-				<bean class="com.sell.core.web.LoginInterceptor">
-					<property name="ignorePackageList">
+				<bean class="com.sell.bis.sys.SecurityInterceptor">
+					<property name="permissionIpList">
 						<list>
-							<value>com.sell.sys.security</value>
+							<value>127.0.0.1</value>
+							<value>localhost</value>
 						</list>
 					</property>
 				</bean>
 			</list>
 		</property>
-		 -->
 	</bean>
 	
 	<!-- 配置SpringMVC @ResponseBody和@RequestBody注解 -->
