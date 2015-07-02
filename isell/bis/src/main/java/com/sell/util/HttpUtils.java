@@ -5,7 +5,6 @@ import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -30,8 +29,13 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 /**
- * 
+ * <pre>
  * 发送HTTP请求工具类
+ * 1. 通过调用getInstance方法获取httpclient实例，从而发送http/https请求可以保证每次访问不关闭连接，
+ *    在使用完成后手动调用closeConnection()关闭连接。
+ * 2. 通过提供的静态方法，可以更方便发送请求，适用于绝大多数单次请求的场景
+ * (为提升性能，一个业务流程如果需要多次HTTP请求，建议采用方法1：使用一个httpclient实例)
+ * </pre>
  * 
  * @author lilin
  * @version [版本号, 2015年7月1日]
@@ -73,42 +77,37 @@ public final class HttpUtils {
     }
     
     /**
-     * 以下为每次访问不关闭连接的API(为提升性能，一个业务流程如果需要多次HTTP请求，建议使用一个httpclient实例)，需调用getInstance方法获取httpclient实例，
-     * 并在使用完成后手动调用closeConnection()关闭连接
-     */
-    
-    /**
-     * http get请求
+     * get请求
      * 
      * @param url 请求url
      * @return 响应字符串
      */
-    public String httpget(String url) {
+    public String sendGet(String url) {
         HttpGet httpGet = new HttpGet(url);
         return http(httpClient, httpGet, false);
     }
     
     /**
-     * http post请求(字符串形式)
+     * post请求(字符串形式)
      * 
      * @param url 请求url
      * @param param 请求参数
      * @return 响应字符串
      */
-    public String httppost(String url, String param) {
+    public String sendPost(String url, String param) {
         HttpPost httpPost = new HttpPost(url);
         httpPost.setEntity(new StringEntity(param, "UTF-8"));
         return http(httpClient, httpPost, false);
     }
     
     /**
-     * http post请求(form形式)
+     * post请求(form形式)
      * 
      * @param url 请求url
      * @param paramMap 请求参数
      * @return 响应字符串
      */
-    public String httppost(String url, Map<String, String> paramMap) {
+    public String sendPost(String url, Map<String, String> paramMap) {
         HttpPost httpPost = new HttpPost(url);
         if (paramMap != null) {
             httpPost.setEntity(getUrlEncodedFormEntity(paramMap));
@@ -117,43 +116,10 @@ public final class HttpUtils {
     }
     
     /**
-     * https get请求
-     * 
-     * @param url 请求url
-     * @return 响应字符串
+     * 关闭HTTP
      */
-    public static String httpsget(String url) {
-        HttpGet httpGet = new HttpGet(url);
-        return http(getSSLHttpClient(), httpGet, false);
-    }
-    
-    /**
-     * https post请求(字符串形式)
-     * 
-     * @param url 请求url
-     * @param param 请求参数
-     * @return 响应字符串
-     */
-    public String httpspost(String url, String param) {
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.setEntity(new StringEntity(param, "UTF-8"));
-        return http(getSSLHttpClient(), httpPost, false);
-    }
-    
-    /**
-     * https post请求(form形式)
-     * 
-     * @param url 请求url
-     * @param param 请求参数
-     * @return 响应字符串
-     */
-    public String httpspost(String url, Map<String, String> paramMap) {
-        HttpPost httpPost = new HttpPost(url);
-        if (paramMap != null) {
-            httpPost.setEntity(getUrlEncodedFormEntity(paramMap));
-        }
-        
-        return http(getSSLHttpClient(), httpPost, false);
+    public void closeConn() {
+        closeConnenction(httpClient);
     }
     
     /**
@@ -311,25 +277,16 @@ public final class HttpUtils {
                 throw new RuntimeException("exception.httprequest-error", e);
             }
             if (isFinishClose) {
-                try {
-                    httpclient.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("exception.httprequest-error", e);
-                }
+                closeConnenction(httpclient);
             }
         }
     }
     
-    public static void main(String[] args)
-        throws Exception {
-        
-        Map<String, String> paramMap = new HashMap<String, String>();
-        paramMap.put("verifyCode", "gBWGwSga2cpavGJYg85e7Q==");
-        paramMap.put("xml",
-            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Request lang=\"zh-CN\" service=\"RouteService\"><Head>BSPdevelop</Head><Body><RouteRequest method_type=\"1\" tracking_number=\"444029276937\" tracking_type=\"1\"/></Body></Request>");
-        
-        System.out.println(httpsPost("https://bsp-oisp.test.sf-express.com/bsp-oisp/sfexpressService", paramMap));
-        System.out.println(httpsGet("https://www.baidu.com"));
+    private static void closeConnenction(CloseableHttpClient httpclient) {
+        try {
+            httpclient.close();
+        } catch (IOException e) {
+            throw new RuntimeException("exception.httprequest-error", e);
+        }
     }
-    
 }

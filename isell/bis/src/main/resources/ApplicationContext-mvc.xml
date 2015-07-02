@@ -12,12 +12,7 @@
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
     
-	<!--
-		************注意************ 
-		use-default-filters="false" 属性不能改动，如果删除，或者改为true 事物将失效
-	-->
-	<context:component-scan base-package="com.sell.*" use-default-filters="false">
-	</context:component-scan>
+	<context:component-scan base-package="com.sell.*" />
 	
 	<!-- 配置requestMapping -->
 	<bean
@@ -52,6 +47,7 @@
 		<property name="supportedMediaTypes">
 			<list>
 				<value>application/json;charset=utf-8</value>
+				<value>text/plain;charset=UTF-8</value>
 			</list>
 		</property>
 		<!-- 设置一个自定义 objectMapper，让Date类型的数据转成yyyy-MM-dd HH:mm:ss-->
@@ -69,8 +65,10 @@
 	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
-				<value>plain/text;charset=utf-8</value>
+				<value>text/plain;charset=UTF-8</value>
 			</list>
 		</property>
 	</bean>
+	
+	<import resource="ApplicationContext.xml" />
 </beans>  
