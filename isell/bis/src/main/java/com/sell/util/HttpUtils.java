@@ -163,6 +163,7 @@ public final class HttpUtils {
      */
     public static String httpPost(String url, String param) {
         HttpPost httpPost = new HttpPost(url);
+        httpPost.setHeader("Content-Type", "application/xml");
         httpPost.setEntity(new StringEntity(param, "UTF-8"));
         return http(httpPost);
     }
