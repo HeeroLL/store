@@ -97,8 +97,20 @@
 			</list>
 		</property>
 	</bean>
-	<!-- 
-	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"/>
- 	-->
+	<!-- <bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"/> -->
+	<!-- 根据请求头Accept选择对应的视图 -->
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="defaultViews">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<property name="marshaller" ref="xmlMarshaller" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
 	<import resource="ApplicationContext.xml" />
 </beans>  

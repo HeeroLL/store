@@ -163,7 +163,22 @@ public final class HttpUtils {
      */
     public static String httpPost(String url, String param) {
         HttpPost httpPost = new HttpPost(url);
-        httpPost.setHeader("Content-Type", "application/xml");
+        httpPost.setEntity(new StringEntity(param, "UTF-8"));
+        return http(httpPost);
+    }
+    
+    /**
+     * http post请求(字符串形式)
+     * 
+     * @param url 请求url
+     * @param param 请求参数
+     * @param contentType contentType
+     * @return 响应字符串
+     */
+    public static String httpPost(String url, String param, String contentType) {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.addHeader("Content-Type", contentType);
+        httpPost.addHeader("Accept", contentType);
         httpPost.setEntity(new StringEntity(param, "UTF-8"));
         return http(httpPost);
     }
@@ -177,6 +192,25 @@ public final class HttpUtils {
      */
     public static String httpPost(String url, Map<String, String> paramMap) {
         HttpPost httpPost = new HttpPost(url);
+        if (paramMap != null) {
+            httpPost.setEntity(getUrlEncodedFormEntity(paramMap));
+        }
+        
+        return http(httpPost);
+    }
+    
+    /**
+     * http post请求(form形式)
+     * 
+     * @param url 请求url
+     * @param paramMap 请求参数
+     * @param contentType contentType
+     * @return 响应字符串
+     */
+    public static String httpPost(String url, Map<String, String> paramMap, String contentType) {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.addHeader("Content-Type", contentType);
+        httpPost.addHeader("Accept", contentType);
         if (paramMap != null) {
             httpPost.setEntity(getUrlEncodedFormEntity(paramMap));
         }
@@ -209,6 +243,22 @@ public final class HttpUtils {
     }
     
     /**
+     * https post请求(字符串形式)
+     * 
+     * @param url 请求url
+     * @param param 请求参数
+     * @param contentType contentType
+     * @return 响应字符串
+     */
+    public static String httpsPost(String url, String param, String contentType) {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.addHeader("Content-Type", contentType);
+        httpPost.addHeader("Accept", contentType);
+        httpPost.setEntity(new StringEntity(param, "UTF-8"));
+        return http(getSSLHttpClient(), httpPost, true);
+    }
+    
+    /**
      * https post请求(form形式)
      * 
      * @param url 请求url
@@ -216,6 +266,23 @@ public final class HttpUtils {
      * @return 响应字符串
      */
     public static String httpsPost(String url, Map<String, String> paramMap) {
+        HttpPost httpPost = new HttpPost(url);
+        if (paramMap != null) {
+            httpPost.setEntity(getUrlEncodedFormEntity(paramMap));
+        }
+        
+        return http(getSSLHttpClient(), httpPost, true);
+    }
+    
+    /**
+     * https post请求(form形式)
+     * 
+     * @param url 请求url
+     * @param param 请求参数
+     * @param contentType contentType
+     * @return 响应字符串
+     */
+    public static String httpsPost(String url, Map<String, String> paramMap, String contentType) {
         HttpPost httpPost = new HttpPost(url);
         if (paramMap != null) {
             httpPost.setEntity(getUrlEncodedFormEntity(paramMap));

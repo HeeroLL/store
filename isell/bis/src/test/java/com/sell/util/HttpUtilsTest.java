@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.sell.core.util.JsonUtil;
 import com.sell.demo.Address;
 import com.sell.demo.Person;
 import com.thoughtworks.xstream.XStream;
@@ -38,12 +39,36 @@ public class HttpUtilsTest {
         System.err.println(HttpUtils.httpsGet("https://www.baidu.com"));
     }
     
-    //@Test
-    public void testXmlMap() {
-        String xml = "<java.util.HashMap><entry><key>No.3</key><value>123</value></entry>" + 
-           "<entry><key>No.1</key><value>456</value></entry></java.util.HashMap>";
+    @Test
+    public void testJsonMap() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("aa", 1);
+        map.put("bb", "2");
         
-        System.out.println(HttpUtils.httpPost("http://localhost:8080/bis/demo", xml));
+        System.out.println(HttpUtils.httpPost("http://localhost:8080/bis/demo", JsonUtil.writeValueAsString(map)));
+    }
+    
+    @Test
+    public void testJsonObject() {
+        Person person = new Person();
+        person.setName("requestName");
+        person.setPhoneNuber(123);
+        person.setAddresses(new ArrayList<Address>());
+        
+        Address address = new Address();
+        address.setHouseNo(1);
+        address.setStreet("街道1");
+        person.getAddresses().add(address);
+        address = new Address();
+        address.setHouseNo(2);
+        address.setStreet("街道2");
+        person.getAddresses().add(address);
+        address = new Address();
+        address.setHouseNo(3);
+        address.setStreet("街道3");
+        person.getAddresses().add(address);
+        
+        System.out.println(HttpUtils.httpPost("http://localhost:8080/bis/demo2", JsonUtil.writeValueAsString(person)));
     }
     
     @Test
@@ -72,6 +97,6 @@ public class HttpUtilsTest {
         
         String xml = xStream.toXML(person);
         System.out.println("requestXml=\n" + xml);
-        System.out.println("responseXml=\n" + HttpUtils.httpPost("http://localhost:8080/bis/demo2", xml));
+        System.out.println("responseXml=\n" + HttpUtils.httpPost("http://localhost:8080/bis/demo2", xml, "application/xml"));
     }
 }
