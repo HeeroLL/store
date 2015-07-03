@@ -97,6 +97,8 @@
 			</list>
 		</property>
 	</bean>
-
+	<!-- 
+	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"/>
+ 	-->
 	<import resource="ApplicationContext.xml" />
 </beans>  
