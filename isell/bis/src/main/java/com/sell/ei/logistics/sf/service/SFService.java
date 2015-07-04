@@ -1,0 +1,37 @@
+package com.sell.ei.logistics.sf.service;
+
+import com.sell.ei.logistics.sf.vo.SOrder;
+import com.sell.ei.logistics.sf.vo.SResponse;
+
+/**
+ * 
+ * 顺丰物流接口封装业务层
+ * 
+ * @author lilin
+ * @version [版本号, 2015年7月4日]
+ * 
+ */
+public interface SFService {
+    /**
+     * 开发环境Checkword：j8DzkIFgmlomPt0aLuwU
+     */
+    String CHECKWORD = "j8DzkIFgmlomPt0aLuwU";
+    
+    /**
+     * 开发环境接入编码：BSPdevelop
+     */
+    String HEAD = "BSPdevelop";
+    
+    /**
+     * 顺丰统一URL
+     */
+    String URL = "https://bsp-oisp.test.sf-express.com/bsp-oisp/sfexpressService";
+    
+    /**
+     * 下订单
+     * 
+     * @param order 订单信息
+     * @return 响应信息
+     */
+    SResponse orderService(SOrder order);
+}

@@ -77,8 +77,8 @@
 
 	<bean id="marshallingHttpMessageConverter"
 		class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-		<property name="marshaller" ref="xmlMarshaller" />
-		<property name="unmarshaller" ref="xmlMarshaller" />
+		<property name="marshaller" ref="jaxb2Marshaller" />
+		<property name="unmarshaller" ref="jaxb2Marshaller" />
 		<property name="supportedMediaTypes">
 			<list>
 				<value>application/xml;charset=utf-8</value>
@@ -87,17 +87,20 @@
 		</property>
 	</bean>
 
-	<bean id="xmlMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
-		<!-- 设置XStream支持注解 -->
-		<property name="autodetectAnnotations" value="true" />
-		<property name="annotatedClasses">
-			<list>
+	<!-- <bean id="xStreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller"> 
+		<property name="autodetectAnnotations" value="true" /> <property name="annotatedClasses"> 
+		<list> <value>com.sell.demo.Person</value> <value>com.sell.demo.Address</value> 
+		</list> </property> </bean> -->
+
+	<bean id="jaxb2Marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="classesToBeBound">
+			<array>
 				<value>com.sell.demo.Person</value>
 				<value>com.sell.demo.Address</value>
-			</list>
+			</array>
 		</property>
 	</bean>
-	<!-- <bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"/> -->
+
 	<!-- 根据请求头Accept选择对应的视图 -->
 	<bean
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
@@ -106,7 +109,7 @@
 				<bean
 					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
 				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
-					<property name="marshaller" ref="xmlMarshaller" />
+					<property name="marshaller" ref="jaxb2Marshaller" />
 				</bean>
 			</list>
 		</property>

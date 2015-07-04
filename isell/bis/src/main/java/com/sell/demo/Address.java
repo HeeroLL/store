@@ -1,14 +1,13 @@
 package com.sell.demo;
 
-import com.sell.core.base.BaseInfo;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("address")
-public class Address extends BaseInfo {
-    /**
-     * 注释内容
-     */
-    private static final long serialVersionUID = 7987281795739880643L;
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Address {
     
     private String street;
     
