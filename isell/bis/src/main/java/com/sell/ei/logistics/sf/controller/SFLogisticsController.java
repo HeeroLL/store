@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sell.bis.sys.NoNeedForExceptionHandler;
+import com.sell.core.web.NoNeedForExceptionHandler;
 import com.sell.ei.logistics.sf.service.SFService;
 import com.sell.ei.logistics.sf.vo.SOrder;
 import com.sell.ei.logistics.sf.vo.SOrderSearch;

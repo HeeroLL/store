@@ -25,16 +25,17 @@
       <!-- org.apache.log4j.WriterAppender(将日志信息以流格式发送到任意指定的地方)   -->  
   <!-- ==========================================================================
 -->  
-    
-    <appender name="allFileLog" class="org.apache.log4j.RollingFileAppender">  
-        <param name="File" value="logs/all.log"/>  
-        <param name="Append" value="true"/>  
-        <param name="MaxFileSize" value="1024KB"/>  
-        <param name="MaxBackupIndex" value="10"/>
-        <layout class="org.apache.log4j.PatternLayout">  
-            <param name="ConversionPattern" value="[%p- %l ]%n\t%m%n"/>  
-        </layout>
-    </appender>
+    <appender name="app_log"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${catalina.home}/logs/bis.log" />
+		<param name="Append" value="true"/>  
+		<param name="MaxBackupIndex" value="10" />
+		<param name="MaxFileSize" value="1MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d [%p] (%c:%L)- %m%n" />
+		</layout>
+	</appender>
       
     <!-- 输出到控制台 -->
     <appender name="consoleLog" class="org.apache.log4j.ConsoleAppender">
@@ -69,6 +70,6 @@
     <root>  
         <priority value="DEBUG"/>
         <appender-ref ref="consoleLog" /> 
-        <!-- <appender-ref ref="allFileLog"/> -->
+        <appender-ref ref="app_log" />
     </root>  
 </log4j:configuration>  

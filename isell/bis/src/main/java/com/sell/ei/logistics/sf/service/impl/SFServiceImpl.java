@@ -3,6 +3,7 @@ package com.sell.ei.logistics.sf.service.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.sell.ei.logistics.sf.service.SFService;
@@ -25,6 +26,10 @@ import com.sell.util.JaxbUtil;
  */
 @Service("sfService")
 public class SFServiceImpl implements SFService {
+    /**
+     * log
+     */
+    private static final Logger log = Logger.getLogger(SFServiceImpl.class);
     
     @Override
     public SResponse orderService(SOrder order) {
@@ -86,9 +91,11 @@ public class SFServiceImpl implements SFService {
         paramMap.put("verifyCode", verifyCode);
         paramMap.put("xml", xml);
         
-        System.out.println(request.getService() + ":" + paramMap); // 发送参数
+        //System.out.println(request.getService() + ":" + paramMap); // 发送参数
+        log.info(request.getService() + ":" + paramMap);
         String result = HttpUtils.httpsPost(URL, paramMap);
-        System.out.println(result); // 改成记录日志
+        //System.out.println(result); // 改成记录日志
+        log.info(result);
         
         return JaxbUtil.converyToJavaBean(result, SResponse.class);
     }

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 
 import com.sell.core.util.MessageUtil;
+import com.sell.core.web.NoNeedForExceptionHandler;
 
 /**
  * 通用异常捕获处理器
