@@ -36,22 +36,27 @@
 	<!-- 配置SpringMVC @ResponseBody和@RequestBody注解 -->
 	<bean
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-		<!-- 回应信息转换 -->
+		<!-- 请求参数信息转换 -->
 		<property name="messageConverters">
 			<util:list id="beanList">
 				<ref bean="stringHttpMessageConverter" />
+				<!-- json转换器 -->
 				<ref bean="jsonHttpMessageConverter" />
+				<!-- xml转换器 -->
 				<ref bean="marshallingHttpMessageConverter" />
 			</util:list>
 		</property>
 	</bean>
 
+	<!-- json转换器 -->
 	<bean id="jsonHttpMessageConverter"
 		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
+				<!-- 配置转换器运行的Content-Type集合，只有在集合中的类型才有可能被该转换器做转换 -->
 				<value>application/json;charset=utf-8</value>
 				<value>text/plain;charset=UTF-8</value>
+				<value>application/x-www-form-urlencoded;charset=UTF-8</value>
 			</list>
 		</property>
 		<!-- 设置一个自定义 objectMapper，让Date类型的数据转成yyyy-MM-dd HH:mm:ss -->
@@ -75,6 +80,7 @@
 		</property>
 	</bean>
 
+	<!-- xml转换器 -->
 	<bean id="marshallingHttpMessageConverter"
 		class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
 		<property name="marshaller" ref="jaxb2Marshaller" />
@@ -87,31 +93,42 @@
 		</property>
 	</bean>
 
-	<!-- <bean id="xStreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller"> 
-		<property name="autodetectAnnotations" value="true" /> <property name="annotatedClasses"> 
-		<list> <value>com.sell.demo.Person</value> <value>com.sell.demo.Address</value> 
-		</list> </property> </bean> -->
-
+	<!-- 配置最终展现的视图为混合视图 -->
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="defaultViews">
+			<!-- 根据请求头Accept选择对应的视图 -->
+			<list>
+				<!-- json视图 -->
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+				<!-- xml视图 -->
+				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<property name="marshaller" ref="jaxb2Marshaller" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- xStream的xml和java对象互转方式，autodetectAnnotations=true允许注解的方式进行配置，annotatedClasses配置需要转换的bean的class
+	<bean id="xStreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
+		<property name="autodetectAnnotations" value="true" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.sell.demo.Person</value>
+				<value>com.sell.demo.Address</value>
+			</list>
+		</property>
+	</bean>
+	 -->
+	<!-- jaxb2的xml和java对象互转方式，classesToBeBound配置需要转换的bean的class -->
+	<!-- jaxb2采用jdk自带的xml和java对象的互转实现，可能和一些低版本jar包冲突（例如xPath依赖的jaxen低版本有可能会和jaxb2冲突），要特别注意 -->
 	<bean id="jaxb2Marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 		<property name="classesToBeBound">
 			<array>
 				<value>com.sell.demo.Person</value>
 				<value>com.sell.demo.Address</value>
 			</array>
-		</property>
-	</bean>
-
-	<!-- 根据请求头Accept选择对应的视图 -->
-	<bean
-		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<property name="defaultViews">
-			<list>
-				<bean
-					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
-				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
-					<property name="marshaller" ref="jaxb2Marshaller" />
-				</bean>
-			</list>
 		</property>
 	</bean>
 

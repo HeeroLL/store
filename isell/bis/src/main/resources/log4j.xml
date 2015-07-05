@@ -61,6 +61,11 @@
 		<priority value="ERROR" />
 	</category>
 	
+	<!-- 关闭httpClient的log -->
+	<category name="org.apache.http">
+		<priority value="ERROR" />
+	</category>
+	
     <root>  
         <priority value="DEBUG"/>
         <appender-ref ref="consoleLog" /> 

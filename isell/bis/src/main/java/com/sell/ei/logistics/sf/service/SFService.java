@@ -2,6 +2,7 @@ package com.sell.ei.logistics.sf.service;
 
 import com.sell.ei.logistics.sf.vo.SOrder;
 import com.sell.ei.logistics.sf.vo.SResponse;
+import com.sell.ei.logistics.sf.vo.SRouteRequest;
 
 /**
  * 
@@ -28,10 +29,20 @@ public interface SFService {
     String URL = "https://bsp-oisp.test.sf-express.com/bsp-oisp/sfexpressService";
     
     /**
-     * 下订单
+     * 下订单接口
      * 
      * @param order 订单信息
      * @return 响应信息
      */
     SResponse orderService(SOrder order);
+    
+    /**
+     * 路由查询接口
+     * 
+     * @param routeRequest 路由查询参数
+     * @return 响应信息
+     */
+    SResponse routeService(SRouteRequest routeRequest);
+    
+    
 }

@@ -191,6 +191,7 @@
 			<artifactId>druid</artifactId>
 			<version>0.2.12</version>
 		</dependency>
+		<!-- jaxen低版本有可能会和jaxb2冲突 -->
 		<dependency>
 			<groupId>jaxen</groupId>
 			<artifactId>jaxen</artifactId>

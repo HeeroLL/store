@@ -6,7 +6,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * 路由查询响应报文
+ * 
+ * 路由查询请求报文
+ * 
+ * @author lilin
+ * @version [版本号, 2015年7月1日]
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {}) 
