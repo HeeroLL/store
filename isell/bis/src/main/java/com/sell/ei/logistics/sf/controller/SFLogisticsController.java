@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sell.bis.sys.NoNeedForExceptionHandler;
 import com.sell.ei.logistics.sf.service.SFService;
 import com.sell.ei.logistics.sf.vo.SOrder;
+import com.sell.ei.logistics.sf.vo.SOrderSearch;
 import com.sell.ei.logistics.sf.vo.SResponse;
 import com.sell.ei.logistics.sf.vo.SRouteRequest;
 
@@ -52,5 +53,17 @@ public class SFLogisticsController implements NoNeedForExceptionHandler {
     @ResponseBody
     public SResponse routeService(@RequestBody SRouteRequest routeRequest) {
         return sfService.routeService(routeRequest);
+    }
+    
+    /**
+     * 订单结果查询接口
+     * 
+     * @param orderSearch 订单查询参数
+     * @return 顺丰返回的处理结果
+     */
+    @RequestMapping("orderSearchService")
+    @ResponseBody
+    public SResponse orderSearchService(@RequestBody SOrderSearch orderSearch) {
+        return sfService.orderSearchService(orderSearch);
     }
 }

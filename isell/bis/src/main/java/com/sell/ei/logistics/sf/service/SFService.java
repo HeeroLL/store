@@ -1,6 +1,7 @@
 package com.sell.ei.logistics.sf.service;
 
 import com.sell.ei.logistics.sf.vo.SOrder;
+import com.sell.ei.logistics.sf.vo.SOrderSearch;
 import com.sell.ei.logistics.sf.vo.SResponse;
 import com.sell.ei.logistics.sf.vo.SRouteRequest;
 
@@ -44,5 +45,11 @@ public interface SFService {
      */
     SResponse routeService(SRouteRequest routeRequest);
     
-    
+    /**
+     * 订单结果查询接口
+     *
+     * @param orderSearch 订单查询参数
+     * @return 响应信息
+     */
+    SResponse orderSearchService(SOrderSearch orderSearch);
 }

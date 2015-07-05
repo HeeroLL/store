@@ -3,6 +3,7 @@ package com.sell.ei.logistics.sf.controller;
 import org.junit.Test;
 
 import com.sell.core.util.JsonUtil;
+import com.sell.ei.logistics.sf.vo.SOrderSearch;
 import com.sell.ei.logistics.sf.vo.SRouteRequest;
 import com.sell.util.HttpUtils;
 
@@ -34,6 +35,17 @@ public class SFLogisticsControllerTest {
         SRouteRequest routeRequest = new SRouteRequest();
         routeRequest.setTrackingNumber("444029276937"); //如果是多个用,分开
         String result = HttpUtils.httpPost("http://localhost:8080/bis/logistics/sf/routeService", JsonUtil.writeValueAsString(routeRequest));
+        System.out.println("result=" + result);
+    }
+    
+    /**
+     * 测试顺丰订单结果查询接口
+     */
+    @Test
+    public void testOrderSearchService() {
+        SOrderSearch orderSearch = new SOrderSearch();
+        orderSearch.setOrderid("140");
+        String result = HttpUtils.httpPost("http://localhost:8080/bis/logistics/sf/orderSearchService", JsonUtil.writeValueAsString(orderSearch));
         System.out.println("result=" + result);
     }
 }

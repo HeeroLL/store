@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.sell.ei.logistics.sf.service.SFService;
 import com.sell.ei.logistics.sf.vo.SBody;
 import com.sell.ei.logistics.sf.vo.SOrder;
+import com.sell.ei.logistics.sf.vo.SOrderSearch;
 import com.sell.ei.logistics.sf.vo.SRequest;
 import com.sell.ei.logistics.sf.vo.SResponse;
 import com.sell.ei.logistics.sf.vo.SRouteRequest;
@@ -49,6 +50,18 @@ public class SFServiceImpl implements SFService {
         return sendHttpsPost(request);
     }
     
+    @Override
+    public SResponse orderSearchService(SOrderSearch orderSearch) {
+        SRequest request = new SRequest();
+        request.setService("OrderSearchService");
+        request.setHead(HEAD);
+        SBody body = new SBody();
+        body.setOrderSearch(orderSearch);
+        request.setBody(body);
+        
+        return sendHttpsPost(request);
+    }
+    
     /**
      * 根据请求的xml和顺丰密钥生成校验码
      * 
@@ -74,9 +87,9 @@ public class SFServiceImpl implements SFService {
         paramMap.put("xml", xml);
         
         System.out.println(request.getService() + ":" + paramMap); // 发送参数
-        String reuslt = HttpUtils.httpsPost(URL, paramMap);
-        System.out.println(reuslt); // 改成记录日志
+        String result = HttpUtils.httpsPost(URL, paramMap);
+        System.out.println(result); // 改成记录日志
         
-        return JaxbUtil.converyToJavaBean(reuslt, SResponse.class);
+        return JaxbUtil.converyToJavaBean(result, SResponse.class);
     }
 }
