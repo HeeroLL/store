@@ -62,6 +62,10 @@
 		<!-- 设置一个自定义 objectMapper，让Date类型的数据转成yyyy-MM-dd HH:mm:ss -->
 		<property name="objectMapper">
 			<bean class="org.codehaus.jackson.map.ObjectMapper">
+				<!-- 属性为null则不序列化 -->
+				<property name="serializationInclusion">
+					<value type="org.codehaus.jackson.map.annotate.JsonSerialize$Inclusion">NON_NULL</value>
+				</property>
 				<property name="dateFormat">
 					<bean class="java.text.SimpleDateFormat">
 						<constructor-arg value="yyyy-MM-dd HH:mm:ss" />
@@ -109,18 +113,12 @@
 			</list>
 		</property>
 	</bean>
-	
-	<!-- xStream的xml和java对象互转方式，autodetectAnnotations=true允许注解的方式进行配置，annotatedClasses配置需要转换的bean的class
-	<bean id="xStreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
-		<property name="autodetectAnnotations" value="true" />
-		<property name="annotatedClasses">
-			<list>
-				<value>com.sell.demo.Person</value>
-				<value>com.sell.demo.Address</value>
-			</list>
-		</property>
-	</bean>
-	 -->
+
+	<!-- xStream的xml和java对象互转方式，autodetectAnnotations=true允许注解的方式进行配置，annotatedClasses配置需要转换的bean的class 
+		<bean id="xStreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller"> 
+		<property name="autodetectAnnotations" value="true" /> <property name="annotatedClasses"> 
+		<list> <value>com.sell.demo.Person</value> <value>com.sell.demo.Address</value> 
+		</list> </property> </bean> -->
 	<!-- jaxb2的xml和java对象互转方式，classesToBeBound配置需要转换的bean的class -->
 	<!-- jaxb2采用jdk自带的xml和java对象的互转实现，可能和一些低版本jar包冲突（例如xPath依赖的jaxen低版本有可能会和jaxb2冲突），要特别注意 -->
 	<bean id="jaxb2Marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">

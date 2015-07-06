@@ -9,13 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 
+import com.sell.core.util.Exceptions;
 import com.sell.core.util.MessageUtil;
-import com.sell.core.web.NoNeedForExceptionHandler;
 
 /**
  * 通用异常捕获处理器
@@ -47,16 +46,9 @@ public class ExceptionHandler implements HandlerExceptionResolver {
         
         // 记录日志
         log.error(ex.getMessage(), ex);
-        // 如果控制层忽略异常处理，则对异常不做处理
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod)handler;
-            if (handlerMethod.getBean() instanceof NoNeedForExceptionHandler) {
-                throw new RuntimeException(ex);
-            }
-        }
         
         map.put("success", false);
-        map.put("errorTrace", ex.toString());
+        map.put("errorTrace", Exceptions.getStackTraceAsString(ex));
         
         String message = MessageUtil.getMessage(ex.getMessage());
         

@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sell.core.web.NoNeedForExceptionHandler;
+import com.sell.core.web.JsonData;
 import com.sell.ei.logistics.sf.service.SFService;
 import com.sell.ei.logistics.sf.vo.SOrder;
 import com.sell.ei.logistics.sf.vo.SOrderSearch;
-import com.sell.ei.logistics.sf.vo.SResponse;
 import com.sell.ei.logistics.sf.vo.SRouteRequest;
 
 /**
@@ -23,7 +22,7 @@ import com.sell.ei.logistics.sf.vo.SRouteRequest;
  */
 @Controller
 @RequestMapping("logistics/sf")
-public class SFLogisticsController implements NoNeedForExceptionHandler {
+public class SFLogisticsController {
     
     /**
      * 顺丰接口
@@ -35,35 +34,41 @@ public class SFLogisticsController implements NoNeedForExceptionHandler {
      * 顺丰下订单接口
      * 
      * @param order 订单明细
-     * @return 顺丰返回的处理结果
+     * @return 封装后的处理结果
      */
     @RequestMapping("orderService")
     @ResponseBody
-    public SResponse orderService(@RequestBody SOrder order) {
-        return sfService.orderService(order);
+    public JsonData orderService(@RequestBody SOrder order) {
+        JsonData jsonData = new JsonData();
+        jsonData.setData(sfService.orderService(order));
+        return jsonData;
     }
     
     /**
      * 路由查询接口
      * 
      * @param routeRequest 路由查询参数
-     * @return 顺丰返回的处理结果
+     * @return 封装后的处理结果
      */
     @RequestMapping("routeService")
     @ResponseBody
-    public SResponse routeService(@RequestBody SRouteRequest routeRequest) {
-        return sfService.routeService(routeRequest);
+    public JsonData routeService(@RequestBody SRouteRequest routeRequest) {
+        JsonData jsonData = new JsonData();
+        jsonData.setData(sfService.routeService(routeRequest));
+        return jsonData;
     }
     
     /**
      * 订单结果查询接口
      * 
      * @param orderSearch 订单查询参数
-     * @return 顺丰返回的处理结果
+     * @return 封装后的处理结果
      */
     @RequestMapping("orderSearchService")
     @ResponseBody
-    public SResponse orderSearchService(@RequestBody SOrderSearch orderSearch) {
-        return sfService.orderSearchService(orderSearch);
+    public JsonData orderSearchService(@RequestBody SOrderSearch orderSearch) {
+        JsonData jsonData = new JsonData();
+        jsonData.setData(sfService.orderSearchService(orderSearch));
+        return jsonData;
     }
 }
