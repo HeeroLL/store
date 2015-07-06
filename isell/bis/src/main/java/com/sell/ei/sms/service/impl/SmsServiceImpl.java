@@ -2,6 +2,7 @@ package com.sell.ei.sms.service.impl;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.message.BasicHeader;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.sell.core.util.DateUtil;
@@ -20,6 +21,11 @@ import com.sell.util.HttpUtils;
  */
 @Service("smsService")
 public class SmsServiceImpl implements SmsService {
+    
+    /**
+     * log
+     */
+    private static final Logger log = Logger.getLogger(SmsServiceImpl.class);
     
     /** ip */
     private static final String IP = "api.ucpaas.com";
@@ -65,7 +71,9 @@ public class SmsServiceImpl implements SmsService {
         // 生成请求头认证信息
         String src = accountSid + ":" + timestamp;
         String auth = Coder.encryptBASE64(src);
+        log.info(url + "sendMessageTo:" + "\nparam:" + body);
         String result = HttpUtils.httpPost(url, body, "application/json", new BasicHeader("Authorization", auth));
+        log.info(result);
         
         return JsonUtil.readValue(result, SMSResponse.class);
         
