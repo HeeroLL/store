@@ -13,7 +13,9 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.http.Consts;
+import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -159,10 +161,14 @@ public final class HttpUtils {
      * 
      * @param url 请求url
      * @param param 请求参数
+     * @param headers 请求头
      * @return 响应字符串
      */
-    public static String httpPost(String url, String param) {
+    public static String httpPost(String url, String param, Header... headers) {
         HttpPost httpPost = new HttpPost(url);
+        if (ArrayUtils.isNotEmpty(headers)) {
+            httpPost.setHeaders(headers);
+        }
         httpPost.setEntity(new StringEntity(param, "UTF-8"));
         return http(httpPost);
     }
@@ -173,12 +179,18 @@ public final class HttpUtils {
      * @param url 请求url
      * @param param 请求参数
      * @param contentType contentType
+     * @param headers 请求头
      * @return 响应字符串
      */
-    public static String httpPost(String url, String param, String contentType) {
+    public static String httpPost(String url, String param, String contentType, Header... headers) {
         HttpPost httpPost = new HttpPost(url);
-        httpPost.addHeader("Content-Type", contentType);
-        httpPost.addHeader("Accept", contentType);
+        httpPost.setHeader("Accept", contentType);
+        httpPost.setHeader("Content-Type", contentType + ";charset=utf-8");
+        if (ArrayUtils.isNotEmpty(headers)) {
+            for (Header header : headers) {
+                httpPost.setHeader(header);
+            }
+        }
         httpPost.setEntity(new StringEntity(param, "UTF-8"));
         return http(httpPost);
     }
@@ -188,10 +200,14 @@ public final class HttpUtils {
      * 
      * @param url 请求url
      * @param paramMap 请求参数
+     * @param headers 请求头
      * @return 响应字符串
      */
-    public static String httpPost(String url, Map<String, String> paramMap) {
+    public static String httpPost(String url, Map<String, String> paramMap, Header... headers) {
         HttpPost httpPost = new HttpPost(url);
+        if (ArrayUtils.isNotEmpty(headers)) {
+            httpPost.setHeaders(headers);
+        }
         if (paramMap != null) {
             httpPost.setEntity(getUrlEncodedFormEntity(paramMap));
         }
@@ -205,12 +221,19 @@ public final class HttpUtils {
      * @param url 请求url
      * @param paramMap 请求参数
      * @param contentType contentType
+     * @param headers 请求头
      * @return 响应字符串
      */
-    public static String httpPost(String url, Map<String, String> paramMap, String contentType) {
+    public static String httpPost(String url, Map<String, String> paramMap, String contentType, Header... headers) {
         HttpPost httpPost = new HttpPost(url);
-        httpPost.addHeader("Content-Type", contentType);
-        httpPost.addHeader("Accept", contentType);
+        httpPost.setHeader("Accept", contentType);
+        httpPost.setHeader("Content-Type", contentType + ";charset=utf-8");
+        if (ArrayUtils.isNotEmpty(headers)) {
+            for (Header header : headers) {
+                httpPost.setHeader(header);
+            }
+        }
+        
         if (paramMap != null) {
             httpPost.setEntity(getUrlEncodedFormEntity(paramMap));
         }
@@ -234,10 +257,14 @@ public final class HttpUtils {
      * 
      * @param url 请求url
      * @param param 请求参数
+     * @param headers 请求头
      * @return 响应字符串
      */
-    public static String httpsPost(String url, String param) {
+    public static String httpsPost(String url, String param, Header... headers) {
         HttpPost httpPost = new HttpPost(url);
+        if (ArrayUtils.isNotEmpty(headers)) {
+            httpPost.setHeaders(headers);
+        }
         httpPost.setEntity(new StringEntity(param, "UTF-8"));
         return http(getSSLHttpClient(), httpPost, true);
     }
@@ -248,12 +275,19 @@ public final class HttpUtils {
      * @param url 请求url
      * @param param 请求参数
      * @param contentType contentType
+     * @param headers 请求头
      * @return 响应字符串
      */
-    public static String httpsPost(String url, String param, String contentType) {
+    public static String httpsPost(String url, String param, String contentType, Header... headers) {
         HttpPost httpPost = new HttpPost(url);
-        httpPost.addHeader("Content-Type", contentType);
-        httpPost.addHeader("Accept", contentType);
+        httpPost.setHeader("Accept", contentType);
+        httpPost.setHeader("Content-Type", contentType + ";charset=utf-8");
+        if (ArrayUtils.isNotEmpty(headers)) {
+            for (Header header : headers) {
+                httpPost.setHeader(header);
+            }
+        }
+        
         httpPost.setEntity(new StringEntity(param, "UTF-8"));
         return http(getSSLHttpClient(), httpPost, true);
     }
@@ -263,10 +297,14 @@ public final class HttpUtils {
      * 
      * @param url 请求url
      * @param param 请求参数
+     * @param headers 请求头
      * @return 响应字符串
      */
-    public static String httpsPost(String url, Map<String, String> paramMap) {
+    public static String httpsPost(String url, Map<String, String> paramMap, Header... headers) {
         HttpPost httpPost = new HttpPost(url);
+        if (ArrayUtils.isNotEmpty(headers)) {
+            httpPost.setHeaders(headers);
+        }
         if (paramMap != null) {
             httpPost.setEntity(getUrlEncodedFormEntity(paramMap));
         }
@@ -280,10 +318,18 @@ public final class HttpUtils {
      * @param url 请求url
      * @param param 请求参数
      * @param contentType contentType
+     * @param headers 请求头
      * @return 响应字符串
      */
-    public static String httpsPost(String url, Map<String, String> paramMap, String contentType) {
+    public static String httpsPost(String url, Map<String, String> paramMap, String contentType, Header... headers) {
         HttpPost httpPost = new HttpPost(url);
+        httpPost.setHeader("Accept", contentType);
+        httpPost.setHeader("Content-Type", contentType + ";charset=utf-8");
+        if (ArrayUtils.isNotEmpty(headers)) {
+            for (Header header : headers) {
+                httpPost.setHeader(header);
+            }
+        }
         if (paramMap != null) {
             httpPost.setEntity(getUrlEncodedFormEntity(paramMap));
         }

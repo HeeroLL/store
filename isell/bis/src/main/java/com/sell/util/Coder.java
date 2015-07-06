@@ -26,6 +26,8 @@ public abstract class Coder {
     
     public static final String KEY_MD5 = "MD5";
     
+    private static final String UTF8 = "utf-8";
+    
     /**
      * MAC算法可选以下多种算法
      * 
@@ -56,6 +58,20 @@ public abstract class Coder {
     /**
      * BASE64加密
      * 
+     * @param key key
+     * @return
+     */
+    public static String encryptBASE64(String key) {
+        try {
+            return new BASE64Encoder().encode(key.getBytes(UTF8));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
+     * BASE64加密
+     * 
      * @param key
      * @return
      */
@@ -65,13 +81,13 @@ public abstract class Coder {
     
     /**
      * MD5加密
-     *
+     * 
      * @param data
      * @return
      */
     public static byte[] encryptMD5(String data) {
         try {
-            return encryptMD5(data.getBytes("UTF-8"));
+            return encryptMD5(data.getBytes(UTF8));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
