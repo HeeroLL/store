@@ -1,4 +1,4 @@
-package com.sell.util;
+package com.sell.core.util;
 
 import java.io.StringReader;
 import java.io.StringWriter;

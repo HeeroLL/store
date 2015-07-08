@@ -6,6 +6,9 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.sell.core.util.Coder;
+import com.sell.core.util.HttpUtils;
+import com.sell.core.util.JaxbUtil;
 import com.sell.ei.logistics.sf.service.SFService;
 import com.sell.ei.logistics.sf.vo.SBody;
 import com.sell.ei.logistics.sf.vo.SOrder;
@@ -13,9 +16,6 @@ import com.sell.ei.logistics.sf.vo.SOrderSearch;
 import com.sell.ei.logistics.sf.vo.SRequest;
 import com.sell.ei.logistics.sf.vo.SResponse;
 import com.sell.ei.logistics.sf.vo.SRouteRequest;
-import com.sell.util.Coder;
-import com.sell.util.HttpUtils;
-import com.sell.util.JaxbUtil;
 
 /**
  * 

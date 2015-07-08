@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.sell.core.util.HttpUtils;
 import com.sell.core.util.JsonUtil;
 import com.sell.demo.Address;
 import com.sell.demo.Person;

@@ -2,10 +2,10 @@ package com.sell.ei.logistics.sf.controller;
 
 import org.junit.Test;
 
+import com.sell.core.util.HttpUtils;
 import com.sell.core.util.JsonUtil;
 import com.sell.ei.logistics.sf.vo.SOrderSearch;
 import com.sell.ei.logistics.sf.vo.SRouteRequest;
-import com.sell.util.HttpUtils;
 
 /**
  * 

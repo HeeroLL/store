@@ -2,7 +2,7 @@ package com.sell.ei.sms.controller;
 
 import org.junit.Test;
 
-import com.sell.util.HttpUtils;
+import com.sell.core.util.HttpUtils;
 
 /**
  * SMS接口测试类

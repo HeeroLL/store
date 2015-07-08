@@ -1,4 +1,4 @@
-package com.sell.util;
+package com.sell.core.util;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
