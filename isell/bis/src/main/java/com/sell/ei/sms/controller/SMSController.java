@@ -28,7 +28,7 @@ public class SMSController {
     private SmsService smsService;
     
     /**
-     * 路由查询接口
+     * 发送短信
      * 
      * @param templateSMS 短信信息
      * @return 封装后的处理结果

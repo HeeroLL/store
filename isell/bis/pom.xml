@@ -146,6 +146,12 @@
 			<artifactId>cxf-rt-ws-security</artifactId>
 			<version>3.0.3</version>
 		</dependency>
+		<!-- jdk email组件，可能会和cxf依赖的java mail组件冲突 -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
