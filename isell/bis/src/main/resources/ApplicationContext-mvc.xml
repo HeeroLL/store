@@ -60,18 +60,31 @@
 			</list>
 		</property>
 		<!-- 设置一个自定义 objectMapper，让Date类型的数据转成yyyy-MM-dd HH:mm:ss -->
-		<property name="objectMapper">
-			<bean class="org.codehaus.jackson.map.ObjectMapper">
-				<!-- 属性为null则不序列化 -->
-				<property name="serializationInclusion">
-					<value type="org.codehaus.jackson.map.annotate.JsonSerialize$Inclusion">NON_NULL</value>
-				</property>
-				<property name="dateFormat">
-					<bean class="java.text.SimpleDateFormat">
-						<constructor-arg value="yyyy-MM-dd HH:mm:ss" />
-					</bean>
-				</property>
+		<property name="objectMapper" ref="jacksonObjectMapper" />
+	</bean>
+
+	<bean id="jacksonObjectMapper" class="org.codehaus.jackson.map.ObjectMapper">
+		<!-- 属性为null则不序列化 -->
+		<property name="serializationInclusion">
+			<value type="org.codehaus.jackson.map.annotate.JsonSerialize$Inclusion">NON_NULL</value>
+		</property>
+		<property name="dateFormat">
+			<bean class="java.text.SimpleDateFormat">
+				<constructor-arg value="yyyy-MM-dd HH:mm:ss" />
 			</bean>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="jacksonObjectMapper" />
+		<property name="targetMethod" value="configure" />
+		<!-- 忽略未识别的参数(解决json串中多属性，而类中又未定义的情况) -->
+		<property name="arguments">
+			<list>
+				<value type="org.codehaus.jackson.map.DeserializationConfig.Feature">FAIL_ON_UNKNOWN_PROPERTIES</value>
+				<value>false</value>
+			</list>
 		</property>
 	</bean>
 
