@@ -40,4 +40,15 @@ public class SMSController {
         jsonData.setData(smsService.sendMessage(templateSMS));
         return jsonData;
     }
+    
+    /**
+     * 发送短信(测试，由于发短信要钱，所以做个测试接口，直接返回成功)
+     * 
+     * @return 封装后的处理结果
+     */
+    @RequestMapping("sendTestMessage")
+    @ResponseBody
+    public JsonData sendTestMessage(@RequestBody TemplateSMS templateSMS) {
+        return new JsonData();
+    }
 }
