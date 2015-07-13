@@ -28,9 +28,17 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
      */
     private List<String> permissionIpList;
     
+    /**
+     * 忽略校验
+     */
+    private boolean ignoreValidation;
+    
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
         throws Exception {
+        if (ignoreValidation) {
+            return true;
+        }
         // 忽略指定的包的url
         if (CollectionUtils.isNotEmpty(ignorePackageList)) {
             for (String pkg : ignorePackageList) {
@@ -54,5 +62,9 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     public void setPermissionIpList(List<String> permissionIpList) {
         this.permissionIpList = permissionIpList;
+    }
+
+    public void setIgnoreValidation(boolean ignoreValidation) {
+        this.ignoreValidation = ignoreValidation;
     }
 }

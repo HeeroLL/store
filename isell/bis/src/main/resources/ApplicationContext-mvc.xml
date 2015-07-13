@@ -20,6 +20,8 @@
 		<property name="interceptors">
 			<list>
 				<bean class="com.sell.bis.sys.SecurityInterceptor">
+					<!-- 是否忽略校验 -->
+					<property name="ignoreValidation" value="${security.ip.ignore-validation}" />
 					<!-- 配置允许访问的ip -->
 					<property name="permissionIpList">
 						<list>
