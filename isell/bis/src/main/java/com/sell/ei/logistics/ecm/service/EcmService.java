@@ -1,6 +1,6 @@
 package com.sell.ei.logistics.ecm.service;
 
-import com.sell.ei.logistics.ecm.vo.Commodities;
+import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmResponse;
 
 /**
@@ -37,5 +37,5 @@ public interface EcmService {
      * @param commodities 商品信息
      * @return ecm处理结果
      */
-    EcmResponse sendCommodity(Commodities commodities);
+    EcmResponse sendCommodity(EcmCommodities commodities);
 }

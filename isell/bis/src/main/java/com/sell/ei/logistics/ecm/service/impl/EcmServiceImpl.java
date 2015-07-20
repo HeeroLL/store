@@ -10,7 +10,7 @@ import com.sell.core.util.DateUtil;
 import com.sell.core.util.HttpUtils;
 import com.sell.core.util.JsonUtil;
 import com.sell.ei.logistics.ecm.service.EcmService;
-import com.sell.ei.logistics.ecm.vo.Commodities;
+import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmResponse;
 
 /**
@@ -23,7 +23,7 @@ import com.sell.ei.logistics.ecm.vo.EcmResponse;
 public class EcmServiceImpl implements EcmService {
     
     @Override
-    public EcmResponse sendCommodity(Commodities commodities) {
+    public EcmResponse sendCommodity(EcmCommodities commodities) {
         Map<String, String> paramMap = getParamMap(commodities);
         System.out.println(paramMap);
         

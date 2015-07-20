@@ -11,6 +11,8 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.commons.codec.binary.Hex;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -86,16 +88,7 @@ public final class Coder {
      * @return 加密后的字符串
      */
     public static String encodeMd5(String data) {
-        StringBuilder hexValue = new StringBuilder();
-        byte[] md5Bytes = encryptMD5(data); 
-        for (int i = 0; i < md5Bytes.length; i++) {
-            int val = ((int) md5Bytes[i]) & 0xff;
-            if (val < 16)
-                hexValue.append("0");
-            hexValue.append(Integer.toHexString(val));
-        }
- 
-        return hexValue.toString();
+        return Hex.encodeHexString(encryptMD5(data));
     }
     
     /**
@@ -178,5 +171,12 @@ public final class Coder {
         } catch (InvalidKeyException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public static void main(String[] args) {
+        String a = "sgfhrt34234asdste534rrsefds5234aswefddsgt";
+        
+        System.out.println(encodeMd5(a));
+        System.out.println(Hex.encodeHexString(encryptMD5(a)));
     }
 }

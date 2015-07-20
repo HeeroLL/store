@@ -13,7 +13,7 @@ import com.sell.core.base.BaseInfo;
  * @author lilin
  * @version [版本号, 2015年7月20日]
  */
-public class Commodities extends BaseInfo {
+public class EcmCommodities extends BaseInfo {
     /**
      * 注释内容
      */
@@ -21,13 +21,13 @@ public class Commodities extends BaseInfo {
     
     /** 商品集合 */
     @JsonProperty("Commoditys")
-    private List<Commodity> commoditys;
+    private List<EcmCommodity> commoditys;
 
-    public List<Commodity> getCommoditys() {
+    public List<EcmCommodity> getCommoditys() {
         return commoditys;
     }
 
-    public void setCommoditys(List<Commodity> commoditys) {
+    public void setCommoditys(List<EcmCommodity> commoditys) {
         this.commoditys = commoditys;
     }
 }

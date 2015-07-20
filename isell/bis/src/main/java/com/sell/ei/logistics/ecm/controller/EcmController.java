@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sell.core.web.JsonData;
 import com.sell.ei.logistics.ecm.service.EcmService;
-import com.sell.ei.logistics.ecm.vo.Commodities;
+import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 
 /**
  * 费舍尔ECM接口Controller
@@ -34,7 +34,7 @@ public class EcmController {
      */
     @ResponseBody
     @RequestMapping("sendCommodity")
-    public JsonData sendCommodity(@RequestBody Commodities commodities) {
+    public JsonData sendCommodity(@RequestBody EcmCommodities commodities) {
         JsonData jsonData = new JsonData();
         jsonData.setData(ecmService.sendCommodity(commodities));
         return jsonData;

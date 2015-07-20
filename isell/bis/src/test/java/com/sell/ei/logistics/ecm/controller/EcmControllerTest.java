@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import com.sell.core.util.HttpUtils;
 import com.sell.core.util.JsonUtil;
-import com.sell.ei.logistics.ecm.vo.Commodities;
-import com.sell.ei.logistics.ecm.vo.Commodity;
+import com.sell.ei.logistics.ecm.vo.EcmCommodities;
+import com.sell.ei.logistics.ecm.vo.EcmCommodity;
 
 /**
  * 费舍尔ECM接口测试类
@@ -19,17 +19,17 @@ public class EcmControllerTest {
     
     @Test
     public void testSendCommodity() {
-        Commodities commodities = new Commodities();
-        Commodity commodity = new Commodity();
+        EcmCommodities commodities = new EcmCommodities();
+        EcmCommodity commodity = new EcmCommodity();
         commodity.setCommodityCode("15098765" + "0001");
         commodity.setCommodityName("九朵云 马油");
         commodity.setCommoditySpec("007"); // 个
         commodity.setUnit("007"); // 个
-        commodity.setWeight("0.1"); // 重量 KG
+        commodity.setWeight(0.1); // 重量 KG
         commodity.setTradeCountryCode("133");
         commodity.setTradeCountryName("韩国");
         
-        commodities.setCommoditys(new ArrayList<Commodity>());
+        commodities.setCommoditys(new ArrayList<EcmCommodity>());
         commodities.getCommoditys().add(commodity);
         
         String result = HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/sendCommodity", JsonUtil.writeValueAsString(commodities));
