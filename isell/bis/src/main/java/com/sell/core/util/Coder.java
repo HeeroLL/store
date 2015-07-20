@@ -21,7 +21,7 @@ import sun.misc.BASE64Encoder;
  * @version 1.0
  * @since 1.0
  */
-public abstract class Coder {
+public final class Coder {
     public static final String KEY_SHA = "SHA";
     
     public static final String KEY_MD5 = "MD5";
@@ -77,6 +77,25 @@ public abstract class Coder {
      */
     public static String encryptBASE64(byte[] key) {
         return new BASE64Encoder().encodeBuffer(key);
+    }
+    
+    /**
+     * MD5加密，返回String
+     *
+     * @param data data
+     * @return 加密后的字符串
+     */
+    public static String encodeMd5(String data) {
+        StringBuilder hexValue = new StringBuilder();
+        byte[] md5Bytes = encryptMD5(data); 
+        for (int i = 0; i < md5Bytes.length; i++) {
+            int val = ((int) md5Bytes[i]) & 0xff;
+            if (val < 16)
+                hexValue.append("0");
+            hexValue.append(Integer.toHexString(val));
+        }
+ 
+        return hexValue.toString();
     }
     
     /**

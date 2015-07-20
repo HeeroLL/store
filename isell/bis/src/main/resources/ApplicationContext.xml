@@ -27,6 +27,15 @@
 		<property name="messageSource" ref="messageSource" />
 	</bean>
 	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:sysconfig.properties</value>
+			</list>
+		</property>
+	</bean>
+	
 	<!-- 
 	<import resource="ApplicationContext-db.xml" />
 	 -->

@@ -11,15 +11,6 @@
 	<description>数据库相关配置</description>
 	<tx:annotation-driven />
 	
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath:sysconfig.properties</value>
-			</list>
-		</property>
-	</bean>
-	
 	<!--定义数据源 -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" init-method="init" >
 		<property name="driverClassName" value="${jdbc.driver}" />
