@@ -25,18 +25,15 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     
     @SuppressWarnings("unchecked")
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-        throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (request.getParameterMap() != null) {
             Map<String, String> paramsMap = new HashMap<String, String>();
             
             Map<String, Object> paramMap = request.getParameterMap();
             for (Entry<String, Object> entry : paramMap.entrySet()) {
-                paramsMap.put(entry.getKey(), ArrayUtils.toString(entry.getValue())) ;
+                paramsMap.put(entry.getKey(), ArrayUtils.toString(entry.getValue()));
             }
             log.info(paramsMap);
-        } else {
-            log.info(request.getQueryString());
         }
         return true;
     }

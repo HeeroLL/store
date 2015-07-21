@@ -87,7 +87,7 @@ public class EcmOrder extends BaseInfo {
     private String payType;
     
     /** 支付公司编码(支付平台在杭州口岸备案编号) */
-    private String payCompanyCode = "AYC";
+    private String payCompanyCode = "ZF14050401"; // 连连支付的编码
     
     /** 支付单号(支付成功后，支付平台反馈给电商平台的支付单号) */
     private String payNumber;

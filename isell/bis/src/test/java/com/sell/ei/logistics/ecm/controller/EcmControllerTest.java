@@ -24,6 +24,9 @@ import com.sell.ei.logistics.ecm.vo.EcmOrders;
  * @version [版本号, 2015年7月20日]
  */
 public class EcmControllerTest {
+    private static final String host = "http://121.40.79.3:8585";
+    
+    private static final String URL = host + "/bis/logistics/ecm/";
     
     @Test
     public void testSendCommodity() {
@@ -31,7 +34,7 @@ public class EcmControllerTest {
         EcmCommodity commodity = new EcmCommodity();
         commodity.setCommodityCode("15098765" + "0001");
         commodity.setCommodityName("九朵云 马油");
-        commodity.setCommoditySpec("007"); // 个
+        commodity.setCommoditySpec("个"); // 个
         commodity.setUnit("007"); // 个
         commodity.setWeight(0.1); // 重量 KG
         commodity.setTradeCountryCode("133");
@@ -40,9 +43,7 @@ public class EcmControllerTest {
         commodities.setCommoditys(new ArrayList<EcmCommodity>());
         commodities.getCommoditys().add(commodity);
         
-        String result =
-            HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/sendCommodity",
-                JsonUtil.writeValueAsString(commodities));
+        String result = HttpUtils.httpPost(URL + "sendCommodity", JsonUtil.writeValueAsString(commodities));
         System.out.println(result);
     }
     
@@ -60,7 +61,7 @@ public class EcmControllerTest {
         order.setReceiverAddress("朝阳新村10幢501");
         order.setReceiverZip("213000");
         order.setPayType("01");
-        order.setPayCompanyCode("AYC");
+        order.setPayCompanyCode("ZF14050401"); // 支付平台在杭州口岸备案编号
         order.setPayNumber("lianlian154");
         order.setPaperNumber("320402198408273738");
         order.setOrderTotalAmount(100.00);
@@ -94,9 +95,7 @@ public class EcmControllerTest {
         orders.setOrders(new ArrayList<EcmOrder>());
         orders.getOrders().add(order);
         
-        String result =
-            HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/pushSaleOrder",
-                JsonUtil.writeValueAsString(orders));
+        String result = HttpUtils.httpPost(URL + "pushSaleOrder", JsonUtil.writeValueAsString(orders));
         System.out.println(result);
     }
     
@@ -117,7 +116,7 @@ public class EcmControllerTest {
                 .toUpperCase()); // 校验码
         // paramMap.put("JSON_OBJ", Coder.encryptBASE64(JsonUtil.writeValueAsString(jsonObj))); // BASE64编码后的jsonObj
         
-        String result = HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/sendOrderStatus", paramMap);
+        String result = HttpUtils.httpPost(URL + "sendOrderStatus", paramMap);
         System.out.println(result);
     }
     
@@ -137,7 +136,17 @@ public class EcmControllerTest {
                 .toUpperCase()); // 校验码
         // paramMap.put("JSON_OBJ", Coder.encryptBASE64(JsonUtil.writeValueAsString(jsonObj))); // BASE64编码后的jsonObj
         
-        String result = HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/sendShipOrder", paramMap);
+        String result = HttpUtils.httpPost(URL + "sendShipOrder", paramMap);
         System.out.println(result);
+    }
+    
+    public static void main(String[] args) {
+        String s2 = "eyJTSElQUE9SREVSUyI6W3sic2hpcHBpbmdUaW1lIjoiMjAxNS0wNy0yMSAxNDozMjoyOSIsImRldGFpbHMiOlt7ImNvbW1vZGl0eUFydE5vIjoiIiwiY29tbW9kaXR5U3BlYyI6IjAwNyIsInF0eSI6MS4wLCJjb21tb2RpdHlOYW1lIjoi5Lmd5py15LqRIOmprOayuSIsImNvbW1vZGl0eUNvZGUiOiIxNTA5ODc2NTAwMDEifSx7ImNvbW1vZGl0eUFydE5vIjoiMTUwOTg3NjUwMDAxIiwiY29tbW9kaXR5U3BlYyI6IjHnvZAiLCJxdHkiOjEuMCwiY29tbW9kaXR5TmFtZSI6IuS5neacteS6kSDpqazmsrkiLCJjb21tb2RpdHlDb2RlIjoiMTUwOTg3NjUwMDAxIn0seyJjb21tb2RpdHlBcnRObyI6IiIsImNvbW1vZGl0eVNwZWMiOiLmsLTmnpzlkbMiLCJxdHkiOjEuMCwiY29tbW9kaXR5TmFtZSI6IuS5neacteS6kSDpqazmsrkiLCJjb21tb2RpdHlDb2RlIjoiMTUwOTg3NjUwMDAxIn1dLCJvcmRlckNvZGUiOiJBWUMwMDEiLCJyZWFsV2VpZ2h0IjowLjEwLCJleHByZXNzTm8iOiIxMTQwNTI4NTYwNjA1IiwiY29tcGFueU5vIjoiRU1TIn1dfQ==";
+        String s1 = "eyJzdGF0dXNMaXN0IjpbeyJsb2dpc3RpY3NOTyI6IiIsInN0YXR1cyI6W3sib3JkZXJNYWtlRGF0ZSI6bnVsbCwib3JkZXJDb21tZW50Ijoi55u05o6l5pS+6KGM77yM5Liq5Lq655Sz5oql5Y2V55Sz5oql5oiQ5YqfIiwib3JkZXJTdGF0dXMiOm51bGx9XSwib3JkZXJDb2RlIjoiQVlDMDAxIiwiY2FycmllciI6IiJ9XX0=";
+        String json1 = new String(Coder.decryptBASE64(s1));
+        String json2 = new String(Coder.decryptBASE64(s2));
+        System.out.println(json1);
+        System.out.println(json2);
+        
     }
 }

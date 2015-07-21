@@ -1,5 +1,6 @@
 package com.sell.ei.logistics.ecm.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,8 @@ import com.sell.core.util.HttpUtils;
 import com.sell.core.util.JsonUtil;
 import com.sell.ei.logistics.ecm.service.EcmService;
 import com.sell.ei.logistics.ecm.vo.EcmCommodities;
+import com.sell.ei.logistics.ecm.vo.EcmCommodity;
+import com.sell.ei.logistics.ecm.vo.EcmOrder;
 import com.sell.ei.logistics.ecm.vo.EcmOrders;
 import com.sell.ei.logistics.ecm.vo.EcmParam;
 import com.sell.ei.logistics.ecm.vo.EcmResponse;
@@ -39,11 +42,20 @@ public class EcmServiceImpl implements EcmService {
     
     @Override
     public EcmResponse pushSaleOrder(EcmOrders ecmOrders) {
-        Map<String, String> paramMap = getParamMap(ecmOrders);
-        System.out.println(paramMap);
+        // 先推送商品
+        EcmCommodities commodities = new EcmCommodities();
+        commodities.setCommoditys(new ArrayList<EcmCommodity>());
         
-        // 还要添加HTTP BASIC验证
-        String result = HttpUtils.httpPost(PUSHSALEORDER_URL, paramMap);
+        for (EcmOrder order : ecmOrders.getOrders()) {
+            commodities.getCommoditys().addAll(order.getOrderDtls());
+        }
+        Map<String, String> paramMap = getParamMap(commodities);
+        System.out.println(paramMap);
+        String result = HttpUtils.httpPost(SENDCOMMODITY_URL, paramMap);
+        System.out.println(result);
+        
+        paramMap = getParamMap(ecmOrders);
+        result = HttpUtils.httpPost(PUSHSALEORDER_URL, paramMap);
         System.out.println(result);
         return JsonUtil.readValue(result, EcmResponse.class);
     }
@@ -52,8 +64,13 @@ public class EcmServiceImpl implements EcmService {
     public EcmResponse sendOrderStatus(EcmParam param) {
         EcmResponse response = new EcmResponse();
         EcmResponseBody rowset = new EcmResponseBody();
-        rowset.setResultCode("1000");
-        rowset.setResultMsg("接收成功");
+        if (validateSign(param)) {
+            rowset.setResultCode("1000");
+            rowset.setResultMsg("接收成功");
+        } else {
+            rowset.setResultCode("1001");
+            rowset.setResultMsg("验证失败");
+        }
         
         response.setRowset(rowset);
         return response;
@@ -63,8 +80,13 @@ public class EcmServiceImpl implements EcmService {
     public EcmResponse sendShipOrder(EcmParam param) {
         EcmResponse response = new EcmResponse();
         EcmResponseBody rowset = new EcmResponseBody();
-        rowset.setResultCode("1000");
-        rowset.setResultMsg("接收成功");
+        if (validateSign(param)) {
+            rowset.setResultCode("1000");
+            rowset.setResultMsg("接收成功");
+        } else {
+            rowset.setResultCode("1001");
+            rowset.setResultMsg("验证失败");
+        }
         
         response.setRowset(rowset);
         return response;
@@ -87,9 +109,18 @@ public class EcmServiceImpl implements EcmService {
         paramMap.put("sessionKey", SESSION_KEY);
         paramMap.put("datetime", datetime);
         
-        paramMap.put("sign", Coder.encodeMd5(V + IP + SESSION_KEY + datetime + APP_KEY).toUpperCase()); // 校验码
+        paramMap.put("sign", getSign(V + IP + SESSION_KEY + datetime + APP_KEY)); // 校验码
         paramMap.put("JSON_OBJ", Coder.encryptBASE64(JsonUtil.writeValueAsString(jsonObj))); // BASE64编码后的jsonObj
         
         return paramMap;
+    }
+    
+    private boolean validateSign(EcmParam param) {
+        String sign = param.getV() + param.getIp() + param.getSessionKey() + param.getDatetime() + APP_KEY;
+        return getSign(sign).equals(param.getSign());
+    }
+    
+    private String getSign(String sign) {
+        return Coder.encodeMd5(sign).toUpperCase();
     }
 }
