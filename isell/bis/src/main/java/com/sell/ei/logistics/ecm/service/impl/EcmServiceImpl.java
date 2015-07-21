@@ -29,18 +29,6 @@ import com.sell.ei.logistics.ecm.vo.EcmResponseBody;
 public class EcmServiceImpl implements EcmService {
     
     @Override
-    public EcmResponse sendCommodity(EcmCommodities commodities) {
-        Map<String, String> paramMap = getParamMap(commodities);
-        System.out.println(paramMap);
-        
-        // 还要添加HTTP BASIC验证
-        String result = HttpUtils.httpPost(SENDCOMMODITY_URL, paramMap);
-        System.out.println(result);
-        
-        return JsonUtil.readValue(result, EcmResponse.class);
-    }
-    
-    @Override
     public EcmResponse pushSaleOrder(EcmOrders ecmOrders) {
         // 先推送商品
         EcmCommodities commodities = new EcmCommodities();
@@ -53,8 +41,14 @@ public class EcmServiceImpl implements EcmService {
         System.out.println(paramMap);
         String result = HttpUtils.httpPost(SENDCOMMODITY_URL, paramMap);
         System.out.println(result);
+        EcmResponse response = JsonUtil.readValue(result, EcmResponse.class);
+        if (response == null || response.getRowset() == null || !"1000".equals(response.getRowset().getResultCode())) {
+            return response;
+        }
         
+        // 再推送订单
         paramMap = getParamMap(ecmOrders);
+        System.out.println(result);
         result = HttpUtils.httpPost(PUSHSALEORDER_URL, paramMap);
         System.out.println(result);
         return JsonUtil.readValue(result, EcmResponse.class);
@@ -75,7 +69,7 @@ public class EcmServiceImpl implements EcmService {
         response.setRowset(rowset);
         return response;
     }
-
+    
     @Override
     public EcmResponse sendShipOrder(EcmParam param) {
         EcmResponse response = new EcmResponse();
@@ -94,7 +88,7 @@ public class EcmServiceImpl implements EcmService {
     
     /**
      * 通用参数封装
-     *
+     * 
      * @param jsonObj jsonObj
      * @return 参数Map
      */
@@ -105,7 +99,7 @@ public class EcmServiceImpl implements EcmService {
         
         paramMap.put("ip", IP); // bis的外网ip
         paramMap.put("v", V); // 接口版本号
-        //paramMap.put("appKey", APP_KEY); // ECM给的key
+        // paramMap.put("appKey", APP_KEY); // ECM给的key
         paramMap.put("sessionKey", SESSION_KEY);
         paramMap.put("datetime", datetime);
         

@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sell.core.web.JsonData;
 import com.sell.ei.logistics.ecm.service.EcmService;
-import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmOrders;
 import com.sell.ei.logistics.ecm.vo.EcmParam;
-import com.sell.ei.logistics.ecm.vo.EcmResponse;
 
 /**
  * 费舍尔ECM接口Controller
@@ -31,45 +29,35 @@ public class EcmController {
     
     /**
      * ECM回调服务（订单生产状态回传）
-     *
+     * 
      * @param param 参数
      * @return 返回值
      */
     @ResponseBody
     @RequestMapping("sendOrderStatus")
-    public EcmResponse sendOrderStatus(EcmParam param) {
-        return ecmService.sendOrderStatus(param);
+    public JsonData sendOrderStatus(EcmParam param) {
+        JsonData jsonData = new JsonData();
+        jsonData.setData(ecmService.sendOrderStatus(param));
+        return jsonData;
     }
     
     /**
      * ECM回调服务（订单批量发货）
-    *
-    * @param param 参数
-    * @return 返回值
-    */
-    @ResponseBody
-    @RequestMapping("sendShipOrder")
-    public EcmResponse sendShipOrder(EcmParam param) {
-        return ecmService.sendShipOrder(param);
-    }
-    
-    /**
-     * ECM商品推送接口
-     *
-     * @param commodities 商品列表
-     * @return 封装后的ECM返回的处理结果
+     * 
+     * @param param 参数
+     * @return 返回值
      */
     @ResponseBody
-    @RequestMapping("sendCommodity")
-    public JsonData sendCommodity(@RequestBody EcmCommodities commodities) {
+    @RequestMapping("sendShipOrder")
+    public JsonData sendShipOrder(EcmParam param) {
         JsonData jsonData = new JsonData();
-        jsonData.setData(ecmService.sendCommodity(commodities));
+        jsonData.setData(ecmService.sendShipOrder(param));
         return jsonData;
     }
     
     /**
      * ECM推送订单
-     *
+     * 
      * @param ecmOrders 订单列表
      * @return 封装后的ECM返回的处理结果
      */

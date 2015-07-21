@@ -1,6 +1,5 @@
 package com.sell.ei.logistics.ecm.service;
 
-import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmOrders;
 import com.sell.ei.logistics.ecm.vo.EcmParam;
 import com.sell.ei.logistics.ecm.vo.EcmResponse;
@@ -32,14 +31,6 @@ public interface EcmService {
     
     /** 1. 推送销售订单接口（pushSaleOrder） URL */
     String PUSHSALEORDER_URL = URL + "pushSaleOrder";
-    
-    /**
-     * 发送商品信息
-     * 
-     * @param commodities 商品信息
-     * @return 封装后的ecm处理结果
-     */
-    EcmResponse sendCommodity(EcmCommodities commodities);
     
     /**
      * 推送销售订单

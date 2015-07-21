@@ -13,7 +13,6 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 
-import com.sell.core.util.Exceptions;
 import com.sell.core.util.MessageUtil;
 
 /**
@@ -48,7 +47,7 @@ public class ExceptionHandler implements HandlerExceptionResolver {
         log.error(ex.getMessage(), ex);
         
         map.put("success", false);
-        map.put("errorTrace", Exceptions.getStackTraceAsString(ex));
+        // map.put("errorTrace", Exceptions.getStackTraceAsString(ex));
         
         String message = MessageUtil.getMessage(ex.getMessage());
         

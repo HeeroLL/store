@@ -12,7 +12,6 @@ import com.sell.core.util.DateUtil;
 import com.sell.core.util.HttpUtils;
 import com.sell.core.util.JsonUtil;
 import com.sell.ei.logistics.ecm.service.EcmService;
-import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmCommodity;
 import com.sell.ei.logistics.ecm.vo.EcmOrder;
 import com.sell.ei.logistics.ecm.vo.EcmOrders;
@@ -24,28 +23,10 @@ import com.sell.ei.logistics.ecm.vo.EcmOrders;
  * @version [版本号, 2015年7月20日]
  */
 public class EcmControllerTest {
-    private static final String host = "http://121.40.79.3:8585";
+    //private static final String host = "http://121.40.79.3:8585";
+    private static final String host = "http://localhost:8080";
     
     private static final String URL = host + "/bis/logistics/ecm/";
-    
-    @Test
-    public void testSendCommodity() {
-        EcmCommodities commodities = new EcmCommodities();
-        EcmCommodity commodity = new EcmCommodity();
-        commodity.setCommodityCode("15098765" + "0001");
-        commodity.setCommodityName("九朵云 马油");
-        commodity.setCommoditySpec("个"); // 个
-        commodity.setUnit("007"); // 个
-        commodity.setWeight(0.1); // 重量 KG
-        commodity.setTradeCountryCode("133");
-        commodity.setTradeCountryName("韩国");
-        
-        commodities.setCommoditys(new ArrayList<EcmCommodity>());
-        commodities.getCommoditys().add(commodity);
-        
-        String result = HttpUtils.httpPost(URL + "sendCommodity", JsonUtil.writeValueAsString(commodities));
-        System.out.println(result);
-    }
     
     @Test
     public void testPushSaleOrder() {
@@ -81,6 +62,11 @@ public class EcmControllerTest {
         commodity.setCommodityCode("15098765" + "0001");
         commodity.setCommodityName("九朵云 马油");
         commodity.setCommodityBarcode("1"); // 商品条形码
+        commodity.setCommoditySpec("个"); // 个
+        commodity.setUnit("007"); // 个
+        commodity.setTradeCountryCode("133");
+        commodity.setTradeCountryName("韩国");
+        
         commodity.setQty(1);
         commodity.setWeight(0.1);
         commodity.setTradePrice(100.00);
