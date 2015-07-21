@@ -12,7 +12,9 @@ import com.sell.core.util.JsonUtil;
 import com.sell.ei.logistics.ecm.service.EcmService;
 import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmOrders;
+import com.sell.ei.logistics.ecm.vo.EcmParam;
 import com.sell.ei.logistics.ecm.vo.EcmResponse;
+import com.sell.ei.logistics.ecm.vo.EcmResponseBody;
 
 /**
  * 费舍尔ECM服务接口封装层实现类
@@ -46,6 +48,28 @@ public class EcmServiceImpl implements EcmService {
         return JsonUtil.readValue(result, EcmResponse.class);
     }
     
+    @Override
+    public EcmResponse sendOrderStatus(EcmParam param) {
+        EcmResponse response = new EcmResponse();
+        EcmResponseBody rowset = new EcmResponseBody();
+        rowset.setResultCode("1000");
+        rowset.setResultMsg("接收成功");
+        
+        response.setRowset(rowset);
+        return response;
+    }
+
+    @Override
+    public EcmResponse sendShipOrder(EcmParam param) {
+        EcmResponse response = new EcmResponse();
+        EcmResponseBody rowset = new EcmResponseBody();
+        rowset.setResultCode("1000");
+        rowset.setResultMsg("接收成功");
+        
+        response.setRowset(rowset);
+        return response;
+    }
+    
     /**
      * 通用参数封装
      *
@@ -59,7 +83,7 @@ public class EcmServiceImpl implements EcmService {
         
         paramMap.put("ip", IP); // bis的外网ip
         paramMap.put("v", V); // 接口版本号
-        paramMap.put("appKey", APP_KEY); // ECM给的key
+        //paramMap.put("appKey", APP_KEY); // ECM给的key
         paramMap.put("sessionKey", SESSION_KEY);
         paramMap.put("datetime", datetime);
         

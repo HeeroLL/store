@@ -2,11 +2,16 @@ package com.sell.ei.logistics.ecm.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
+import com.sell.core.util.Coder;
+import com.sell.core.util.DateUtil;
 import com.sell.core.util.HttpUtils;
 import com.sell.core.util.JsonUtil;
+import com.sell.ei.logistics.ecm.service.EcmService;
 import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmCommodity;
 import com.sell.ei.logistics.ecm.vo.EcmOrder;
@@ -35,7 +40,9 @@ public class EcmControllerTest {
         commodities.setCommoditys(new ArrayList<EcmCommodity>());
         commodities.getCommoditys().add(commodity);
         
-        String result = HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/sendCommodity", JsonUtil.writeValueAsString(commodities));
+        String result =
+            HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/sendCommodity",
+                JsonUtil.writeValueAsString(commodities));
         System.out.println(result);
     }
     
@@ -87,7 +94,50 @@ public class EcmControllerTest {
         orders.setOrders(new ArrayList<EcmOrder>());
         orders.getOrders().add(order);
         
-        String result = HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/pushSaleOrder", JsonUtil.writeValueAsString(orders));
+        String result =
+            HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/pushSaleOrder",
+                JsonUtil.writeValueAsString(orders));
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testSendOrderStatus() {
+        Map<String, String> paramMap = new HashMap<String, String>();
+        
+        String datetime = DateUtil.getCurrentDate("yyyyMMddHHmmss");
+        
+        paramMap.put("ip", EcmService.IP); // bis的外网ip
+        paramMap.put("v", EcmService.V); // 接口版本号
+        // paramMap.put("appKey", APP_KEY); // ECM给的key
+        paramMap.put("sessionKey", EcmService.SESSION_KEY);
+        paramMap.put("datetime", datetime);
+        
+        paramMap.put("sign",
+            Coder.encodeMd5(EcmService.V + EcmService.IP + EcmService.SESSION_KEY + datetime + EcmService.APP_KEY)
+                .toUpperCase()); // 校验码
+        // paramMap.put("JSON_OBJ", Coder.encryptBASE64(JsonUtil.writeValueAsString(jsonObj))); // BASE64编码后的jsonObj
+        
+        String result = HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/sendOrderStatus", paramMap);
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testSendShipOrder() {
+        Map<String, String> paramMap = new HashMap<String, String>();
+        String datetime = DateUtil.getCurrentDate("yyyyMMddHHmmss");
+        
+        paramMap.put("ip", EcmService.IP); // bis的外网ip
+        paramMap.put("v", EcmService.V); // 接口版本号
+        // paramMap.put("appKey", APP_KEY); // ECM给的key
+        paramMap.put("sessionKey", EcmService.SESSION_KEY);
+        paramMap.put("datetime", datetime);
+        
+        paramMap.put("sign",
+            Coder.encodeMd5(EcmService.V + EcmService.IP + EcmService.SESSION_KEY + datetime + EcmService.APP_KEY)
+                .toUpperCase()); // 校验码
+        // paramMap.put("JSON_OBJ", Coder.encryptBASE64(JsonUtil.writeValueAsString(jsonObj))); // BASE64编码后的jsonObj
+        
+        String result = HttpUtils.httpPost("http://localhost:8080/bis/logistics/ecm/sendShipOrder", paramMap);
         System.out.println(result);
     }
 }

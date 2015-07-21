@@ -11,6 +11,8 @@ import com.sell.core.web.JsonData;
 import com.sell.ei.logistics.ecm.service.EcmService;
 import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmOrders;
+import com.sell.ei.logistics.ecm.vo.EcmParam;
+import com.sell.ei.logistics.ecm.vo.EcmResponse;
 
 /**
  * 费舍尔ECM接口Controller
@@ -26,6 +28,30 @@ public class EcmController {
      */
     @Resource
     private EcmService ecmService;
+    
+    /**
+     * ECM回调服务（订单生产状态回传）
+     *
+     * @param param 参数
+     * @return 返回值
+     */
+    @ResponseBody
+    @RequestMapping("sendOrderStatus")
+    public EcmResponse sendOrderStatus(EcmParam param) {
+        return ecmService.sendOrderStatus(param);
+    }
+    
+    /**
+     * ECM回调服务（订单批量发货）
+    *
+    * @param param 参数
+    * @return 返回值
+    */
+    @ResponseBody
+    @RequestMapping("sendShipOrder")
+    public EcmResponse sendShipOrder(EcmParam param) {
+        return ecmService.sendShipOrder(param);
+    }
     
     /**
      * ECM商品推送接口

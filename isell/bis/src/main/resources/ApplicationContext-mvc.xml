@@ -22,6 +22,12 @@
 				<bean class="com.sell.bis.sys.SecurityInterceptor">
 					<!-- 是否忽略校验 -->
 					<property name="ignoreValidation" value="${security.ip.ignore-validation}" />
+					<!-- 忽略校验的包 -->
+					<property name="ignorePackageList">
+						<list>
+							<value>com.sell.ei.logistics.ecm.controller</value>
+						</list>
+					</property>
 					<!-- 配置允许访问的ip -->
 					<property name="permissionIpList">
 						<list>
@@ -31,6 +37,7 @@
 						</list>
 					</property>
 				</bean>
+				<bean class="com.sell.bis.sys.LogInterceptor" />
 			</list>
 		</property>
 	</bean>
