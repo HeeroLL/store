@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sell.core.web.JsonData;
 import com.sell.ei.logistics.ecm.service.EcmService;
 import com.sell.ei.logistics.ecm.vo.EcmCommodities;
+import com.sell.ei.logistics.ecm.vo.EcmOrders;
 
 /**
  * 费舍尔ECM接口Controller
@@ -37,6 +38,20 @@ public class EcmController {
     public JsonData sendCommodity(@RequestBody EcmCommodities commodities) {
         JsonData jsonData = new JsonData();
         jsonData.setData(ecmService.sendCommodity(commodities));
+        return jsonData;
+    }
+    
+    /**
+     * ECM推送订单
+     *
+     * @param ecmOrders 订单列表
+     * @return 封装后的ECM返回的处理结果
+     */
+    @ResponseBody
+    @RequestMapping("pushSaleOrder")
+    public JsonData pushSaleOrder(@RequestBody EcmOrders ecmOrders) {
+        JsonData jsonData = new JsonData();
+        jsonData.setData(ecmService.pushSaleOrder(ecmOrders));
         return jsonData;
     }
 }

@@ -11,6 +11,7 @@ import com.sell.core.util.HttpUtils;
 import com.sell.core.util.JsonUtil;
 import com.sell.ei.logistics.ecm.service.EcmService;
 import com.sell.ei.logistics.ecm.vo.EcmCommodities;
+import com.sell.ei.logistics.ecm.vo.EcmOrders;
 import com.sell.ei.logistics.ecm.vo.EcmResponse;
 
 /**
@@ -31,6 +32,17 @@ public class EcmServiceImpl implements EcmService {
         String result = HttpUtils.httpPost(SENDCOMMODITY_URL, paramMap);
         System.out.println(result);
         
+        return JsonUtil.readValue(result, EcmResponse.class);
+    }
+    
+    @Override
+    public EcmResponse pushSaleOrder(EcmOrders ecmOrders) {
+        Map<String, String> paramMap = getParamMap(ecmOrders);
+        System.out.println(paramMap);
+        
+        // 还要添加HTTP BASIC验证
+        String result = HttpUtils.httpPost(PUSHSALEORDER_URL, paramMap);
+        System.out.println(result);
         return JsonUtil.readValue(result, EcmResponse.class);
     }
     
@@ -56,5 +68,4 @@ public class EcmServiceImpl implements EcmService {
         
         return paramMap;
     }
-    
 }

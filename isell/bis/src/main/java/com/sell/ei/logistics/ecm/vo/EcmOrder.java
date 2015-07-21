@@ -1,6 +1,9 @@
 package com.sell.ei.logistics.ecm.vo;
 
 import java.util.Date;
+import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.sell.core.base.BaseInfo;
 
@@ -90,16 +93,16 @@ public class EcmOrder extends BaseInfo {
     private String payNumber;
     
     /** 订单总金额(货款+订单税款+运费) */
-    private double orderTotalAmount;
+    private Double orderTotalAmount;
     
     /** 订单货款 */
-    private double orderGoodsAmount;
+    private Double orderGoodsAmount;
     
     /** 订单税款(交易过程中商家向用户征收的税款，免税模式填写0) */
-    private double orderTaxAmount;
+    private Double orderTaxAmount;
     
     /** 运费(交易过程中商家向用户征收的运费，免邮模式填写0) */
-    private double feeAmount;
+    private Double feeAmount;
     
     /** 成交时间 */
     private Date tradeTime;
@@ -108,7 +111,7 @@ public class EcmOrder extends BaseInfo {
     private String currCode = "142";
     
     /** 成交总价(“订单总金额”扣除“折扣”之后的金额) */
-    private double totalAmount;
+    private Double totalAmount;
     
     /** 购买人ID(消费者下单时在电商平台的注册ID) */
     private String purchaserId;
@@ -130,6 +133,10 @@ public class EcmOrder extends BaseInfo {
     
     /** 购买人地址 */
     private String address;
+    
+    /** 订单详情 */
+    @JsonProperty("OrderDtls")
+    private List<EcmCommodity> orderDtls;
 
     public String getOrderCode() {
         return orderCode;
@@ -323,35 +330,35 @@ public class EcmOrder extends BaseInfo {
         this.payNumber = payNumber;
     }
 
-    public double getOrderTotalAmount() {
+    public Double getOrderTotalAmount() {
         return orderTotalAmount;
     }
 
-    public void setOrderTotalAmount(double orderTotalAmount) {
+    public void setOrderTotalAmount(Double orderTotalAmount) {
         this.orderTotalAmount = orderTotalAmount;
     }
 
-    public double getOrderGoodsAmount() {
+    public Double getOrderGoodsAmount() {
         return orderGoodsAmount;
     }
 
-    public void setOrderGoodsAmount(double orderGoodsAmount) {
+    public void setOrderGoodsAmount(Double orderGoodsAmount) {
         this.orderGoodsAmount = orderGoodsAmount;
     }
 
-    public double getOrderTaxAmount() {
+    public Double getOrderTaxAmount() {
         return orderTaxAmount;
     }
 
-    public void setOrderTaxAmount(double orderTaxAmount) {
+    public void setOrderTaxAmount(Double orderTaxAmount) {
         this.orderTaxAmount = orderTaxAmount;
     }
 
-    public double getFeeAmount() {
+    public Double getFeeAmount() {
         return feeAmount;
     }
 
-    public void setFeeAmount(double feeAmount) {
+    public void setFeeAmount(Double feeAmount) {
         this.feeAmount = feeAmount;
     }
 
@@ -371,11 +378,11 @@ public class EcmOrder extends BaseInfo {
         this.currCode = currCode;
     }
 
-    public double getTotalAmount() {
+    public Double getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -433,5 +440,13 @@ public class EcmOrder extends BaseInfo {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public List<EcmCommodity> getOrderDtls() {
+        return orderDtls;
+    }
+
+    public void setOrderDtls(List<EcmCommodity> orderDtls) {
+        this.orderDtls = orderDtls;
     }
 }

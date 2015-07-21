@@ -19,4 +19,12 @@ public class EcmResponse extends BaseInfo {
     /** ROWSET */
     @JsonProperty("ROWSET")
     private EcmResponseBody rowset;
+
+    public EcmResponseBody getRowset() {
+        return rowset;
+    }
+
+    public void setRowset(EcmResponseBody rowset) {
+        this.rowset = rowset;
+    }
 }
