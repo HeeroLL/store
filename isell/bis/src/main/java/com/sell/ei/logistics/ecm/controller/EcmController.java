@@ -3,14 +3,13 @@ package com.sell.ei.logistics.ecm.controller;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sell.bis.auth.bean.RequestParameter;
 import com.sell.core.web.JsonData;
 import com.sell.ei.logistics.ecm.service.EcmService;
-import com.sell.ei.logistics.ecm.vo.EcmOrders;
 import com.sell.ei.logistics.ecm.vo.EcmParam;
 
 /**
@@ -68,9 +67,9 @@ public class EcmController {
      */
     @ResponseBody
     @RequestMapping("pushSaleOrder")
-    public JsonData pushSaleOrder(@RequestBody EcmOrders ecmOrders) {
+    public JsonData pushSaleOrder(RequestParameter param) {
         JsonData jsonData = new JsonData();
-        jsonData.setData(ecmService.pushSaleOrder(ecmOrders));
+        jsonData.setData(ecmService.pushSaleOrder(param));
         return jsonData;
     }
 }

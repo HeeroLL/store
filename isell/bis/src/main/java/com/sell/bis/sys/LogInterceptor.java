@@ -2,7 +2,6 @@ package com.sell.bis.sys;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -35,13 +34,26 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 记录日志：调用者、ip、接口名、调用时间、响应时间
         if (MapUtils.isNotEmpty(request.getParameterMap())) {
-            Map<String, String> paramsMap = new HashMap<String, String>();
-            
+            StringBuilder builder = new StringBuilder();
+            int index = 0;
             Map<String, Object> paramMap = request.getParameterMap();
             for (Entry<String, Object> entry : paramMap.entrySet()) {
-                paramsMap.put(entry.getKey(), ArrayUtils.toString(entry.getValue()));
+                if (index++ != 0) {
+                    builder.append('&');
+                }
+                builder.append(entry.getKey()).append('=');
+                if (entry.getValue().getClass().isArray()) {
+                    Object[] values = (Object[])entry.getValue();
+                    if (values.length == 1) {
+                        builder.append(values[0]);
+                    } else {
+                        builder.append(ArrayUtils.toString(entry.getValue()));
+                    }
+                } else {
+                    builder.append(entry.getValue());
+                }
             }
-            log.info(paramsMap);
+            log.info(builder.toString());
         } else {
             try {
                 String body = StreamUtils.copyToString(request.getInputStream(), CHARSET);

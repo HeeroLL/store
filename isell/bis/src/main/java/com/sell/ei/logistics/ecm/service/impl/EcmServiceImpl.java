@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.sell.bis.auth.BisValidator;
+import com.sell.bis.auth.bean.RequestParameter;
 import com.sell.core.util.Coder;
 import com.sell.core.util.DateUtil;
 import com.sell.core.util.HttpUtils;
@@ -28,9 +33,20 @@ import com.sell.ei.logistics.ecm.vo.EcmResponseBody;
  */
 @Service("ecmService")
 public class EcmServiceImpl implements EcmService {
+    /**
+     * 验证器
+     */
+    @Qualifier(value = "basicValidator")
+    @Resource
+    private BisValidator validator;
     
     @Override
-    public EcmResponse pushSaleOrder(EcmOrders ecmOrders) {
+    public EcmResponse pushSaleOrder(RequestParameter param) {
+        // 先验证参数合法性
+        validator.validate(param);
+        
+        EcmOrders ecmOrders = JsonUtil.readValue(param.getJsonObj(), EcmOrders.class);
+        
         // 先推送商品
         EcmCommodities commodities = new EcmCommodities();
         commodities.setCommoditys(new ArrayList<EcmCommodity>());
@@ -53,7 +69,14 @@ public class EcmServiceImpl implements EcmService {
         System.out.println(result);
         result = HttpUtils.httpPost(PUSHSALEORDER_URL, paramMap);
         System.out.println(result);
-        return JsonUtil.readValue(result, EcmResponse.class);
+        response = JsonUtil.readValue(result, EcmResponse.class);
+        if (response == null || response.getRowset() == null || !"1000".equals(response.getRowset().getResultCode())) {
+            return response;
+        }
+        
+        // TODO 将订单号和接入系统编码关系存入数据库
+        
+        return response;
     }
     
     @Override
@@ -63,7 +86,7 @@ public class EcmServiceImpl implements EcmService {
         // 验证通过才推送
         if ("1000".equals(response.getRowset().getResultCode())) {
             String paramJson = getJsonObj(param.getJsonObj());
-            // TODO 发送消息给对应系统
+            // TODO 发送消息给对应系统 注意去除CUSTOMER_CODE
             System.out.println(paramJson);
         }
         
@@ -77,7 +100,7 @@ public class EcmServiceImpl implements EcmService {
         // 验证通过才推送
         if ("1000".equals(response.getRowset().getResultCode())) {
             String paramJson = getJsonObj(param.getJsonObj());
-            // TODO 发送消息给对应系统
+            // TODO 发送消息给对应系统 注意去除CUSTOMER_CODE
             System.out.println(paramJson);
         }
         

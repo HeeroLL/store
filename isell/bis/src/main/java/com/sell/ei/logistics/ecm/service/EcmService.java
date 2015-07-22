@@ -1,6 +1,6 @@
 package com.sell.ei.logistics.ecm.service;
 
-import com.sell.ei.logistics.ecm.vo.EcmOrders;
+import com.sell.bis.auth.bean.RequestParameter;
 import com.sell.ei.logistics.ecm.vo.EcmParam;
 import com.sell.ei.logistics.ecm.vo.EcmResponse;
 
@@ -38,10 +38,10 @@ public interface EcmService {
     /**
      * 推送销售订单
      *
-     * @param ecmOrders 订单信息
+     * @param ecmOrders 请求参数
      * @return 封装后的ecm处理结果
      */
-    EcmResponse pushSaleOrder(EcmOrders ecmOrders);
+    EcmResponse pushSaleOrder(RequestParameter param);
     
     /**
      * ECM回调服务（订单生产状态回传）

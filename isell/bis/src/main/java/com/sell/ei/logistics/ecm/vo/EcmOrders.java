@@ -20,12 +20,12 @@ public class EcmOrders extends BaseInfo {
     
     /** orders */
     @JsonProperty("Orders")
-    List<EcmOrder> orders;
-
+    private List<EcmOrder> orders;
+    
     public List<EcmOrder> getOrders() {
         return orders;
     }
-
+    
     public void setOrders(List<EcmOrder> orders) {
         this.orders = orders;
     }
