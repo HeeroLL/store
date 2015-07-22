@@ -1,5 +1,6 @@
 package com.sell.ei.logistics.ecm.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class EcmServiceImpl implements EcmService {
         commodities.setCommoditys(new ArrayList<EcmCommodity>());
         
         for (EcmOrder order : ecmOrders.getOrders()) {
+            order.setOrderCode(CUSTOMER_CODE + order.getOrderCode()); // 加上客户编码避免重复
             commodities.getCommoditys().addAll(order.getOrderDtls());
         }
         Map<String, String> paramMap = getParamMap(commodities);
@@ -56,33 +58,29 @@ public class EcmServiceImpl implements EcmService {
     
     @Override
     public EcmResponse sendOrderStatus(EcmParam param) {
-        EcmResponse response = new EcmResponse();
-        EcmResponseBody rowset = new EcmResponseBody();
-        if (validateSign(param)) {
-            rowset.setResultCode("1000");
-            rowset.setResultMsg("接收成功");
-        } else {
-            rowset.setResultCode("1001");
-            rowset.setResultMsg("验证失败");
+        EcmResponse response = getResponse(param);
+        
+        // 验证通过才推送
+        if ("1000".equals(response.getRowset().getResultCode())) {
+            String paramJson = getJsonObj(param.getJsonObj());
+            // TODO 发送消息给对应系统
+            System.out.println(paramJson);
         }
         
-        response.setRowset(rowset);
         return response;
     }
     
     @Override
     public EcmResponse sendShipOrder(EcmParam param) {
-        EcmResponse response = new EcmResponse();
-        EcmResponseBody rowset = new EcmResponseBody();
-        if (validateSign(param)) {
-            rowset.setResultCode("1000");
-            rowset.setResultMsg("接收成功");
-        } else {
-            rowset.setResultCode("1001");
-            rowset.setResultMsg("验证失败");
+        EcmResponse response = getResponse(param);
+        
+        // 验证通过才推送
+        if ("1000".equals(response.getRowset().getResultCode())) {
+            String paramJson = getJsonObj(param.getJsonObj());
+            // TODO 发送消息给对应系统
+            System.out.println(paramJson);
         }
         
-        response.setRowset(rowset);
         return response;
     }
     
@@ -107,6 +105,30 @@ public class EcmServiceImpl implements EcmService {
         paramMap.put("JSON_OBJ", Coder.encryptBASE64(JsonUtil.writeValueAsString(jsonObj))); // BASE64编码后的jsonObj
         
         return paramMap;
+    }
+    
+    private String getJsonObj(String jsonObj) {
+        // 参数解密
+        try {
+            return new String(Coder.decryptBASE64(jsonObj), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private EcmResponse getResponse(EcmParam param) {
+        EcmResponse response = new EcmResponse();
+        EcmResponseBody rowset = new EcmResponseBody();
+        if (validateSign(param)) {
+            rowset.setResultCode("1000");
+            rowset.setResultMsg("接收成功");
+        } else {
+            rowset.setResultCode("1001");
+            rowset.setResultMsg("验证失败");
+        }
+        
+        response.setRowset(rowset);
+        return response;
     }
     
     private boolean validateSign(EcmParam param) {

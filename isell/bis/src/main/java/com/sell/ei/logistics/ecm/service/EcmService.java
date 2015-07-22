@@ -25,12 +25,15 @@ public interface EcmService {
     
     /** ECM给的URL */
     String URL = "http://60.191.39.196:8001/ecm/interface/rest/AYCInterface/";
+
+    /** 1. 推送销售订单接口（pushSaleOrder） URL */
+    String PUSHSALEORDER_URL = URL + "pushSaleOrder";
     
     /** 4. 推送商品信息接口（sendCommodity） URL */
     String SENDCOMMODITY_URL = URL + "sendCommodity";
     
-    /** 1. 推送销售订单接口（pushSaleOrder） URL */
-    String PUSHSALEORDER_URL = URL + "pushSaleOrder";
+    /** 客户编码 */
+    String CUSTOMER_CODE = "AYC";
     
     /**
      * 推送销售订单

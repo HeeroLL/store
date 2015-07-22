@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sell.core.web.JsonData;
@@ -31,11 +32,13 @@ public class EcmController {
      * ECM回调服务（订单生产状态回传）
      * 
      * @param param 参数
+     * @param jsonObj json参数
      * @return 返回值
      */
     @ResponseBody
     @RequestMapping("sendOrderStatus")
-    public JsonData sendOrderStatus(EcmParam param) {
+    public JsonData sendOrderStatus(EcmParam param, @RequestParam("JSON_OBJ")String jsonObj) {
+        param.setJsonObj(jsonObj);
         JsonData jsonData = new JsonData();
         jsonData.setData(ecmService.sendOrderStatus(param));
         return jsonData;
@@ -45,11 +48,13 @@ public class EcmController {
      * ECM回调服务（订单批量发货）
      * 
      * @param param 参数
+     * @param jsonObj json参数
      * @return 返回值
      */
     @ResponseBody
     @RequestMapping("sendShipOrder")
-    public JsonData sendShipOrder(EcmParam param) {
+    public JsonData sendShipOrder(EcmParam param, @RequestParam("JSON_OBJ")String jsonObj) {
+        param.setJsonObj(jsonObj);
         JsonData jsonData = new JsonData();
         jsonData.setData(ecmService.sendShipOrder(param));
         return jsonData;

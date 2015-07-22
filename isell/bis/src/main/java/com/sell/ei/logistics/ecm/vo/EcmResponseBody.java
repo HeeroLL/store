@@ -1,5 +1,7 @@
 package com.sell.ei.logistics.ecm.vo;
 
+import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.sell.core.base.BaseInfo;
@@ -24,7 +26,7 @@ public class EcmResponseBody extends BaseInfo {
     
     /** 异常信息 */
     @JsonProperty("ERROR")
-    private EcmError error;
+    private List<EcmError> errorList;
 
     public String getResultCode() {
         return resultCode;
@@ -42,11 +44,11 @@ public class EcmResponseBody extends BaseInfo {
         this.resultMsg = resultMsg;
     }
 
-    public EcmError getError() {
-        return error;
+    public List<EcmError> getErrorList() {
+        return errorList;
     }
 
-    public void setError(EcmError error) {
-        this.error = error;
+    public void setErrorList(List<EcmError> errorList) {
+        this.errorList = errorList;
     }
 }
