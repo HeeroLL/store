@@ -60,7 +60,7 @@ public class EcmControllerTest {
         commodity.setCommodityCode("15098765" + "0001");
         commodity.setCommodityName("九朵云 马油");
         commodity.setCommodityBarcode("1"); // 商品条形码
-        commodity.setCommoditySpec("个"); // 个
+        commodity.setCommoditySpec("1个"); // 个
         commodity.setUnit("007"); // 个
         commodity.setTradeCountryCode("133");
         commodity.setTradeCountryName("韩国");
