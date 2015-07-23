@@ -11,6 +11,7 @@ import com.sell.bis.auth.bean.RequestParameter;
 import com.sell.core.web.JsonData;
 import com.sell.ei.logistics.ecm.service.EcmService;
 import com.sell.ei.logistics.ecm.vo.EcmParam;
+import com.sell.ei.logistics.ecm.vo.EcmResponse;
 
 /**
  * 费舍尔ECM接口Controller
@@ -38,11 +39,9 @@ public class EcmController {
      */
     @ResponseBody
     @RequestMapping("sendOrderStatus")
-    public JsonData sendOrderStatus(EcmParam param, @RequestParam("JSON_OBJ")String jsonObj) {
+    public EcmResponse sendOrderStatus(EcmParam param, @RequestParam("JSON_OBJ")String jsonObj) {
         param.setJsonObj(jsonObj);
-        JsonData jsonData = new JsonData();
-        jsonData.setData(ecmService.sendOrderStatus(param));
-        return jsonData;
+        return ecmService.sendOrderStatus(param);
     }
     
     /**
@@ -56,15 +55,13 @@ public class EcmController {
      */
     @ResponseBody
     @RequestMapping("sendShipOrder")
-    public JsonData sendShipOrder(EcmParam param, @RequestParam("JSON_OBJ")String jsonObj) {
+    public EcmResponse sendShipOrder(EcmParam param, @RequestParam("JSON_OBJ")String jsonObj) {
         param.setJsonObj(jsonObj);
-        JsonData jsonData = new JsonData();
-        jsonData.setData(ecmService.sendShipOrder(param));
-        return jsonData;
+        return ecmService.sendShipOrder(param);
     }
     
     /**
-     * ECM推送订单
+     * 向ECM推送订单
      * 
      * @param ecmOrders 订单列表
      * @return 封装后的ECM返回的处理结果

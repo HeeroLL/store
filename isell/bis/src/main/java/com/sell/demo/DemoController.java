@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sell.ei.pay.weixin.bean.PayResultInfo;
+
 @Controller
 public class DemoController {
     
@@ -25,5 +27,11 @@ public class DemoController {
         System.out.println("param=\n" + person);
         person.setName("serverName");
         return person;
+    }
+    
+    @RequestMapping(value="/testPayResult")
+    @ResponseBody
+    public PayResultInfo testPayResult(@RequestBody PayResultInfo payResultInfo) {
+        return payResultInfo;
     }
 }
