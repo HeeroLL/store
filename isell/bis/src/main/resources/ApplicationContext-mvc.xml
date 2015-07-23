@@ -26,6 +26,7 @@
 					<property name="ignorePackageList">
 						<list>
 							<value>com.sell.ei.logistics.ecm.controller</value>
+							<value>com.sell.ei.pay.weixin.controller</value>
 						</list>
 					</property>
 					<!-- 配置允许访问的ip -->

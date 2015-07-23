@@ -10,11 +10,6 @@ import com.sell.bis.auth.bean.RequestParameter;
  */
 public interface BisValidator {
     /**
-     * 初始化
-     */
-    void init();
-    
-    /**
      * 验证参数
      *
      * @param param 参数

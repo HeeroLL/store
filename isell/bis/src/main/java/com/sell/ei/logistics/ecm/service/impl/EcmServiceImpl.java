@@ -69,7 +69,6 @@ public class EcmServiceImpl implements EcmService {
         if (response == null || response.getRowset() == null || !"1000".equals(response.getRowset().getResultCode())) {
             return response;
         }
-        
         // TODO 将订单号和接入系统编码关系存入数据库
         
         return response;

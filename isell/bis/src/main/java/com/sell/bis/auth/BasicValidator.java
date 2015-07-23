@@ -1,14 +1,12 @@
 package com.sell.bis.auth;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
 import com.sell.bis.auth.bean.AccessSystemInfo;
 import com.sell.bis.auth.bean.RequestParameter;
+import com.sell.bis.config.BisConfig;
 import com.sell.core.util.Coder;
 
 /**
@@ -19,19 +17,11 @@ import com.sell.core.util.Coder;
  */
 @Service("basicValidator")
 public class BasicValidator implements BisValidator {
-    
     /**
-     * 接入系统Map集合
+     * 系统配置信息
      */
-    private Map<String, AccessSystemInfo> accessSysMap;
-    
-    @PostConstruct
-    @Override
-    public void init() {
-        // 系统加载时初始化认证信息 TODO 以后从数据库中读取
-        accessSysMap = new HashMap<String, AccessSystemInfo>();
-        accessSysMap.put("lootooker", new AccessSystemInfo("lootooker", "lootookerPrivateKEY", false));
-    }
+    @Resource
+    private BisConfig config;
     
     @Override
     public boolean validate(RequestParameter param) {
@@ -39,7 +29,7 @@ public class BasicValidator implements BisValidator {
         if (accessCode == null || param.getJsonObj() == null || param.getAuthCode() == null) {
             throw new RuntimeException("exception.access.param-invalidate");
         }
-        AccessSystemInfo sysInfo = accessSysMap.get(accessCode);
+        AccessSystemInfo sysInfo = config.getAccessSysMap().get(accessCode);
         if (sysInfo == null) {
             throw new RuntimeException("exception.access.system-null");
         }
