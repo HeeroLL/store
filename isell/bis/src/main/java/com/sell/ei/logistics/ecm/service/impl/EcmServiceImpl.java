@@ -56,9 +56,7 @@ public class EcmServiceImpl implements EcmService {
             commodities.getCommoditys().addAll(order.getOrderDtls());
         }
         Map<String, String> paramMap = getParamMap(commodities);
-        System.out.println(paramMap);
         String result = HttpUtils.httpPost(SENDCOMMODITY_URL, paramMap);
-        System.out.println(result);
         EcmResponse response = JsonUtil.readValue(result, EcmResponse.class);
         if (response == null || response.getRowset() == null || !"1000".equals(response.getRowset().getResultCode())) {
             return response;
@@ -66,9 +64,7 @@ public class EcmServiceImpl implements EcmService {
         
         // 再推送订单
         paramMap = getParamMap(ecmOrders);
-        System.out.println(result);
         result = HttpUtils.httpPost(PUSHSALEORDER_URL, paramMap);
-        System.out.println(result);
         response = JsonUtil.readValue(result, EcmResponse.class);
         if (response == null || response.getRowset() == null || !"1000".equals(response.getRowset().getResultCode())) {
             return response;

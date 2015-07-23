@@ -22,7 +22,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * @version [版本号, 2015年6月30日]
  */
 public class LogInterceptor extends HandlerInterceptorAdapter {
-    
     /** 默认字符集 */
     private static final Charset CHARSET = Charset.forName("UTF-8");
     
@@ -56,8 +55,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
             log.info(builder.toString());
         } else {
             try {
-                String body = StreamUtils.copyToString(request.getInputStream(), CHARSET);
-                log.info(body);
+                log.info(StreamUtils.copyToString(request.getInputStream(), CHARSET));
             } catch (IOException e) {
                 log.error(e);
                 throw new RuntimeException(e);

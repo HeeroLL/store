@@ -1,9 +1,6 @@
 package com.sell.core.util;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -72,14 +69,5 @@ public class JsonUtil {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-    
-    public static void main(String[] args) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("name", "张三");
-        map.put("age", 50);
-        map.put("生日", new Date());
-        System.out.println(writeValueAsString(map));
-        System.out.println(writeValueAsString(map, "yyyy年MM月dd日HH时mm分"));
     }
 }

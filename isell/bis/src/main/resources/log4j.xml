@@ -48,6 +48,18 @@
 				value="%d [%p] - %m%n" />
 		</layout>
 	</appender>
+	
+	<appender name="sendMessage_log"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${catalina.home}/logs/sendMessage.log" />
+		<param name="Append" value="true"/>  
+		<param name="MaxBackupIndex" value="10" />
+		<param name="MaxFileSize" value="1MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d [%p] - %m%n" />
+		</layout>
+	</appender>
       
     <!-- 输出到控制台 -->
     <appender name="consoleLog" class="org.apache.log4j.ConsoleAppender">
@@ -60,6 +72,11 @@
     <logger name="com.sell.bis.sys" additivity="false">
 		<level value="info" />
 		<appender-ref ref="receiveMessage_log" />
+	</logger>
+	
+	<logger name="com.sell.core.util.HttpUtils" additivity="false">
+		<level value="info" />
+		<appender-ref ref="sendMessage_log" />
 	</logger>
 	
   	<!--
@@ -85,7 +102,8 @@
 	
     <root>  
         <priority value="DEBUG"/>
-        <appender-ref ref="receiveMessage_log" /> 
+        <appender-ref ref="receiveMessage_log" />
+        <appender-ref ref="sendMessage_log" />
         <appender-ref ref="app_log" />
         <appender-ref ref="consoleLog" /> 
     </root>  

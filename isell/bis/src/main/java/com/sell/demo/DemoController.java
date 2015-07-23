@@ -15,7 +15,6 @@ public class DemoController {
     @RequestMapping(value="/demo")
     @ResponseBody
     public Map<String, Object> demo(@RequestBody Map<String, Object> requestMap) {
-        System.out.println(requestMap);
         requestMap.put("result", true);
         
         return requestMap;
@@ -24,7 +23,6 @@ public class DemoController {
     @RequestMapping(value="/demo2")
     @ResponseBody
     public Person demo2(@RequestBody Person person) {
-        System.out.println("param=\n" + person);
         person.setName("serverName");
         return person;
     }

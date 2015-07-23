@@ -172,11 +172,4 @@ public final class Coder {
             throw new RuntimeException(e);
         }
     }
-    
-    public static void main(String[] args) {
-        String a = "sgfhrt34234asdste534rrsefds5234aswefddsgt";
-        
-        System.out.println(encodeMd5(a));
-        System.out.println(Hex.encodeHexString(encryptMD5(a)));
-    }
 }

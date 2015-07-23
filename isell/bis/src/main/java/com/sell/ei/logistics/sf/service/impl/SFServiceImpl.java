@@ -3,7 +3,6 @@ package com.sell.ei.logistics.sf.service.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.sell.core.util.Coder;
@@ -26,11 +25,6 @@ import com.sell.ei.logistics.sf.vo.SRouteRequest;
  */
 @Service("sfService")
 public class SFServiceImpl implements SFService {
-    /**
-     * log
-     */
-    private static final Logger log = Logger.getLogger(SFServiceImpl.class);
-    
     @Override
     public SResponse orderService(SOrder order) {
         SRequest request = new SRequest();
@@ -79,7 +73,7 @@ public class SFServiceImpl implements SFService {
     
     /**
      * 组装请求消息体并发送
-     *
+     * 
      * @param request 请求消息体参数
      * @return 顺丰响应信息
      */
@@ -91,12 +85,7 @@ public class SFServiceImpl implements SFService {
         paramMap.put("verifyCode", verifyCode);
         paramMap.put("xml", xml);
         
-        //System.out.println(request.getService() + ":" + paramMap); // 发送参数
-        log.info(request.getService() + ":" + paramMap);
         String result = HttpUtils.httpsPost(URL, paramMap);
-        //System.out.println(result); // 改成记录日志
-        log.info(result);
-        
         return JaxbUtil.converyToJavaBean(result, SResponse.class);
     }
 }

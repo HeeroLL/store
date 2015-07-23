@@ -69,7 +69,7 @@ public class HttpUtilsTest {
         address.setStreet("街道3");
         person.getAddresses().add(address);
         
-        System.out.println(HttpUtils.httpPost("http://localhost:8080/bis/demo2", JsonUtil.writeValueAsString(person)));
+        System.out.println(HttpUtils.httpPost("http://localhost:18080/bis/demo2", JsonUtil.writeValueAsString(person)));
     }
     
     @Test

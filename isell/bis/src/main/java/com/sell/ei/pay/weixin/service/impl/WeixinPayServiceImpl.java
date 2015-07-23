@@ -36,9 +36,7 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         
         // xml格式发送请求
         String xml = WeixinUtil.transMapToXml(paramMap);
-        System.out.println(xml);
         String result = HttpUtils.httpsPost(UNIFIEDORDER, xml, "application/xml");
-        System.out.println(result);
         
         return WeixinUtil.transXmlToMap(result);
     }
@@ -48,9 +46,7 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         generateMap(paramMap);
         // xml格式发送请求
         String xml = WeixinUtil.transMapToXml(paramMap);
-        System.out.println(xml);
         String result = HttpUtils.httpsPost(ORDERQUERY, xml, "application/xml");
-        System.out.println(result);
         
         return WeixinUtil.transXmlToMap(result);
     }
@@ -60,9 +56,7 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         generateMap(paramMap);
         // xml格式发送请求
         String xml = WeixinUtil.transMapToXml(paramMap);
-        System.out.println(xml);
         String result = HttpUtils.httpsPost(CLOSEORDER, xml, "application/xml");
-        System.out.println(result);
         
         return WeixinUtil.transXmlToMap(result);
     }
@@ -82,9 +76,7 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         BeanUtils.copyProperties(payResultInfo, newParam, "appid", "mchId", "nonceStr", "sign", "attach");
         String notifyUrl = payResultInfo.getAttach(); // 对应系统的通知URL存在参数attach中
         // json格式发送请求
-        System.out.println(newParam);
         String result = HttpUtils.httpPost(notifyUrl, JsonUtil.writeValueAsString(newParam));
-        System.out.println(result);
         
         return JsonUtil.readValue(result, PayResultInfo.class);
     }

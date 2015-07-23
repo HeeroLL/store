@@ -1,6 +1,7 @@
 package com.sell.core.util;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -29,6 +30,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
+import org.springframework.util.StreamUtils;
 
 /**
  * <pre>
@@ -43,6 +46,16 @@ import org.apache.http.util.EntityUtils;
  * @version [版本号, 2015年7月1日]
  */
 public final class HttpUtils {
+    /**
+     * log
+     */
+    private static final Logger log = Logger.getLogger(HttpUtils.class);
+    
+    /**
+     * 默认字符集
+     */
+    private static final Charset CHARSET = Charset.forName("UTF-8");
+    
     /**
      * http连接
      */
@@ -378,8 +391,16 @@ public final class HttpUtils {
     private static String http(CloseableHttpClient httpclient, HttpUriRequest request, boolean isFinishClose) {
         CloseableHttpResponse response = null;
         try {
+            if (request instanceof HttpPost) {
+                HttpPost httpPost = ((HttpPost)request);
+                // 记录发送日志
+                log.info("send:" + StreamUtils.copyToString(httpPost.getEntity().getContent(), CHARSET));
+            }
             response = httpclient.execute(request);
-            return EntityUtils.toString(response.getEntity(), "UTF-8");
+            String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+            // 记录响应日志
+            log.info("receive:" + result);
+            return result;
         } catch (Exception e) {
             throw new RuntimeException("exception.httprequest-error", e);
         } finally {
