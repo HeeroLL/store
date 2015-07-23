@@ -2,6 +2,8 @@ package com.sell.ei.pay.lianlian.util;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.sell.core.util.Coder;
+
 /**
  * 连连支付工具类
  * 
@@ -353,7 +355,7 @@ public class LianlianPayInfo {
             version + merchant_id + merchant_userid + biz_code + url_notify + req_ip + goods_type + merchant_orderno
                 + merchant_trans_date + trans_amt + trans_cur + sign;
         //System.out.println("签名原串:" + signSrc);
-        String signed = Md5Algorithm.getInstance().md5Digest(signSrc.getBytes());
+        String signed = Coder.encodeMd5(signSrc);//Md5Algorithm.getInstance().md5Digest(signSrc.getBytes());
         //System.out.println("签名后:" + signed);
         StringBuffer params = new StringBuffer();
         /** 版本号 */

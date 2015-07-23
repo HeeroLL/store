@@ -28,7 +28,9 @@ public class EcmController {
     private EcmService ecmService;
     
     /**
-     * ECM回调服务（订单生产状态回传）
+     * ECM回调服务（订单生产状态回传）<br>
+     * 这个是ECM的回调接口，需要继续回调对应系统相应接口<br>
+     * 需要做权限认证
      * 
      * @param param 参数
      * @param jsonObj json参数
@@ -44,7 +46,9 @@ public class EcmController {
     }
     
     /**
-     * ECM回调服务（订单批量发货）
+     * ECM回调服务（订单批量发货）<br>
+     * 这个是ECM的回调接口，需要继续回调对应系统相应接口<br>
+     * 需要做权限认证
      * 
      * @param param 参数
      * @param jsonObj json参数
