@@ -22,20 +22,40 @@ import com.sell.ei.pay.weixin.util.WeixinUtil;
  */
 public class WeixinPayControllerTest {
     
-    private static final String host = "http://localhost:8080";
+    private static final String host = "http://localhost:18080";
     
     private static final String URL = host + "/bis/pay/weixin/";
     
     @Test
     public void testUnifiedorder() {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("body", "aaa");
-        map.put("aody", "aac");
-        map.put("cody", "aav");
-        map.put("eody", "aab");
-        map.put("dody", "aan");
+        map.put("body", "九朵云 马油");
+        map.put("out_trade_no", "AYS001");
+        map.put("total_fee", 10000);
+        map.put("spbill_create_ip", "127.0.0.1");
+        map.put("notify_url", host + "/bis/testPayResult");
+        map.put("trade_type", "JSAPI");
+        map.put("openid", "testOpenid");
         
         String result = HttpUtils.httpPost(URL + "unifiedorder", JsonUtil.writeValueAsString(map));
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testOrderquery() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("out_trade_no", "AYS001");
+        
+        String result = HttpUtils.httpPost(URL + "orderquery", JsonUtil.writeValueAsString(map));
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testCloseorder() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("out_trade_no", "AYS001");
+        
+        String result = HttpUtils.httpPost(URL + "closeorder", JsonUtil.writeValueAsString(map));
         System.out.println(result);
     }
     

@@ -27,12 +27,29 @@ public interface WeixinPayService {
      */
     String KEY = "isellPrivateKey";
     
-    /** 微信给的URL */
-    String URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    /**
+     * 微信给的URL
+     */
+    String URL = "https://api.mch.weixin.qq.com/pay/";
+    
+    /**
+     * 统一下单接口
+     */
+    String UNIFIEDORDER = URL + "unifiedorder";
+    
+    /**
+     * 查询订单接口
+     */
+    String ORDERQUERY = URL + "orderquery";
+    
+    /**
+     * 关闭订单接口
+     */
+    String CLOSEORDER = URL + "closeorder";
     
     /**
      * 统一下单服务
-     *
+     * 
      * @param paramMap map参数
      * @return 返回Map
      */
@@ -40,7 +57,7 @@ public interface WeixinPayService {
     
     /**
      * 查询订单服务
-     *
+     * 
      * @param paramMap map参数
      * @return 返回Map
      */
@@ -48,7 +65,7 @@ public interface WeixinPayService {
     
     /**
      * 关闭订单服务
-     *
+     * 
      * @param paramMap map参数
      * @return 返回Map
      */
@@ -57,7 +74,7 @@ public interface WeixinPayService {
     /**
      * 支付结果通知接口<br>
      * 该接口是通过【统一下单API】中提交的参数notify_url设置，如果链接无法访问，商户将无法接收到微信通知。
-     *
+     * 
      * @param payResultInfo 请求参数
      * @return 返回响应
      */

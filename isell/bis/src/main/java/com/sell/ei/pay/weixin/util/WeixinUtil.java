@@ -1,8 +1,16 @@
 package com.sell.ei.pay.weixin.util;
 
 import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+
+import org.apache.commons.lang3.StringUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
 import com.sell.core.util.Coder;
 
@@ -13,6 +21,49 @@ import com.sell.core.util.Coder;
  * @version [版本号, 2015年7月23日]
  */
 public final class WeixinUtil {
+    
+    /**
+     * 将map转成xml
+     *
+     * @param map map
+     * @return xml字符串
+     */
+    public static String transMapToXml(Map<String, Object> map) {
+        StringBuilder builder = new StringBuilder("<xml>");
+        for (Entry<String, Object> entry : map.entrySet()) {
+            builder.append('<').append(entry.getKey()).append('>');
+            builder.append(entry.getValue());
+            builder.append("</").append(entry.getKey()).append('>');
+        }
+        
+        builder.append("</xml>");
+        return builder.toString();
+    }
+    
+    /**
+     * 将xml转map
+     *
+     * @param xml xml字符串
+     * @return treeMap
+     */
+    public static TreeMap<String, Object> transXmlToMap(String xml) {
+        TreeMap<String, Object> map = new TreeMap<String, Object>();
+        try {
+            Document document = DocumentHelper.parseText(xml);
+            List<?> list = document.getRootElement().elements();
+            for (Object obj : list) {
+                Element element = (Element)obj;
+                if (StringUtils.isNotEmpty(element.getText())) {
+                    map.put(element.getName(), element.getText());
+                }
+            }
+            
+        } catch (DocumentException e) {
+            throw new RuntimeException(e);
+        }
+            
+        return map;
+    }
     
     /**
      * 获取参数

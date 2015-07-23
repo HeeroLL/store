@@ -24,7 +24,7 @@ public class WeixinPayServiceImpl implements WeixinPayService {
     /**
      * bis域名地址
      */
-    @Value("bis.host")
+    @Value("${bis.host}")
     private String bisHost;
     
     @Override
@@ -35,22 +35,36 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         generateMap(paramMap);
         
         // xml格式发送请求
-        String param = WeixinUtil.encryptString(WeixinUtil.getParameter(paramMap), KEY);
-        System.out.println(param);
-        String result = HttpUtils.httpsPost(URL, param, "application/xml");
+        String xml = WeixinUtil.transMapToXml(paramMap);
+        System.out.println(xml);
+        String result = HttpUtils.httpsPost(UNIFIEDORDER, xml, "application/xml");
         System.out.println(result);
         
-        return null;
+        return WeixinUtil.transXmlToMap(result);
     }
     
     @Override
     public TreeMap<String, Object> orderquery(TreeMap<String, Object> paramMap) {
-        return null;
+        generateMap(paramMap);
+        // xml格式发送请求
+        String xml = WeixinUtil.transMapToXml(paramMap);
+        System.out.println(xml);
+        String result = HttpUtils.httpsPost(ORDERQUERY, xml, "application/xml");
+        System.out.println(result);
+        
+        return WeixinUtil.transXmlToMap(result);
     }
     
     @Override
     public TreeMap<String, Object> closeorder(TreeMap<String, Object> paramMap) {
-        return null;
+        generateMap(paramMap);
+        // xml格式发送请求
+        String xml = WeixinUtil.transMapToXml(paramMap);
+        System.out.println(xml);
+        String result = HttpUtils.httpsPost(CLOSEORDER, xml, "application/xml");
+        System.out.println(result);
+        
+        return WeixinUtil.transXmlToMap(result);
     }
     
     @Override
@@ -77,13 +91,14 @@ public class WeixinPayServiceImpl implements WeixinPayService {
     
     /**
      * 设置一些必填参数
-     *
+     * 
      * @param paramMap 参数map
      */
     private void generateMap(TreeMap<String, Object> paramMap) {
         paramMap.put("appid", APPID);
-        paramMap.put("mch_id", MCH_ID); 
+        paramMap.put("mch_id", MCH_ID);
         paramMap.put("nonce_str", Identities.uuid());
         
+        paramMap.put("sign", WeixinUtil.encryptString(WeixinUtil.getParameter(paramMap), KEY));
     }
 }
