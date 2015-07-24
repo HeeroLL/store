@@ -22,7 +22,7 @@ import com.sell.ei.logistics.ecm.vo.EcmOrders;
  */
 public class EcmControllerTest {
     // private static final String host = "http://121.40.79.3:8585";
-    private static final String host = "http://localhost:18080";
+    private static final String host = "http://localhost:8080";
     
     private static final String URL = host + "/bis/logistics/ecm/";
     

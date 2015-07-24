@@ -90,6 +90,11 @@
     	<appender-ref ref="consoleLog"/>
     </category>
     
+    <category name="org.mybatis.spring" additivity="false">
+     	<priority value="ERROR" />
+    	<appender-ref ref="consoleLog"/>
+    </category>
+    
     <!-- 关闭spring的log -->
 	<category name="org.springframework">
 		<priority value="ERROR" />

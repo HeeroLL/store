@@ -4,9 +4,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sell.bis.auth.bean.AccessSystemInfo;
 import com.sell.bis.auth.bean.RequestParameter;
 import com.sell.bis.config.BisConfig;
+import com.sell.bis.config.vo.AccessSystem;
 import com.sell.core.util.Coder;
 
 /**
@@ -29,7 +29,7 @@ public class BasicValidator implements BisValidator {
         if (accessCode == null || param.getJsonObj() == null || param.getAuthCode() == null) {
             throw new RuntimeException("exception.access.param-invalidate");
         }
-        AccessSystemInfo sysInfo = config.getAccessSysMap().get(accessCode);
+        AccessSystem sysInfo = config.getAccessSysMap().get(accessCode);
         if (sysInfo == null) {
             throw new RuntimeException("exception.access.system-null");
         }

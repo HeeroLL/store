@@ -1,4 +1,6 @@
-package com.sell.bis.auth.bean;
+package com.sell.bis.config.vo;
+
+import java.util.Date;
 
 /**
  * 接入系统信息
@@ -6,7 +8,7 @@ package com.sell.bis.auth.bean;
  * @author lilin
  * @version [版本号, 2015年7月22日]
  */
-public class AccessSystemInfo {
+public class AccessSystem {
     /**
      * 主键id
      */
@@ -42,11 +44,16 @@ public class AccessSystemInfo {
      */
     private boolean frozen;
     
-    public AccessSystemInfo() {
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    
+    public AccessSystem() {
         
     }
     
-    public AccessSystemInfo(String accessCode, String privateKey, boolean frozen) {
+    public AccessSystem(String accessCode, String privateKey, boolean frozen) {
         this.accessCode = accessCode;
         this.privateKey = privateKey;
         this.frozen = frozen;
@@ -106,5 +113,13 @@ public class AccessSystemInfo {
     
     public void setPrivateKey(String privateKey) {
         this.privateKey = privateKey;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

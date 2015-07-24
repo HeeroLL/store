@@ -116,14 +116,14 @@ public final class WeixinUtil {
     }
     
     /**
-     * 生成加密后的签名
+     * 生成加密后的签名(转大写)
      * 
      * @param param 参数
      * @param key 密钥
      * @return 加密后的签名
      */
     public static String encryptString(String param, String key) {
-        String stringSignTemp = param + "@key=" + key;
+        String stringSignTemp = param + "&key=" + key;
         return Coder.encodeMd5(stringSignTemp).toUpperCase();
     }
 }

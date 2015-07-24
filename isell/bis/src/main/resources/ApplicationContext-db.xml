@@ -56,6 +56,7 @@
 	<tx:advice id="jtaTxAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="push*" propagation="REQUIRED" />
 			<tx:method name="update*" propagation="REQUIRED" />
 			<tx:method name="delete*" propagation="REQUIRED" />
 			<tx:method name="get*" propagation="REQUIRED" read-only="true" />

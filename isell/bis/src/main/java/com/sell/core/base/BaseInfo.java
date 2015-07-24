@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author lilin
  * @version [版本号, 2015年6月19日]
  */
-public class BaseInfo implements Serializable {
+public abstract class BaseInfo implements Serializable {
 
     /**
      * 注释内容

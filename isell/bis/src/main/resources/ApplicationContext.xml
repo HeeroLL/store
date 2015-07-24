@@ -36,7 +36,5 @@
 		</property>
 	</bean>
 	
-	<!-- 
 	<import resource="ApplicationContext-db.xml" />
-	 -->
 </beans>

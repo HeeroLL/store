@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sell.bis.config.dao.RequestAccsysRefMapper">
+    <resultMap id="BaseResultMap" type="com.sell.bis.config.vo.RequestAccsysRef">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="request_id" jdbcType="VARCHAR" property="requestId"/>
+        <result column="access_code" jdbcType="VARCHAR" property="accessCode"/>
+        <result column="request_time" jdbcType="TIMESTAMP" property="requestTime"/>
+        <result column="finish" jdbcType="BIT" property="finish"/>
+    </resultMap>
+    <select id="getRequestAccsysRefById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             request_accsys_ref
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getRequestAccsysRefByRequestId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             request_accsys_ref
+        WHERE            
+            request_id = #{requestId,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllRequestAccsysRef" resultMap="BaseResultMap">
+          SELECT * FROM request_accsys_ref 
+    </select>
+    
+    <delete id="deleteRequestAccsysRef">
+        DELETE
+        FROM
+             request_accsys_ref
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveRequestAccsysRef" parameterType="com.sell.bis.config.vo.RequestAccsysRef" >
+        INSERT INTO request_accsys_ref (request_id, access_code) values
+        <foreach collection="array" item="item" index="index" separator=",">
+		(#{item.requestId},#{item.accessCode})
+		</foreach>
+    </insert>
+
+    <update id="updateRequestAccsysRef" parameterType="com.sell.bis.config.vo.RequestAccsysRef" >
+        UPDATE request_accsys_ref
+        <set>
+            <if test="requestId != null" >
+                request_id = #{requestId,jdbcType=VARCHAR},
+            </if>
+            <if test="accessCode != null" >
+                access_code = #{accessCode,jdbcType=VARCHAR},
+            </if>
+            <if test="requestTime != null" >
+                request_time = #{requestTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="finish != null" >
+                finish = #{finish,jdbcType=BIT},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

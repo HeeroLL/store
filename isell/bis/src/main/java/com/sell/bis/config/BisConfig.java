@@ -1,13 +1,18 @@
 package com.sell.bis.config;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
 
-import com.sell.bis.auth.bean.AccessSystemInfo;
+import com.sell.bis.config.dao.AccessSystemMapper;
+import com.sell.bis.config.dao.SysMappingMapper;
+import com.sell.bis.config.vo.AccessSystem;
+import com.sell.bis.config.vo.SysMapping;
 
 /**
  * 系统配置类
@@ -17,10 +22,23 @@ import com.sell.bis.auth.bean.AccessSystemInfo;
  */
 @Repository("config")
 public class BisConfig {
+    
+    /**
+     * 接入系统Mapper
+     */
+    @Resource
+    private AccessSystemMapper accessSystemMapper;
+    
+    /**
+     * 系统映射信息Mapper
+     */
+    @Resource
+    private SysMappingMapper sysMappingMapper;
+    
     /**
      * 接入系统map集合
      */
-    private Map<String, AccessSystemInfo> accessSysMap;
+    private Map<String, AccessSystem> accessSysMap;
     
     /**
      * 接入系统映射map集合
@@ -32,16 +50,25 @@ public class BisConfig {
      */
     @PostConstruct
     public void init() {
-        // 系统加载时初始化信息 TODO 以后从数据库中读取
-        accessSysMap = new HashMap<String, AccessSystemInfo>();
-        accessSysMap.put("lootooker", new AccessSystemInfo("lootooker", "lootookerPrivateKEY", false));
+        List<AccessSystem> accessSystemList = accessSystemMapper.findAllAccessSystem();
+        accessSysMap = new HashMap<String, AccessSystem>();
+        for (AccessSystem accessSystem : accessSystemList) {
+            accessSysMap.put(accessSystem.getAccessCode(), accessSystem);
+        }
         
+        List<SysMapping> sysMappingList = sysMappingMapper.findAllSysMapping();
         sysMappingMap = new HashMap<String, String>();
-        sysMappingMap.put("lootooker" + "sendOrderStatus", "testURL");
-        sysMappingMap.put("lootooker" + "sendShipOrder", "testURL");
+        
+        for (SysMapping sysMapping : sysMappingList) {
+            sysMappingMap.put(sysMapping.getAccessCode() + sysMapping.getServiceCode(), sysMapping.getNotifyUrl());
+        }
+    }
+    
+    public Map<String, AccessSystem> getAccessSysMap() {
+        return accessSysMap;
     }
 
-    public Map<String, AccessSystemInfo> getAccessSysMap() {
-        return accessSysMap;
+    public Map<String, String> getSysMappingMap() {
+        return sysMappingMap;
     }
 }
