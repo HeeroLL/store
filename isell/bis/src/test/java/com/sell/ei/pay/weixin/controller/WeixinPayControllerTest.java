@@ -22,7 +22,7 @@ import com.sell.ei.pay.weixin.util.WeixinUtil;
  */
 public class WeixinPayControllerTest {
     
-    private static final String host = "http://localhost:18080";
+    private static final String host = "http://localhost:8080";
     
     private static final String URL = host + "/bis/pay/weixin/";
     
