@@ -44,7 +44,7 @@ public class WeixinPayControllerTest {
     @Test
     public void testOrderquery() {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("out_trade_no", "AYS001");
+        map.put("transaction_id", "AYS001");
         
         String result = HttpUtils.httpPost(URL + "orderquery", JsonUtil.writeValueAsString(map));
         System.out.println(result);
