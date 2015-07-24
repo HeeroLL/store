@@ -25,7 +25,7 @@ public interface WeixinPayService {
     /**
      * 微信给的密钥
      */
-    String KEY = "fa680c94cf63719cec68d369ccef2242";
+    String KEY = "5ec7962c67c34e229f1e74e74aa5a5d6";
     
     /**
      * 微信给的URL
