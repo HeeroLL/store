@@ -1,6 +1,6 @@
 package com.sell.ei.pay.alipay.controller;
 
-import java.util.TreeMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -33,7 +33,7 @@ public class AlipayController {
      * @param map 返回值
      */
     @RequestMapping("wapPay")
-    public String wapPay(@RequestBody TreeMap<String, String> paramMap, ModelMap map) {
+    public String wapPay(@RequestBody Map<String, String> paramMap, ModelMap map) {
         paramMap.put("service", "alipay.wap.create.direct.pay.by.user"); // 手机支付接口名
         map.putAll(paramMap);
         map.addAttribute("result", alipayService.getParamInputs(paramMap));
@@ -47,7 +47,7 @@ public class AlipayController {
      * @param map 返回值
      */
     @RequestMapping("webPay")
-    public String webPay(@RequestBody TreeMap<String, String> paramMap, ModelMap map) {
+    public String webPay(@RequestBody Map<String, String> paramMap, ModelMap map) {
         paramMap.put("service", "create_direct_pay_by_user"); // PC支付接口名
         map.putAll(paramMap);
         map.addAttribute("result", alipayService.getParamInputs(paramMap));

@@ -1,6 +1,6 @@
 package com.sell.ei.pay.alipay.service;
 
-import java.util.TreeMap;
+import java.util.Map;
 
 /**
  * 支付宝支付service层接口
@@ -41,10 +41,15 @@ public interface AlipayService {
     String METHOD = "get";
     
     /**
+     * 支付类型。仅支持：1（商品购买）
+     */
+    String PAYMENT_TYPE = "1";
+    
+    /**
      * 获取封装后的支付信息map
      * 
      * @param paramMap map参数
      * @return 返回的参数字符串
      */
-    String getParamInputs(TreeMap<String, String> paramMap);
+    String getParamInputs(Map<String, String> paramMap);
 }

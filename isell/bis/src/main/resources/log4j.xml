@@ -85,12 +85,12 @@
   	-->
   	<!-- 此处配置是为了让mybatis打印出执行的sql语句 -->
   	
-    <category name="org.apache.ibatis" additivity="false">
+    <category name="org.apache.ibatis">
      	<priority value="DEBUG" />
     	<appender-ref ref="consoleLog"/>
     </category>
     
-    <category name="org.mybatis.spring" additivity="false">
+    <category name="org.mybatis.spring">
      	<priority value="ERROR" />
     	<appender-ref ref="consoleLog"/>
     </category>
@@ -107,9 +107,9 @@
 	
     <root>  
         <priority value="DEBUG"/>
-        <appender-ref ref="receiveMessage_log" />
-        <appender-ref ref="sendMessage_log" />
         <appender-ref ref="app_log" />
         <appender-ref ref="consoleLog" /> 
+        <appender-ref ref="receiveMessage_log" />
+        <appender-ref ref="sendMessage_log" />
     </root>  
 </log4j:configuration>  

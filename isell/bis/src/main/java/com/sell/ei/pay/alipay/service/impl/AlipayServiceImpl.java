@@ -1,7 +1,7 @@
 package com.sell.ei.pay.alipay.service.impl;
 
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,8 @@ public class AlipayServiceImpl implements AlipayService {
     private Logger log = Logger.getLogger(AlipayServiceImpl.class);
     
     @Override
-    public String getParamInputs(TreeMap<String, String> paramMap) {
-        generateMap(paramMap);
+    public String getParamInputs(Map<String, String> paramMap) {
+        paramMap = generateMap(paramMap);
         
         StringBuilder sbHtml = new StringBuilder();
         sbHtml.append("<form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\"" + ALIPAY_GATEWAY_NEW + "\" method=\""
@@ -47,12 +47,19 @@ public class AlipayServiceImpl implements AlipayService {
      * 设置一些必填参数
      * 
      * @param paramMap 参数map
+     * @return 格式化后的参数map
      */
-    private void generateMap(TreeMap<String, String> paramMap) {
+    private Map<String, String> generateMap(Map<String, String> paramMap) {
+        // 删除空参数
+        paramMap = AlipayUtil.paraFilter(paramMap);
         paramMap.put("partner", PARTNER);
-        paramMap.put("_input_charset ", INPUT_CHARSET);
+        paramMap.put("seller_id", PARTNER);
+        paramMap.put("_input_charset", INPUT_CHARSET);
         paramMap.put("sign_type", SIGN_TYPE);
+        paramMap.put("payment_type", PAYMENT_TYPE);
         
         paramMap.put("sign", AlipayUtil.encryptString(AlipayUtil.getParameter(paramMap), KEY));
+        
+        return paramMap;
     }
 }
