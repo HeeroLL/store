@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.sell.core.util.HttpUtils;
 import com.sell.core.util.Identities;
 import com.sell.core.util.JsonUtil;
-import com.sell.ei.pay.weixin.bean.PayResultInfo;
+import com.sell.ei.pay.weixin.bean.WeixinPayResultInfo;
 import com.sell.ei.pay.weixin.service.WeixinPayService;
 import com.sell.ei.pay.weixin.util.WeixinUtil;
 
@@ -62,8 +62,8 @@ public class WeixinPayServiceImpl implements WeixinPayService {
     }
     
     @Override
-    public PayResultInfo sendPayResult(PayResultInfo payResultInfo) {
-        PayResultInfo response = new PayResultInfo();
+    public WeixinPayResultInfo sendPayResult(WeixinPayResultInfo payResultInfo) {
+        WeixinPayResultInfo response = new WeixinPayResultInfo();
         // 校验签名
         String sign = WeixinUtil.encryptString(WeixinUtil.generateSign(payResultInfo), KEY);
         if (!sign.equals(payResultInfo.getSign())) {
@@ -72,13 +72,13 @@ public class WeixinPayServiceImpl implements WeixinPayService {
             return response;
         }
         // 发消息给对应的系统
-        PayResultInfo newParam = new PayResultInfo();
+        WeixinPayResultInfo newParam = new WeixinPayResultInfo();
         BeanUtils.copyProperties(payResultInfo, newParam, "appid", "mchId", "nonceStr", "sign", "attach");
         String notifyUrl = payResultInfo.getAttach(); // 对应系统的通知URL存在参数attach中
         // json格式发送请求
         String result = HttpUtils.httpPost(notifyUrl, JsonUtil.writeValueAsString(newParam));
         
-        return JsonUtil.readValue(result, PayResultInfo.class);
+        return JsonUtil.readValue(result, WeixinPayResultInfo.class);
     }
     
     /**

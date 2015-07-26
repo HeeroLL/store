@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sell.ei.pay.weixin.bean.PayResultInfo;
+import com.sell.ei.pay.weixin.bean.WeixinPayResultInfo;
 
 @Controller
 public class DemoController {
@@ -29,7 +29,7 @@ public class DemoController {
     
     @RequestMapping(value="/testPayResult")
     @ResponseBody
-    public PayResultInfo testPayResult(@RequestBody PayResultInfo payResultInfo) {
+    public WeixinPayResultInfo testPayResult(@RequestBody WeixinPayResultInfo payResultInfo) {
         return payResultInfo;
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sell.core.web.JsonData;
-import com.sell.ei.pay.weixin.bean.PayResultInfo;
+import com.sell.ei.pay.weixin.bean.WeixinPayResultInfo;
 import com.sell.ei.pay.weixin.service.WeixinPayService;
 
 /**
@@ -81,7 +81,7 @@ public class WeixinPayController {
      */
     @ResponseBody
     @RequestMapping("sendPayResult")
-    public PayResultInfo sendPayResult(@RequestBody PayResultInfo payResultInfo) {
+    public WeixinPayResultInfo sendPayResult(@RequestBody WeixinPayResultInfo payResultInfo) {
         return weixinPayService.sendPayResult(payResultInfo);
     }
 }

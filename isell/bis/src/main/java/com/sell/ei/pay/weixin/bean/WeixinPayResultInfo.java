@@ -15,7 +15,7 @@ import com.sell.core.base.BaseInfo;
  */
 @XmlRootElement(name = "xml")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class PayResultInfo extends BaseInfo {
+public class WeixinPayResultInfo extends BaseInfo {
     /**
      * 注释内容
      */

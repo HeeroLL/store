@@ -69,7 +69,7 @@ public final class WeixinUtil {
      * 获取参数
      * 
      * @param map map
-     * @return 拼装后的map
+     * @return 拼装后的参数
      */
     public static String getParameter(TreeMap<String, Object> map) {
         int index = 0;

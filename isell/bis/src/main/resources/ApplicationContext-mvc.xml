@@ -177,7 +177,7 @@
 			<array>
 				<value>com.sell.demo.Person</value>
 				<value>com.sell.demo.Address</value>
-				<value>com.sell.ei.pay.weixin.bean.PayResultInfo</value>
+				<value>com.sell.ei.pay.weixin.bean.WeixinPayResultInfo</value>
 			</array>
 		</property>
 	</bean>

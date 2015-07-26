@@ -10,7 +10,7 @@ import com.sell.core.util.HttpUtils;
 import com.sell.core.util.Identities;
 import com.sell.core.util.JaxbUtil;
 import com.sell.core.util.JsonUtil;
-import com.sell.ei.pay.weixin.bean.PayResultInfo;
+import com.sell.ei.pay.weixin.bean.WeixinPayResultInfo;
 import com.sell.ei.pay.weixin.service.WeixinPayService;
 import com.sell.ei.pay.weixin.util.WeixinUtil;
 
@@ -61,7 +61,7 @@ public class WeixinPayControllerTest {
     
     @Test
     public void testSendPayResult() {
-        PayResultInfo payResultInfo = new PayResultInfo();
+        WeixinPayResultInfo payResultInfo = new WeixinPayResultInfo();
         payResultInfo.setReturnCode("SUCCESS");
         payResultInfo.setAppid(WeixinPayService.APPID);
         payResultInfo.setMchId(WeixinPayService.MCH_ID);

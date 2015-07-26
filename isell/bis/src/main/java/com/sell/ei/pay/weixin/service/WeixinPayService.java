@@ -2,7 +2,7 @@ package com.sell.ei.pay.weixin.service;
 
 import java.util.TreeMap;
 
-import com.sell.ei.pay.weixin.bean.PayResultInfo;
+import com.sell.ei.pay.weixin.bean.WeixinPayResultInfo;
 
 /**
  * 微信支付接口服务层
@@ -78,5 +78,5 @@ public interface WeixinPayService {
      * @param payResultInfo 请求参数
      * @return 返回响应
      */
-    PayResultInfo sendPayResult(PayResultInfo payResultInfo);
+    WeixinPayResultInfo sendPayResult(WeixinPayResultInfo payResultInfo);
 }
