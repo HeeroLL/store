@@ -1,115 +1,105 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
-<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">  
-<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>  
-  
-    <!-- ========================== 自定义输出格式说明================================
--->  
-      <!-- %p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL -->  
-      <!-- %r 输出自应用启动到输出该log信息耗费的毫秒数  -->  
-      <!-- %c 输出所属的类目，通常就是所在类的全名 -->  
-      <!-- %t 输出产生该日志事件的线程名 -->  
-      <!-- %m 输出代码中指定的信息，如log(message)中的message -->
-      <!-- %n 输出一个回车换行符，Windows平台为“/r/n”，Unix平台为“/n” -->  
-      <!-- %d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d{yyy MMM dd HH:mm:ss,SSS}，输出类似：2002年10月18日 22：10：28，921  -->  
-      <!-- %l 输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java:10)  -->  
-      <!-- ==========================================================================
--->  
-  
-      <!-- ========================== 输出方式说明================================
--->  
-      <!-- Log4j提供的appender有以下几种:  -->  
-      <!-- org.apache.log4j.ConsoleAppender(控制台),  -->  
-      <!-- org.apache.log4j.FileAppender(文件),  -->  
-      <!-- org.apache.log4j.DailyRollingFileAppender(每天产生一个日志文件), -->  
-      <!-- org.apache.log4j.RollingFileAppender(文件大小到达指定尺寸的时候产生一个新的文件),  -->  
-      <!-- org.apache.log4j.WriterAppender(将日志信息以流格式发送到任意指定的地方)   -->  
-  <!-- ==========================================================================
--->  
-    <appender name="app_log"
-		class="org.apache.log4j.RollingFileAppender">
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+	<!-- ========================== 自定义输出格式说明================================ -->
+	<!-- %p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL -->
+	<!-- %r 输出自应用启动到输出该log信息耗费的毫秒数 -->
+	<!-- %c 输出所属的类目，通常就是所在类的全名 -->
+	<!-- %t 输出产生该日志事件的线程名 -->
+	<!-- %m 输出代码中指定的信息，如log(message)中的message -->
+	<!-- %n 输出一个回车换行符，Windows平台为“/r/n”，Unix平台为“/n” -->
+	<!-- %d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d{yyy MMM dd HH:mm:ss,SSS}，输出类似：2002年10月18日 
+		22：10：28，921 -->
+	<!-- %l 输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java:10) -->
+	<!-- ========================================================================== -->
+
+	<!-- ========================== 输出方式说明================================ -->
+	<!-- Log4j提供的appender有以下几种: -->
+	<!-- org.apache.log4j.ConsoleAppender(控制台), -->
+	<!-- org.apache.log4j.FileAppender(文件), -->
+	<!-- org.apache.log4j.DailyRollingFileAppender(每天产生一个日志文件), -->
+	<!-- org.apache.log4j.RollingFileAppender(文件大小到达指定尺寸的时候产生一个新的文件), -->
+	<!-- org.apache.log4j.WriterAppender(将日志信息以流格式发送到任意指定的地方) -->
+	<!-- ========================================================================== -->
+	<appender name="app_log" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="${catalina.home}/logs/bis.log" />
-		<param name="Append" value="true"/>  
+		<param name="Append" value="true" />
 		<param name="MaxBackupIndex" value="10" />
 		<param name="MaxFileSize" value="1MB" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern"
-				value="%d [%p] (%c:%L)- %m%n" />
+			<param name="ConversionPattern" value="%d [%p] (%c:%L)- %m%n" />
 		</layout>
 	</appender>
-	
-	<appender name="receiveMessage_log"
-		class="org.apache.log4j.RollingFileAppender">
+
+	<appender name="receiveMessage_log" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="${catalina.home}/logs/receiveMessage.log" />
-		<param name="Append" value="true"/>  
+		<param name="Append" value="true" />
 		<param name="MaxBackupIndex" value="10" />
 		<param name="MaxFileSize" value="1MB" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern"
-				value="%d [%p] - %m%n" />
+			<param name="ConversionPattern" value="%d [%p] - %m%n" />
 		</layout>
 	</appender>
-	
-	<appender name="sendMessage_log"
-		class="org.apache.log4j.RollingFileAppender">
+
+	<appender name="sendMessage_log" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="${catalina.home}/logs/sendMessage.log" />
-		<param name="Append" value="true"/>  
+		<param name="Append" value="true" />
 		<param name="MaxBackupIndex" value="10" />
 		<param name="MaxFileSize" value="1MB" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern"
-				value="%d [%p] - %m%n" />
+			<param name="ConversionPattern" value="%d [%p] - %m%n" />
 		</layout>
 	</appender>
-      
-    <!-- 输出到控制台 -->
-    <appender name="consoleLog" class="org.apache.log4j.ConsoleAppender">
-    	<param name="Target" value="System.out"/>  
-        <layout class="org.apache.log4j.PatternLayout">  
-            <param name="ConversionPattern" value="[%p:%d %l]%n\t%m%n"/>  
-        </layout>
-    </appender> 
-    
-    <logger name="com.sell.bis.sys" additivity="false">
+
+	<!-- 输出到控制台 -->
+	<appender name="consoleLog" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%p:%d %l]%n\t%m%n" />
+		</layout>
+	</appender>
+
+	<logger name="com.sell.bis.sys" additivity="false">
 		<level value="info" />
 		<appender-ref ref="receiveMessage_log" />
 	</logger>
-	
+
 	<logger name="com.sell.core.util.HttpUtils" additivity="false">
 		<level value="info" />
 		<appender-ref ref="sendMessage_log" />
 	</logger>
-	
-  	<!--
-  		通过<category></category>的定义可以将各个包中的类日志输出到不同的日志文件中
-  		additivity指示是否遵循缺省的继承机制
-  	-->
-  	<!-- 此处配置是为了让mybatis打印出执行的sql语句 -->
-  	
-    <category name="org.apache.ibatis">
-     	<priority value="DEBUG" />
-    	<appender-ref ref="consoleLog"/>
-    </category>
-    
-    <category name="org.mybatis.spring">
-     	<priority value="ERROR" />
-    	<appender-ref ref="consoleLog"/>
-    </category>
-    
-    <!-- 关闭spring的log -->
+
+	<!-- 通过<category></category>的定义可以将各个包中的类日志输出到不同的日志文件中 additivity指示是否遵循缺省的继承机制 -->
+	<!-- 此处配置是为了让mybatis打印出执行的sql语句 -->
+
+	<category name="org.apache.ibatis">
+		<priority value="DEBUG" />
+		<appender-ref ref="consoleLog" />
+	</category>
+
+	<category name="org.mybatis.spring">
+		<priority value="ERROR" />
+	</category>
+
+	<!-- 关闭spring的log -->
 	<category name="org.springframework">
 		<priority value="ERROR" />
 	</category>
-	
+
 	<!-- 关闭httpClient的log -->
 	<category name="org.apache.http">
 		<priority value="ERROR" />
 	</category>
 	
-    <root>  
-        <priority value="DEBUG"/>
-        <appender-ref ref="app_log" />
-        <appender-ref ref="consoleLog" /> 
-        <appender-ref ref="receiveMessage_log" />
-        <appender-ref ref="sendMessage_log" />
-    </root>  
+	<!-- 关闭freemarker的log -->
+	<category name="freemarker">
+		<priority value="ERROR" />
+	</category>
+
+	<root>
+		<priority value="DEBUG" />
+		<appender-ref ref="app_log" />
+		<appender-ref ref="consoleLog" />
+	</root>
 </log4j:configuration>  

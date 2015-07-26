@@ -38,7 +38,7 @@ public interface AlipayService {
     /**
      * 以什么方式提交表单
      */
-    String METHOD = "get";
+    String METHOD = "POST";
     
     /**
      * 支付类型。仅支持：1（商品购买）

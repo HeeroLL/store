@@ -48,7 +48,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
                 }
             }
         }
-        // 权限判断
+        // ip过滤
         if (!permissionIpList.contains(request.getRemoteAddr())) {
             throw new RuntimeException("exception.no-access-permission");
         }
