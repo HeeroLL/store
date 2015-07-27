@@ -30,8 +30,9 @@ public class WeixinPayServiceImpl implements WeixinPayService {
     @Override
     public TreeMap<String, Object> unifiedorder(TreeMap<String, Object> paramMap) {
         // 修改通知url
-        paramMap.put("attach", paramMap.get("notify_url"));
-        paramMap.put("notify_url", bisHost + "/pay/weixin/sendPayResult");
+        // paramMap.put("attach", paramMap.get("notify_url"));
+        // paramMap.put("notify_url", bisHost + "/pay/weixin/sendPayResult");
+        paramMap.put("trade_type", "JSAPI");
         generateMap(paramMap);
         
         // xml格式发送请求
@@ -46,7 +47,7 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         requestMap.put("nonceStr", Identities.uuid());
         requestMap.put("package", "prepay_id=" + resultMap.get("prepay_id")); // 预付款id
         requestMap.put("signType", "MD5");
-        requestMap.put("paySign",  WeixinUtil.encryptString(WeixinUtil.getParameter(requestMap), KEY));
+        requestMap.put("paySign", WeixinUtil.encryptString(WeixinUtil.getParameter(requestMap), KEY));
         
         return requestMap;
     }
