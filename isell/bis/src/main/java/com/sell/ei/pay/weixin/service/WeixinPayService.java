@@ -48,7 +48,7 @@ public interface WeixinPayService {
     String CLOSEORDER = URL + "closeorder";
     
     /**
-     * 统一下单服务
+     * 统一下单服务(JSAPI)
      * 
      * @param paramMap map参数
      * @return 返回Map

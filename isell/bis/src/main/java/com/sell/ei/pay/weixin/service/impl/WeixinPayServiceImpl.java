@@ -38,7 +38,17 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         String xml = WeixinUtil.transMapToXml(paramMap);
         String result = HttpUtils.httpsPost(UNIFIEDORDER, xml, "application/xml");
         
-        return WeixinUtil.transXmlToMap(result);
+        TreeMap<String, Object> resultMap = WeixinUtil.transXmlToMap(result);
+        // 生成微信支付请求参数
+        TreeMap<String, Object> requestMap = new TreeMap<String, Object>();
+        requestMap.put("appId", APPID);
+        requestMap.put("timeStamp", System.currentTimeMillis() + ""); // 转为String
+        requestMap.put("nonceStr", Identities.uuid());
+        requestMap.put("package", "prepay_id=" + resultMap.get("prepay_id")); // 预付款id
+        requestMap.put("signType", "MD5");
+        requestMap.put("paySign",  WeixinUtil.encryptString(WeixinUtil.getParameter(requestMap), KEY));
+        
+        return requestMap;
     }
     
     @Override

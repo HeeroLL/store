@@ -30,7 +30,7 @@ public class WeixinPayController {
     private WeixinPayService weixinPayService;
     
     /**
-     * 统一下单接口
+     * 统一下单接口(JSAPI)
      * 
      * @param paramMap map参数
      * @return 返回值
