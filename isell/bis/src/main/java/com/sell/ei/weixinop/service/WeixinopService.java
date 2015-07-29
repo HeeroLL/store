@@ -27,11 +27,16 @@ public interface WeixinopService {
         + "&secret=" + SECRET;
     
     /**
-     * 获取微信tocken
-     * 
-     * @return tocken
+     * 获取ticket的URL
      */
-    WeixinTocken getTocken();
+    String GET_TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=";
+    
+    /**
+     * 获取微信ticket
+     * 
+     * @return ticket
+     */
+    WeixinTocken getTicket();
     
     /**
      * 获取微信配置信息

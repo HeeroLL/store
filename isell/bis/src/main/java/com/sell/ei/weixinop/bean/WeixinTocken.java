@@ -22,6 +22,11 @@ public class WeixinTocken {
     private Integer expiresIn;
     
     /**
+     * ticket
+     */
+    private String ticket;
+    
+    /**
      * 错误码
      */
     private String errcode;
@@ -61,5 +66,13 @@ public class WeixinTocken {
 
     public void setErrmsg(String errmsg) {
         this.errmsg = errmsg;
+    }
+
+    public String getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(String ticket) {
+        this.ticket = ticket;
     }
 }
