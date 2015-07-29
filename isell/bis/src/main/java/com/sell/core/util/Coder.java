@@ -24,7 +24,7 @@ import sun.misc.BASE64Encoder;
  * @since 1.0
  */
 public final class Coder {
-    public static final String KEY_SHA = "SHA";
+    public static final String KEY_SHA = "SHA-1";
     
     public static final String KEY_MD5 = "MD5";
     
@@ -122,17 +122,32 @@ public final class Coder {
     }
     
     /**
-     * SHA加密
+     * SHA1加密
      * 
      * @param data
      * @return
      */
-    public static byte[] encryptSHA(byte[] data) {
+    public static byte[] encryptSHA1(byte[] data) {
         try {
             MessageDigest sha = MessageDigest.getInstance(KEY_SHA);
+            sha.reset();
             sha.update(data);
             return sha.digest();
         } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
+     * SHA1加密，返回String
+     *
+     * @param data data
+     * @return 加密后的字符串
+     */
+    public static String encodeSHA1(String data) {
+        try {
+            return Hex.encodeHexString(encryptSHA1(data.getBytes(UTF8)));
+        } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
     }

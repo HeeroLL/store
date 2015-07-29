@@ -20,7 +20,7 @@ import com.sell.core.util.Coder;
  * @author lilin
  * @version [版本号, 2015年7月23日]
  */
-public final class WeixinUtil {
+public final class WeixinPayUtil {
     
     /**
      * 将map转成xml
@@ -112,7 +112,7 @@ public final class WeixinUtil {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return WeixinUtil.getParameter(map);
+        return WeixinPayUtil.getParameter(map);
     }
     
     /**

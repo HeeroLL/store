@@ -23,29 +23,29 @@ public interface WeixinPayService {
     String MCH_ID = "1259762301";
     
     /**
-     * 微信给的密钥
+     * 微信支付设置的密钥
      */
     String KEY = "5ec7962c67c34e229f1e74e74aa5a5d6";
     
     /**
-     * 微信给的URL
+     * 微信支付的URL
      */
-    String URL = "https://api.mch.weixin.qq.com/pay/";
+    String URL = "https://api.mch.weixin.qq.com/pay";
     
     /**
      * 统一下单接口
      */
-    String UNIFIEDORDER = URL + "unifiedorder";
+    String UNIFIEDORDER = URL + "/unifiedorder";
     
     /**
      * 查询订单接口
      */
-    String ORDERQUERY = URL + "orderquery";
+    String ORDERQUERY = URL + "/orderquery";
     
     /**
      * 关闭订单接口
      */
-    String CLOSEORDER = URL + "closeorder";
+    String CLOSEORDER = URL + "/closeorder";
     
     /**
      * 统一下单服务(JSAPI)

@@ -11,7 +11,7 @@ import com.sell.core.util.Identities;
 import com.sell.core.util.JsonUtil;
 import com.sell.ei.pay.weixin.bean.WeixinPayResultInfo;
 import com.sell.ei.pay.weixin.service.WeixinPayService;
-import com.sell.ei.pay.weixin.util.WeixinUtil;
+import com.sell.ei.pay.weixin.util.WeixinPayUtil;
 
 /**
  * 微信支付接口服务层实现类
@@ -36,18 +36,18 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         generateMap(paramMap);
         
         // xml格式发送请求
-        String xml = WeixinUtil.transMapToXml(paramMap);
+        String xml = WeixinPayUtil.transMapToXml(paramMap);
         String result = HttpUtils.httpsPost(UNIFIEDORDER, xml, "application/xml");
         
-        TreeMap<String, Object> resultMap = WeixinUtil.transXmlToMap(result);
+        TreeMap<String, Object> resultMap = WeixinPayUtil.transXmlToMap(result);
         // 生成微信支付请求参数
         TreeMap<String, Object> requestMap = new TreeMap<String, Object>();
         requestMap.put("appId", APPID);
-        requestMap.put("timeStamp", System.currentTimeMillis() + ""); // 转为String
+        requestMap.put("timeStamp", System.currentTimeMillis() / 1000 + ""); // 转为String
         requestMap.put("nonceStr", Identities.uuid());
         requestMap.put("package", "prepay_id=" + resultMap.get("prepay_id")); // 预付款id
         requestMap.put("signType", "MD5");
-        requestMap.put("paySign", WeixinUtil.encryptString(WeixinUtil.getParameter(requestMap), KEY));
+        requestMap.put("paySign", WeixinPayUtil.encryptString(WeixinPayUtil.getParameter(requestMap), KEY));
         
         return requestMap;
     }
@@ -56,27 +56,27 @@ public class WeixinPayServiceImpl implements WeixinPayService {
     public TreeMap<String, Object> orderquery(TreeMap<String, Object> paramMap) {
         generateMap(paramMap);
         // xml格式发送请求
-        String xml = WeixinUtil.transMapToXml(paramMap);
+        String xml = WeixinPayUtil.transMapToXml(paramMap);
         String result = HttpUtils.httpsPost(ORDERQUERY, xml, "application/xml");
         
-        return WeixinUtil.transXmlToMap(result);
+        return WeixinPayUtil.transXmlToMap(result);
     }
     
     @Override
     public TreeMap<String, Object> closeorder(TreeMap<String, Object> paramMap) {
         generateMap(paramMap);
         // xml格式发送请求
-        String xml = WeixinUtil.transMapToXml(paramMap);
+        String xml = WeixinPayUtil.transMapToXml(paramMap);
         String result = HttpUtils.httpsPost(CLOSEORDER, xml, "application/xml");
         
-        return WeixinUtil.transXmlToMap(result);
+        return WeixinPayUtil.transXmlToMap(result);
     }
     
     @Override
     public WeixinPayResultInfo sendPayResult(WeixinPayResultInfo payResultInfo) {
         WeixinPayResultInfo response = new WeixinPayResultInfo();
         // 校验签名
-        String sign = WeixinUtil.encryptString(WeixinUtil.generateSign(payResultInfo), KEY);
+        String sign = WeixinPayUtil.encryptString(WeixinPayUtil.generateSign(payResultInfo), KEY);
         if (!sign.equals(payResultInfo.getSign())) {
             response.setReturnCode("FAIL");
             response.setReturnMsg("签名验证失败");
@@ -102,6 +102,6 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         paramMap.put("mch_id", MCH_ID);
         paramMap.put("nonce_str", Identities.uuid());
         
-        paramMap.put("sign", WeixinUtil.encryptString(WeixinUtil.getParameter(paramMap), KEY));
+        paramMap.put("sign", WeixinPayUtil.encryptString(WeixinPayUtil.getParameter(paramMap), KEY));
     }
 }

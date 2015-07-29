@@ -12,7 +12,7 @@ import com.sell.core.util.JaxbUtil;
 import com.sell.core.util.JsonUtil;
 import com.sell.ei.pay.weixin.bean.WeixinPayResultInfo;
 import com.sell.ei.pay.weixin.service.WeixinPayService;
-import com.sell.ei.pay.weixin.util.WeixinUtil;
+import com.sell.ei.pay.weixin.util.WeixinPayUtil;
 
 /**
  * 微信支付测试类
@@ -78,7 +78,7 @@ public class WeixinPayControllerTest {
         payResultInfo.setTimeEnd(DateUtil.getCurrentDate("yyyyMMddHHmmss"));
         payResultInfo.setAttach(host + "/bis/testPayResult");
         // 生成校验码
-        payResultInfo.setSign(WeixinUtil.encryptString(WeixinUtil.generateSign(payResultInfo), WeixinPayService.KEY));
+        payResultInfo.setSign(WeixinPayUtil.encryptString(WeixinPayUtil.generateSign(payResultInfo), WeixinPayService.KEY));
         
         String result = HttpUtils.httpPost(URL + "sendPayResult", JaxbUtil.convertToXml(payResultInfo), "application/xml");
         System.out.println(result);
