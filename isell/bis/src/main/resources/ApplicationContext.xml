@@ -32,9 +32,13 @@
 		<property name="locations">
 			<list>
 				<value>classpath:sysconfig.properties</value>
+				<!-- 定时任务相关，如不集成到bis，后期需要移除 -->
+				<value>classpath:task/task.properties</value>
 			</list>
 		</property>
 	</bean>
 	
-	<import resource="ApplicationContext-db.xml" />
+	<import resource="classpath:ApplicationContext-db.xml" />
+	<!-- 定时任务相关，如不集成到bis，后期需要移除 -->
+	<import resource="classpath:task/ApplicationContext-task.xml"/>
 </beans>

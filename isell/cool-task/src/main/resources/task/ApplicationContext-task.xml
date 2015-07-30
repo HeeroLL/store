@@ -13,4 +13,6 @@
 	<task:scheduled-tasks scheduler="sch">
 		<task:scheduled ref="coolshopRankingTask" method="execute" cron="1 * * * * ?" />
 	</task:scheduled-tasks>
+	
+	<import resource="ApplicationContext-task-db.xml"/>
 </beans>

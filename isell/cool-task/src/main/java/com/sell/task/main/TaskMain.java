@@ -18,6 +18,6 @@ public class TaskMain {
     @SuppressWarnings("resource")
     public static void main(String[] args) {
         // 加载spring
-        new ClassPathXmlApplicationContext("SpringContext-start.xml");
+        new ClassPathXmlApplicationContext("classpath:task/ApplicationContext.xml");
     }
 }

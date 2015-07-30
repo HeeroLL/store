@@ -13,11 +13,10 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:task.properties</value>
+				<value>classpath:task/task.properties</value>
 			</list>
 		</property>
 	</bean>
 	
 	<import resource="ApplicationContext-task.xml"/>
-	<import resource="ApplicationContext-task-db.xml"/>
 </beans>  
