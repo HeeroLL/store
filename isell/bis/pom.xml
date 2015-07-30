@@ -193,6 +193,13 @@
 			<artifactId>dom4j</artifactId>
 			<version>1.6.1</version>
 		</dependency>
+		<!-- 引入task模块 
+		<dependency>
+			<groupId>com.sell</groupId>
+			<artifactId>cool-task</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		-->
 	</dependencies>
 	<build>
 		<finalName>bis</finalName>
