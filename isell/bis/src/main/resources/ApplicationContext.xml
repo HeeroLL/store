@@ -39,6 +39,9 @@
 	</bean>
 	
 	<import resource="classpath:ApplicationContext-db.xml" />
+	<!-- 缓存模块相关 -->
+	<import resource="classpath:cache/ApplicationContext-task.xml"/>
+	
 	<!-- 定时任务相关，如不集成到bis，后期需要移除 -->
 	<import resource="classpath:task/ApplicationContext-task.xml"/>
 </beans>

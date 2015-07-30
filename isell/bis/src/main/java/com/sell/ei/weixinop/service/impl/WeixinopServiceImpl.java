@@ -1,9 +1,12 @@
 package com.sell.ei.weixinop.service.impl;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.sell.cache.service.JVMCacheService;
 import com.sell.core.util.Coder;
 import com.sell.core.util.HttpUtils;
 import com.sell.core.util.Identities;
@@ -20,11 +23,24 @@ import com.sell.ei.weixinop.service.WeixinopService;
  */
 @Service("weixinopService")
 public class WeixinopServiceImpl implements WeixinopService {
+    /**
+     * log
+     */
     private static final Logger log = Logger.getLogger(WeixinopServiceImpl.class);
     
+    /**
+     * 缓存模块
+     */
+    @Resource
+    private JVMCacheService jvmCacheService;
+    
     @Override
-    public WeixinTocken getTicket() {
-        // TODO : 非付费版公众号要缓存token，因为有调用次数
+    public String getTicket() {
+        // 先从缓存中取key
+        String ticket = jvmCacheService.get(WEIXIN_TICKET_KEY);
+        if (ticket != null) {
+            return ticket;
+        }
         String result = HttpUtils.httpsGet(GET_TOKEN_URL);
         WeixinTocken weixinTocken = JsonUtil.readValue(result, WeixinTocken.class);
         
@@ -33,7 +49,14 @@ public class WeixinopServiceImpl implements WeixinopService {
         }
         // 请求微信获得ticket
         result = HttpUtils.httpsGet(GET_TICKET_URL + weixinTocken.getAccessToken());
-        return JsonUtil.readValue(result, WeixinTocken.class);
+        weixinTocken = JsonUtil.readValue(result, WeixinTocken.class);
+        if (StringUtils.isEmpty(weixinTocken.getTicket())) {
+            throw new RuntimeException(weixinTocken.getErrmsg());
+        }
+        // 放入缓存 公众号要缓存ticket，因为接口有调用次数限制
+        // 默认有效期2小时，这里缓存1小时
+        jvmCacheService.set(WEIXIN_TICKET_KEY, weixinTocken.getTicket(), weixinTocken.getExpiresIn() / 2);
+        return weixinTocken.getTicket();
     }
     
     @Override
@@ -42,14 +65,9 @@ public class WeixinopServiceImpl implements WeixinopService {
         weixinConfig.setAppId(APPID);
         weixinConfig.setNonceStr(Identities.uuid());
         weixinConfig.setTimestamp(System.currentTimeMillis() / 1000 + "");
-        // 获取tocken
-        WeixinTocken tocken = getTicket();
-        if (StringUtils.isEmpty(tocken.getTicket())) {
-            throw new RuntimeException(tocken.getErrmsg());
-        }
         // 生成签名
         StringBuilder builder = new StringBuilder();
-        builder.append("jsapi_ticket=").append(tocken.getTicket());
+        builder.append("jsapi_ticket=").append(getTicket()); // 获取ticket
         builder.append("&noncestr=").append(weixinConfig.getNonceStr());
         builder.append("&timestamp=").append(weixinConfig.getTimestamp());
         builder.append("&url=").append(url);

@@ -1,7 +1,6 @@
 package com.sell.ei.weixinop.service;
 
 import com.sell.ei.weixinop.bean.WeixinConfig;
-import com.sell.ei.weixinop.bean.WeixinTocken;
 
 /**
  * 微信开放平台（公众号）开发服务接口
@@ -32,15 +31,20 @@ public interface WeixinopService {
     String GET_TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=";
     
     /**
+     * 存放微信ticket的key
+     */
+    String WEIXIN_TICKET_KEY = "weixin_ticket_key";
+    
+    /**
      * 获取微信ticket
      * 
      * @return ticket
      */
-    WeixinTocken getTicket();
+    String getTicket();
     
     /**
      * 获取微信配置信息
-     *
+     * 
      * @param url 请求微信接口的url
      * @return weixinConfig
      */

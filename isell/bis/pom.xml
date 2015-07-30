@@ -199,6 +199,12 @@
 			<artifactId>cool-task</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<!-- 引入缓存模块 -->
+		<dependency>
+			<groupId>com.sell</groupId>
+			<artifactId>cool-cache</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>bis</finalName>
