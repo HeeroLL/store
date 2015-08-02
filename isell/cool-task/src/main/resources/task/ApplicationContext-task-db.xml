@@ -28,7 +28,8 @@
 		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
 		<property name="minEvictableIdleTimeMillis" value="25200000" />
 	</bean>
-	<!-- 支持注解事务 <tx:annotation-driven /> -->
+	<!-- 支持注解事务 -->
+	<tx:annotation-driven transaction-manager="coolTransactionManager"/>
 
 	<bean id="coolJdbcTemplate"
 		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
@@ -43,7 +44,7 @@
 		<qualifier value="cool" />
 	</bean>
 
-	<!-- 声明式事务配置 -->
+	<!-- 声明式事务配置 
 	<aop:config>
 		<aop:advisor pointcut="execution(* com.sell.task..*Service.*(..))"
 			advice-ref="coolJtaTxAdvice" />
@@ -60,4 +61,5 @@
 			<tx:method name="*" propagation="NOT_SUPPORTED" />
 		</tx:attributes>
 	</tx:advice>
+	-->
 </beans>

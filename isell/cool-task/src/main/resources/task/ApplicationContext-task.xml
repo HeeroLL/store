@@ -11,7 +11,7 @@
 
 	<!-- 引用线程池 -->
 	<task:scheduled-tasks scheduler="taskScheduler">
-		<task:scheduled ref="coolshopRankingTask" method="execute" cron="1 * * * * ?" />
+		<task:scheduled ref="coolshopRankingTask" method="execute" cron="0 0 1 * * ?" />
 	</task:scheduled-tasks>
 	
 	<import resource="ApplicationContext-task-db.xml"/>
