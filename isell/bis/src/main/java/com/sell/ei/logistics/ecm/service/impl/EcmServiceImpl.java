@@ -77,6 +77,9 @@ public class EcmServiceImpl implements EcmService {
         for (EcmOrder order : ecmOrders.getOrders()) {
             order.setOrderCode(CUSTOMER_CODE + order.getOrderCode()); // 加上客户编码避免重复
             requestAccsysRefs[index++] = new RequestAccsysRef(order.getOrderCode(), param.getAccessCode());
+            for (EcmCommodity ecmCommodity : order.getOrderDtls()) {
+                ecmCommodity.setCommodityCode(CUSTOMER_CODE + ecmCommodity.getCommodityCode()); // 加上客户编码避免重复
+            }
             commodities.getCommoditys().addAll(order.getOrderDtls());
         }
         Map<String, String> paramMap = getParamMap(commodities);
@@ -159,6 +162,9 @@ public class EcmServiceImpl implements EcmService {
                     if (StringUtils.isNotEmpty(notifyUrl)) {
                         // 把事先添加的CUSTOMER_CODE去除
                         ecmShipOrder.setOrderCode(ecmShipOrder.getOrderCode().substring(CUSTOMER_CODE.length()));
+                        for (EcmCommodity ecmCommodity : ecmShipOrder.getDetails()) {
+                            ecmCommodity.setCommodityCode(ecmCommodity.getCommodityCode().substring(CUSTOMER_CODE.length()));
+                        }
                         
                         EcmShipOrders request = new EcmShipOrders();
                         request.setShipporders(new ArrayList<EcmShipOrder>());
