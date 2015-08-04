@@ -72,7 +72,7 @@ public class ShopRankingDaoImpl implements ShopRankingDao {
     public List<ShopRanking> getAllRanking() {
         // 统计订单信息
         String sql =
-            "select supplier,sum(total) as total,sum(supplier_profit) as profit,count(*) as orderCount from cool_order where state=4 and supplier != 0 group by supplier";
+            "select supplier,sum(total) as total,sum(supplier_profit) as profit,count(*) as orderCount from cool_order where (state=3 or state=4) and supplier!=0 group by supplier";
         return coolJdbcTemplate.query(sql, rowMapper);
     }
     
@@ -90,7 +90,7 @@ public class ShopRankingDaoImpl implements ShopRankingDao {
         // 统计订单信息
         String sql =
             "select supplier,sum(total) as total,sum(supplier_profit) as profit,count(*) as orderCount from cool_order "
-                + "where finish_time>=:today and finish_time<:tomorrow and state=4 and supplier != 0 group by supplier";
+                + "where finish_time>=:today and finish_time<:tomorrow and (state=3 or state=4) and supplier!=0 group by supplier";
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("today", today);
         paramMap.put("tomorrow", tomorrow);
