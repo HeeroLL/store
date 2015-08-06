@@ -119,7 +119,7 @@ public class EcmServiceImpl implements EcmService {
                         continue;
                     }
                     String accessCode = requestAccsysRef.getAccessCode();
-                    String notifyUrl = config.getSysMappingMap().get(accessCode + "sendShipOrder");
+                    String notifyUrl = config.getSysMappingMap().get(accessCode + "sendOrderStatus");
                     
                     if (StringUtils.isNotEmpty(notifyUrl)) {
                         // 把事先添加的CUSTOMER_CODE去除
@@ -170,7 +170,11 @@ public class EcmServiceImpl implements EcmService {
                         request.setShipporders(new ArrayList<EcmShipOrder>());
                         request.getShipporders().add(ecmShipOrder);
                         
-                        HttpUtils.httpPost(notifyUrl, JsonUtil.writeValueAsString(request));
+                        String result = HttpUtils.httpPost(notifyUrl, JsonUtil.writeValueAsString(request));
+                        EcmResponse res = JsonUtil.readValue(result, EcmResponse.class);
+                        if (!"1000".equals(res.getRowset().getResultCode())) {
+                            return res;
+                        }
                     }
                 }
             }
