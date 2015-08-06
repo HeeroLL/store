@@ -173,7 +173,7 @@ public class EcmServiceImpl implements EcmService {
                         String result = HttpUtils.httpPost(notifyUrl, JsonUtil.writeValueAsString(request));
                         EcmResponse res = JsonUtil.readValue(result, EcmResponse.class);
                         if (!"1000".equals(res.getRowset().getResultCode())) {
-                            return res;
+                            response = res;
                         }
                     }
                 }
