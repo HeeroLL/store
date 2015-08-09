@@ -2,6 +2,7 @@ package com.sell.core.util;
 
 import java.text.SimpleDateFormat;
 
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -21,6 +22,8 @@ public class JsonUtil {
         ObjectMapper objectMapper = new ObjectMapper();
         // 字段值为null的不序列化成json
         objectMapper.setSerializationInclusion(Inclusion.NON_NULL);
+        // 忽略未识别的参数(解决json串中多属性，而类中又未定义的情况)
+        objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
     }
     

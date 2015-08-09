@@ -37,7 +37,7 @@ public class AlipayController {
         paramMap.put("service", "alipay.wap.create.direct.pay.by.user"); // 手机支付接口名
         map.putAll(paramMap);
         map.addAttribute("result", alipayService.getParamInputs(paramMap));
-        return "pay/alipay/pay";
+        return "result";
     }
     
     /**
@@ -51,6 +51,6 @@ public class AlipayController {
         paramMap.put("service", "create_direct_pay_by_user"); // PC支付接口名
         map.putAll(paramMap);
         map.addAttribute("result", alipayService.getParamInputs(paramMap));
-        return "pay/alipay/pay";
+        return "result";
     }
 }
