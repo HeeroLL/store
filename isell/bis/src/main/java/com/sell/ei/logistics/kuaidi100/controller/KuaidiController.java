@@ -53,7 +53,8 @@ public class KuaidiController {
     }
     
     /**
-     * 快递查询接口，返回wap页面(html5页面)
+     * 已弃用。快递100不支持这种调用方式，请直接通过get方式访问快递100wap查询界面
+     * <br>快递查询接口，返回wap页面(html5页面)
      * 
      * @param com 快递公司代码
      * @param nu 快递单号
@@ -61,6 +62,7 @@ public class KuaidiController {
      * @param map 返回值
      * @return 页面
      */
+    @Deprecated
     @RequestMapping("wapService")
     public String wapService(String com, String nu, String callbackurl, ModelMap map) {
         map.addAttribute("result", KuaidiService.wapService(com, nu, callbackurl));

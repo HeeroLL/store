@@ -50,6 +50,7 @@ public class KuaidiServiceImpl implements KuaidiService {
         return HttpUtils.httpPost(WEB_URL, paramMap);
     }
 
+    @Deprecated
     @Override
     public String wapService(String type, String postid, String callbackurl) {
         Map<String, String> paramMap = new HashMap<String, String>();
