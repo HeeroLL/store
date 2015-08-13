@@ -16,6 +16,7 @@ import com.sell.task.shop.dao.ShopRankingDao;
 import com.sell.task.shop.service.ShopRankingService;
 import com.sell.task.shop.vo.ShopRanking;
 import com.sell.task.util.DateUtil;
+import com.sell.task.util.Identities;
 
 /**
  * 酷店排名服务接口实现类
@@ -78,6 +79,7 @@ public class ShopRankingServiceImpl implements ShopRankingService {
         // 组装参数
         int index = 1; // 排名
         for (ShopRanking shopRanking : shopRankingList) {
+            shopRanking.setId(Identities.uuid()); // 主键
             shopRanking.setRanking(index); // 排名
             ShopRanking lastShopRanking = lastMap.get(shopRanking.getsId()); // 上次排名
             // 设置上次排名

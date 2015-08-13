@@ -1,6 +1,5 @@
 package com.sell.task.shop.vo;
 
-
 /**
  * 酷店排名信息
  * 
@@ -8,6 +7,11 @@ package com.sell.task.shop.vo;
  * @version [版本号, 2015年8月1日]
  */
 public class ShopRanking {
+    /**
+     * 主键id
+     */
+    private String id;
+    
     /**
      * 酷店id
      */
@@ -120,60 +124,68 @@ public class ShopRanking {
     public void setGapAmount(double gapAmount) {
         this.gapAmount = gapAmount;
     }
-
+    
     public int getOrderRanking() {
         return orderRanking;
     }
-
+    
     public void setOrderRanking(int orderRanking) {
         this.orderRanking = orderRanking;
     }
-
+    
     public int getLastOrderRanking() {
         return lastOrderRanking;
     }
-
+    
     public void setLastOrderRanking(int lastOrderRanking) {
         this.lastOrderRanking = lastOrderRanking;
     }
-
+    
     public double getDayAmount() {
         return dayAmount;
     }
-
+    
     public void setDayAmount(double dayAmount) {
         this.dayAmount = dayAmount;
     }
-
+    
     public int getDayOrders() {
         return dayOrders;
     }
-
+    
     public void setDayOrders(int dayOrders) {
         this.dayOrders = dayOrders;
     }
-
+    
     public double getDayIncome() {
         return dayIncome;
     }
-
+    
     public void setDayIncome(double dayIncome) {
         this.dayIncome = dayIncome;
     }
-
+    
     public double getTotalIncome() {
         return totalIncome;
     }
-
+    
     public void setTotalIncome(double totalIncome) {
         this.totalIncome = totalIncome;
     }
-
+    
     public String getCreatedate() {
         return createdate;
     }
-
+    
     public void setCreatedate(String createdate) {
         this.createdate = createdate;
+    }
+    
+    public String getId() {
+        return id;
+    }
+    
+    public void setId(String id) {
+        this.id = id;
     }
 }

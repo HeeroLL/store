@@ -111,9 +111,9 @@ public class ShopRankingDaoImpl implements ShopRankingDao {
     @Override
     public void batchSave(List<ShopRanking> shopRankingList) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(shopRankingList.toArray());
-        coolJdbcTemplate.batchUpdate("insert into coon_shop_ranking(s_id,turnover_amount,turnover_orders,total_income,ranking,last_ranking,gap_amount,"
+        coolJdbcTemplate.batchUpdate("insert into coon_shop_ranking(id,s_id,turnover_amount,turnover_orders,total_income,ranking,last_ranking,gap_amount,"
             + "order_ranking,last_order_ranking,day_amount,day_orders,day_income,createdate)"
-            + " values(:sId,:turnoverAmount,:turnoverOrders,:totalIncome,:ranking,:lastRanking,:gapAmount,:orderRanking,:lastOrderRanking,:dayAmount,:dayOrders,:dayIncome,:createdate)",
+            + " values(:id,:sId,:turnoverAmount,:turnoverOrders,:totalIncome,:ranking,:lastRanking,:gapAmount,:orderRanking,:lastOrderRanking,:dayAmount,:dayOrders,:dayIncome,:createdate)",
             batch);
     }
     
