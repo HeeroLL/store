@@ -29,9 +29,18 @@ public interface ShopRankingDao {
     /**
      * 获取上次统计的所以信息
      *
+     * @param datetime 统计日期
      * @return 上次统计的所以信息
      */
-    List<ShopRanking> getLastRanking();
+    List<ShopRanking> getLastRanking(String datetime);
+    
+    /**
+     * 判断当前日期是否已统计过
+     *
+     * @param createdate 统计日期
+     * @return 是否统计
+     */
+    boolean isExistDate(String createdate);
     
     /**
      * 批量删除

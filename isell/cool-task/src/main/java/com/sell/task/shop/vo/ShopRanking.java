@@ -7,7 +7,7 @@ package com.sell.task.shop.vo;
  * @author lilin
  * @version [版本号, 2015年8月1日]
  */
-public class ShopRanking implements Comparable<ShopRanking> {
+public class ShopRanking {
     /**
      * 酷店id
      */
@@ -22,6 +22,11 @@ public class ShopRanking implements Comparable<ShopRanking> {
      * 成交单数
      */
     private int turnoverOrders;
+    
+    /**
+     * 总收入
+     */
+    private double totalIncome;
     
     /**
      * 排名
@@ -39,25 +44,34 @@ public class ShopRanking implements Comparable<ShopRanking> {
     private double gapAmount;
     
     /**
-     * 收入
+     * 总单数排名
      */
-    private double income;
+    private int orderRanking;
     
     /**
-     * 昨天收入
+     * 昨日单数排名
      */
-    private double yestodayIncome;
+    private int lastOrderRanking;
     
     /**
-     * 按交易总额从大到小排序
-     * 
-     * @param other other
-     * @return int
+     * 当日成交金额
      */
-    @Override
-    public int compareTo(ShopRanking other) {
-        return (int)((other.getTurnoverAmount() - this.turnoverAmount) * 100);
-    }
+    private double dayAmount;
+    
+    /**
+     * 当日成交单数
+     */
+    private int dayOrders;
+    
+    /**
+     * 当日收入
+     */
+    private double dayIncome;
+    
+    /**
+     * 统计日期(格式：yyyyMMdd)
+     */
+    private String createdate;
     
     public String getsId() {
         return sId;
@@ -106,20 +120,60 @@ public class ShopRanking implements Comparable<ShopRanking> {
     public void setGapAmount(double gapAmount) {
         this.gapAmount = gapAmount;
     }
-    
-    public double getIncome() {
-        return income;
-    }
-    
-    public void setIncome(double income) {
-        this.income = income;
+
+    public int getOrderRanking() {
+        return orderRanking;
     }
 
-    public double getYestodayIncome() {
-        return yestodayIncome;
+    public void setOrderRanking(int orderRanking) {
+        this.orderRanking = orderRanking;
     }
 
-    public void setYestodayIncome(double yestodayIncome) {
-        this.yestodayIncome = yestodayIncome;
+    public int getLastOrderRanking() {
+        return lastOrderRanking;
+    }
+
+    public void setLastOrderRanking(int lastOrderRanking) {
+        this.lastOrderRanking = lastOrderRanking;
+    }
+
+    public double getDayAmount() {
+        return dayAmount;
+    }
+
+    public void setDayAmount(double dayAmount) {
+        this.dayAmount = dayAmount;
+    }
+
+    public int getDayOrders() {
+        return dayOrders;
+    }
+
+    public void setDayOrders(int dayOrders) {
+        this.dayOrders = dayOrders;
+    }
+
+    public double getDayIncome() {
+        return dayIncome;
+    }
+
+    public void setDayIncome(double dayIncome) {
+        this.dayIncome = dayIncome;
+    }
+
+    public double getTotalIncome() {
+        return totalIncome;
+    }
+
+    public void setTotalIncome(double totalIncome) {
+        this.totalIncome = totalIncome;
+    }
+
+    public String getCreatedate() {
+        return createdate;
+    }
+
+    public void setCreatedate(String createdate) {
+        this.createdate = createdate;
     }
 }

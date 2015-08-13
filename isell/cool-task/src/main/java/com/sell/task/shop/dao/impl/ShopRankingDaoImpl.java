@@ -41,7 +41,7 @@ public class ShopRankingDaoImpl implements ShopRankingDao {
             shopRanking.setsId(rs.getString("supplier"));
             shopRanking.setTurnoverAmount(rs.getDouble("total"));
             shopRanking.setTurnoverOrders(rs.getInt("orderCount"));
-            shopRanking.setIncome(rs.getDouble("profit"));
+            shopRanking.setTotalIncome(rs.getDouble("profit"));
             
             return shopRanking;
         }
@@ -57,6 +57,7 @@ public class ShopRankingDaoImpl implements ShopRankingDao {
             ShopRanking shopRanking = new ShopRanking();
             shopRanking.setsId(rs.getString("s_id"));
             shopRanking.setRanking(rs.getInt("ranking"));
+            shopRanking.setOrderRanking(rs.getInt("order_ranking"));
             
             return shopRanking;
         }
@@ -72,7 +73,7 @@ public class ShopRankingDaoImpl implements ShopRankingDao {
     public List<ShopRanking> getAllRanking() {
         // 统计订单信息
         String sql =
-            "select supplier,sum(total) as total,sum(supplier_profit) as profit,count(*) as orderCount from cool_order where (state=3 or state=4) and supplier!=0 group by supplier";
+            "select supplier,sum(total) as total,sum(supplier_profit) as profit,count(*) as orderCount from cool_order where (state=3 or state=4) and supplier is not null group by supplier";
         return coolJdbcTemplate.query(sql, rowMapper);
     }
     
@@ -90,7 +91,7 @@ public class ShopRankingDaoImpl implements ShopRankingDao {
         // 统计订单信息
         String sql =
             "select supplier,sum(total) as total,sum(supplier_profit) as profit,count(*) as orderCount from cool_order "
-                + "where finish_time>=:today and finish_time<:tomorrow and (state=3 or state=4) and supplier!=0 group by supplier";
+                + "where finish_time>=:today and finish_time<:tomorrow and (state=3 or state=4) and supplier is not null group by supplier";
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("today", today);
         paramMap.put("tomorrow", tomorrow);
@@ -99,15 +100,20 @@ public class ShopRankingDaoImpl implements ShopRankingDao {
     }
     
     @Override
-    public List<ShopRanking> getLastRanking() {
-        return coolJdbcTemplate.query("select s_id, ranking from coon_shop_ranking", lastRowMapper);
+    public List<ShopRanking> getLastRanking(String datetime) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("datetime", datetime);
+        return coolJdbcTemplate.query("select s_id, ranking, order_ranking from coon_shop_ranking where createdate=:datetime",
+            paramMap,
+            lastRowMapper);
     }
     
     @Override
     public void batchSave(List<ShopRanking> shopRankingList) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(shopRankingList.toArray());
-        coolJdbcTemplate.batchUpdate("insert into coon_shop_ranking(s_id,turnover_amount,turnover_orders,ranking,last_ranking,gap_amount)"
-            + " values(:sId,:turnoverAmount,:turnoverOrders,:ranking,:lastRanking,:gapAmount)",
+        coolJdbcTemplate.batchUpdate("insert into coon_shop_ranking(s_id,turnover_amount,turnover_orders,total_income,ranking,last_ranking,gap_amount,"
+            + "order_ranking,last_order_ranking,day_amount,day_orders,day_income,createdate)"
+            + " values(:sId,:turnoverAmount,:turnoverOrders,:totalIncome,:ranking,:lastRanking,:gapAmount,:orderRanking,:lastOrderRanking,:dayAmount,:dayOrders,:dayIncome,:createdate)",
             batch);
     }
     
@@ -119,8 +125,19 @@ public class ShopRankingDaoImpl implements ShopRankingDao {
     @Override
     public void batchUpdate(List<ShopRanking> shopRankingList) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(shopRankingList.toArray());
-        coolJdbcTemplate.batchUpdate("update coon_shop set y_income=:yestodayIncome,all_amount=:income,nwd_amount=:income-wd_amount"
-            + " where id=:sId",
+        coolJdbcTemplate.batchUpdate("update coon_shop set y_income=:dayIncome,all_amount=:totalIncome,nwd_amount=:totalIncome-wd_amount where id=:sId",
             batch);
+    }
+    
+    @Override
+    public boolean isExistDate(String createdate) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("createdate", createdate);
+        Integer count =
+            coolJdbcTemplate.queryForObject("select count(*) from coon_shop_ranking where createdate=:createdate",
+                paramMap,
+                Integer.class);
+        
+        return count > 0;
     }
 }
