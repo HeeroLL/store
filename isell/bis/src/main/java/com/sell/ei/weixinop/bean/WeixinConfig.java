@@ -1,12 +1,19 @@
 package com.sell.ei.weixinop.bean;
 
+import com.sell.core.base.BaseInfo;
+
 /**
  * 微信接口配置信息
  * 
  * @author lilin
  * @version [版本号, 2015年7月29日]
  */
-public class WeixinConfig {
+public class WeixinConfig extends BaseInfo {
+    /**
+     * 注释内容
+     */
+    private static final long serialVersionUID = 8536705365257357846L;
+
     /**
      * 公众号的唯一标识
      */

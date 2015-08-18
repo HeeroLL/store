@@ -73,6 +73,7 @@ public class WeixinopServiceImpl implements WeixinopService {
         builder.append("&url=").append(url);
         log.debug(builder.toString());
         weixinConfig.setSignature(Coder.encodeSHA1(builder.toString()));
+        log.debug("signature=" + weixinConfig.getSignature());
         
         return weixinConfig;
     }
