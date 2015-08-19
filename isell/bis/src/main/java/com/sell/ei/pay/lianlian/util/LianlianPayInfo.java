@@ -21,6 +21,9 @@ public class LianlianPayInfo {
     /** 用户ID */
     private String merchant_userid;
     
+    /** 商户名称 */
+    private String merchant_name = "杭州艾易售电子商务有限公司";
+    
     /** 支付方式 */
     private String pay_method = "RMB Pay";
     
@@ -365,6 +368,9 @@ public class LianlianPayInfo {
         /** 用户ID */
         if (!StringUtils.isEmpty(merchant_userid))
             params.append("<input type='hidden' name='merchant_userid' value='" + merchant_userid + "' />");
+        /** 商户名称 */
+        if (!StringUtils.isEmpty(merchant_name))
+            params.append("<input type='hidden' name='merchant_name' value='" + merchant_name + "' />");
         /** 支付方式 */
         if (!StringUtils.isEmpty(pay_method))
             params.append("<input type='hidden' name='pay_method' value='" + pay_method + "' />");
@@ -451,6 +457,14 @@ public class LianlianPayInfo {
         // new HttpUtils().sendPost("http://test.yintong.com.cn/lcpay_web/cashier/securityCashier.htm",
         // params.toString());
         return params.toString();
+    }
+
+    public String getMerchant_name() {
+        return merchant_name;
+    }
+
+    public void setMerchant_name(String merchant_name) {
+        this.merchant_name = merchant_name;
     }
     
 }
