@@ -15,8 +15,8 @@ public class LianlianPayInfo {
     /** 版本号 */
     private String version = "1.0";
     
-    /** 商户唯一标识 （艾易售正式商户号：201503091000233507） */
-    private String merchant_id = "201401271000001093";
+    /** 商户唯一标识 （艾易售正式商户号：201401271000001093） */
+    private String merchant_id = "201503091000233507";
     
     /** 用户ID */
     private String merchant_userid;
@@ -100,7 +100,7 @@ public class LianlianPayInfo {
     private String extend_field1 = "Zjeport";
     
     /** 签名 */
-    private String sign = "yangguanghaitao";
+    private String sign = "RDcd1dseIKLcede323";
     
     /** 签名方式 */
     private String sign_method = "MD5";
