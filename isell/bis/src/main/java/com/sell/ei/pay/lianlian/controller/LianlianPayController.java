@@ -56,7 +56,7 @@ public class LianlianPayController {
      * @param lianlianRefundInfo 连连支付退款信息
      * @param map 返回值
      */
-    @RequestMapping("webPay")
+    @RequestMapping("refund")
     public String refund(@RequestBody LianlianRefundInfo lianlianRefundInfo, ModelMap map) {
         map.put("inputparams", lianlianPayService.getRefundParams(lianlianRefundInfo));
         return "pay/lianlian/refund";
