@@ -1,4 +1,4 @@
-package com.sell.ei.pay.lianlian.util;
+package com.sell.ei.pay.lianlian.bean;
 
 import org.apache.commons.lang3.StringUtils;
 
