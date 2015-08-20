@@ -24,8 +24,9 @@ public interface EcmService {
     String SESSION_KEY = "2015AYCAV1";
     
     /** ECM给的URL */
-    String URL = "http://60.191.39.196:8001/ecm/interface/rest/AYCInterface/";
-
+    // String URL = "http://60.191.39.196:8001/ecm/interface/rest/AYCInterface/";
+    String URL = "http://60.191.39.195:8001/ecm/interface/rest/AYCInterface/"; // 正式地址
+    
     /** 1. 推送销售订单接口（pushSaleOrder） URL */
     String PUSHSALEORDER_URL = URL + "pushSaleOrder";
     
@@ -37,7 +38,7 @@ public interface EcmService {
     
     /**
      * 推送销售订单
-     *
+     * 
      * @param ecmOrders 请求参数
      * @return 封装后的ecm处理结果
      */
@@ -45,7 +46,7 @@ public interface EcmService {
     
     /**
      * ECM回调服务（订单生产状态回传）
-     *
+     * 
      * @param param 参数
      * @return 返回值
      */
@@ -53,7 +54,7 @@ public interface EcmService {
     
     /**
      * ECM回调服务（订单批量发货）
-     *
+     * 
      * @param param 参数
      * @return 返回值
      */
