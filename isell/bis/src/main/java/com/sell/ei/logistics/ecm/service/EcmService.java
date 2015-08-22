@@ -1,6 +1,7 @@
 package com.sell.ei.logistics.ecm.service;
 
 import com.sell.bis.auth.bean.RequestParameter;
+import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmParam;
 import com.sell.ei.logistics.ecm.vo.EcmResponse;
 
@@ -23,9 +24,10 @@ public interface EcmService {
     /** ecm给的sessionKey */
     String SESSION_KEY = "2015AYCAV1";
     
+    // String URL = "http://60.191.39.196:8001/ecm/interface/rest/AYCInterface/"; // 测试地址
+    
     /** ECM给的URL */
-    // String URL = "http://60.191.39.196:8001/ecm/interface/rest/AYCInterface/";
-    String URL = "http://60.191.39.195:8001/ecm/interface/rest/AYCInterface/"; // 正式地址
+    String URL = "http://60.191.39.195:8001/ecm/interface/rest/AYCInterface/";// 正式地址
     
     /** 1. 推送销售订单接口（pushSaleOrder） URL */
     String PUSHSALEORDER_URL = URL + "pushSaleOrder";
@@ -37,10 +39,18 @@ public interface EcmService {
     String CUSTOMER_CODE = "AYC";
     
     /**
+     * 推送商品信息接口
+     * 
+     * @param param 商品信息
+     * @return ecm处理结果
+     */
+    EcmResponse sendCommodity(EcmCommodities param);
+    
+    /**
      * 推送销售订单
      * 
      * @param ecmOrders 请求参数
-     * @return 封装后的ecm处理结果
+     * @return ecm处理结果
      */
     EcmResponse pushSaleOrder(RequestParameter param);
     

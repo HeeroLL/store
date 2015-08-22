@@ -29,7 +29,7 @@ public class EcmCommodity extends BaseInfo {
     /** 商品条形码 */
     private String commodityBarcode;
     
-    /** 商品规格（商品最小包装规格 1包、2罐等） */
+    /** 商品规格（商品最小包装规格 1包、2罐等，填中文，编码对应unit字段） */
     private String commoditySpec;
     
     /** 是否套装的标识 */

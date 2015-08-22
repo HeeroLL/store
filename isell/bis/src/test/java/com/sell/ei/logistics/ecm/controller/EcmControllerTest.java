@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.sell.core.util.Coder;
 import com.sell.core.util.HttpUtils;
 import com.sell.core.util.JsonUtil;
+import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmCommodity;
 import com.sell.ei.logistics.ecm.vo.EcmOrder;
 import com.sell.ei.logistics.ecm.vo.EcmOrders;
@@ -22,9 +23,29 @@ import com.sell.ei.logistics.ecm.vo.EcmOrders;
  */
 public class EcmControllerTest {
     // private static final String host = "http://121.40.79.3:8585";
-    private static final String host = "http://localhost:8080";
+    private static final String host = "http://localhost:18080/bis";
     
-    private static final String URL = host + "/bis/logistics/ecm/";
+    private static final String URL = host + "/logistics/ecm/";
+    
+    @Test
+    public void testSendCommodity() {
+        EcmCommodity commodity = new EcmCommodity();
+        commodity.setCommodityCode("150402010001");
+        commodity.setCommodityName("Guerisson奇迹马油霜 70g");
+        commodity.setCommoditySpec("罐");
+        commodity.setUnit("122");
+        commodity.setWeight(0.07);
+        commodity.setTradeCountryCode("133");
+        commodity.setTradeCountryName("韩国");
+        
+        EcmCommodities ecmCommodities = new EcmCommodities();
+        ecmCommodities.setCommoditys(new ArrayList<EcmCommodity>());
+        ecmCommodities.getCommoditys().add(commodity);
+        
+        String jsonObj = JsonUtil.writeValueAsString(ecmCommodities);
+        String result = HttpUtils.httpPost(URL + "sendCommodity", jsonObj);
+        System.out.println(result);
+    }
     
     @Test
     public void testPushSaleOrder() {
@@ -39,10 +60,8 @@ public class EcmControllerTest {
         order.setDistrict("天宁区");
         order.setReceiverAddress("朝阳新村10幢501");
         order.setReceiverZip("213000");
-        order.setPayType("01");
-        order.setPayCompanyCode("ZF14050401"); // 支付平台在杭州口岸备案编号
+        order.setPayType("03");
         order.setPayNumber("lianlian154");
-        order.setPaperNumber("320402199005273738");
         order.setOrderTotalAmount(100.00);
         order.setOrderGoodsAmount(100.00);
         order.setOrderTaxAmount(0.00);
@@ -53,20 +72,15 @@ public class EcmControllerTest {
         order.setId("21");
         order.setName("张三");
         order.setTelNumber("13512345678");
+        order.setPaperType("01");
         order.setAddress("朝阳新村10幢501");
         
         EcmCommodity commodity = new EcmCommodity();
-        // commodity.setWarehouseCode(null);
-        commodity.setCommodityCode("15098765" + "0001");
-        commodity.setCommodityName("九朵云 马油");
+        commodity.setCommodityCode("150402010001");
+        commodity.setCommodityName("Guerisson奇迹马油霜 70g");
         commodity.setCommodityBarcode("1"); // 商品条形码
-        commodity.setCommoditySpec("1个"); // 个
-        commodity.setUnit("007"); // 个
-        commodity.setTradeCountryCode("133");
-        commodity.setTradeCountryName("韩国");
-        
         commodity.setQty(1);
-        commodity.setWeight(0.1);
+        commodity.setWeight(0.07);
         commodity.setTradePrice(100.00);
         commodity.setTradeTotal(100.00);
         commodity.setDeclPrice(100.00);
@@ -81,9 +95,9 @@ public class EcmControllerTest {
         
         String jsonObj = JsonUtil.writeValueAsString(orders);
         Map<String, String> paramMap = new HashMap<String, String>();
-        paramMap.put("accessCode", "lootooker");
+        paramMap.put("accessCode", "xiaocoon");
         paramMap.put("jsonObj", jsonObj);
-        paramMap.put("authCode", Coder.encryptBASE64(Coder.encryptMD5(jsonObj + "lootookerPrivateKEY")));
+        paramMap.put("authCode", Coder.encryptBASE64(Coder.encryptMD5(jsonObj + "4d64418014b240d99cb84e7e6cade671")));
         
         System.out.println(paramMap);
         String result = HttpUtils.httpPost(URL + "pushSaleOrder", paramMap);

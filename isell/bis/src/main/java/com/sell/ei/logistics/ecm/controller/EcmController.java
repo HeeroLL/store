@@ -3,6 +3,7 @@ package com.sell.ei.logistics.ecm.controller;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sell.bis.auth.bean.RequestParameter;
 import com.sell.core.web.JsonData;
 import com.sell.ei.logistics.ecm.service.EcmService;
+import com.sell.ei.logistics.ecm.vo.EcmCommodities;
 import com.sell.ei.logistics.ecm.vo.EcmParam;
 import com.sell.ei.logistics.ecm.vo.EcmResponse;
 
@@ -61,6 +63,23 @@ public class EcmController {
     }
     
     /**
+     * 向ECM推送商品
+     * 
+     * @param ecmOrders 订单列表
+     * @return 封装后的ECM返回的处理结果
+     */
+    @ResponseBody
+    @RequestMapping("sendCommodity")
+    public JsonData sendCommodity(@RequestBody EcmCommodities param) {
+        JsonData jsonData = new JsonData();
+        EcmResponse response = ecmService.sendCommodity(param);
+        jsonData.setSuccess("1000".equals(response.getRowset().getResultCode()));
+        jsonData.setMsg(response.getRowset().getResultMsg());
+        jsonData.setData(response);
+        return jsonData;
+    }
+    
+    /**
      * 向ECM推送订单
      * 
      * @param ecmOrders 订单列表
@@ -70,7 +89,10 @@ public class EcmController {
     @RequestMapping("pushSaleOrder")
     public JsonData pushSaleOrder(RequestParameter param) {
         JsonData jsonData = new JsonData();
-        jsonData.setData(ecmService.pushSaleOrder(param));
+        EcmResponse response = ecmService.pushSaleOrder(param);
+        jsonData.setSuccess("1000".equals(response.getRowset().getResultCode()));
+        jsonData.setMsg(response.getRowset().getResultMsg());
+        jsonData.setData(response);
         return jsonData;
     }
 }

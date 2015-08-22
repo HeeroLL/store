@@ -24,7 +24,7 @@ public class LianlianRefundInfo {
     private String col_custid;
     
     /**
-     * 退款金额
+     * 退款金额(单位：厘)
      */
     private String col_amt_refund;
     

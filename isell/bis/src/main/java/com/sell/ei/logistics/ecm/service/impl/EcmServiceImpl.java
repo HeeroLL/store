@@ -61,38 +61,32 @@ public class EcmServiceImpl implements EcmService {
     private BisConfig config;
     
     @Override
+    public EcmResponse sendCommodity(EcmCommodities param) {
+        // 推送商品
+        Map<String, String> paramMap = getParamMap(param);
+        String result = HttpUtils.httpPost(SENDCOMMODITY_URL, paramMap);
+        EcmResponse response = JsonUtil.readValue(result, EcmResponse.class);
+        return response;
+    }
+    
+    @Override
     public EcmResponse pushSaleOrder(RequestParameter param) {
         // 先验证参数合法性
         validator.validate(param);
         
         EcmOrders ecmOrders = JsonUtil.readValue(param.getJsonObj(), EcmOrders.class);
-        
-        // 先推送商品
-        EcmCommodities commodities = new EcmCommodities();
-        commodities.setCommoditys(new ArrayList<EcmCommodity>());
         // 请求与接入信息关系
         RequestAccsysRef[] requestAccsysRefs = new RequestAccsysRef[ecmOrders.getOrders().size()];
-        
         int index = 0;
         for (EcmOrder order : ecmOrders.getOrders()) {
             order.setOrderCode(CUSTOMER_CODE + order.getOrderCode()); // 加上客户编码避免重复
             requestAccsysRefs[index++] = new RequestAccsysRef(order.getOrderCode(), param.getAccessCode());
-            for (EcmCommodity ecmCommodity : order.getOrderDtls()) {
-                ecmCommodity.setCommodityCode(CUSTOMER_CODE + ecmCommodity.getCommodityCode()); // 加上客户编码避免重复
-            }
-            commodities.getCommoditys().addAll(order.getOrderDtls());
-        }
-        Map<String, String> paramMap = getParamMap(commodities);
-        String result = HttpUtils.httpPost(SENDCOMMODITY_URL, paramMap);
-        EcmResponse response = JsonUtil.readValue(result, EcmResponse.class);
-        if (response == null || response.getRowset() == null || !"1000".equals(response.getRowset().getResultCode())) {
-            return response;
         }
         
-        // 再推送订单
-        paramMap = getParamMap(ecmOrders);
-        result = HttpUtils.httpPost(PUSHSALEORDER_URL, paramMap);
-        response = JsonUtil.readValue(result, EcmResponse.class);
+        // 推送订单
+        Map<String, String> paramMap = getParamMap(ecmOrders);
+        String result = HttpUtils.httpPost(PUSHSALEORDER_URL, paramMap);
+        EcmResponse response = JsonUtil.readValue(result, EcmResponse.class);
         if (response == null || response.getRowset() == null || !"1000".equals(response.getRowset().getResultCode())) {
             return response;
         }
@@ -163,7 +157,8 @@ public class EcmServiceImpl implements EcmService {
                         // 把事先添加的CUSTOMER_CODE去除
                         ecmShipOrder.setOrderCode(ecmShipOrder.getOrderCode().substring(CUSTOMER_CODE.length()));
                         for (EcmCommodity ecmCommodity : ecmShipOrder.getDetails()) {
-                            ecmCommodity.setCommodityCode(ecmCommodity.getCommodityCode().substring(CUSTOMER_CODE.length()));
+                            ecmCommodity.setCommodityCode(ecmCommodity.getCommodityCode()
+                                .substring(CUSTOMER_CODE.length()));
                         }
                         
                         EcmShipOrders request = new EcmShipOrders();
@@ -196,7 +191,6 @@ public class EcmServiceImpl implements EcmService {
         
         paramMap.put("ip", IP); // bis的外网ip
         paramMap.put("v", V); // 接口版本号
-        // paramMap.put("appKey", APP_KEY); // ECM给的key
         paramMap.put("sessionKey", SESSION_KEY);
         paramMap.put("datetime", datetime);
         
