@@ -28,7 +28,8 @@ public class HttpServletRequestReplacedFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
-        if (request instanceof HttpServletRequest && MapUtils.isEmpty(request.getParameterMap())) {
+        if (request instanceof HttpServletRequest && MapUtils.isEmpty(request.getParameterMap())
+            && !"multipart/form-data".equals(((HttpServletRequest)request).getHeader("Content-Type"))) {
             chain.doFilter(new BodyReaderHttpServletRequestWrapper((HttpServletRequest)request), response);
         } else {
             chain.doFilter(request, response);

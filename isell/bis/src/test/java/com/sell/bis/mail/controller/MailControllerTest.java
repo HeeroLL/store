@@ -23,7 +23,7 @@ public class MailControllerTest {
         str.append("<p>亲爱的 lilin, </p>").append("<p>你好！</p>");
         mailInfo.setContent(str.toString());
         
-        String result = HttpUtils.httpPost("http://localhost:8080/bis/mail/sendTextMail", JsonUtil.writeValueAsString(mailInfo));
+        String result = HttpUtils.httpPost("http://localhost:18080/bis/mail/sendTextMail", JsonUtil.writeValueAsString(mailInfo));
         System.out.println("result=" + result);
     }
     
@@ -42,7 +42,7 @@ public class MailControllerTest {
         str.append("<p>亲爱的 lilin, </p>").append("<p>你好！</p>");
         mailInfo.setContent(str.toString());
         
-        String result = HttpUtils.httpPost("http://localhost:8080/bis/mail/sendHtmlMail", JsonUtil.writeValueAsString(mailInfo));
+        String result = HttpUtils.httpPost("http://localhost:18080/bis/mail/sendHtmlMail", JsonUtil.writeValueAsString(mailInfo));
         System.out.println("result=" + result);
     }
     

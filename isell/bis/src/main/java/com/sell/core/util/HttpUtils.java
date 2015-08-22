@@ -390,18 +390,26 @@ public final class HttpUtils {
     
     private static String http(CloseableHttpClient httpclient, HttpUriRequest request, boolean isFinishClose) {
         CloseableHttpResponse response = null;
+        StringBuilder builder = new StringBuilder();
+        builder.append("sendToUrl: ").append(request.getURI()).append(System.getProperty("line.separator", "\n"));
         try {
             if (request instanceof HttpPost) {
                 HttpPost httpPost = ((HttpPost)request);
                 // 记录发送日志
-                log.info("send:" + StreamUtils.copyToString(httpPost.getEntity().getContent(), CHARSET));
+                builder.append("parameter: ")
+                    .append(StreamUtils.copyToString(httpPost.getEntity().getContent(), CHARSET))
+                    .append(System.getProperty("line.separator", "\n"));
             }
             response = httpclient.execute(request);
             String result = EntityUtils.toString(response.getEntity(), "UTF-8");
             // 记录响应日志
-            log.info("receive:" + result);
+            builder.append("response:  ").append(result);
+            log.info(builder.toString());
             return result;
         } catch (Exception e) {
+            // 记录异常日志
+            builder.append("response:  ").append(e);
+            log.error(builder.toString());
             throw new RuntimeException("exception.httprequest-error", e);
         } finally {
             try {

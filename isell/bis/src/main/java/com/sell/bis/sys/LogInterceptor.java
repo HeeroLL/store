@@ -32,8 +32,14 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 记录日志：调用者、ip、接口名、调用时间、响应时间
+        StringBuilder builder = new StringBuilder();
+        builder.append("ip:").append(request.getRemoteAddr());
+        builder.append(", callmethod:").append(handler);
+        builder.append(", Content-Type:").append(request.getHeader("Content-Type"));
+        builder.append(", Referer:").append(request.getHeader("Referer"));
+        builder.append(System.getProperty("line.separator", "\n"));
+        
         if (MapUtils.isNotEmpty(request.getParameterMap())) {
-            StringBuilder builder = new StringBuilder();
             int index = 0;
             Map<String, Object> paramMap = request.getParameterMap();
             for (Entry<String, Object> entry : paramMap.entrySet()) {
@@ -52,15 +58,16 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
                     builder.append(entry.getValue());
                 }
             }
-            log.info(builder.toString());
         } else {
             try {
-                log.info(StreamUtils.copyToString(request.getInputStream(), CHARSET));
+                builder.append(StreamUtils.copyToString(request.getInputStream(), CHARSET));
             } catch (IOException e) {
-                log.error(e);
+                builder.append(e);
+                log.error(builder.toString());
                 throw new RuntimeException(e);
             }
         }
+        log.info(builder.toString());
         return true;
     }
 }

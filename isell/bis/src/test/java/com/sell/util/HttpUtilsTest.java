@@ -46,7 +46,7 @@ public class HttpUtilsTest {
         map.put("aa", 1);
         map.put("bb", "2");
         
-        System.out.println(HttpUtils.httpPost("http://localhost:8080/bis/demo", JsonUtil.writeValueAsString(map)));
+        System.out.println(HttpUtils.httpPost("http://localhost:18080/bis/demo", JsonUtil.writeValueAsString(map)));
     }
     
     @Test
@@ -99,6 +99,6 @@ public class HttpUtilsTest {
         String xml = xStream.toXML(person);
         System.out.println("requestXml=\n" + xml);
         System.out.println("responseXml=\n"
-            + HttpUtils.httpPost("http://localhost:8080/bis/demo2", xml, "application/xml"));
+            + HttpUtils.httpPost("http://localhost:18080/bis/demo2", xml, "application/xml"));
     }
 }
