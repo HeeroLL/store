@@ -99,6 +99,9 @@ public class LianlianPayInfo {
     /** 报关口岸 */
     private String extend_field1 = "Zjeport";
     
+    /** 申报通知地址 */
+    private String declare_notify;
+    
     /** 签名 */
     private String sign = "RDcd1dseIKLcede323";
     
@@ -352,6 +355,14 @@ public class LianlianPayInfo {
     public void setSign_method(String sign_method) {
         this.sign_method = sign_method;
     }
+
+    public String getDeclare_notify() {
+        return declare_notify;
+    }
+
+    public void setDeclare_notify(String declare_notify) {
+        this.declare_notify = declare_notify;
+    }
     
     public String getParamInputs() {
         String signSrc =
@@ -447,6 +458,10 @@ public class LianlianPayInfo {
         /** 报关口岸 */
         if (!StringUtils.isEmpty(extend_field1))
             params.append("<input type='hidden' name='extend_field1' value='" + extend_field1 + "' />");
+        /** 申报通知地址 */
+        if (!StringUtils.isEmpty(declare_notify))
+            params.append("<input type='hidden' name='declare_notify' value='" + declare_notify + "' />");
+        
         /** 签名 */
         if (!StringUtils.isEmpty(signed))
             params.append("<input type='hidden' name='sign' value='" + signed + "' />");
