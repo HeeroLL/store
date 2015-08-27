@@ -21,7 +21,7 @@ public class LianlianRefundInfo {
     /**
      * 原收款方
      */
-    private String col_custid;
+    private String col_custid = "201503091000233507";
     
     /**
      * 退款金额(单位：厘)
