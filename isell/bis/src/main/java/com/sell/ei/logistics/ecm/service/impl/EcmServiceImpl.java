@@ -22,7 +22,6 @@ import com.sell.core.util.HttpUtils;
 import com.sell.core.util.JsonUtil;
 import com.sell.ei.logistics.ecm.service.EcmService;
 import com.sell.ei.logistics.ecm.vo.EcmCommodities;
-import com.sell.ei.logistics.ecm.vo.EcmCommodity;
 import com.sell.ei.logistics.ecm.vo.EcmOrder;
 import com.sell.ei.logistics.ecm.vo.EcmOrderStatusListInfo;
 import com.sell.ei.logistics.ecm.vo.EcmOrderStatuses;
@@ -102,7 +101,6 @@ public class EcmServiceImpl implements EcmService {
         // 验证通过才推送
         if ("1000".equals(response.getRowset().getResultCode())) {
             String paramJson = getJsonObj(param.getJsonObj());
-            // 发送消息给对应系统 注意去除CUSTOMER_CODE
             EcmOrderStatuses ecmOrderStatuses = JsonUtil.readValue(paramJson, EcmOrderStatuses.class);
             for (EcmOrderStatusListInfo ecmOrderStatusListInfo : ecmOrderStatuses.getStatusList()) {
                 RequestAccsysRef requestAccsysRef =
@@ -114,10 +112,6 @@ public class EcmServiceImpl implements EcmService {
                 String notifyUrl = config.getSysMappingMap().get(accessCode + "sendOrderStatus");
                 
                 if (StringUtils.isNotEmpty(notifyUrl)) {
-                    // 把事先添加的CUSTOMER_CODE去除
-                    ecmOrderStatusListInfo.setOrderCode(ecmOrderStatusListInfo.getOrderCode()
-                        .substring(CUSTOMER_CODE.length()));
-                    
                     EcmOrderStatuses request = new EcmOrderStatuses();
                     request.setStatusList(new ArrayList<EcmOrderStatusListInfo>());
                     request.getStatusList().add(ecmOrderStatusListInfo);
@@ -137,7 +131,6 @@ public class EcmServiceImpl implements EcmService {
         // 验证通过才推送
         if ("1000".equals(response.getRowset().getResultCode())) {
             String paramJson = getJsonObj(param.getJsonObj());
-            // 发送消息给对应系统 注意去除CUSTOMER_CODE
             EcmShipOrders ecmShipOrders = JsonUtil.readValue(paramJson, EcmShipOrders.class);
             for (EcmShipOrder ecmShipOrder : ecmShipOrders.getShipporders()) {
                 RequestAccsysRef requestAccsysRef =
@@ -150,12 +143,6 @@ public class EcmServiceImpl implements EcmService {
                 String notifyUrl = config.getSysMappingMap().get(accessCode + "sendShipOrder");
                 
                 if (StringUtils.isNotEmpty(notifyUrl)) {
-                    // 把事先添加的CUSTOMER_CODE去除
-                    ecmShipOrder.setOrderCode(ecmShipOrder.getOrderCode().substring(CUSTOMER_CODE.length()));
-                    for (EcmCommodity ecmCommodity : ecmShipOrder.getDetails()) {
-                        ecmCommodity.setCommodityCode(ecmCommodity.getCommodityCode().substring(CUSTOMER_CODE.length()));
-                    }
-                    
                     EcmShipOrders request = new EcmShipOrders();
                     request.setShipporders(new ArrayList<EcmShipOrder>());
                     request.getShipporders().add(ecmShipOrder);
