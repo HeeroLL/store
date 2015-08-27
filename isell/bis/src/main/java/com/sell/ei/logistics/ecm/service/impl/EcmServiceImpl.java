@@ -79,7 +79,6 @@ public class EcmServiceImpl implements EcmService {
         RequestAccsysRef[] requestAccsysRefs = new RequestAccsysRef[ecmOrders.getOrders().size()];
         int index = 0;
         for (EcmOrder order : ecmOrders.getOrders()) {
-            order.setOrderCode(CUSTOMER_CODE + order.getOrderCode()); // 加上客户编码避免重复
             requestAccsysRefs[index++] = new RequestAccsysRef(order.getOrderCode(), param.getAccessCode());
         }
         
@@ -106,26 +105,24 @@ public class EcmServiceImpl implements EcmService {
             // 发送消息给对应系统 注意去除CUSTOMER_CODE
             EcmOrderStatuses ecmOrderStatuses = JsonUtil.readValue(paramJson, EcmOrderStatuses.class);
             for (EcmOrderStatusListInfo ecmOrderStatusListInfo : ecmOrderStatuses.getStatusList()) {
-                if (ecmOrderStatusListInfo.getOrderCode().startsWith(CUSTOMER_CODE)) {
-                    RequestAccsysRef requestAccsysRef =
-                        requestAccsysRefMapper.getRequestAccsysRefByRequestId(ecmOrderStatusListInfo.getOrderCode());
-                    if (requestAccsysRef == null) {
-                        continue;
-                    }
-                    String accessCode = requestAccsysRef.getAccessCode();
-                    String notifyUrl = config.getSysMappingMap().get(accessCode + "sendOrderStatus");
+                RequestAccsysRef requestAccsysRef =
+                    requestAccsysRefMapper.getRequestAccsysRefByRequestId(ecmOrderStatusListInfo.getOrderCode());
+                if (requestAccsysRef == null) {
+                    continue;
+                }
+                String accessCode = requestAccsysRef.getAccessCode();
+                String notifyUrl = config.getSysMappingMap().get(accessCode + "sendOrderStatus");
+                
+                if (StringUtils.isNotEmpty(notifyUrl)) {
+                    // 把事先添加的CUSTOMER_CODE去除
+                    ecmOrderStatusListInfo.setOrderCode(ecmOrderStatusListInfo.getOrderCode()
+                        .substring(CUSTOMER_CODE.length()));
                     
-                    if (StringUtils.isNotEmpty(notifyUrl)) {
-                        // 把事先添加的CUSTOMER_CODE去除
-                        ecmOrderStatusListInfo.setOrderCode(ecmOrderStatusListInfo.getOrderCode()
-                            .substring(CUSTOMER_CODE.length()));
-                        
-                        EcmOrderStatuses request = new EcmOrderStatuses();
-                        request.setStatusList(new ArrayList<EcmOrderStatusListInfo>());
-                        request.getStatusList().add(ecmOrderStatusListInfo);
-                        
-                        HttpUtils.httpPost(notifyUrl, JsonUtil.writeValueAsString(request));
-                    }
+                    EcmOrderStatuses request = new EcmOrderStatuses();
+                    request.setStatusList(new ArrayList<EcmOrderStatusListInfo>());
+                    request.getStatusList().add(ecmOrderStatusListInfo);
+                    
+                    HttpUtils.httpPost(notifyUrl, JsonUtil.writeValueAsString(request));
                 }
             }
         }
@@ -143,33 +140,30 @@ public class EcmServiceImpl implements EcmService {
             // 发送消息给对应系统 注意去除CUSTOMER_CODE
             EcmShipOrders ecmShipOrders = JsonUtil.readValue(paramJson, EcmShipOrders.class);
             for (EcmShipOrder ecmShipOrder : ecmShipOrders.getShipporders()) {
-                if (ecmShipOrder.getOrderCode().startsWith(CUSTOMER_CODE)) {
-                    RequestAccsysRef requestAccsysRef =
-                        requestAccsysRefMapper.getRequestAccsysRefByRequestId(ecmShipOrder.getOrderCode());
-                    if (requestAccsysRef == null) {
-                        continue;
+                RequestAccsysRef requestAccsysRef =
+                    requestAccsysRefMapper.getRequestAccsysRefByRequestId(ecmShipOrder.getOrderCode());
+                if (requestAccsysRef == null) {
+                    continue;
+                }
+                // 根据接入编码和业务编码获取通知URL
+                String accessCode = requestAccsysRef.getAccessCode();
+                String notifyUrl = config.getSysMappingMap().get(accessCode + "sendShipOrder");
+                
+                if (StringUtils.isNotEmpty(notifyUrl)) {
+                    // 把事先添加的CUSTOMER_CODE去除
+                    ecmShipOrder.setOrderCode(ecmShipOrder.getOrderCode().substring(CUSTOMER_CODE.length()));
+                    for (EcmCommodity ecmCommodity : ecmShipOrder.getDetails()) {
+                        ecmCommodity.setCommodityCode(ecmCommodity.getCommodityCode().substring(CUSTOMER_CODE.length()));
                     }
-                    // 根据接入编码和业务编码获取通知URL
-                    String accessCode = requestAccsysRef.getAccessCode();
-                    String notifyUrl = config.getSysMappingMap().get(accessCode + "sendShipOrder");
                     
-                    if (StringUtils.isNotEmpty(notifyUrl)) {
-                        // 把事先添加的CUSTOMER_CODE去除
-                        ecmShipOrder.setOrderCode(ecmShipOrder.getOrderCode().substring(CUSTOMER_CODE.length()));
-                        for (EcmCommodity ecmCommodity : ecmShipOrder.getDetails()) {
-                            ecmCommodity.setCommodityCode(ecmCommodity.getCommodityCode()
-                                .substring(CUSTOMER_CODE.length()));
-                        }
-                        
-                        EcmShipOrders request = new EcmShipOrders();
-                        request.setShipporders(new ArrayList<EcmShipOrder>());
-                        request.getShipporders().add(ecmShipOrder);
-                        
-                        String result = HttpUtils.httpPost(notifyUrl, JsonUtil.writeValueAsString(request));
-                        EcmResponse res = JsonUtil.readValue(result, EcmResponse.class);
-                        if (!"1000".equals(res.getRowset().getResultCode())) {
-                            response = res;
-                        }
+                    EcmShipOrders request = new EcmShipOrders();
+                    request.setShipporders(new ArrayList<EcmShipOrder>());
+                    request.getShipporders().add(ecmShipOrder);
+                    
+                    String result = HttpUtils.httpPost(notifyUrl, JsonUtil.writeValueAsString(request));
+                    EcmResponse res = JsonUtil.readValue(result, EcmResponse.class);
+                    if (!"1000".equals(res.getRowset().getResultCode())) {
+                        response = res;
                     }
                 }
             }
