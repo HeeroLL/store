@@ -6,9 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sell.core.web.JsonData;
 import com.sell.ei.pay.lianlian.bean.LianlianPayInfo;
 import com.sell.ei.pay.lianlian.bean.LianlianRefundInfo;
+import com.sell.ei.pay.lianlian.bean.LianlianRefundResult;
 import com.sell.ei.pay.lianlian.service.LianlianPayService;
 
 /**
@@ -56,9 +59,14 @@ public class LianlianPayController {
      * @param lianlianRefundInfo 连连支付退款信息
      * @param map 返回值
      */
+    @ResponseBody
     @RequestMapping("refund")
-    public String refund(@RequestBody LianlianRefundInfo lianlianRefundInfo, ModelMap map) {
-        map.put("inputparams", lianlianPayService.getRefundParams(lianlianRefundInfo));
-        return "pay/lianlian/refund";
+    public JsonData refund(@RequestBody LianlianRefundInfo lianlianRefundInfo, ModelMap map) {
+        JsonData jsonData = new JsonData();
+        LianlianRefundResult response = lianlianPayService.refund(lianlianRefundInfo);
+        jsonData.setSuccess("0000".equals(response.getRetcode()));
+        jsonData.setMsg(response.getRetmsg());
+        jsonData.setData(response);
+        return jsonData;
     }
 }

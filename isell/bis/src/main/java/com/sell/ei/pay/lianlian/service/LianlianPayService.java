@@ -2,6 +2,7 @@ package com.sell.ei.pay.lianlian.service;
 
 import com.sell.ei.pay.lianlian.bean.LianlianPayInfo;
 import com.sell.ei.pay.lianlian.bean.LianlianRefundInfo;
+import com.sell.ei.pay.lianlian.bean.LianlianRefundResult;
 
 /**
  * 连连支付业务层
@@ -22,19 +23,22 @@ public interface LianlianPayService {
     /** 签名方式 */
     String SIGN_METHOD = "MD5";
     
+    /** 退款URL */
+    String REFUND_URL = "https://yintong.com.cn/globalpay/cashier/refund.htm";
+    
     /**
      * 获取连连支付表单参数
-     *
+     * 
      * @param lianlianPayInfo 参数
      * @return 连连支付表单参数
      */
     String getPayParams(LianlianPayInfo lianlianPayInfo);
     
     /**
-     * 获取连连退款表单参数
-     *
+     * 调用连连退款接口
+     * 
      * @param lianlianRefundInfo 参数
-     * @return 连连退款表单参数
+     * @return 退款结果
      */
-    String getRefundParams(LianlianRefundInfo lianlianRefundInfo);
+    LianlianRefundResult refund(LianlianRefundInfo lianlianRefundInfo);
 }

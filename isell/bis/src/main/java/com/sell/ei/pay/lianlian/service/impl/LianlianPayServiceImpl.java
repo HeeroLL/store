@@ -1,11 +1,17 @@
 package com.sell.ei.pay.lianlian.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.sell.core.util.Coder;
+import com.sell.core.util.HttpUtils;
+import com.sell.core.util.JsonUtil;
 import com.sell.ei.pay.lianlian.bean.LianlianPayInfo;
 import com.sell.ei.pay.lianlian.bean.LianlianRefundInfo;
+import com.sell.ei.pay.lianlian.bean.LianlianRefundResult;
 import com.sell.ei.pay.lianlian.service.LianlianPayService;
 
 /**
@@ -138,30 +144,28 @@ public class LianlianPayServiceImpl implements LianlianPayService {
         
         return params.toString();
     }
-    
+
     @Override
-    public String getRefundParams(LianlianRefundInfo param) {
+    public LianlianRefundResult refund(LianlianRefundInfo param) {
         String signSrc =
             param.getVersion() + param.getMerchant_id() + param.getOid_billno() + param.getCol_custid()
                 + param.getCol_amt_refund() + param.getCol_cur_code() + param.getSign();
         String signed = Coder.encodeMd5(signSrc);
-        StringBuilder params = new StringBuilder();
-        /** 版本号 */
-        params.append("<input type='hidden' name='version' value='" + param.getVersion() + "' />");
-        /** 商户唯一标识 （测试商户号：201401271000001093） */
-        params.append("<input type='hidden' name='merchant_id' value='" + param.getMerchant_id() + "' />");
-        params.append("<input type='hidden' name='oid_billno' value='" + param.getOid_billno() + "' />");
-        params.append("<input type='hidden' name='col_custid' value='" + param.getCol_custid() + "' />");
-        params.append("<input type='hidden' name='col_amt_refund' value='" + param.getCol_amt_refund() + "' />");
-        params.append("<input type='hidden' name='col_cur_code' value='" + param.getCol_cur_code() + "' />");
-        /** 支付结果通知地址 */
-        params.append("<input type='hidden' name='url_notify' value='" + param.getUrl_notify() + "' />");
-        /** 签名 */
-        params.append("<input type='hidden' name='sign' value='" + signed + "' />");
-        /** 签名方式 */
-        params.append("<input type='hidden' name='sign_method' value='" + SIGN_METHOD + "' />");
         
-        return params.toString();
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("version", param.getVersion());
+        paramMap.put("merchant_id", param.getMerchant_id());
+        paramMap.put("oid_billno", param.getOid_billno());
+        paramMap.put("col_custid", param.getCol_custid());
+        paramMap.put("col_amt_refund", param.getCol_amt_refund());
+        paramMap.put("col_cur_code", param.getCol_cur_code());
+        paramMap.put("url_notify", param.getUrl_notify());
+        paramMap.put("sign", signed);
+        paramMap.put("sign_method", SIGN_METHOD);
+        
+        String result = HttpUtils.httpsPost(REFUND_URL, paramMap);
+        
+        return JsonUtil.readValue(result, LianlianRefundResult.class);
     }
     
 }
