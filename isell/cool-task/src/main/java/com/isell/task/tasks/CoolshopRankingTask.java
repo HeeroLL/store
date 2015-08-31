@@ -25,6 +25,7 @@ public class CoolshopRankingTask {
      */
     @Resource
     private ShopRankingService shopRankingService;
+    
     /**
      * 定时任务到达执行的方法
      */
