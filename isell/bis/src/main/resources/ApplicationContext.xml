@@ -23,7 +23,7 @@
 		<property name="cacheSeconds" value="60" />
 	</bean>
 	<!-- 国际化消息工具类 -->
-	<bean class="com.sell.core.util.MessageUtil" factory-method="getInstance">
+	<bean class="com.isell.core.util.MessageUtil" factory-method="getInstance">
 		<property name="messageSource" ref="messageSource" />
 	</bean>
 	

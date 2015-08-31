@@ -30,7 +30,7 @@
 	</filter-mapping>
 	<filter>
 		<filter-name>RequestReplace</filter-name>
-		<filter-class>com.sell.bis.sys.HttpServletRequestReplacedFilter</filter-class>
+		<filter-class>com.isell.bis.sys.HttpServletRequestReplacedFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>RequestReplace</filter-name>

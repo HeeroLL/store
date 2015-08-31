@@ -12,21 +12,21 @@
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<context:component-scan base-package="com.sell.*" />
+	<context:component-scan base-package="com.isell.*" />
 	
 	<!-- 配置requestMapping -->
 	<bean
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
 		<property name="interceptors">
 			<list>
-				<bean class="com.sell.bis.sys.SecurityInterceptor">
+				<bean class="com.isell.bis.sys.SecurityInterceptor">
 					<!-- 是否忽略校验 -->
 					<property name="ignoreValidation" value="${security.ip.ignore-validation}" />
 					<!-- 忽略校验的包 -->
 					<property name="ignorePackageList">
 						<list>
-							<value>com.sell.ei.logistics.ecm.controller</value>
-							<value>com.sell.ei.pay.weixin.controller</value>
+							<value>com.isell.ei.logistics.ecm.controller</value>
+							<value>com.isell.ei.pay.weixin.controller</value>
 						</list>
 					</property>
 					<!-- 配置允许访问的ip -->
@@ -38,7 +38,7 @@
 						</list>
 					</property>
 				</bean>
-				<bean class="com.sell.bis.sys.LogInterceptor" />
+				<bean class="com.isell.bis.sys.LogInterceptor" />
 			</list>
 		</property>
 	</bean>
@@ -168,16 +168,16 @@
 	<!-- xStream的xml和java对象互转方式，autodetectAnnotations=true允许注解的方式进行配置，annotatedClasses配置需要转换的bean的class 
 		<bean id="xStreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller"> 
 		<property name="autodetectAnnotations" value="true" /> <property name="annotatedClasses"> 
-		<list> <value>com.sell.demo.Person</value> <value>com.sell.demo.Address</value> 
+		<list> <value>com.isell.demo.Person</value> <value>com.isell.demo.Address</value> 
 		</list> </property> </bean> -->
 	<!-- jaxb2的xml和java对象互转方式，classesToBeBound配置需要转换的bean的class -->
 	<!-- jaxb2采用jdk自带的xml和java对象的互转实现，可能和一些低版本jar包冲突（例如xPath依赖的jaxen低版本有可能会和jaxb2冲突），要特别注意 -->
 	<bean id="jaxb2Marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 		<property name="classesToBeBound">
 			<array>
-				<value>com.sell.demo.Person</value>
-				<value>com.sell.demo.Address</value>
-				<value>com.sell.ei.pay.weixin.bean.WeixinPayResultInfo</value>
+				<value>com.isell.demo.Person</value>
+				<value>com.isell.demo.Address</value>
+				<value>com.isell.ei.pay.weixin.bean.WeixinPayResultInfo</value>
 			</array>
 		</property>
 	</bean>

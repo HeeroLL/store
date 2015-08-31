@@ -8,7 +8,7 @@
 	
 	<plugins>
 		<!-- 分页查询插件 -->
-		<plugin interceptor="com.sell.core.mybatis.interceptor.PaginationInterceptor">
+		<plugin interceptor="com.isell.core.mybatis.interceptor.PaginationInterceptor">
 		<!-- 表示使用的是oracle数据库 ,进行分页查询时，使用oracle分页形式,如果没有指定，将使用逻辑分页形式-->
 			<!--property name="dialect" value="oracle"/-->
 			<property name="dialect" value="mysql"/>

@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.sell</groupId>
+	<groupId>com.isell</groupId>
 	<artifactId>bis</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
@@ -195,13 +195,13 @@
 		</dependency>
 		<!-- 引入task模块 -->
 		<dependency>
-			<groupId>com.sell</groupId>
+			<groupId>com.isell</groupId>
 			<artifactId>cool-task</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- 引入缓存模块 -->
 		<dependency>
-			<groupId>com.sell</groupId>
+			<groupId>com.isell</groupId>
 			<artifactId>cool-cache</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

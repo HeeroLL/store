@@ -60,12 +60,12 @@
 		</layout>
 	</appender>
 
-	<logger name="com.sell.bis.sys" additivity="false">
+	<logger name="com.isell.bis.sys" additivity="false">
 		<level value="info" />
 		<appender-ref ref="receiveMessage_log" />
 	</logger>
 
-	<logger name="com.sell.core.util.HttpUtils" additivity="false">
+	<logger name="com.isell.core.util.HttpUtils" additivity="false">
 		<level value="info" />
 		<appender-ref ref="sendMessage_log" />
 	</logger>

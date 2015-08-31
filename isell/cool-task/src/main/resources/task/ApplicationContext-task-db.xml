@@ -46,7 +46,7 @@
 
 	<!-- 声明式事务配置 
 	<aop:config>
-		<aop:advisor pointcut="execution(* com.sell.task..*Service.*(..))"
+		<aop:advisor pointcut="execution(* com.isell.task..*Service.*(..))"
 			advice-ref="coolJtaTxAdvice" />
 	</aop:config>
 

@@ -39,8 +39,8 @@
 
 	<!-- 指定mybatis映射器的位置，spring自动扫描并将映射器生成代理放到spring上下文中 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.sell" />
-		<property name="annotationClass" value="com.sell.core.mybatis.Mapper" />
+		<property name="basePackage" value="com.isell" />
+		<property name="annotationClass" value="com.isell.core.mybatis.Mapper" />
 	</bean>
 	
 	<!-- 定义事物管理 
@@ -50,7 +50,7 @@
 	</bean>
 	
 	<aop:config>
-		<aop:advisor pointcut="execution(* com.sell.bis..*Service.*(..))"
+		<aop:advisor pointcut="execution(* com.isell.bis..*Service.*(..))"
 			advice-ref="jtaTxAdvice" />
 	</aop:config>
 
