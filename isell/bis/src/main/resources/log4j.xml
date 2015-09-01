@@ -98,7 +98,7 @@
 	</category>
 
 	<root>
-		<priority value="DEBUG" />
+		<priority value="INFO" />
 		<appender-ref ref="app_log" />
 		<appender-ref ref="consoleLog" />
 	</root>
