@@ -2,6 +2,7 @@ package com.isell.core.util;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -185,6 +186,20 @@ public final class Coder {
             throw new RuntimeException(e);
         } catch (InvalidKeyException e) {
             throw new RuntimeException(e);
+        }
+    }
+    
+    /**
+     * encodeUrl
+     *
+     * @param url url
+     * @return encodeUrl
+     */
+    public static String encodeUrl(String url) {
+        try {
+            return URLEncoder.encode(url, UTF8);
+        } catch (UnsupportedEncodingException e) {
+               throw new RuntimeException(e);
         }
     }
 }
