@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.isell.task.order.dao.OrderDao;
-import com.sun.jmx.snmp.Timestamp;
 
 /**
  * 订单数据接口实现类
@@ -33,7 +32,7 @@ public class OrderDaoImpl implements OrderDao {
      */
     @Resource
     private NamedParameterJdbcTemplate coolJdbcTemplate;
-
+    
     @Override
     public void cancelOrder() {
         // 批量将超时付款的订单设置为取消
@@ -42,9 +41,8 @@ public class OrderDaoImpl implements OrderDao {
         cal.add(Calendar.SECOND, timeoutsecond * -1);
         
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("time", new Timestamp(cal.getTimeInMillis()));
+        paramMap.put("time", cal.getTime());
         
         coolJdbcTemplate.update(sql, paramMap);
     }
-    
 }

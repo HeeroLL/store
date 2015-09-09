@@ -25,14 +25,12 @@ public class YuantongServiceImpl implements YuantongService {
     public OrderResponse placeOrder(OrderRequest orderRequest) {
         Map<String, String> paramMap = new HashMap<String, String>();
         String xml = JaxbUtil.convertToXml(orderRequest);
-        //xml = xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "");
-        System.out.println(xml);
-        paramMap.put("logistics_interface", Coder.encodeUrl(xml));
-        paramMap.put("clientId", Coder.encodeUrl(CLIENT_ID));
-        paramMap.put("data_digest", Coder.encodeUrl(getDataDigest(xml)));
+
+        paramMap.put("logistics_interface", xml);
+        paramMap.put("clientId", CLIENT_ID);
+        paramMap.put("data_digest", getDataDigest(xml));
         
         String result = HttpUtils.httpPost(PLACEORDER_URL, paramMap);
-        System.out.println(result);
         
         return JaxbUtil.converyToJavaBean(result, OrderResponse.class);
     }
