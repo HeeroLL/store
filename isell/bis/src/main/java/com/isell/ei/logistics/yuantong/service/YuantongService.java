@@ -13,12 +13,14 @@ public interface YuantongService {
     /**
      * 商家账号
      */
-    String CLIENT_ID = "K51912835";
+    // String CLIENT_ID = "K51912835"; 
+    String CLIENT_ID = "K24000154";
     
     /**
      * 商家密钥
      */
-    String PARTNER_ID = "B657MDM2";
+    // String PARTNER_ID = "B657MDM2";
+    String PARTNER_ID = "weH71Rbq";
     
     /**
      * 下单地址

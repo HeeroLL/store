@@ -1,6 +1,5 @@
 package com.isell.core.util;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
@@ -12,10 +11,8 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 /**
  * 基础加密组件
@@ -51,11 +48,7 @@ public final class Coder {
      * @return
      */
     public static byte[] decryptBASE64(String key) {
-        try {
-            return new BASE64Decoder().decodeBuffer(key);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Base64.decodeBase64(key);
     }
     
     /**
@@ -66,7 +59,7 @@ public final class Coder {
      */
     public static String encryptBASE64(String key) {
         try {
-            return new BASE64Encoder().encode(key.getBytes(UTF8));
+            return new String(Base64.encodeBase64(key.getBytes(UTF8)));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
@@ -79,12 +72,12 @@ public final class Coder {
      * @return
      */
     public static String encryptBASE64(byte[] key) {
-        return new BASE64Encoder().encodeBuffer(key);
+        return new String(Base64.encodeBase64(key));
     }
     
     /**
      * MD5加密，返回String
-     *
+     * 
      * @param data data
      * @return 加密后的字符串
      */
@@ -141,7 +134,7 @@ public final class Coder {
     
     /**
      * SHA1加密，返回String
-     *
+     * 
      * @param data data
      * @return 加密后的字符串
      */
@@ -191,7 +184,7 @@ public final class Coder {
     
     /**
      * encodeUrl
-     *
+     * 
      * @param url url
      * @return encodeUrl
      */
@@ -199,7 +192,7 @@ public final class Coder {
         try {
             return URLEncoder.encode(url, UTF8);
         } catch (UnsupportedEncodingException e) {
-               throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 }

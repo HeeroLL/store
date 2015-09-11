@@ -1,6 +1,5 @@
 package com.isell.ei.logistics.yuantong.bean;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,17 +31,11 @@ public class OrderRequest {
     /** 物流订单号 */
     private String txLogisticID;
     
-    /** 成功绑定的面单号 */
-    private String mailNo;
-    
     /** 成功绑定的大头笔信息 */
     private String bigPen;
     
     /** 订单类型(0-COD,1-普通订单,2-便携式订单3-退货单) */
     private int orderType = 1;
-    
-    /** 订单类型（该字段是为向下兼容预留） */
-    private int type;
     
     /** 服务类型(1-上门揽收, 2-次日达 4-次晨达 8-当日达,0-自己联系)。默认为0 */
     private long serviceType = 0;
@@ -57,10 +50,10 @@ public class OrderRequest {
     private AddressInfo receiver;
     
     /** 物流公司上门取货时间段，通过”yyyy-MM-dd HH:mm:ss”格式化，本文中所有时间格式相同。 */
-    private Date sendStartTime;
+    private String sendStartTime;
     
     /** 物流公司上门取货时间段，通过”yyyy-MM-dd HH:mm:ss”格式化，本文中所有时间格式相同。 */
-    private Date sendEndTime;
+    private String sendEndTime;
     
     /** 商品金额，包括优惠和运费，但无服务费 */
     private double goodsValue;
@@ -87,6 +80,24 @@ public class OrderRequest {
     @XmlElementWrapper(name ="items")
     @XmlElement(name ="item")
     private List<ItemInfo> items;
+    
+    /** 业务交易号（可选） */
+    private String tradeNo;
+    
+    /** 成功绑定的面单号 */
+    private String mailNo;
+    
+    /** 订单类型（该字段是为向下兼容预留） */
+    private int type;
+    
+    /** 代收金额，如果是代收订单， 必须大于0；非代收设置为0.0 */
+    private String agencyFund;
+    
+    /** 货物价值 */
+    private double itemsValue;
+    
+    /** 货物总重量 */
+    private double itemsWeight;
     
     public String getClientID() {
         return clientID;
@@ -158,22 +169,6 @@ public class OrderRequest {
     
     public void setReceiver(AddressInfo receiver) {
         this.receiver = receiver;
-    }
-    
-    public Date getSendStartTime() {
-        return sendStartTime;
-    }
-    
-    public void setSendStartTime(Date sendStartTime) {
-        this.sendStartTime = sendStartTime;
-    }
-    
-    public Date getSendEndTime() {
-        return sendEndTime;
-    }
-    
-    public void setSendEndTime(Date sendEndTime) {
-        this.sendEndTime = sendEndTime;
     }
     
     public double getGoodsValue() {
@@ -262,5 +257,53 @@ public class OrderRequest {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getTradeNo() {
+        return tradeNo;
+    }
+
+    public void setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo;
+    }
+
+    public String getAgencyFund() {
+        return agencyFund;
+    }
+
+    public void setAgencyFund(String agencyFund) {
+        this.agencyFund = agencyFund;
+    }
+
+    public double getItemsValue() {
+        return itemsValue;
+    }
+
+    public void setItemsValue(double itemsValue) {
+        this.itemsValue = itemsValue;
+    }
+
+    public double getItemsWeight() {
+        return itemsWeight;
+    }
+
+    public void setItemsWeight(double itemsWeight) {
+        this.itemsWeight = itemsWeight;
+    }
+
+    public String getSendStartTime() {
+        return sendStartTime;
+    }
+
+    public void setSendStartTime(String sendStartTime) {
+        this.sendStartTime = sendStartTime;
+    }
+
+    public String getSendEndTime() {
+        return sendEndTime;
+    }
+
+    public void setSendEndTime(String sendEndTime) {
+        this.sendEndTime = sendEndTime;
     }
 }

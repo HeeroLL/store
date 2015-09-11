@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.isell.core.util.HttpUtils;
+import com.isell.core.util.JaxbUtil;
 import com.isell.core.util.JsonUtil;
 import com.isell.ei.logistics.yuantong.bean.AddressInfo;
 import com.isell.ei.logistics.yuantong.bean.ItemInfo;
@@ -53,11 +54,11 @@ public class YuantongControllerTest {
         
         request.setGoodsValue(99.11 * 2 + 99.01);
         
-       // String requestStr = "<RequestOrder><logisticProviderID>YTO</logisticProviderID><txLogisticID>LP07082300225709</txLogisticID><tradeNo>2007082300225709</tradeNo><totalServiceFee>32.0</totalServiceFee><codSplitFee>200</codSplitFee><type>0</type><orderType>1</orderType><serviceType>0</serviceType><flag>1</flag><sender><name>张三</name><postCode>310013</postCode><phone>231234134</phone><mobile>13575745195</mobile><prov>浙江</prov><city>上海,浦东新区</city><address>新龙科技大厦9层</address></sender><receiver><name>李四</name><postCode>100000</postCode><phone>231234134</phone><mobile>13112345678</mobile><prov>北京</prov><city>北京市,朝阳区</city><address>新龙科技大厦9层</address></receiver><sendStartTime>2005-08-24 08:00:00</sendStartTime><sendEndTime>2005-08-24 12:00:00</sendEndTime><goodsValue>1900</goodsValue><itemsValue>2000</itemsValue><agencyFund>2000</agencyFund><items><item><itemName>Nokia N73</itemName><number>2</number><itemValue>2</itemValue></item><item><itemName>Nokia N72</itemName><number>1</number><itemValue>2</itemValue></item></items><insuranceValue>0.0</insuranceValue><special>0</special><remark>易碎品</remark></RequestOrder>";        
+        String requestStr = "<RequestOrder><clientID>K24000154</clientID><logisticProviderID>YTO</logisticProviderID><customerId>K24000154</customerId><txLogisticID>LP81132426447</txLogisticID><tradeNo>1</tradeNo><totalServiceFee>1</totalServiceFee><codSplitFee>1</codSplitFee><orderType>1</orderType><serviceType>1</serviceType><flag>1</flag><sendStartTime>2014-03-06 12:12:12</sendStartTime><sendEndTime>2014-03-06 12:12:12</sendEndTime><goodsValue>1</goodsValue><itemsValue>1</itemsValue><insuranceValue>1</insuranceValue><special>1</special><remark>1</remark><deliverNo>1</deliverNo><type>1</type><totalValue>1</totalValue><itemsWeight>1</itemsWeight><packageOrNot>1</packageOrNot><orderSource>1</orderSource><sender><name>汪明新</name><postCode>123456</postCode><phone>1234567</phone><mobile>18221885929</mobile><prov>上海</prov><city>上海,青浦区</city><address>上海市青浦区华徐公路民兴大道</address></sender><receiver><name>汪明新</name><postCode>123456</postCode><phone>1234567</phone><mobile>18221885929</mobile><prov>浙江省</prov><city>金华市,浦江县</city><address>赤松路308号</address></receiver><items><item><itemName>windows pc</itemName><number>2</number><itemValue>50</itemValue></item><item><itemName>windows pc</itemName><number>2</number><itemValue>50</itemValue></item></items></RequestOrder>";        
         
         String result =
-            HttpUtils.httpPost("http://localhost:8080/bis/logistics/yuantong/placeOrder", //JsonUtil.writeValueAsString(JaxbUtil.converyToJavaBean(requestStr, OrderRequest.class)));
-                JsonUtil.writeValueAsString(request));
+            HttpUtils.httpPost("http://localhost:8080/bis/logistics/yuantong/placeOrder", JsonUtil.writeValueAsString(JaxbUtil.converyToJavaBean(requestStr, OrderRequest.class)));
+               // JsonUtil.writeValueAsString(request));
         System.out.println(result);
     }
 }
