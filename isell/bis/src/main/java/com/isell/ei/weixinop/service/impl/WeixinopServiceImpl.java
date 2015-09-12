@@ -77,4 +77,32 @@ public class WeixinopServiceImpl implements WeixinopService {
         
         return weixinConfig;
     }
+    
+    @Override
+    public String getAuthCode(String redirectUrl) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<script>window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=");
+        builder.append(APPID);
+        builder.append("&redirect_uri=");
+        builder.append(Coder.encodeUrl(redirectUrl));
+        builder.append("&response_type=code&scope=snsapi_base#wechat_redirect'</script>");
+        
+        return builder.toString();
+    }
+    
+    @Override
+    public WeixinTocken getOpenid(String code) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("https://api.weixin.qq.com/sns/oauth2/access_token?appid=");
+        builder.append(APPID);
+        builder.append("&secret=");
+        builder.append(SECRET);
+        builder.append("&code=");
+        builder.append(code);
+        builder.append("&grant_type=authorization_code");
+        
+        String result = HttpUtils.httpsGet(builder.toString());
+        
+        return JsonUtil.readValue(result, WeixinTocken.class);
+    }
 }

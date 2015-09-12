@@ -31,6 +31,7 @@ public class AlipayController {
      * 
      * @param paramMap 参数信息
      * @param map 返回值
+     * @return 返回的参数字符串
      */
     @RequestMapping("wapPay")
     public String wapPay(@RequestBody Map<String, String> paramMap, ModelMap map) {
@@ -45,6 +46,7 @@ public class AlipayController {
      * 
      * @param paramMap 参数信息
      * @param map 返回值
+     * @return 返回的参数字符串
      */
     @RequestMapping("webPay")
     public String webPay(@RequestBody Map<String, String> paramMap, ModelMap map) {

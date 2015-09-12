@@ -1,6 +1,7 @@
 package com.isell.core.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -40,6 +41,21 @@ public class JsonData {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
+    /**
+     * 获取data中的值
+     *
+     * @param key key
+     * @return value
+     */
+    @SuppressWarnings("unchecked")
+    public Object getDataValue(String key) {
+        if (data instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>)data;
+            return map.get(key);
+        }
+        return null;
     }
     
     /**

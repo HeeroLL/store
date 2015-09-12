@@ -1,6 +1,7 @@
 package com.isell.ei.weixinop.service;
 
 import com.isell.ei.weixinop.bean.WeixinConfig;
+import com.isell.ei.weixinop.bean.WeixinTocken;
 
 /**
  * 微信开放平台（公众号）开发服务接口
@@ -43,10 +44,26 @@ public interface WeixinopService {
     String getTicket();
     
     /**
-     * 获取微信配置信息
+     * 获取微信配置信息（微信分享相关信息）
      * 
      * @param url 请求微信接口的url
      * @return weixinConfig
      */
     WeixinConfig getWeixinConfig(String url);
+    
+    /**
+     * 获取用户授权code
+     *
+     * @param redirectUrl 重定向的url
+     * @return 获取用户授权code的url
+     */
+    String getAuthCode(String redirectUrl);
+    
+    /**
+     * 根据用户授权code获取用户openid
+     *
+     * @param code 用户授权code
+     * @return 用户openid等信息
+     */
+    WeixinTocken getOpenid(String code);
 }
