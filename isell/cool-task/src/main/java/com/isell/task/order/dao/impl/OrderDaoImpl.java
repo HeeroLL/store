@@ -1,9 +1,5 @@
 package com.isell.task.order.dao.impl;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -36,13 +32,14 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public void cancelOrder() {
         // 批量将超时付款的订单设置为取消
-        String sql = "update cool_order set state=99 where state=0 and createtime<:time";
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, timeoutsecond * -1);
-        
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("time", cal.getTime());
-        
-        coolJdbcTemplate.update(sql, paramMap);
+        // TODO: 这里还要减销量加库存
+        /*
+         * String sql = "update cool_order set state=99 where state=0 and createtime<:time"; Calendar cal =
+         * Calendar.getInstance(); cal.add(Calendar.SECOND, timeoutsecond * -1);
+         * 
+         * Map<String, Object> paramMap = new HashMap<String, Object>(); paramMap.put("time", cal.getTime());
+         * 
+         * coolJdbcTemplate.update(sql, paramMap);
+         */
     }
 }
