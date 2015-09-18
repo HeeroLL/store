@@ -25,6 +25,7 @@ public interface YuantongService {
     /**
      * 下单地址
      */
+    // String PLACEORDER_URL = "http://service.yto56.net.cn/CommonOrderModeBServlet.action";
     String PLACEORDER_URL = "http://58.32.246.71:8000/CommonOrderModeBServlet.action";
     
     /**
