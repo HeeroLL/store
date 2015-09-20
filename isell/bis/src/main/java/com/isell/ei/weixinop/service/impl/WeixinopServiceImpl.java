@@ -70,7 +70,7 @@ public class WeixinopServiceImpl implements WeixinopService {
         builder.append("jsapi_ticket=").append(getTicket()); // 获取ticket
         builder.append("&noncestr=").append(weixinConfig.getNonceStr());
         builder.append("&timestamp=").append(weixinConfig.getTimestamp());
-        builder.append("&url=").append(url);
+        builder.append("&url=").append(Coder.encodeUrl(url));
         log.debug(builder.toString());
         weixinConfig.setSignature(Coder.encodeSHA1(builder.toString()));
         log.debug("signature=" + weixinConfig.getSignature());
