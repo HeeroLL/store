@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.isell.core.web.JsonData;
 import com.isell.ei.logistics.yuantong.bean.OrderRequest;
 import com.isell.ei.logistics.yuantong.bean.OrderResponse;
 import com.isell.ei.logistics.yuantong.service.YuantongService;
@@ -26,9 +27,22 @@ public class YuantongController {
     @Resource
     private YuantongService yuantongService;
     
+    /**
+     * 下订单
+     *
+     * @param orderRequest 请求信息
+     * @return 封装后的圆通返回信息
+     */
     @RequestMapping("placeOrder")
     @ResponseBody
-    public OrderResponse placeOrder(@RequestBody OrderRequest orderRequest) {
-        return yuantongService.placeOrder(orderRequest);
+    public JsonData placeOrder(@RequestBody OrderRequest orderRequest) {
+        OrderResponse orderResponse = yuantongService.placeOrder(orderRequest);
+        JsonData jsonData = new JsonData();
+        jsonData.setData(orderResponse);
+        if ("false".equals(orderResponse.getSuccess())) {
+            jsonData.setSuccess(false);
+            jsonData.setMsg(orderResponse.getReason());
+        }
+        return jsonData;
     }
 }

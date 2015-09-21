@@ -25,6 +25,7 @@ public class YuantongServiceImpl implements YuantongService {
     public OrderResponse placeOrder(OrderRequest orderRequest) {
         Map<String, String> paramMap = new HashMap<String, String>();
         String xml = JaxbUtil.convertToXml(orderRequest);
+        xml = xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "");
 
         paramMap.put("logistics_interface", xml);
         paramMap.put("clientId", CLIENT_ID);

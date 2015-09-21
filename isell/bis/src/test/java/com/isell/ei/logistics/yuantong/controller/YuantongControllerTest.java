@@ -16,7 +16,7 @@ public class YuantongControllerTest {
     @Test
     public void testPlaceOrder() {
         OrderRequest request = new OrderRequest();
-        request.setTxLogisticID("CO2015090711111111");
+        request.setTxLogisticID("CO2015092111111110");
         AddressInfo sender = new AddressInfo();
         sender.setName("张三");
         sender.setPostCode(213000);

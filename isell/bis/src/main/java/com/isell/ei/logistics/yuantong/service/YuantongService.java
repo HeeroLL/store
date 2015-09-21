@@ -13,24 +13,27 @@ public interface YuantongService {
     /**
      * 商家账号
      */
-    // String CLIENT_ID = "K51912835"; 
-    String CLIENT_ID = "K24000154";
+    String CLIENT_ID = "K51912835";
+    
+    // String CLIENT_ID = "K24000154";
     
     /**
      * 商家密钥
      */
-    // String PARTNER_ID = "B657MDM2";
-    String PARTNER_ID = "weH71Rbq";
+    String PARTNER_ID = "B657MDM2";
+    
+    // String PARTNER_ID = "weH71Rbq";
     
     /**
      * 下单地址
      */
-    // String PLACEORDER_URL = "http://service.yto56.net.cn/CommonOrderModeBServlet.action";
-    String PLACEORDER_URL = "http://58.32.246.71:8000/CommonOrderModeBServlet.action";
+    String PLACEORDER_URL = "http://service.yto56.net.cn/CommonOrderModeBServlet.action";
+    
+    // String PLACEORDER_URL = "http://58.32.246.71:8000/CommonOrderModeBServlet.action";
     
     /**
      * 通知圆通下单
-     *
+     * 
      * @param orderRequest 订单信息
      * @return 圆通返回信息
      */
