@@ -37,7 +37,7 @@ public class AlipayController {
     public String wapPay(@RequestBody Map<String, String> paramMap, ModelMap map) {
         paramMap.put("service", "alipay.wap.create.direct.pay.by.user"); // 手机支付接口名
         map.putAll(paramMap);
-        map.addAttribute("result", alipayService.getParamInputs(paramMap));
+        map.addAttribute("result", alipayService.getPayParams(paramMap));
         return "result";
     }
     
@@ -52,7 +52,21 @@ public class AlipayController {
     public String webPay(@RequestBody Map<String, String> paramMap, ModelMap map) {
         paramMap.put("service", "create_direct_pay_by_user"); // PC支付接口名
         map.putAll(paramMap);
-        map.addAttribute("result", alipayService.getParamInputs(paramMap));
+        map.addAttribute("result", alipayService.getPayParams(paramMap));
+        return "result";
+    }
+    
+    /**
+     * PC端批量付款到支付宝账户
+     * 
+     * @param paramMap 参数信息
+     * @param map 返回值
+     * @return 返回的参数字符串
+     */
+    public String batchTrans(@RequestBody Map<String, String> paramMap, ModelMap map) {
+        paramMap.put("service", "batch_trans_notify"); // PC批量付款接口名
+        map.putAll(paramMap);
+        map.addAttribute("result", alipayService.getPayParams(paramMap));
         return "result";
     }
 }

@@ -9,11 +9,20 @@ import java.util.Map;
  * @version [版本号, 2015年7月26日]
  */
 public interface AlipayService {
-    
     /**
      * 合作者身份ID
      */
     String PARTNER = "2088711787113554";
+    
+    /**
+     * 付款方支付宝账户姓名
+     */
+    String ACCOUNT_NAME = "上海艾售电子商务有限公司‍";
+    
+    /**
+     * 付款方支付宝账户
+     */
+    String EMAIL = "marilyn.ma@i-sell.cn‍";
     
     /**
      * MD5签名时的密钥
@@ -51,5 +60,13 @@ public interface AlipayService {
      * @param paramMap map参数
      * @return 返回的参数字符串
      */
-    String getParamInputs(Map<String, String> paramMap);
+    String getPayParams(Map<String, String> paramMap);
+    
+    /**
+     * 获取封装后的打款信息map
+     * 
+     * @param paramMap map参数
+     * @return 返回的参数字符串
+     */
+    String getBatchTransParams(Map<String, String> paramMap);
 }
