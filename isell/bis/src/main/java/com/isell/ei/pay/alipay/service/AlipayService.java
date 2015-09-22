@@ -17,7 +17,7 @@ public interface AlipayService {
     /**
      * 付款方支付宝账户姓名
      */
-    String ACCOUNT_NAME = "上海艾售电子商务有限公司‍";
+    String ACCOUNT_NAME = "杭州艾易售电子商务有限公司‍";
     
     /**
      * 付款方支付宝账户
