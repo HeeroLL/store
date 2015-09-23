@@ -34,12 +34,12 @@ public class SmsServiceImpl implements SmsService {
     private static final String VERSION = "2014-06-30";
     
     private static final String accountSid = "20857dfa396b243bf35d8a49845110e3";
-                                    
+    
     private static final String authToken = "70973baed3589527c080758b5d44d312";
     
     private static final String appId = "668cd249996a4554bf8ed61e309fb3e3";
     
-    private static final String templateId = "3132";
+    // private static final String templateId = "3132";
     
     /** BASEURL */
     private static final String BASEURL;
@@ -64,7 +64,7 @@ public class SmsServiceImpl implements SmsService {
         String url = BASEURL + "?sig=" + signature.toUpperCase();
         
         templateSMS.setAppId(appId);
-        templateSMS.setTemplateId(templateId);
+        // templateSMS.setTemplateId(templateId);
         String body = JsonUtil.writeValueAsString(templateSMS);
         body = "{\"templateSMS\":" + body + "}";
         

@@ -63,10 +63,11 @@ public class AlipayController {
      * @param map 返回值
      * @return 返回的参数字符串
      */
+    @RequestMapping("batchTrans")
     public String batchTrans(@RequestBody Map<String, String> paramMap, ModelMap map) {
         paramMap.put("service", "batch_trans_notify"); // PC批量付款接口名
         map.putAll(paramMap);
-        map.addAttribute("result", alipayService.getPayParams(paramMap));
+        map.addAttribute("result", alipayService.getBatchTransParams(paramMap));
         return "result";
     }
 }

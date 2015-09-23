@@ -59,20 +59,19 @@ public class AlipayServiceImpl implements AlipayService {
         paramMap.put("_input_charset", INPUT_CHARSET);
         paramMap.put("sign_type", SIGN_TYPE);
         paramMap.put("account_name", ACCOUNT_NAME);
-        paramMap.put("Email", EMAIL);
+        paramMap.put("email", EMAIL);
         
         paramMap.put("sign", AlipayUtil.encryptString(AlipayUtil.getParameter(paramMap), KEY));
         
         StringBuilder sbHtml = new StringBuilder();
-        sbHtml.append("<form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\"" + ALIPAY_GATEWAY_NEW + "\" method=\""
-            + METHOD + "\">");
+        sbHtml.append("<form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\"" + ALIPAY_GATEWAY_NEW + "\" method=\"get\">"); // 必须get提交
         
         for (Entry<String, String> entry : paramMap.entrySet()) {
             sbHtml.append("<input type=\"hidden\" name=\"" + entry.getKey() + "\" value=\"" + entry.getValue() + "\"/>");
         }
         
         // submit按钮控件请不要含有name属性
-        sbHtml.append("<input type=\"submit\" value=\"确认\" style=\"display:none;\"></form>");
+        sbHtml.append("<input type=\"submit\" value=\"确认\" style=\"display:none;\"></form>"); 
         sbHtml.append("<script>document.forms['alipaysubmit'].submit();</script>");
         
         log.info(sbHtml.toString());

@@ -17,12 +17,12 @@ public interface AlipayService {
     /**
      * 付款方支付宝账户姓名
      */
-    String ACCOUNT_NAME = "杭州艾易售电子商务有限公司‍";
+    String ACCOUNT_NAME = "杭州艾易售电子商务有限公司‍";//"magic.wang@i-coolshop.cn"; 
     
     /**
      * 付款方支付宝账户
      */
-    String EMAIL = "marilyn.ma@i-sell.cn‍";
+    String EMAIL = "marilyn.ma@i-sell.cn‍";// "magic.wang@i-coolshop.cn";
     
     /**
      * MD5签名时的密钥
