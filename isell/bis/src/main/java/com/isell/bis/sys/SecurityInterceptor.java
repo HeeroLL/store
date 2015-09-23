@@ -1,7 +1,5 @@
 package com.isell.bis.sys;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,17 +68,11 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         }
         if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
-            if (ipAddress.equals("127.0.0.1")) {
-                // 根据网卡取本机配置的IP
-                InetAddress inet = null;
-                try {
-                    inet = InetAddress.getLocalHost();
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
-                ipAddress = inet.getHostAddress();
-            }
-            
+            /*
+             * if (ipAddress.equals("127.0.0.1")) { // 根据网卡取本机配置的IP InetAddress inet = null; try { inet =
+             * InetAddress.getLocalHost(); } catch (UnknownHostException e) { e.printStackTrace(); } ipAddress =
+             * inet.getHostAddress(); }
+             */
         }
         
         // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
