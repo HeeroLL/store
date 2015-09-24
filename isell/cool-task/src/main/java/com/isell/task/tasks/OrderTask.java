@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.isell.task.order.service.OrderService;
+import com.isell.task.order.service.TaskOrderService;
 
 /**
  * 订单任务Task
@@ -24,14 +24,14 @@ public class OrderTask {
      * 订单服务接口
      */
     @Resource
-    private OrderService orderService;
+    private TaskOrderService taskOrderService;
     
     /**
      * 定时任务到达执行的方法
      */
     public void execute() {
         log.debug("in OrderTask");
-        orderService.cancelOrder();
+        taskOrderService.cancelOrder();
         log.debug("out OrderTask");
     }
 }

@@ -6,7 +6,7 @@ package com.isell.task.order.service;
  * @author lilin
  * @version [版本号, 2015年8月31日]
  */
-public interface OrderService {
+public interface TaskOrderService {
     /**
      * 批量取消订单
      */
