@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.isell.core.web.JsonData;
+import com.isell.core.util.JsonData;
 import com.isell.ei.logistics.yuantong.bean.OrderRequest;
 import com.isell.ei.logistics.yuantong.bean.OrderResponse;
 import com.isell.ei.logistics.yuantong.service.YuantongService;

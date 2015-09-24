@@ -27,6 +27,8 @@
 						<list>
 							<value>com.isell.ei.logistics.ecm.controller</value>
 							<value>com.isell.ei.pay.weixin.controller</value>
+							<!-- 这个包是提供对外服务的，不通过ip校验，通过特有的校验方式校验 -->
+							<value>com.isell.ps</value>
 						</list>
 					</property>
 					<!-- 配置允许访问的ip -->

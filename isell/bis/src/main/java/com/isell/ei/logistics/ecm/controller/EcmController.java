@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.isell.bis.auth.bean.RequestParameter;
-import com.isell.core.web.JsonData;
+import com.isell.core.util.JsonData;
 import com.isell.ei.logistics.ecm.service.EcmService;
 import com.isell.ei.logistics.ecm.vo.EcmCommodities;
 import com.isell.ei.logistics.ecm.vo.EcmParam;

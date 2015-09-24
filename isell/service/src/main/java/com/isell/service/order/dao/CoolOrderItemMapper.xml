@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.order.dao.CoolOrderItemMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.order.vo.CoolOrderItem">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="g_id" jdbcType="INTEGER" property="gId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="gg" jdbcType="VARCHAR" property="gg"/>
+        <result column="count" jdbcType="INTEGER" property="count"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="b_id" jdbcType="INTEGER" property="bId"/>
+        <result column="review" jdbcType="BIT" property="review"/>
+        <result column="l_id" jdbcType="INTEGER" property="lId"/>
+        <result column="l_price" jdbcType="DECIMAL" property="lPrice"/>
+        <result column="l_name" jdbcType="VARCHAR" property="lName"/>
+        <result column="l_code" jdbcType="VARCHAR" property="lCode"/>
+        <result column="comments" jdbcType="VARCHAR" property="comments"/>
+        <result column="gid" jdbcType="INTEGER" property="gid"/>
+        <result column="brokerage" jdbcType="DECIMAL" property="brokerage"/>
+    </resultMap>
+    <select id="getCoolOrderItemById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_order_item
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findCoolOrderItemByOrderNo" resultMap="BaseResultMap">
+          SELECT * FROM cool_order_item where order_no = #{orderNo}
+    </select>
+    
+    <delete id="deleteCoolOrderItem">
+        DELETE
+        FROM
+             cool_order_item
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolOrderItem" parameterType="com.isell.service.order.vo.CoolOrderItem" >
+        INSERT INTO cool_order_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="gId != null" >
+                g_id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="logo != null" >
+                logo,
+            </if>
+            <if test="gg != null" >
+                gg,
+            </if>
+            <if test="count != null" >
+                count,
+            </if>
+            <if test="price != null" >
+                price,
+            </if>
+            <if test="orderNo != null" >
+                order_no,
+            </if>
+            <if test="bId != null" >
+                b_id,
+            </if>
+            <if test="review != null" >
+                review,
+            </if>
+            <if test="lId != null" >
+                l_id,
+            </if>
+            <if test="lPrice != null" >
+                l_price,
+            </if>
+            <if test="lName != null" >
+                l_name,
+            </if>
+            <if test="lCode != null" >
+                l_code,
+            </if>
+            <if test="comments != null" >
+                comments,
+            </if>
+            <if test="gid != null" >
+                gid,
+            </if>
+            <if test="brokerage != null" >
+                brokerage,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="gId != null" >
+                #{gId,jdbcType=INTEGER},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="logo != null" >
+                #{logo,jdbcType=VARCHAR},
+            </if> 
+            <if test="gg != null" >
+                #{gg,jdbcType=VARCHAR},
+            </if> 
+            <if test="count != null" >
+                #{count,jdbcType=INTEGER},
+            </if> 
+            <if test="price != null" >
+                #{price,jdbcType=DECIMAL},
+            </if> 
+            <if test="orderNo != null" >
+                #{orderNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="bId != null" >
+                #{bId,jdbcType=INTEGER},
+            </if> 
+            <if test="review != null" >
+                #{review,jdbcType=BIT},
+            </if> 
+            <if test="lId != null" >
+                #{lId,jdbcType=INTEGER},
+            </if> 
+            <if test="lPrice != null" >
+                #{lPrice,jdbcType=DECIMAL},
+            </if> 
+            <if test="lName != null" >
+                #{lName,jdbcType=VARCHAR},
+            </if> 
+            <if test="lCode != null" >
+                #{lCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="comments != null" >
+                #{comments,jdbcType=VARCHAR},
+            </if> 
+            <if test="gid != null" >
+                #{gid,jdbcType=INTEGER},
+            </if> 
+            <if test="brokerage != null" >
+                #{brokerage,jdbcType=DECIMAL},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolOrderItem" parameterType="com.isell.service.order.vo.CoolOrderItem" >
+        UPDATE cool_order_item
+        <set>
+            <if test="gId != null" >
+                g_id = #{gId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="logo != null" >
+                logo = #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="gg != null" >
+                gg = #{gg,jdbcType=VARCHAR},
+            </if>
+            <if test="count != null" >
+                count = #{count,jdbcType=INTEGER},
+            </if>
+            <if test="price != null" >
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="orderNo != null" >
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="bId != null" >
+                b_id = #{bId,jdbcType=INTEGER},
+            </if>
+            <if test="review != null" >
+                review = #{review,jdbcType=BIT},
+            </if>
+            <if test="lId != null" >
+                l_id = #{lId,jdbcType=INTEGER},
+            </if>
+            <if test="lPrice != null" >
+                l_price = #{lPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="lName != null" >
+                l_name = #{lName,jdbcType=VARCHAR},
+            </if>
+            <if test="lCode != null" >
+                l_code = #{lCode,jdbcType=VARCHAR},
+            </if>
+            <if test="comments != null" >
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+            <if test="gid != null" >
+                gid = #{gid,jdbcType=INTEGER},
+            </if>
+            <if test="brokerage != null" >
+                brokerage = #{brokerage,jdbcType=DECIMAL},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -6,8 +6,8 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.isell.core.util.HttpUtils;
+import com.isell.core.util.JsonData;
 import com.isell.core.util.JsonUtil;
-import com.isell.core.web.JsonData;
 import com.isell.ei.logistics.kuaidi100.service.KuaidiService;
 import com.isell.ei.logistics.kuaidi100.vo.ResultInfo;
 

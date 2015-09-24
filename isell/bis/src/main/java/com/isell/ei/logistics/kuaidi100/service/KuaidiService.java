@@ -1,6 +1,6 @@
 package com.isell.ei.logistics.kuaidi100.service;
 
-import com.isell.core.web.JsonData;
+import com.isell.core.util.JsonData;
 
 /**
  * 快递100查询接口

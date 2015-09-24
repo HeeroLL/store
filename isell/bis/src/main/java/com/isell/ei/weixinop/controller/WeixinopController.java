@@ -7,7 +7,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.isell.core.web.JsonData;
+import com.isell.core.util.JsonData;
 import com.isell.ei.weixinop.bean.WeixinTocken;
 import com.isell.ei.weixinop.service.WeixinopService;
 

@@ -1,12 +1,10 @@
-package com.isell.core.web;
+package com.isell.core.util;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import com.isell.core.util.Exceptions;
 
 /**
  * 通用的Json数据对象。

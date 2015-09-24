@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.order.dao.CoolOrderMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.order.vo.CoolOrder">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="location_p" jdbcType="VARCHAR" property="locationP"/>
+        <result column="location_c" jdbcType="VARCHAR" property="locationC"/>
+        <result column="location_a" jdbcType="VARCHAR" property="locationA"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="linkman" jdbcType="VARCHAR" property="linkman"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="psfs" jdbcType="VARCHAR" property="psfs"/>
+        <result column="ps_price" jdbcType="DECIMAL" property="psPrice"/>
+        <result column="zffs" jdbcType="INTEGER" property="zffs"/>
+        <result column="comments" jdbcType="VARCHAR" property="comments"/>
+        <result column="total" jdbcType="DECIMAL" property="total"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="m_id" jdbcType="INTEGER" property="mId"/>
+        <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="score" jdbcType="INTEGER" property="score"/>
+        <result column="o_type" jdbcType="TINYINT" property="oType"/>
+        <result column="b_id" jdbcType="INTEGER" property="bId"/>
+        <result column="reason" jdbcType="VARCHAR" property="reason"/>
+        <result column="ps_code" jdbcType="VARCHAR" property="psCode"/>
+        <result column="oid_billno" jdbcType="VARCHAR" property="oidBillno"/>
+        <result column="pay_time" jdbcType="TIMESTAMP" property="payTime"/>
+        <result column="trade_no" jdbcType="VARCHAR" property="tradeNo"/>
+        <result column="distributors" jdbcType="INTEGER" property="distributors"/>
+        <result column="supplier" jdbcType="VARCHAR" property="supplier"/>
+        <result column="supplier_settle" jdbcType="BIT" property="supplierSettle"/>
+        <result column="zipcode" jdbcType="VARCHAR" property="zipcode"/>
+        <result column="supplier_profit" jdbcType="DECIMAL" property="supplierProfit"/>
+        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
+        <result column="pay_state" jdbcType="TINYINT" property="payState"/>
+        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
+        <result column="is_del" jdbcType="BIT" property="isDel"/>
+        <result column="share_user" jdbcType="VARCHAR" property="shareUser"/>
+        <result column="share_added" jdbcType="BIT" property="shareAdded"/>
+        <result column="bigpen" jdbcType="VARCHAR" property="bigpen"/>
+        <result column="barcode" jdbcType="VARCHAR" property="barcode"/>
+    </resultMap>
+    <select id="getCoolOrderById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_order
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getCoolOrderByOrderNo" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_order
+        WHERE            
+            order_no = #{orderNo,jdbcType=VARCHAR}
+    </select>
+    
+    <delete id="deleteCoolOrder">
+        DELETE
+        FROM
+             cool_order
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolOrder" parameterType="com.isell.service.order.vo.CoolOrder" >
+        INSERT INTO cool_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="locationP != null" >
+                location_p,
+            </if>
+            <if test="locationC != null" >
+                location_c,
+            </if>
+            <if test="locationA != null" >
+                location_a,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="linkman != null" >
+                linkman,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="tel != null" >
+                tel,
+            </if>
+            <if test="psfs != null" >
+                psfs,
+            </if>
+            <if test="psPrice != null" >
+                ps_price,
+            </if>
+            <if test="zffs != null" >
+                zffs,
+            </if>
+            <if test="comments != null" >
+                comments,
+            </if>
+            <if test="total != null" >
+                total,
+            </if>
+            <if test="state != null" >
+                state,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+            <if test="orderNo != null" >
+                order_no,
+            </if>
+            <if test="mId != null" >
+                m_id,
+            </if>
+            <if test="updatetime != null" >
+                updatetime,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+            <if test="score != null" >
+                score,
+            </if>
+            <if test="oType != null" >
+                o_type,
+            </if>
+            <if test="bId != null" >
+                b_id,
+            </if>
+            <if test="reason != null" >
+                reason,
+            </if>
+            <if test="psCode != null" >
+                ps_code,
+            </if>
+            <if test="oidBillno != null" >
+                oid_billno,
+            </if>
+            <if test="payTime != null" >
+                pay_time,
+            </if>
+            <if test="tradeNo != null" >
+                trade_no,
+            </if>
+            <if test="distributors != null" >
+                distributors,
+            </if>
+            <if test="supplier != null" >
+                supplier,
+            </if>
+            <if test="supplierSettle != null" >
+                supplier_settle,
+            </if>
+            <if test="zipcode != null" >
+                zipcode,
+            </if>
+            <if test="supplierProfit != null" >
+                supplier_profit,
+            </if>
+            <if test="finishTime != null" >
+                finish_time,
+            </if>
+            <if test="payState != null" >
+                pay_state,
+            </if>
+            <if test="orderType != null" >
+                order_type,
+            </if>
+            <if test="isDel != null" >
+                is_del,
+            </if>
+            <if test="shareUser != null" >
+                share_user,
+            </if>
+            <if test="shareAdded != null" >
+                share_added,
+            </if>
+            <if test="bigpen != null" >
+                bigpen,
+            </if>
+            <if test="barcode != null" >
+                barcode,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="locationP != null" >
+                #{locationP,jdbcType=VARCHAR},
+            </if> 
+            <if test="locationC != null" >
+                #{locationC,jdbcType=VARCHAR},
+            </if> 
+            <if test="locationA != null" >
+                #{locationA,jdbcType=VARCHAR},
+            </if> 
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if> 
+            <if test="linkman != null" >
+                #{linkman,jdbcType=VARCHAR},
+            </if> 
+            <if test="mobile != null" >
+                #{mobile,jdbcType=VARCHAR},
+            </if> 
+            <if test="tel != null" >
+                #{tel,jdbcType=VARCHAR},
+            </if> 
+            <if test="psfs != null" >
+                #{psfs,jdbcType=VARCHAR},
+            </if> 
+            <if test="psPrice != null" >
+                #{psPrice,jdbcType=DECIMAL},
+            </if> 
+            <if test="zffs != null" >
+                #{zffs,jdbcType=INTEGER},
+            </if> 
+            <if test="comments != null" >
+                #{comments,jdbcType=VARCHAR},
+            </if> 
+            <if test="total != null" >
+                #{total,jdbcType=DECIMAL},
+            </if> 
+            <if test="state != null" >
+                #{state,jdbcType=TINYINT},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="orderNo != null" >
+                #{orderNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="mId != null" >
+                #{mId,jdbcType=INTEGER},
+            </if> 
+            <if test="updatetime != null" >
+                #{updatetime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="remark != null" >
+                #{remark,jdbcType=VARCHAR},
+            </if> 
+            <if test="score != null" >
+                #{score,jdbcType=INTEGER},
+            </if> 
+            <if test="oType != null" >
+                #{oType,jdbcType=TINYINT},
+            </if> 
+            <if test="bId != null" >
+                #{bId,jdbcType=INTEGER},
+            </if> 
+            <if test="reason != null" >
+                #{reason,jdbcType=VARCHAR},
+            </if> 
+            <if test="psCode != null" >
+                #{psCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="oidBillno != null" >
+                #{oidBillno,jdbcType=VARCHAR},
+            </if> 
+            <if test="payTime != null" >
+                #{payTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="tradeNo != null" >
+                #{tradeNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="distributors != null" >
+                #{distributors,jdbcType=INTEGER},
+            </if> 
+            <if test="supplier != null" >
+                #{supplier,jdbcType=VARCHAR},
+            </if> 
+            <if test="supplierSettle != null" >
+                #{supplierSettle,jdbcType=BIT},
+            </if> 
+            <if test="zipcode != null" >
+                #{zipcode,jdbcType=VARCHAR},
+            </if> 
+            <if test="supplierProfit != null" >
+                #{supplierProfit,jdbcType=DECIMAL},
+            </if> 
+            <if test="finishTime != null" >
+                #{finishTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="payState != null" >
+                #{payState,jdbcType=TINYINT},
+            </if> 
+            <if test="orderType != null" >
+                #{orderType,jdbcType=TINYINT},
+            </if> 
+            <if test="isDel != null" >
+                #{isDel,jdbcType=BIT},
+            </if> 
+            <if test="shareUser != null" >
+                #{shareUser,jdbcType=VARCHAR},
+            </if> 
+            <if test="shareAdded != null" >
+                #{shareAdded,jdbcType=BIT},
+            </if> 
+            <if test="bigpen != null" >
+                #{bigpen,jdbcType=VARCHAR},
+            </if> 
+            <if test="barcode != null" >
+                #{barcode,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolOrder" parameterType="com.isell.service.order.vo.CoolOrder" >
+        UPDATE cool_order
+        <set>
+            <if test="locationP != null" >
+                location_p = #{locationP,jdbcType=VARCHAR},
+            </if>
+            <if test="locationC != null" >
+                location_c = #{locationC,jdbcType=VARCHAR},
+            </if>
+            <if test="locationA != null" >
+                location_a = #{locationA,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null" >
+                linkman = #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null" >
+                tel = #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="psfs != null" >
+                psfs = #{psfs,jdbcType=VARCHAR},
+            </if>
+            <if test="psPrice != null" >
+                ps_price = #{psPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="zffs != null" >
+                zffs = #{zffs,jdbcType=INTEGER},
+            </if>
+            <if test="comments != null" >
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+            <if test="total != null" >
+                total = #{total,jdbcType=DECIMAL},
+            </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=TINYINT},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderNo != null" >
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="mId != null" >
+                m_id = #{mId,jdbcType=INTEGER},
+            </if>
+            <if test="updatetime != null" >
+                updatetime = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="score != null" >
+                score = #{score,jdbcType=INTEGER},
+            </if>
+            <if test="oType != null" >
+                o_type = #{oType,jdbcType=TINYINT},
+            </if>
+            <if test="bId != null" >
+                b_id = #{bId,jdbcType=INTEGER},
+            </if>
+            <if test="reason != null" >
+                reason = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="psCode != null" >
+                ps_code = #{psCode,jdbcType=VARCHAR},
+            </if>
+            <if test="oidBillno != null" >
+                oid_billno = #{oidBillno,jdbcType=VARCHAR},
+            </if>
+            <if test="payTime != null" >
+                pay_time = #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="tradeNo != null" >
+                trade_no = #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="distributors != null" >
+                distributors = #{distributors,jdbcType=INTEGER},
+            </if>
+            <if test="supplier != null" >
+                supplier = #{supplier,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierSettle != null" >
+                supplier_settle = #{supplierSettle,jdbcType=BIT},
+            </if>
+            <if test="zipcode != null" >
+                zipcode = #{zipcode,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierProfit != null" >
+                supplier_profit = #{supplierProfit,jdbcType=DECIMAL},
+            </if>
+            <if test="finishTime != null" >
+                finish_time = #{finishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="payState != null" >
+                pay_state = #{payState,jdbcType=TINYINT},
+            </if>
+            <if test="orderType != null" >
+                order_type = #{orderType,jdbcType=TINYINT},
+            </if>
+            <if test="isDel != null" >
+                is_del = #{isDel,jdbcType=BIT},
+            </if>
+            <if test="shareUser != null" >
+                share_user = #{shareUser,jdbcType=VARCHAR},
+            </if>
+            <if test="shareAdded != null" >
+                share_added = #{shareAdded,jdbcType=BIT},
+            </if>
+            <if test="bigpen != null" >
+                bigpen = #{bigpen,jdbcType=VARCHAR},
+            </if>
+            <if test="barcode != null" >
+                barcode = #{barcode,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

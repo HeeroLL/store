@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.isell.bis.config.dao.AccessSystemMapper;
@@ -34,6 +35,30 @@ public class BisConfig {
      */
     @Resource
     private SysMappingMapper sysMappingMapper;
+    
+    /**
+     * 基础域名
+     */
+    @Value("${base_domain}")
+    private String baseDomain;
+    
+    /**
+     * web网站域名
+     */
+    @Value("${domain}")
+    private String domain;
+    
+    /**
+     * wap网站域名
+     */
+    @Value("${wap_domain}")
+    private String wapDomain;
+    
+    /**
+     * 图片域名
+     */
+    @Value("${img_domain}")
+    private String imgDomain;
     
     /**
      * 接入系统map集合
@@ -67,8 +92,24 @@ public class BisConfig {
     public Map<String, AccessSystem> getAccessSysMap() {
         return accessSysMap;
     }
-
+    
     public Map<String, String> getSysMappingMap() {
         return sysMappingMap;
+    }
+
+    public String getBaseDomain() {
+        return baseDomain;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public String getWapDomain() {
+        return wapDomain;
+    }
+
+    public String getImgDomain() {
+        return imgDomain;
     }
 }

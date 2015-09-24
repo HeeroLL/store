@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.isell.bis.mail.service.SimpleMailService;
 import com.isell.bis.mail.vo.MailSenderInfo;
-import com.isell.core.web.JsonData;
+import com.isell.core.util.JsonData;
 
 /**
  * 邮件服务controller
