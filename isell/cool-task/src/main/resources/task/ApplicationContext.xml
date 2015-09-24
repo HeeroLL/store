@@ -19,4 +19,5 @@
 	</bean>
 	
 	<import resource="ApplicationContext-task.xml"/>
+	<import resource="ApplicationContext-task-db.xml"/>
 </beans>  

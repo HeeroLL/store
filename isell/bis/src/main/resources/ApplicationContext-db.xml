@@ -43,14 +43,14 @@
 		<property name="annotationClass" value="com.isell.core.mybatis.Mapper" />
 	</bean>
 	
-	<!-- 定义事物管理 
+	<!-- 定义事物管理 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
 	<aop:config>
-		<aop:advisor pointcut="execution(* com.isell.bis..*Service.*(..))"
+		<aop:advisor pointcut="execution(* com.isell..*Service.*(..))"
 			advice-ref="jtaTxAdvice" />
 	</aop:config>
 
@@ -66,5 +66,4 @@
 			<tx:method name="*" propagation="NOT_SUPPORTED" />
 		</tx:attributes>
 	</tx:advice>
-	-->
 </beans>

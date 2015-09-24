@@ -3,7 +3,6 @@ package com.isell.ei.pay.weixin.service.impl;
 import java.util.TreeMap;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.isell.core.util.HttpUtils;
@@ -21,11 +20,6 @@ import com.isell.ei.pay.weixin.util.WeixinPayUtil;
  */
 @Service("weixinPayService")
 public class WeixinPayServiceImpl implements WeixinPayService {
-    /**
-     * bis域名地址
-     */
-    @Value("${bis.host}")
-    private String bisHost;
     
     @Override
     public TreeMap<String, Object> unifiedorder(TreeMap<String, Object> paramMap) {

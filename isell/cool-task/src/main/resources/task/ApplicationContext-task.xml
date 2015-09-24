@@ -17,5 +17,7 @@
 		 -->
 	</task:scheduled-tasks>
 	
+	<!-- 
 	<import resource="ApplicationContext-task-db.xml"/>
+	 -->
 </beans>

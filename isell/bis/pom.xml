@@ -205,6 +205,12 @@
 			<artifactId>cool-cache</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<!-- 引入服务模块 -->
+		<dependency>
+			<groupId>com.isell</groupId>
+			<artifactId>cool-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>bis</finalName>
