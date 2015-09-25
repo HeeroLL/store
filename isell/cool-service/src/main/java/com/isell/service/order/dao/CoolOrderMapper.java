@@ -22,12 +22,20 @@ public interface CoolOrderMapper {
     CoolOrder getCoolOrderById(@Param("id") Integer id);
     
     /**
-     * 根据订单id查询
+     * 根据订单编号查询
      * 
-     * @param id 订单主键
+     * @param orderNo 订单编号
      * @return 订单信息
      */
     CoolOrder getCoolOrderByOrderNo(String orderNo);
+    
+    /**
+     * 根据物流单号查询
+     * 
+     * @param psCode 物流单号
+     * @return 订单信息
+     */
+    CoolOrder getCoolOrderByPsCode(String psCode);
     
     /**
      * 保存

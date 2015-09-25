@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShop">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="ann_info" jdbcType="VARCHAR" property="annInfo"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="qr_code" jdbcType="VARCHAR" property="qrCode"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="y_income" jdbcType="DECIMAL" property="yIncome"/>
+        <result column="nwd_amount" jdbcType="DECIMAL" property="nwdAmount"/>
+        <result column="wd_amount" jdbcType="DECIMAL" property="wdAmount"/>
+        <result column="all_amount" jdbcType="DECIMAL" property="allAmount"/>
+        <result column="show_way" jdbcType="TINYINT" property="showWay"/>
+        <result column="show_banner" jdbcType="BIT" property="showBanner"/>
+        <result column="level" jdbcType="VARCHAR" property="level"/>
+        <result column="turnover_orders" jdbcType="INTEGER" property="turnoverOrders"/>
+        <result column="show_model" jdbcType="TINYINT" property="showModel"/>
+        <result column="tbd_amount" jdbcType="DECIMAL" property="tbdAmount"/>
+    </resultMap>
+    <select id="getCoonShopById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <delete id="deleteCoonShop">
+        DELETE
+        FROM
+             coon_shop
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShop" parameterType="com.isell.service.shop.vo.CoonShop" >
+        INSERT INTO coon_shop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="code != null" >
+                code,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="logo != null" >
+                logo,
+            </if>
+            <if test="annInfo != null" >
+                ann_info,
+            </if>
+            <if test="img != null" >
+                img,
+            </if>
+            <if test="qrCode != null" >
+                qr_code,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+            <if test="yIncome != null" >
+                y_income,
+            </if>
+            <if test="nwdAmount != null" >
+                nwd_amount,
+            </if>
+            <if test="wdAmount != null" >
+                wd_amount,
+            </if>
+            <if test="allAmount != null" >
+                all_amount,
+            </if>
+            <if test="showWay != null" >
+                show_way,
+            </if>
+            <if test="showBanner != null" >
+                show_banner,
+            </if>
+            <if test="level != null" >
+                level,
+            </if>
+            <if test="turnoverOrders != null" >
+                turnover_orders,
+            </if>
+            <if test="showModel != null" >
+                show_model,
+            </if>
+            <if test="tbdAmount != null" >
+                tbd_amount,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="userId != null" >
+                #{userId,jdbcType=VARCHAR},
+            </if> 
+            <if test="code != null" >
+                #{code,jdbcType=VARCHAR},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="logo != null" >
+                #{logo,jdbcType=VARCHAR},
+            </if> 
+            <if test="annInfo != null" >
+                #{annInfo,jdbcType=VARCHAR},
+            </if> 
+            <if test="img != null" >
+                #{img,jdbcType=VARCHAR},
+            </if> 
+            <if test="qrCode != null" >
+                #{qrCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="yIncome != null" >
+                #{yIncome,jdbcType=DECIMAL},
+            </if> 
+            <if test="nwdAmount != null" >
+                #{nwdAmount,jdbcType=DECIMAL},
+            </if> 
+            <if test="wdAmount != null" >
+                #{wdAmount,jdbcType=DECIMAL},
+            </if> 
+            <if test="allAmount != null" >
+                #{allAmount,jdbcType=DECIMAL},
+            </if> 
+            <if test="showWay != null" >
+                #{showWay,jdbcType=TINYINT},
+            </if> 
+            <if test="showBanner != null" >
+                #{showBanner,jdbcType=BIT},
+            </if> 
+            <if test="level != null" >
+                #{level,jdbcType=VARCHAR},
+            </if> 
+            <if test="turnoverOrders != null" >
+                #{turnoverOrders,jdbcType=INTEGER},
+            </if> 
+            <if test="showModel != null" >
+                #{showModel,jdbcType=TINYINT},
+            </if> 
+            <if test="tbdAmount != null" >
+                #{tbdAmount,jdbcType=DECIMAL},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShop" parameterType="com.isell.service.shop.vo.CoonShop" >
+        UPDATE coon_shop
+        <set>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null" >
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="logo != null" >
+                logo = #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="annInfo != null" >
+                ann_info = #{annInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                img = #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="qrCode != null" >
+                qr_code = #{qrCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="yIncome != null" >
+                y_income = #{yIncome,jdbcType=DECIMAL},
+            </if>
+            <if test="nwdAmount != null" >
+                nwd_amount = #{nwdAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="wdAmount != null" >
+                wd_amount = #{wdAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="allAmount != null" >
+                all_amount = #{allAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="showWay != null" >
+                show_way = #{showWay,jdbcType=TINYINT},
+            </if>
+            <if test="showBanner != null" >
+                show_banner = #{showBanner,jdbcType=BIT},
+            </if>
+            <if test="level != null" >
+                level = #{level,jdbcType=VARCHAR},
+            </if>
+            <if test="turnoverOrders != null" >
+                turnover_orders = #{turnoverOrders,jdbcType=INTEGER},
+            </if>
+            <if test="showModel != null" >
+                show_model = #{showModel,jdbcType=TINYINT},
+            </if>
+            <if test="tbdAmount != null" >
+                tbd_amount = #{tbdAmount,jdbcType=DECIMAL},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

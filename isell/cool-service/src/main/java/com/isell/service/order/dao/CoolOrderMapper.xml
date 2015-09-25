@@ -61,6 +61,15 @@
             order_no = #{orderNo,jdbcType=VARCHAR}
     </select>
     
+    <select id="getCoolOrderByPsCode" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_order
+        WHERE            
+            ps_code = #{psCode,jdbcType=VARCHAR}
+    </select>
+    
     <delete id="deleteCoolOrder">
         DELETE
         FROM

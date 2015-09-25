@@ -16,6 +16,8 @@ import com.isell.ps.wpwl.vo.WpwlOrderItem;
 import com.isell.service.order.service.OrderService;
 import com.isell.service.order.vo.CoolOrder;
 import com.isell.service.order.vo.CoolOrderItem;
+import com.isell.service.shop.service.CoonShopService;
+import com.isell.service.shop.vo.CoonShop;
 
 /**
  * 与杭州沃朴物联科技有限公司（防伪）商定的订单相关HTTP服务
@@ -32,6 +34,12 @@ public class WpwlOrderController {
     @Resource
     private OrderService orderService;
     
+    /**
+     * 酷店接口
+     */
+    @Resource
+    private CoonShopService coonShopService;
+    
     @Resource
     private BisConfig config;
     
@@ -45,7 +53,7 @@ public class WpwlOrderController {
     @ResponseBody
     public JsonData getOrderByOrderNo(String jsonObj) {
         CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
-        order = orderService.getCoolOrderDetailByOrderNo(order.getOrderNo());
+        order = orderService.getCoolOrderDetailByPsCode(order.getOrderNo());
         if (order == null) {
             throw new RuntimeException("exception.order.null");
         }
@@ -60,11 +68,18 @@ public class WpwlOrderController {
         wpwlOrderInfo.setTotal(order.getTotal());
         
         String baseurl = "http://";
-        if (order.getSupplier() == null) {
-            baseurl += config.getDefaultShopId();
-        } else {
-            baseurl += order.getSupplier();
+        String code = null;
+        if (order.getSupplier() != null) {
+            CoonShop shop = coonShopService.getCoonShopById(order.getSupplier());
+            if (shop != null) {
+                code = shop.getCode();
+            }
         }
+        if (code == null) {
+            code = config.getDefaultShopId();
+        }
+        
+        baseurl += code;
         baseurl += ".m." + config.getBaseDomain();
         
         if (order.getItemList() != null) {

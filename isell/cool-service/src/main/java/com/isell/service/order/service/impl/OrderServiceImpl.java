@@ -56,5 +56,14 @@ public class OrderServiceImpl implements OrderService {
         }
         return order;
     }
+
+    @Override
+    public CoolOrder getCoolOrderDetailByPsCode(String psCode) {
+        CoolOrder order = coolOrderMapper.getCoolOrderByPsCode(psCode);
+        if (order != null) {
+            order.setItemList(coolOrderItemMapper.findCoolOrderItemByOrderNo(order.getOrderNo()));
+        }
+        return order;
+    }
     
 }

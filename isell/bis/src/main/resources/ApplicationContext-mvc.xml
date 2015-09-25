@@ -37,6 +37,7 @@
 							<value>127.0.0.1</value>
 							<value>localhost</value>
 							<value>0:0:0:0:0:0:0:1</value>
+							<value>121.41.113.175</value>
 						</list>
 					</property>
 				</bean>

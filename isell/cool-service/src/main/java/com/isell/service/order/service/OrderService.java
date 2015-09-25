@@ -40,4 +40,12 @@ public interface OrderService {
      * @return 订单信息及详情
      */
     CoolOrder getCoolOrderDetailByOrderNo(String orderNo);
+    
+    /**
+     * 根据物流单号查询订单详情
+     * 
+     * @param psCode 物流单号
+     * @return 订单信息及详情
+     */
+    CoolOrder getCoolOrderDetailByPsCode(String psCode);
 }
