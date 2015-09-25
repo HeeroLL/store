@@ -61,6 +61,12 @@ public class BisConfig {
     private String imgDomain;
     
     /**
+     * 默认酷店id
+     */
+    @Value("${default_shopId}")
+    private String defaultShopId;
+    
+    /**
      * 接入系统map集合
      */
     private Map<String, AccessSystem> accessSysMap;
@@ -111,5 +117,9 @@ public class BisConfig {
 
     public String getImgDomain() {
         return imgDomain;
+    }
+
+    public String getDefaultShopId() {
+        return defaultShopId;
     }
 }

@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.isell.bis.config.BisConfig;
 import com.isell.core.util.JsonData;
@@ -41,6 +42,7 @@ public class WpwlOrderController {
      * @return 订单信息
      */
     @RequestMapping("getOrderByOrderNo")
+    @ResponseBody
     public JsonData getOrderByOrderNo(String jsonObj) {
         CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
         order = orderService.getCoolOrderDetailByOrderNo(order.getOrderNo());
@@ -56,6 +58,15 @@ public class WpwlOrderController {
         wpwlOrderInfo.setCreatetime(order.getCreatetime());
         wpwlOrderInfo.setCustomerName(order.getLinkman());
         wpwlOrderInfo.setTotal(order.getTotal());
+        
+        String baseurl = "http://";
+        if (order.getSupplier() == null) {
+            baseurl += config.getDefaultShopId();
+        } else {
+            baseurl += order.getSupplier();
+        }
+        baseurl += ".m." + config.getBaseDomain();
+        
         if (order.getItemList() != null) {
             wpwlOrderInfo.setItems(new ArrayList<WpwlOrderItem>());
             for (CoolOrderItem item : order.getItemList()) {
@@ -64,9 +75,9 @@ public class WpwlOrderController {
                 wpwlOrderItem.setLogo(config.getImgDomain() + item.getLogo());
                 wpwlOrderItem.setCount(item.getCount());
                 wpwlOrderItem.setPrice(item.getPrice());
-                wpwlOrderItem.setUrl(config.getWapDomain() + "/product/" + item.getgId());
+                wpwlOrderItem.setUrl(baseurl + "/product/" + item.getgId());
                 wpwlOrderItem.setAttribute(new ArrayList<String>());
-                wpwlOrderItem.getAttribute().add("gg:" + item.getGg());
+                wpwlOrderItem.getAttribute().add("规格:" + item.getGg());
                 
                 wpwlOrderInfo.getItems().add(wpwlOrderItem);
             }
