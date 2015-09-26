@@ -12,22 +12,24 @@ public interface AlipayService {
     /**
      * 合作者身份ID
      */
-    String PARTNER = "2088711787113554";
+    // String PARTNER = "2088711787113554";
+    String PARTNER = "2088021829532240";
     
     /**
      * 付款方支付宝账户姓名
      */
-    String ACCOUNT_NAME = "杭州艾易售电子商务有限公司‍";//"magic.wang@i-coolshop.cn"; 
+    String ACCOUNT_NAME = "杭州艾易售电子商务有限公司‍";// "magic.wang@i-coolshop.cn";
     
     /**
      * 付款方支付宝账户
      */
-    String EMAIL = "marilyn.ma@i-sell.cn‍";// "magic.wang@i-coolshop.cn";
+    String EMAIL = "magic.wang@i-coolshop.cn‍";// "marilyn.ma@i-sell.cn";
     
     /**
      * MD5签名时的密钥
      */
-    String KEY = "6jmeztqlek89dxucy9pphsa5mfk2i7f4";
+    // String KEY = "6jmeztqlek89dxucy9pphsa5mfk2i7f4";
+    String KEY = "utjn3sfouen3ynpesrv227xx91yllha8";
     
     /**
      * 支付宝网关地址
