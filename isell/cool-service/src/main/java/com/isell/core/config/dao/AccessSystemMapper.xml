@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.core.config.dao.AccessSystemMapper">
+    <resultMap id="BaseResultMap" type="com.isell.core.config.vo.AccessSystem">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="access_code" jdbcType="VARCHAR" property="accessCode"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="private_key" jdbcType="VARCHAR" property="privateKey"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="host" jdbcType="VARCHAR" property="host"/>
+        <result column="frozen" jdbcType="BIT" property="frozen"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <select id="getAccessSystemById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             bis_access_system
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllAccessSystem" resultMap="BaseResultMap">
+          SELECT * FROM bis_access_system where frozen = 0
+    </select>
+    
+    <delete id="deleteAccessSystem">
+        DELETE
+        FROM
+             bis_access_system
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveAccessSystem" parameterType="com.isell.core.config.vo.AccessSystem" >
+        INSERT INTO bis_access_system
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="accessCode != null" >
+                access_code,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="privateKey != null" >
+                private_key,
+            </if>
+            <if test="ip != null" >
+                ip,
+            </if>
+            <if test="host != null" >
+                host,
+            </if>
+            <if test="frozen != null" >
+                frozen,
+            </if>
+            <if test="creatTime != null" >
+                creat_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="accessCode != null" >
+                #{accessCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="privateKey != null" >
+                #{privateKey,jdbcType=VARCHAR},
+            </if> 
+            <if test="ip != null" >
+                #{ip,jdbcType=VARCHAR},
+            </if> 
+            <if test="host != null" >
+                #{host,jdbcType=VARCHAR},
+            </if> 
+            <if test="frozen != null" >
+                #{frozen,jdbcType=BIT},
+            </if> 
+            <if test="creatTime != null" >
+                #{creatTime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateAccessSystem" parameterType="com.isell.core.config.vo.AccessSystem" >
+        UPDATE bis_access_system
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="accessCode != null" >
+                access_code = #{accessCode,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="privateKey != null" >
+                private_key = #{privateKey,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null" >
+                ip = #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="host != null" >
+                host = #{host,jdbcType=VARCHAR},
+            </if>
+            <if test="frozen != null" >
+                frozen = #{frozen,jdbcType=BIT},
+            </if>
+            <if test="creatTime != null" >
+                creat_time = #{creatTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

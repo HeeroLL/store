@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.isell</groupId>
-	<artifactId>bis</artifactId>
-	<packaging>war</packaging>
+	<artifactId>cool-ei</artifactId>
+	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bis</name>
+	<name>cool-ei</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -193,12 +193,6 @@
 			<artifactId>dom4j</artifactId>
 			<version>1.6.1</version>
 		</dependency>
-		<!-- 引入task模块 -->
-		<dependency>
-			<groupId>com.isell</groupId>
-			<artifactId>cool-task</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 		<!-- 引入缓存模块 -->
 		<dependency>
 			<groupId>com.isell</groupId>
@@ -209,12 +203,6 @@
 		<dependency>
 			<groupId>com.isell</groupId>
 			<artifactId>cool-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<!-- 引入对外接口模块 -->
-		<dependency>
-			<groupId>com.isell</groupId>
-			<artifactId>cool-ei</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

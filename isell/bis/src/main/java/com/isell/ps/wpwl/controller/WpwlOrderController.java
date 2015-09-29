@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.isell.bis.config.BisConfig;
+import com.isell.core.config.BisConfig;
 import com.isell.core.util.JsonData;
 import com.isell.core.util.JsonUtil;
 import com.isell.ps.wpwl.vo.WpwlOrderInfo;
@@ -40,6 +40,9 @@ public class WpwlOrderController {
     @Resource
     private CoonShopService coonShopService;
     
+    /**
+     * 基础配置信息
+     */
     @Resource
     private BisConfig config;
     

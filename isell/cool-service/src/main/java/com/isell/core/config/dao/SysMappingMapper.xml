@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.core.config.dao.SysMappingMapper">
+    <resultMap id="BaseResultMap" type="com.isell.core.config.vo.SysMapping">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="access_code" jdbcType="VARCHAR" property="accessCode"/>
+        <result column="service_code" jdbcType="VARCHAR" property="serviceCode"/>
+        <result column="notify_url" jdbcType="VARCHAR" property="notifyUrl"/>
+    </resultMap>
+    <select id="getSysMappingById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             bis_sys_mapping
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllSysMapping" resultMap="BaseResultMap">
+          SELECT * FROM bis_sys_mapping 
+    </select>
+    
+    <delete id="deleteSysMapping">
+        DELETE
+        FROM
+             bis_sys_mapping
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveSysMapping" parameterType="com.isell.core.config.vo.SysMapping" >
+        INSERT INTO bis_sys_mapping
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="accessCode != null" >
+                access_code,
+            </if>
+            <if test="serviceCode != null" >
+                service_code,
+            </if>
+            <if test="notifyUrl != null" >
+                notify_url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="accessCode != null" >
+                #{accessCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="serviceCode != null" >
+                #{serviceCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="notifyUrl != null" >
+                #{notifyUrl,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateSysMapping" parameterType="com.isell.core.config.vo.SysMapping" >
+        UPDATE bis_sys_mapping
+        <set>
+            <if test="accessCode != null" >
+                access_code = #{accessCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceCode != null" >
+                service_code = #{serviceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyUrl != null" >
+                notify_url = #{notifyUrl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

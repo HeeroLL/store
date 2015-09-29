@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.isell.bis.auth.BisValidator;
-import com.isell.bis.auth.bean.RequestParameter;
+import com.isell.core.auth.BisValidator;
+import com.isell.core.auth.bean.RequestParameter;
 
 
 /**
