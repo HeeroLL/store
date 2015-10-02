@@ -32,6 +32,14 @@ public interface CoolOrderItemMapper {
     List<CoolOrderItem> findCoolOrderItemByOrderNo(String orderNo);
     
     /**
+     * 根据订单主键查询订单详情
+     *
+     * @param orderId 订单主键
+     * @return 订单详情列表
+     */
+    List<CoolOrderItem> findCoolOrderItemByOrderId(Integer orderId);
+    
+    /**
      * 保存订单详情
      *
      * @param coolOrderItem 订单详情信息

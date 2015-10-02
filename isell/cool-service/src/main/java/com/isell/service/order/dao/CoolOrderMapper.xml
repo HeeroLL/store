@@ -70,6 +70,13 @@
             ps_code = #{psCode,jdbcType=VARCHAR}
     </select>
     
+    <select id="getCoolOrderList" resultMap="BaseResultMap">
+        select * from cool_order where 1=1 
+        <if test="state != null"> and state=#{state} </if>
+        <if test="createtime != null"> and createtime <![CDATA[<]]> #{createtime} </if>
+        <if test="updatetime != null"> and updatetime <![CDATA[<]]> #{updatetime} </if>
+    </select>
+    
     <delete id="deleteCoolOrder">
         DELETE
         FROM

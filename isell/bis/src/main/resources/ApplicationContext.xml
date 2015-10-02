@@ -39,6 +39,7 @@
 		</property>
 	</bean>
 	
+	<!-- 数据库相关 -->
 	<import resource="classpath:ApplicationContext-db.xml" />
 	<!-- 缓存模块相关 -->
 	<import resource="classpath:cache/ApplicationContext-task.xml"/>

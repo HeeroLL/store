@@ -1,5 +1,7 @@
 package com.isell.service.order.service;
 
+import java.util.List;
+
 import com.isell.service.order.vo.CoolOrder;
 
 /**
@@ -48,4 +50,19 @@ public interface OrderService {
      * @return 订单信息及详情
      */
     CoolOrder getCoolOrderDetailByPsCode(String psCode);
+    
+    /**
+     * 根据条件查询订单列表
+     *
+     * @param param 查询条件
+     * @return 符合条件的订单列表
+     */
+    List<CoolOrder> getCoolOrderList(CoolOrder param);
+    
+    /**
+     * 取消订单
+     *
+     * @param ids 订单主键集合
+     */
+    void cancelOrder(Integer... ids);
 }

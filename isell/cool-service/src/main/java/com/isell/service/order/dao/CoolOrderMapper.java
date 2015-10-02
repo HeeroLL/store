@@ -1,5 +1,7 @@
 package com.isell.service.order.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.isell.core.mybatis.Mapper;
@@ -36,6 +38,14 @@ public interface CoolOrderMapper {
      * @return 订单信息
      */
     CoolOrder getCoolOrderByPsCode(String psCode);
+    
+    /**
+     * 根据条件查询订单列表
+     *
+     * @param param 查询条件
+     * @return 符合条件的订单列表
+     */
+    List<CoolOrder> getCoolOrderList(CoolOrder param);
     
     /**
      * 保存

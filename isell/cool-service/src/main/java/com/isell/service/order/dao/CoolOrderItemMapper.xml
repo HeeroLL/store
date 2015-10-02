@@ -33,6 +33,10 @@
           SELECT * FROM cool_order_item where order_no = #{orderNo}
     </select>
     
+    <select id="findCoolOrderItemByOrderId" resultMap="BaseResultMap">
+          select a.* from cool_order_item a inner join cool_order b on a.order_no=b.order_no where b.id= #{orderId}
+    </select>
+    
     <delete id="deleteCoolOrderItem">
         DELETE
         FROM

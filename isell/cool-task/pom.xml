@@ -73,6 +73,12 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.10</version>
 		</dependency>
+		<!-- 引入服务模块 -->
+		<dependency>
+			<groupId>com.isell</groupId>
+			<artifactId>cool-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>cool-task</finalName>

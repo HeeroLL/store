@@ -11,6 +11,42 @@ import java.util.List;
  * @version [版本号, 2015年9月24日]
  */
 public class CoolOrder {
+    
+    /**
+     * 待支付
+     */
+    public static final byte ORDER_STATE_0 = 0;
+    
+    /**
+     * 待发货
+     */
+    public static final byte ORDER_STATE_1 = 1;
+    
+    /**
+     * 待收货
+     */
+    public static final byte ORDER_STATE_2 = 2;
+    
+    /**
+     * 待评价
+     */
+    public static final byte ORDER_STATE_3 = 3;
+    
+    /**
+     * 已完成
+     */
+    public static final byte ORDER_STATE_4 = 4;
+    
+    /**
+     * 已退款
+     */
+    public static final byte ORDER_STATE_5 = 5;
+    
+    /**
+     * 已取消
+     */
+    public static final byte ORDER_STATE_99 = 99;
+    
     /**
      * 主键id
      */
@@ -535,11 +571,11 @@ public class CoolOrder {
     public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
-
+    
     public List<CoolOrderItem> getItemList() {
         return itemList;
     }
-
+    
     public void setItemList(List<CoolOrderItem> itemList) {
         this.itemList = itemList;
     }

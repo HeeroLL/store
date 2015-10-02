@@ -1,10 +1,15 @@
 package com.isell.task.order.service.impl;
 
+import java.util.Calendar;
+import java.util.List;
+
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.isell.task.order.dao.OrderDao;
+import com.isell.service.order.service.OrderService;
+import com.isell.service.order.vo.CoolOrder;
 import com.isell.task.order.service.TaskOrderService;
 
 /**
@@ -16,13 +21,38 @@ import com.isell.task.order.service.TaskOrderService;
 @Service("taskOrderService")
 public class TaskOrderServiceImpl implements TaskOrderService {
     /**
-     * 订单数据接口
+     * 默认订单自动取消秒数
+     */
+    @Value("${order.cancel.timeout}")
+    private int cancelOrderTimeoutSeconds;
+    
+    /**
+     * 默认订单自动确认时间天数
+     */
+    @Value("${order.confirm.timeout}")
+    private int orderConfirmTimeoutDays;
+    
+    /**
+     * 订单服务接口
      */
     @Resource
-    private OrderDao orderDao;
+    private OrderService orderService;
     
     @Override
     public void cancelOrder() {
-        orderDao.cancelOrder();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.SECOND, cancelOrderTimeoutSeconds * -1);
+        CoolOrder param = new CoolOrder();
+        param.setState(CoolOrder.ORDER_STATE_0);
+        param.setCreatetime(cal.getTime());
+        List<CoolOrder> orderList = orderService.getCoolOrderList(param);
+        if (orderList != null) {
+            Integer[] ids = new Integer[orderList.size()];
+            int index = 0;
+            for (CoolOrder order : orderList) {
+                ids[index++] = order.getId();
+            }
+            orderService.cancelOrder(ids);
+        }
     }
 }
