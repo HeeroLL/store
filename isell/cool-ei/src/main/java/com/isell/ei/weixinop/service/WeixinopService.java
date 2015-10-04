@@ -13,7 +13,7 @@ public interface WeixinopService {
     /**
      * 微信公众账号ID
      */
-    String APPID = "wxe863e749f59e9d7f";
+    String APPID = "wx13b5278aee454058"; // old = wxe863e749f59e9d7f
     
     /**
      * 微信公众号密钥

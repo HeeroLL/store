@@ -15,12 +15,12 @@ public interface WeixinPayService {
     /**
      * 微信公众账号ID
      */
-    String APPID = "wxe863e749f59e9d7f";
+    String APPID = "wx13b5278aee454058"; // old = wxe863e749f59e9d7f
     
     /**
      * 商户号
      */
-    String MCH_ID = "1259762301";
+    String MCH_ID = "1274723201"; // old = 1259762301
     
     /**
      * 微信支付设置的密钥
