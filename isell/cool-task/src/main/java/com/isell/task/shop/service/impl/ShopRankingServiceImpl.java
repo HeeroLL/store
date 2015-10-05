@@ -33,7 +33,7 @@ public class ShopRankingServiceImpl implements ShopRankingService {
     @Resource
     private ShopRankingDao shopRankingDao;
     
-    @Transactional("cool")
+    @Transactional
     @Override
     public void batchSave() {
         // 统计日期
