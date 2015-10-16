@@ -20,6 +20,20 @@
         <result column="gid" jdbcType="INTEGER" property="gid"/>
         <result column="brokerage" jdbcType="DECIMAL" property="brokerage"/>
     </resultMap>
+    <!-- 商品销量Map -->
+    <resultMap id="ProductSalesMap" type="com.isell.service.order.po.CoolProductSales">
+    	<result column="p_name" jdbcType="VARCHAR" property="pName"/>
+    	<result column="gid" jdbcType="VARCHAR" property="gid"/>
+    	<result column="gg" jdbcType="VARCHAR" property="gg"/>
+    	<result column="sales" jdbcType="INTEGER" property="sales"/>
+    	<result column="total" jdbcType="DECIMAL" property="total"/>
+    	<result column="score" jdbcType="DECIMAL" property="score"/>
+    </resultMap>
+    <!-- 订单发货费舍尔相关信息 -->
+    <resultMap id="coolOrderEcmMap" type="com.isell.service.order.po.CoolOrderEcm">
+        <result column="g_id" jdbcType="INTEGER" property="gId"/>
+        
+    </resultMap>
     <select id="getCoolOrderItemById" resultMap="BaseResultMap">
         SELECT
             *
@@ -36,6 +50,28 @@
     <select id="findCoolOrderItemByOrderId" resultMap="BaseResultMap">
           select a.* from cool_order_item a inner join cool_order b on a.order_no=b.order_no where b.id= #{orderId}
     </select>
+    
+    <select id="getMaxProfit" resultType="java.math.BigDecimal">
+          select sum(i.count*i.price*p.divide) from cool_order_item i inner join cool_product p on i.g_id=p.id where i.order_no = #{orderNo}
+    </select>
+    
+    <!-- 统计商品销量 -->
+    <select id="getSumCoolProductSales" resultMap="ProductSalesMap" parameterType="com.isell.service.order.po.CoolOrderSelect">
+    	SELECT * from (
+	    	SELECT i.name as p_name,i.gg,i.gid, sum(i.count) as sales, (sum(i.count*i.price)) as total
+			FROM cool_order_item i
+			inner join cool_order o on i.order_no = o.order_no and (o.state = 1 or o.state = 2 or o.state = 3 or o.state = 4)
+				and left(o.createtime,10) <![CDATA[<]]> left(now(),10)
+			group by i.gg			
+			order by sum(i.count) desc limit 10	) a1	
+		union all
+		SELECT * from (
+			SELECT '' as p_name, '总计' as gg, '总计' as gid, sum(i2.count) as sales, (sum(i2.count*i2.price)) as total
+			FROM cool_order_item i2
+			inner join cool_order o2 on i2.order_no = o2.order_no and (o2.state = 1 or o2.state = 2 or o2.state = 3 or o2.state = 4)
+				and left(o2.createtime,10) <![CDATA[<]]> left(now(),10)) a2				
+    </select>
+
     
     <delete id="deleteCoolOrderItem">
         DELETE

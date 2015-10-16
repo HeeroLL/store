@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.fare.dao.CoonFareTempProMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.fare.vo.CoonFareTempPro">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="temp_id" jdbcType="VARCHAR" property="tempId"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="first_wei" jdbcType="DECIMAL" property="firstWei"/>
+        <result column="first_pri" jdbcType="DECIMAL" property="firstPri"/>
+        <result column="extent_wei" jdbcType="DECIMAL" property="extentWei"/>
+        <result column="extent_pri" jdbcType="DECIMAL" property="extentPri"/>
+    </resultMap>
+    <select id="getCoonFareTempProById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_fare_temp_pro
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonFareTempPro" resultMap="BaseResultMap">
+          SELECT * FROM coon_fare_temp_pro 
+    </select>
+    
+    <!-- 根据省份获取了、快递费用信息 -->
+    <select id="getCoonFareTempProByPro" resultMap="BaseResultMap">
+          select cftp.* 
+          from coon_fare_temp cft 
+          join coon_fare_temp_pro cftp on cft.id = cftp.temp_id  and province = #{province,jdbcType=VARCHAR} and acquiesce = 1
+    </select>
+    
+    <delete id="deleteCoonFareTempPro">
+        DELETE
+        FROM
+             coon_fare_temp_pro
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonFareTempPro" parameterType="com.isell.service.fare.vo.CoonFareTempPro" >
+        INSERT INTO coon_fare_temp_pro
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="tempId != null" >
+                temp_id,
+            </if>
+            <if test="province != null" >
+                province,
+            </if>
+            <if test="firstWei != null" >
+                first_wei,
+            </if>
+            <if test="firstPri != null" >
+                first_pri,
+            </if>
+            <if test="extentWei != null" >
+                extent_wei,
+            </if>
+            <if test="extentPri != null" >
+                extent_pri,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="tempId != null" >
+                #{tempId,jdbcType=VARCHAR},
+            </if> 
+            <if test="province != null" >
+                #{province,jdbcType=VARCHAR},
+            </if> 
+            <if test="firstWei != null" >
+                #{firstWei,jdbcType=DECIMAL},
+            </if> 
+            <if test="firstPri != null" >
+                #{firstPri,jdbcType=DECIMAL},
+            </if> 
+            <if test="extentWei != null" >
+                #{extentWei,jdbcType=DECIMAL},
+            </if> 
+            <if test="extentPri != null" >
+                #{extentPri,jdbcType=DECIMAL},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonFareTempPro" parameterType="com.isell.service.fare.vo.CoonFareTempPro" >
+        UPDATE coon_fare_temp_pro
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="tempId != null" >
+                temp_id = #{tempId,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null" >
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="firstWei != null" >
+                first_wei = #{firstWei,jdbcType=DECIMAL},
+            </if>
+            <if test="firstPri != null" >
+                first_pri = #{firstPri,jdbcType=DECIMAL},
+            </if>
+            <if test="extentWei != null" >
+                extent_wei = #{extentWei,jdbcType=DECIMAL},
+            </if>
+            <if test="extentPri != null" >
+                extent_pri = #{extentPri,jdbcType=DECIMAL},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

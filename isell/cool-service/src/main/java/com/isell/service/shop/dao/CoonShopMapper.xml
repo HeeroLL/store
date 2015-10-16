@@ -31,6 +31,13 @@
             id = #{id,jdbcType=VARCHAR}
     </select>
     
+    <!-- 根据查询到的数量判断是否达到下个等级 -->
+    <select id="getCoonShopNextLevel" resultType="int">
+        select count(*) from coon_shop s 
+        inner join coon_shop_level l on s.level=l.id where s.id = #{id,jdbcType=VARCHAR} 
+        	and s.turnover_orders <![CDATA[>]]> l.order_max
+    </select>
+    
     <delete id="deleteCoonShop">
         DELETE
         FROM
@@ -38,6 +45,12 @@
         WHERE            
             id = #{id,jdbcType=VARCHAR}
     </delete>
+    
+    <update id="updateCoonShopLevel">
+    	update coon_shop s 
+    	set s.level=(select l.id from coon_shop_level l where l.order_min<![CDATA[<=]]>s.turnover_orders and l.order_max<![CDATA[>=]]>s.turnover_orders)  
+    	where s.id = #{id,jdbcType=VARCHAR}
+    </update>
 
     <insert id="saveCoonShop" parameterType="com.isell.service.shop.vo.CoonShop" >
         INSERT INTO coon_shop

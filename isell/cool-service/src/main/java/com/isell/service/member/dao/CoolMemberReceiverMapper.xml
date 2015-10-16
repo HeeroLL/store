@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.member.dao.CoolMemberReceiverMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.member.vo.CoolMemberReceiver">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="location_p" jdbcType="VARCHAR" property="locationP"/>
+        <result column="location_c" jdbcType="VARCHAR" property="locationC"/>
+        <result column="location_a" jdbcType="VARCHAR" property="locationA"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="zipcode" jdbcType="VARCHAR" property="zipcode"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="def" jdbcType="BIT" property="def"/>
+        <result column="m_id" jdbcType="INTEGER" property="mId"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+    </resultMap>
+    <select id="getCoolMemberReceiverById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_member_receiver
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolMemberReceiver" resultMap="BaseResultMap">
+          SELECT * FROM cool_member_receiver 
+    </select>
+    
+    <delete id="deleteCoolMemberReceiver">
+        DELETE
+        FROM
+             cool_member_receiver
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolMemberReceiver" parameterType="com.isell.service.member.vo.CoolMemberReceiver" >
+        INSERT INTO cool_member_receiver
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="locationP != null" >
+                location_p,
+            </if>
+            <if test="locationC != null" >
+                location_c,
+            </if>
+            <if test="locationA != null" >
+                location_a,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="zipcode != null" >
+                zipcode,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="tel != null" >
+                tel,
+            </if>
+            <if test="def != null" >
+                def,
+            </if>
+            <if test="mId != null" >
+                m_id,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="locationP != null" >
+                #{locationP,jdbcType=VARCHAR},
+            </if> 
+            <if test="locationC != null" >
+                #{locationC,jdbcType=VARCHAR},
+            </if> 
+            <if test="locationA != null" >
+                #{locationA,jdbcType=VARCHAR},
+            </if> 
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if> 
+            <if test="zipcode != null" >
+                #{zipcode,jdbcType=VARCHAR},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="mobile != null" >
+                #{mobile,jdbcType=VARCHAR},
+            </if> 
+            <if test="tel != null" >
+                #{tel,jdbcType=VARCHAR},
+            </if> 
+            <if test="def != null" >
+                #{def,jdbcType=BIT},
+            </if> 
+            <if test="mId != null" >
+                #{mId,jdbcType=INTEGER},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolMemberReceiver" parameterType="com.isell.service.member.vo.CoolMemberReceiver" >
+        UPDATE cool_member_receiver
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="locationP != null" >
+                location_p = #{locationP,jdbcType=VARCHAR},
+            </if>
+            <if test="locationC != null" >
+                location_c = #{locationC,jdbcType=VARCHAR},
+            </if>
+            <if test="locationA != null" >
+                location_a = #{locationA,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="zipcode != null" >
+                zipcode = #{zipcode,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null" >
+                tel = #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="def != null" >
+                def = #{def,jdbcType=BIT},
+            </if>
+            <if test="mId != null" >
+                m_id = #{mId,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

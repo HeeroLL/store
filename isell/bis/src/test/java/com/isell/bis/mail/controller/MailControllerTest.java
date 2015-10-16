@@ -11,12 +11,12 @@ public class MailControllerTest {
     @Test
     public void testSendTextMail() {
         MailSenderInfo mailInfo = new MailSenderInfo();
-        mailInfo.setMailServerHost("smtp.i-sell.cn");
+        mailInfo.setMailServerHost("smtp.mxhichina.com");
         mailInfo.setMailServerPort("25");
         mailInfo.setValidate(true);
-        mailInfo.setUserName("admin@i-sell.cn");
+        mailInfo.setUserName("admin@i-coolshop.cn");
         mailInfo.setPassword("Abc12345");// 您的邮箱密码
-        mailInfo.setFromAddress("admin@i-sell.cn");
+        mailInfo.setFromAddress("admin@i-coolshop.cn");
         mailInfo.setToAddress("114046323@qq.com");
         mailInfo.setSubject("小酷儿商城商家注册");
         StringBuffer str = new StringBuffer();
@@ -30,12 +30,12 @@ public class MailControllerTest {
     @Test
     public void testSendHtmlMail() {
         MailSenderInfo mailInfo = new MailSenderInfo();
-        mailInfo.setMailServerHost("smtp.i-sell.cn");
+        mailInfo.setMailServerHost("smtp.mxhichina.com");
         mailInfo.setMailServerPort("25");
         mailInfo.setValidate(true);
-        mailInfo.setUserName("admin@i-sell.cn");
+        mailInfo.setUserName("admin@i-coolshop.cn");
         mailInfo.setPassword("Abc12345");// 您的邮箱密码
-        mailInfo.setFromAddress("admin@i-sell.cn");
+        mailInfo.setFromAddress("admin@i-coolshop.cn");
         mailInfo.setToAddress("114046323@qq.com");
         mailInfo.setSubject("小酷儿商城商家注册");
         StringBuffer str = new StringBuffer();

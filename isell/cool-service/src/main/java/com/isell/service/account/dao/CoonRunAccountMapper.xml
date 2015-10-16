@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.account.dao.CoonRunAccountMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.account.vo.CoonRunAccount">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="fee" jdbcType="DECIMAL" property="fee"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="serial_number" jdbcType="VARCHAR" property="serialNumber"/>
+        <result column="withdraw_state" jdbcType="INTEGER" property="withdrawState"/>
+        <result column="withdraw_type" jdbcType="INTEGER" property="withdrawType"/>
+        <result column="withdraw_name" jdbcType="VARCHAR" property="withdrawName"/>
+        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
+        <result column="withdraw_num" jdbcType="VARCHAR" property="withdrawNum"/>
+        <result column="batch_no" jdbcType="VARCHAR" property="batchNo"/>
+    </resultMap>
+    <select id="getCoonRunAccountById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_run_account
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonRunAccount" resultMap="BaseResultMap">
+          SELECT * FROM coon_run_account 
+    </select>
+    
+    <delete id="deleteCoonRunAccount">
+        DELETE
+        FROM
+             coon_run_account
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonRunAccount" parameterType="com.isell.service.account.vo.CoonRunAccount" >
+        INSERT INTO coon_run_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="amount != null" >
+                amount,
+            </if>
+            <if test="fee != null" >
+                fee,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="serialNumber != null" >
+                serial_number,
+            </if>
+            <if test="withdrawState != null" >
+                withdraw_state,
+            </if>
+            <if test="withdrawType != null" >
+                withdraw_type,
+            </if>
+            <if test="withdrawName != null" >
+                withdraw_name,
+            </if>
+            <if test="finishTime != null" >
+                finish_time,
+            </if>
+            <if test="withdrawNum != null" >
+                withdraw_num,
+            </if>
+            <if test="batchNo != null" >
+                batch_no,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="userId != null" >
+                #{userId,jdbcType=VARCHAR},
+            </if> 
+            <if test="type != null" >
+                #{type,jdbcType=INTEGER},
+            </if> 
+            <if test="amount != null" >
+                #{amount,jdbcType=DECIMAL},
+            </if> 
+            <if test="fee != null" >
+                #{fee,jdbcType=DECIMAL},
+            </if> 
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="serialNumber != null" >
+                #{serialNumber,jdbcType=VARCHAR},
+            </if> 
+            <if test="withdrawState != null" >
+                #{withdrawState,jdbcType=INTEGER},
+            </if> 
+            <if test="withdrawType != null" >
+                #{withdrawType,jdbcType=INTEGER},
+            </if> 
+            <if test="withdrawName != null" >
+                #{withdrawName,jdbcType=VARCHAR},
+            </if> 
+            <if test="finishTime != null" >
+                #{finishTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="withdrawNum != null" >
+                #{withdrawNum,jdbcType=VARCHAR},
+            </if> 
+            <if test="batchNo != null" >
+                #{batchNo,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonRunAccount" parameterType="com.isell.service.account.vo.CoonRunAccount" >
+        UPDATE coon_run_account
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null" >
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="fee != null" >
+                fee = #{fee,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="serialNumber != null" >
+                serial_number = #{serialNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="withdrawState != null" >
+                withdraw_state = #{withdrawState,jdbcType=INTEGER},
+            </if>
+            <if test="withdrawType != null" >
+                withdraw_type = #{withdrawType,jdbcType=INTEGER},
+            </if>
+            <if test="withdrawName != null" >
+                withdraw_name = #{withdrawName,jdbcType=VARCHAR},
+            </if>
+            <if test="finishTime != null" >
+                finish_time = #{finishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="withdrawNum != null" >
+                withdraw_num = #{withdrawNum,jdbcType=VARCHAR},
+            </if>
+            <if test="batchNo != null" >
+                batch_no = #{batchNo,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

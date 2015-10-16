@@ -1,7 +1,9 @@
 package com.isell.task.order.service.impl;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -53,6 +55,23 @@ public class TaskOrderServiceImpl implements TaskOrderService {
                 ids[index++] = order.getId();
             }
             orderService.cancelOrder(ids);
+        }
+    }
+
+    @Override
+    public void signOrder() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, orderConfirmTimeoutDays * -1);
+        CoolOrder param = new CoolOrder();
+        param.setState(CoolOrder.ORDER_STATE_2);
+        param.setUpdatetime(cal.getTime());
+        List<CoolOrder> orderList = orderService.getCoolOrderList(param);
+        if (orderList != null) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            for (CoolOrder order : orderList) {
+                map.put("id", order.getId());
+                orderService.updateCoolOrderRec(map);
+            }
         }
     }
 }

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopLevelMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShopLevel">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="level" jdbcType="TINYINT" property="level"/>
+        <result column="order_min" jdbcType="INTEGER" property="orderMin"/>
+        <result column="order_max" jdbcType="INTEGER" property="orderMax"/>
+        <result column="c_rate" jdbcType="DECIMAL" property="cRate"/>
+        <result column="free_use" jdbcType="BIT" property="freeUse"/>
+        <result column="level_name" jdbcType="TINYINT" property="levelName"/>
+        <result column="p_rate" jdbcType="DECIMAL" property="pRate"/>
+    </resultMap>
+    <select id="getCoonShopLevelById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_level
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonShopLevel" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_level 
+    </select>
+    
+    <!-- 查询店铺对应的比例 -->
+    <select id="getLevelPrate" resultType="java.math.BigDecimal">
+          select p_rate from coon_shop_level where id = (select level from coon_shop where user_id = #{userId,jdbcType=VARCHAR})
+    </select>
+    
+    <delete id="deleteCoonShopLevel">
+        DELETE
+        FROM
+             coon_shop_level
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShopLevel" parameterType="com.isell.service.shop.vo.CoonShopLevel" >
+        INSERT INTO coon_shop_level
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="level != null" >
+                level,
+            </if>
+            <if test="orderMin != null" >
+                order_min,
+            </if>
+            <if test="orderMax != null" >
+                order_max,
+            </if>
+            <if test="cRate != null" >
+                c_rate,
+            </if>
+            <if test="freeUse != null" >
+                free_use,
+            </if>
+            <if test="levelName != null" >
+                level_name,
+            </if>
+            <if test="pRate != null" >
+                p_rate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="level != null" >
+                #{level,jdbcType=TINYINT},
+            </if> 
+            <if test="orderMin != null" >
+                #{orderMin,jdbcType=INTEGER},
+            </if> 
+            <if test="orderMax != null" >
+                #{orderMax,jdbcType=INTEGER},
+            </if> 
+            <if test="cRate != null" >
+                #{cRate,jdbcType=DECIMAL},
+            </if> 
+            <if test="freeUse != null" >
+                #{freeUse,jdbcType=BIT},
+            </if> 
+            <if test="levelName != null" >
+                #{levelName,jdbcType=TINYINT},
+            </if> 
+            <if test="pRate != null" >
+                #{pRate,jdbcType=DECIMAL},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopLevel" parameterType="com.isell.service.shop.vo.CoonShopLevel" >
+        UPDATE coon_shop_level
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null" >
+                level = #{level,jdbcType=TINYINT},
+            </if>
+            <if test="orderMin != null" >
+                order_min = #{orderMin,jdbcType=INTEGER},
+            </if>
+            <if test="orderMax != null" >
+                order_max = #{orderMax,jdbcType=INTEGER},
+            </if>
+            <if test="cRate != null" >
+                c_rate = #{cRate,jdbcType=DECIMAL},
+            </if>
+            <if test="freeUse != null" >
+                free_use = #{freeUse,jdbcType=BIT},
+            </if>
+            <if test="levelName != null" >
+                level_name = #{levelName,jdbcType=TINYINT},
+            </if>
+            <if test="pRate != null" >
+                p_rate = #{pRate,jdbcType=DECIMAL},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.product.dao.CoolProductFillingMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.product.vo.CoolProductFilling">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="post_tax_no" jdbcType="VARCHAR" property="postTaxNo"/>
+        <result column="goods_type" jdbcType="VARCHAR" property="goodsType"/>
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName"/>
+        <result column="bar_code" jdbcType="VARCHAR" property="barCode"/>
+        <result column="brand" jdbcType="VARCHAR" property="brand"/>
+        <result column="goods_model" jdbcType="VARCHAR" property="goodsModel"/>
+        <result column="main_element" jdbcType="VARCHAR" property="mainElement"/>
+        <result column="purpose" jdbcType="VARCHAR" property="purpose"/>
+        <result column="standards" jdbcType="VARCHAR" property="standards"/>
+        <result column="production_enterprise" jdbcType="VARCHAR" property="productionEnterprise"/>
+        <result column="production_country" jdbcType="VARCHAR" property="productionCountry"/>
+        <result column="licence_key" jdbcType="VARCHAR" property="licenceKey"/>
+        <result column="category_code" jdbcType="VARCHAR" property="categoryCode"/>
+        <result column="material_address" jdbcType="VARCHAR" property="materialAddress"/>
+        <result column="declare_time" jdbcType="VARCHAR" property="declareTime"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="pro_id" jdbcType="INTEGER" property="proId"/>
+        <result column="category_id" jdbcType="INTEGER" property="categoryId"/>
+        <result column="business_no" jdbcType="VARCHAR" property="businessNo"/>
+        <result column="notice_date" jdbcType="VARCHAR" property="noticeDate"/>
+        <result column="product_record_no" jdbcType="VARCHAR" property="productRecordNo"/>
+        <result column="approve_result" jdbcType="VARCHAR" property="approveResult"/>
+        <result column="approve_comment" jdbcType="VARCHAR" property="approveComment"/>
+        <result column="process_time" jdbcType="VARCHAR" property="processTime"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+    </resultMap>
+    <select id="getCoolProductFillingById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_filling
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolProductFilling" resultMap="BaseResultMap">
+          SELECT * FROM cool_product_filling 
+    </select>
+    
+    <delete id="deleteCoolProductFilling">
+        DELETE
+        FROM
+             cool_product_filling
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolProductFilling" parameterType="com.isell.service.product.vo.CoolProductFilling" >
+        INSERT INTO cool_product_filling
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="postTaxNo != null" >
+                post_tax_no,
+            </if>
+            <if test="goodsType != null" >
+                goods_type,
+            </if>
+            <if test="goodsName != null" >
+                goods_name,
+            </if>
+            <if test="barCode != null" >
+                bar_code,
+            </if>
+            <if test="brand != null" >
+                brand,
+            </if>
+            <if test="goodsModel != null" >
+                goods_model,
+            </if>
+            <if test="mainElement != null" >
+                main_element,
+            </if>
+            <if test="purpose != null" >
+                purpose,
+            </if>
+            <if test="standards != null" >
+                standards,
+            </if>
+            <if test="productionEnterprise != null" >
+                production_enterprise,
+            </if>
+            <if test="productionCountry != null" >
+                production_country,
+            </if>
+            <if test="licenceKey != null" >
+                licence_key,
+            </if>
+            <if test="categoryCode != null" >
+                category_code,
+            </if>
+            <if test="materialAddress != null" >
+                material_address,
+            </if>
+            <if test="declareTime != null" >
+                declare_time,
+            </if>
+            <if test="state != null" >
+                state,
+            </if>
+            <if test="proId != null" >
+                pro_id,
+            </if>
+            <if test="categoryId != null" >
+                category_id,
+            </if>
+            <if test="businessNo != null" >
+                business_no,
+            </if>
+            <if test="noticeDate != null" >
+                notice_date,
+            </if>
+            <if test="productRecordNo != null" >
+                product_record_no,
+            </if>
+            <if test="approveResult != null" >
+                approve_result,
+            </if>
+            <if test="approveComment != null" >
+                approve_comment,
+            </if>
+            <if test="processTime != null" >
+                process_time,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="postTaxNo != null" >
+                #{postTaxNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="goodsType != null" >
+                #{goodsType,jdbcType=VARCHAR},
+            </if> 
+            <if test="goodsName != null" >
+                #{goodsName,jdbcType=VARCHAR},
+            </if> 
+            <if test="barCode != null" >
+                #{barCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="brand != null" >
+                #{brand,jdbcType=VARCHAR},
+            </if> 
+            <if test="goodsModel != null" >
+                #{goodsModel,jdbcType=VARCHAR},
+            </if> 
+            <if test="mainElement != null" >
+                #{mainElement,jdbcType=VARCHAR},
+            </if> 
+            <if test="purpose != null" >
+                #{purpose,jdbcType=VARCHAR},
+            </if> 
+            <if test="standards != null" >
+                #{standards,jdbcType=VARCHAR},
+            </if> 
+            <if test="productionEnterprise != null" >
+                #{productionEnterprise,jdbcType=VARCHAR},
+            </if> 
+            <if test="productionCountry != null" >
+                #{productionCountry,jdbcType=VARCHAR},
+            </if> 
+            <if test="licenceKey != null" >
+                #{licenceKey,jdbcType=VARCHAR},
+            </if> 
+            <if test="categoryCode != null" >
+                #{categoryCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="materialAddress != null" >
+                #{materialAddress,jdbcType=VARCHAR},
+            </if> 
+            <if test="declareTime != null" >
+                #{declareTime,jdbcType=VARCHAR},
+            </if> 
+            <if test="state != null" >
+                #{state,jdbcType=INTEGER},
+            </if> 
+            <if test="proId != null" >
+                #{proId,jdbcType=INTEGER},
+            </if> 
+            <if test="categoryId != null" >
+                #{categoryId,jdbcType=INTEGER},
+            </if> 
+            <if test="businessNo != null" >
+                #{businessNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="noticeDate != null" >
+                #{noticeDate,jdbcType=VARCHAR},
+            </if> 
+            <if test="productRecordNo != null" >
+                #{productRecordNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="approveResult != null" >
+                #{approveResult,jdbcType=VARCHAR},
+            </if> 
+            <if test="approveComment != null" >
+                #{approveComment,jdbcType=VARCHAR},
+            </if> 
+            <if test="processTime != null" >
+                #{processTime,jdbcType=VARCHAR},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolProductFilling" parameterType="com.isell.service.product.vo.CoolProductFilling" >
+        UPDATE cool_product_filling
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="postTaxNo != null" >
+                post_tax_no = #{postTaxNo,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsType != null" >
+                goods_type = #{goodsType,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null" >
+                goods_name = #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="barCode != null" >
+                bar_code = #{barCode,jdbcType=VARCHAR},
+            </if>
+            <if test="brand != null" >
+                brand = #{brand,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsModel != null" >
+                goods_model = #{goodsModel,jdbcType=VARCHAR},
+            </if>
+            <if test="mainElement != null" >
+                main_element = #{mainElement,jdbcType=VARCHAR},
+            </if>
+            <if test="purpose != null" >
+                purpose = #{purpose,jdbcType=VARCHAR},
+            </if>
+            <if test="standards != null" >
+                standards = #{standards,jdbcType=VARCHAR},
+            </if>
+            <if test="productionEnterprise != null" >
+                production_enterprise = #{productionEnterprise,jdbcType=VARCHAR},
+            </if>
+            <if test="productionCountry != null" >
+                production_country = #{productionCountry,jdbcType=VARCHAR},
+            </if>
+            <if test="licenceKey != null" >
+                licence_key = #{licenceKey,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryCode != null" >
+                category_code = #{categoryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialAddress != null" >
+                material_address = #{materialAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="declareTime != null" >
+                declare_time = #{declareTime,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="proId != null" >
+                pro_id = #{proId,jdbcType=INTEGER},
+            </if>
+            <if test="categoryId != null" >
+                category_id = #{categoryId,jdbcType=INTEGER},
+            </if>
+            <if test="businessNo != null" >
+                business_no = #{businessNo,jdbcType=VARCHAR},
+            </if>
+            <if test="noticeDate != null" >
+                notice_date = #{noticeDate,jdbcType=VARCHAR},
+            </if>
+            <if test="productRecordNo != null" >
+                product_record_no = #{productRecordNo,jdbcType=VARCHAR},
+            </if>
+            <if test="approveResult != null" >
+                approve_result = #{approveResult,jdbcType=VARCHAR},
+            </if>
+            <if test="approveComment != null" >
+                approve_comment = #{approveComment,jdbcType=VARCHAR},
+            </if>
+            <if test="processTime != null" >
+                process_time = #{processTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

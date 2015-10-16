@@ -44,5 +44,21 @@ public interface CoonShopMapper{
      * @return 成功删除的条数
      */
     int deleteCoonShop(@Param("id")String id);
+    
+    /**
+     * 根据查询到的数量判断是否达到下个等级
+     * 
+     * @param id
+     * @return 数量
+     */
+    int getCoonShopNextLevel(@Param("id")String id);
+    
+    /**
+     * 更新酷店等级
+     * 
+     * @param id
+     * @return 
+     */
+    int updateCoonShopLevel(@Param("id")String id);
 }
 

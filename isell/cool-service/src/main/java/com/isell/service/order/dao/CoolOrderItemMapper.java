@@ -1,10 +1,13 @@
 package com.isell.service.order.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.isell.core.mybatis.Mapper;
+import com.isell.service.order.po.CoolOrderSelect;
+import com.isell.service.order.po.CoolProductSales;
 import com.isell.service.order.vo.CoolOrderItem;
 
 /**
@@ -62,4 +65,20 @@ public interface CoolOrderItemMapper {
      * @return 成功删除的条数
      */
     int deleteCoolOrderItem(@Param("id") Integer id);
+    
+    /**
+     * 根据订单号获取最大佣金
+     *
+     * @param orderNo 订单号
+     * @return 最大佣金
+     */
+    BigDecimal getMaxProfit(@Param("orderNo") String orderNo);
+    
+    /**
+	 * 统计商品销量
+	 * 
+	 * @param param
+	 */
+    List<CoolProductSales> getSumCoolProductSales(CoolOrderSelect orderSelect);
+
 }

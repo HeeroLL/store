@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopProductMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShopProduct">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="p_id" jdbcType="VARCHAR" property="pId"/>
+        <result column="added" jdbcType="BIT" property="added"/>
+        <result column="s_id" jdbcType="VARCHAR" property="sId"/>
+        <result column="qr_code" jdbcType="VARCHAR" property="qrCode"/>
+        <result column="brokerage" jdbcType="DECIMAL" property="brokerage"/>
+    </resultMap>
+    <select id="getCoonShopProductById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_product
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonShopProduct" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_product 
+    </select>
+    
+    <!-- 根据条件查询 -->
+    <select id="getCoonShopProduct" resultMap="BaseResultMap" parameterType="com.isell.service.shop.vo.CoonShopProduct">
+          SELECT * FROM coon_shop_product 
+          where 1=1 
+          <if test="pId != null and pId != ''" >
+              and p_id = #{pId,jdbcType=VARCHAR}
+          </if>
+          <if test="sId != null and sId != ''" >
+              and s_id = #{sId,jdbcType=VARCHAR}
+          </if>
+    </select>
+    
+    <delete id="deleteCoonShopProduct">
+        DELETE
+        FROM
+             coon_shop_product
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShopProduct" parameterType="com.isell.service.shop.vo.CoonShopProduct" >
+        INSERT INTO coon_shop_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="pId != null" >
+                p_id,
+            </if>
+            <if test="added != null" >
+                added,
+            </if>
+            <if test="sId != null" >
+                s_id,
+            </if>
+            <if test="qrCode != null" >
+                qr_code,
+            </if>
+            <if test="brokerage != null" >
+                brokerage,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="pId != null" >
+                #{pId,jdbcType=VARCHAR},
+            </if> 
+            <if test="added != null" >
+                #{added,jdbcType=BIT},
+            </if> 
+            <if test="sId != null" >
+                #{sId,jdbcType=VARCHAR},
+            </if> 
+            <if test="qrCode != null" >
+                #{qrCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="brokerage != null" >
+                #{brokerage,jdbcType=DECIMAL},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopProduct" parameterType="com.isell.service.shop.vo.CoonShopProduct" >
+        UPDATE coon_shop_product
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="pId != null" >
+                p_id = #{pId,jdbcType=VARCHAR},
+            </if>
+            <if test="added != null" >
+                added = #{added,jdbcType=BIT},
+            </if>
+            <if test="sId != null" >
+                s_id = #{sId,jdbcType=VARCHAR},
+            </if>
+            <if test="qrCode != null" >
+                qr_code = #{qrCode,jdbcType=VARCHAR},
+            </if>
+            <if test="brokerage != null" >
+                brokerage = #{brokerage,jdbcType=DECIMAL},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

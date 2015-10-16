@@ -42,7 +42,29 @@
         <result column="share_added" jdbcType="BIT" property="shareAdded"/>
         <result column="bigpen" jdbcType="VARCHAR" property="bigpen"/>
         <result column="barcode" jdbcType="VARCHAR" property="barcode"/>
+        <result column="is_del_m" jdbcType="BIT" property="isDelM"/>
+        <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
+        <result column="sup_Name" jdbcType="VARCHAR" property="supName"/>
     </resultMap>
+    <!-- 导出返回类 -->
+    <resultMap id="ExportMap" type="com.isell.service.order.po.CoolOrderExport">
+    	<result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+    	<result column="state" jdbcType="TINYINT" property="state"/>
+    	<result column="name" jdbcType="VARCHAR" property="name"/>
+    	<result column="count" jdbcType="INTEGER" property="count"/>
+    	<result column="price" jdbcType="DECIMAL" property="price"/>
+    	<result column="supplier" jdbcType="VARCHAR" property="supplier"/>
+    	<result column="sup_name" jdbcType="VARCHAR" property="supName"/>
+    	<result column="ps_code" jdbcType="VARCHAR" property="psCode"/>
+    </resultMap>
+    <!-- 统计返回类 -->
+    <resultMap id="StatisticsMap" type="com.isell.core.common.StatisticsPo">
+    	<result column="statistics_k" jdbcType="VARCHAR" property="statistics_k"/>
+    	<result column="statistics_v_s" jdbcType="VARCHAR" property="statistics_v_s"/>
+    	<result column="statistics_v_b" jdbcType="DECIMAL" property="statistics_v_b"/>
+    	<result column="statistics_v_i" jdbcType="INTEGER" property="statistics_v_i"/>
+    </resultMap>
+    
     <select id="getCoolOrderById" resultMap="BaseResultMap">
         SELECT
             *
@@ -75,6 +97,186 @@
         <if test="state != null"> and state=#{state} </if>
         <if test="createtime != null"> and createtime <![CDATA[<]]> #{createtime} </if>
         <if test="updatetime != null"> and updatetime <![CDATA[<]]> #{updatetime} </if>
+        <if test="startTime != null"> and createtime <![CDATA[>]]> #{startTime} </if>
+        <if test="endTime != null"> and createtime <![CDATA[<]]> #{endTime} </if>
+    </select>
+    
+    <!-- 统计订单数 -->
+    <!-- 1 按年 2 按月 3 按日 -->
+    <select id="getSumCoolOrderNumber" resultMap="StatisticsMap">
+        SELECT
+            <if test="selectType == 1">  
+            	 left(createtime,7) as statistics_k,
+            </if>
+            <if test="selectType == 2">
+            	 left(createtime,10) as statistics_k,
+            </if>
+            <if test="selectType == 3">
+            	 left(createtime,13) as statistics_k,
+            </if>            
+            count(*) as statistics_v_i
+        FROM
+             cool_order
+        WHERE            
+            (state = 1 or state = 2 or state = 3 or state = 4)
+            <if test="selectType == 1">  
+            	 and left(createtime,4) = left(#{time},4)
+            </if>
+            <if test="selectType == 2">
+            	 and left(createtime,7) = left(#{time},7)
+            </if>
+            <if test="selectType == 3">
+            	 and left(createtime,10) = left(#{time},10)
+            </if> 
+         group by 
+            <if test="selectType == 1">  
+            	 left(createtime,7) order by left(createtime,7)
+            </if>
+            <if test="selectType == 2">
+            	 left(createtime,10) order by left(createtime,10)
+            </if>
+            <if test="selectType == 3">
+            	 left(createtime,13) order by left(createtime,13)
+            </if>
+    </select>
+    
+    <!-- 统计销售额 -->
+    <!-- 1 按年 2 按月 3 按日 -->
+    <select id="getSumCoolOrderSales" resultMap="StatisticsMap">
+        SELECT
+            <if test="selectType == 1">  
+            	 left(createtime,7) as statistics_k,
+            </if>
+            <if test="selectType == 2">
+            	 left(createtime,10) as statistics_k,
+            </if>
+            <if test="selectType == 3">
+            	 left(createtime,13) as statistics_k,
+            </if>            
+            sum(total) as statistics_v_b
+        FROM
+             cool_order
+        WHERE            
+            (state = 1 or state = 2 or state = 3 or state = 4)
+            <if test="selectType == 1">  
+            	 and left(createtime,4) = left(#{time},4)
+            </if>
+            <if test="selectType == 2">
+            	 and left(createtime,7) = left(#{time},7)
+            </if>
+            <if test="selectType == 3">
+            	 and left(createtime,10) = left(#{time},10)
+            </if> 
+         group by 
+            <if test="selectType == 1">  
+            	 left(createtime,7) order by left(createtime,7)
+            </if>
+            <if test="selectType == 2">
+            	 left(createtime,10) order by left(createtime,10)
+            </if>
+            <if test="selectType == 3">
+            	 left(createtime,13) order by left(createtime,13)
+            </if>
+    </select>
+    
+    <!-- 统计店铺销售额排名 -->
+    <select id="getSumCoonShopSales" resultMap="BaseResultMap" parameterType="com.isell.service.order.po.CoolOrderSelect">
+    	select * from (
+			select o.supplier,s.name as sup_Name,sum(o.total) as total, sum(o.supplier_profit) as supplier_profit
+			from cool_order o
+			left join coon_shop s on s.id = o.supplier 
+			where (o.state = 1 or o.state = 2 or o.state = 3 or o.state = 4) and left(o.createtime,10) <![CDATA[<]]> left(now(),10) and o.supplier is not null
+			group by o.supplier desc
+			order by sum(o.total) desc limit 10) a1
+		union all
+		select * from (
+			select '' as supplier, '总计' as sup_Name,sum(o2.total) as total, sum(o2.supplier_profit) as supplier_profit
+			from cool_order o2
+			where (o2.state = 1 or o2.state = 2 or o2.state = 3 or o2.state = 4) and left(o2.createtime,10) <![CDATA[<]]> left(now(),10) )a2
+    </select>
+    
+    <!-- 根据条件分页查询订单列表 -->
+    <sql id="where_sql">
+    	where 1=1 
+    	<if test="id != null and id != ''">
+    		and id = #{id,jdbcType=INTEGER}
+    	</if>
+    	<if test="psfs != null and psfs != ''">
+    		and psfs = #{psfs,jdbcType=VARCHAR}
+    	</if>
+    	<if test="zffs != null and zffs != ''">
+    		and zffs = #{zffs,jdbcType=INTEGER}
+    	</if>
+    	<if test="state != null and state != ''">
+    		and state = #{state,jdbcType=TINYINT}
+    	</if>
+    	<if test="mId != null and mId != ''">
+    		and  m_id = #{mId,jdbcType=INTEGER} and  is_Del_m = 0
+    	</if>
+    	<if test="oType != null and oType != ''">
+    		and  o_type = #{oType,jdbcType=TINYINT}
+    	</if>
+    	<if test="supplier != null and supplier != ''">
+    		and  supplier = #{supplier,jdbcType=TINYINT} and is_del = 0
+    	</if>
+    	<if test="payTime != null and payTime != ''">
+    		and  pay_state = #{payTime,jdbcType=TINYINT}
+    	</if>
+    	<if test="orderType != null and orderType != ''">
+    		and  order_type = #{orderType,jdbcType=TINYINT}
+    	</if>
+    	<if test="startUpdatetime != null"> 
+    		and updatetime <![CDATA[>=]]> #{startUpdatetime} 
+    	</if>
+        <if test="endUpdatetime != null"> 
+        	and createtime <![CDATA[<=]]> #{endUpdatetime} 
+        </if>
+    </sql>
+    <select id="getCoolOrderPageList" resultMap="BaseResultMap" parameterType="com.isell.service.order.po.CoolOrderSelect">
+    	select * from cool_order
+    	<include refid="where_sql"></include>
+    	 order by createtime desc
+    </select>
+    <select id="getCoolOrderPageListCount" parameterType="com.isell.service.order.po.CoolOrderSelect">
+    	select count(*) from cool_order
+    	<include refid="where_sql"></include>
+    </select>
+    
+    <!-- 根据条件查询导出订单列表 -->
+    <select id="getCoolOrderListExport" parameterType="com.isell.service.order.po.CoolOrderSelect" resultMap="ExportMap">
+    	select o.order_no, o.state, i.name, i.count, (i.count*i.price) as price, o.supplier, s.name as sup_name, o.ps_code
+    	from cool_order o
+    	left join cool_order_item i on o.order_no = i.order_no 
+    	left join coon_shop s on s.id = o.supplier
+    	where 1=1 
+    	<if test="startTime != null">
+    		and o.createtime <![CDATA[>=]]> #{startTime}
+    	</if>
+    	<if test="endTime != null">
+    		and o.createtime <![CDATA[<=]]> #{endTime}
+    	</if>
+    	<if test="orderNo != null and orderNo != ''">
+    		and o.order_no = #{orderNo}
+    	</if>
+    	<if test="supName != null and supName != ''">
+    		and s.name like '%' || #{supName} || '%'
+    	</if>
+    	<if test="order_type != null">
+    		and o.order_type = #{orderType}
+    	</if>
+    	<if test="state != null">
+    		and o.state = #{state}
+    	</if>
+    	<if test="locationP != null and locationP != ''">
+    		and o.location_p = #{locationP}
+    	</if>
+    	<if test="locationC != null and locationC != ''">
+    		and o.location_c = #{locationC}
+    	</if>
+    	<if test="locationA != null and locationA != ''">
+    		and o.location_a = #{locationA}
+    	</if>
+    	order by createtime desc
     </select>
     
     <delete id="deleteCoolOrder">
@@ -208,6 +410,12 @@
             <if test="barcode != null" >
                 barcode,
             </if>
+            <if test="idcard != null" >
+                idcard,
+            </if>
+            <if test="isDelM != null" >
+                is_del_m,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -330,6 +538,12 @@
             <if test="barcode != null" >
                 #{barcode,jdbcType=VARCHAR},
             </if> 
+            <if test="idcard != null" >
+                #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelM != null" >
+                #{is_Del_m,jdbcType=BIT},
+            </if>
         </trim>
     </insert>
 
@@ -450,8 +664,11 @@
             <if test="bigpen != null" >
                 bigpen = #{bigpen,jdbcType=VARCHAR},
             </if>
-            <if test="barcode != null" >
-                barcode = #{barcode,jdbcType=VARCHAR},
+            <if test="idcard != null" >
+                idcard = #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelM != null" >
+                is_Del_m = #{isDelM,jdbcType=BIT},
             </if>
         </set>
         WHERE 

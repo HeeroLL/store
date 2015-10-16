@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.product.dao.CoolProductGgMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.product.vo.CoolProductGg">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="gg" jdbcType="VARCHAR" property="gg"/>
+        <result column="jg" jdbcType="DECIMAL" property="jg"/>
+        <result column="cxjg" jdbcType="DECIMAL" property="cxjg"/>
+        <result column="stock" jdbcType="REAL" property="stock"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="xsjg" jdbcType="DECIMAL" property="xsjg"/>
+        <result column="sales" jdbcType="INTEGER" property="sales"/>
+        <result column="weight" jdbcType="DOUBLE" property="weight"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+        <result column="spec" jdbcType="VARCHAR" property="spec"/>
+        <result column="drp_price" jdbcType="DECIMAL" property="drpPrice"/>
+    </resultMap>
+    <select id="getCoolProductGgById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_gg
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolProductGg" resultMap="BaseResultMap">
+          SELECT * FROM cool_product_gg 
+    </select>
+    
+    <delete id="deleteCoolProductGg">
+        DELETE
+        FROM
+             cool_product_gg
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolProductGg" parameterType="com.isell.service.product.vo.CoolProductGg" >
+        INSERT INTO cool_product_gg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="goodsId != null" >
+                goods_id,
+            </if>
+            <if test="gg != null" >
+                gg,
+            </if>
+            <if test="jg != null" >
+                jg,
+            </if>
+            <if test="cxjg != null" >
+                cxjg,
+            </if>
+            <if test="stock != null" >
+                stock,
+            </if>
+            <if test="code != null" >
+                code,
+            </if>
+            <if test="logo != null" >
+                logo,
+            </if>
+            <if test="xsjg != null" >
+                xsjg,
+            </if>
+            <if test="sales != null" >
+                sales,
+            </if>
+            <if test="weight != null" >
+                weight,
+            </if>
+            <if test="unit != null" >
+                unit,
+            </if>
+            <if test="spec != null" >
+                spec,
+            </if>
+            <if test="drpPrice != null" >
+                drp_price,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="goodsId != null" >
+                #{goodsId,jdbcType=INTEGER},
+            </if> 
+            <if test="gg != null" >
+                #{gg,jdbcType=VARCHAR},
+            </if> 
+            <if test="jg != null" >
+                #{jg,jdbcType=DECIMAL},
+            </if> 
+            <if test="cxjg != null" >
+                #{cxjg,jdbcType=DECIMAL},
+            </if> 
+            <if test="stock != null" >
+                #{stock,jdbcType=REAL},
+            </if> 
+            <if test="code != null" >
+                #{code,jdbcType=VARCHAR},
+            </if> 
+            <if test="logo != null" >
+                #{logo,jdbcType=VARCHAR},
+            </if> 
+            <if test="xsjg != null" >
+                #{xsjg,jdbcType=DECIMAL},
+            </if> 
+            <if test="sales != null" >
+                #{sales,jdbcType=INTEGER},
+            </if> 
+            <if test="weight != null" >
+                #{weight,jdbcType=DOUBLE},
+            </if> 
+            <if test="unit != null" >
+                #{unit,jdbcType=VARCHAR},
+            </if> 
+            <if test="spec != null" >
+                #{spec,jdbcType=VARCHAR},
+            </if> 
+            <if test="drpPrice != null" >
+                #{drpPrice,jdbcType=DECIMAL},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolProductGg" parameterType="com.isell.service.product.vo.CoolProductGg" >
+        UPDATE cool_product_gg
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="goodsId != null" >
+                goods_id = #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="gg != null" >
+                gg = #{gg,jdbcType=VARCHAR},
+            </if>
+            <if test="jg != null" >
+                jg = #{jg,jdbcType=DECIMAL},
+            </if>
+            <if test="cxjg != null" >
+                cxjg = #{cxjg,jdbcType=DECIMAL},
+            </if>
+            <if test="stock != null" >
+                stock = #{stock,jdbcType=REAL},
+            </if>
+            <if test="code != null" >
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="logo != null" >
+                logo = #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="xsjg != null" >
+                xsjg = #{xsjg,jdbcType=DECIMAL},
+            </if>
+            <if test="sales != null" >
+                sales = #{sales,jdbcType=INTEGER},
+            </if>
+            <if test="weight != null" >
+                weight = #{weight,jdbcType=DOUBLE},
+            </if>
+            <if test="unit != null" >
+                unit = #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="spec != null" >
+                spec = #{spec,jdbcType=VARCHAR},
+            </if>
+            <if test="drpPrice != null" >
+                drp_price = #{drpPrice,jdbcType=DECIMAL},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
