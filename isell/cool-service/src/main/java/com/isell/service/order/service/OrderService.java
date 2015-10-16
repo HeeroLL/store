@@ -1,7 +1,13 @@
 package com.isell.service.order.service;
 
 import java.util.List;
+import java.util.Map;
 
+import com.isell.core.mybatis.page.PageInfo;
+import com.isell.core.util.JsonData;
+import com.isell.core.util.Record;
+import com.isell.service.order.po.CoolOrderParam;
+import com.isell.service.order.po.CoolOrderSelect;
 import com.isell.service.order.vo.CoolOrder;
 
 /**
@@ -65,4 +71,128 @@ public interface OrderService {
      * @param ids 订单主键集合
      */
     void cancelOrder(Integer... ids);
+    
+    /**
+     * 确认订单
+     *
+     * @param param 订单参数
+     * @return 订单、商品信息
+     */
+    Record getCoolOrderReturn(CoolOrderParam param);
+    
+    /**
+     * 保存订单
+     *
+     * @param param 订单参数
+     * @return 
+     */
+    Record saveCoolOrder(CoolOrderParam param);
+    
+    /**
+     * 修改订单（通用）
+     * 
+     * @param param
+     * @return Record
+     */
+    Record updateCoolOrderCommon(Map<String,Object> param);
+    
+    /**
+     * 修改订单（支付成功）
+     * 
+     * @param param
+     * @return Record
+     */
+    Record updateCoolOrderCheck(Map<String,Object> param);
+    
+    /**
+     * 支付宝付款更新订单
+     * 
+     * @param param
+     * @return Record
+     */
+    Record updateCoolOrderZfb(Map<String,Object> param);
+    
+    /**
+     * 修改订单（发货） 0 自提， 1 圆通 2 费舍尔
+     * 
+     * @param param
+     * @return Record
+     */
+    Record updateCoolOrderDelivery(Map<String,Object> param);
+    
+    /**
+     * 修改订单（签收）
+     * 
+     * @param param
+     * @return Record
+     */
+    Record updateCoolOrderRec(Map<String,Object> param);
+    
+    /**
+     * 删除订单
+     * 
+     * @param param
+     * @return Record
+     */
+    Record deleteCoolOrder(Map<String,Object> param);
+    
+    /**
+     * 分页查询订单列表
+     *
+     * @param orderSelect 查询条件
+     * @return 分页信息
+     */
+    PageInfo<CoolOrder> getCoolOrderListPage(CoolOrderSelect orderSelect);
+    
+    /**
+     * 导出订单
+     * 
+     * @param param
+     * @param jsonData
+     */
+    void exportCoolOrderList(CoolOrderSelect orderSelect,JsonData jsonData);
+    
+    /**
+     * 查询订单流水
+     * 
+     * @param param
+     * @param jsonData
+     */
+    void getCoolOrderListSerial(CoolOrder order,JsonData jsonData);
+    
+    /**
+     * 通用查询
+     * 
+     * @param param
+     * @return Record
+     */
+    void updateOrder(CoolOrder param);
+    
+    /**
+	 * 统计商品销量
+	 * 
+	 * @param param
+	 */
+	void getSumCoolProductSales(Map<String,Object> param,JsonData jsonData);
+	
+	/**
+	 * 统计订单数
+	 * 
+	 * @param param
+	 */
+	void getSumCoolOrderNumber(Map<String,Object> param,JsonData jsonData);
+	
+	/**
+	 * 统计销售额
+	 * 
+	 * @param param
+	 */
+	void getSumCoolOrderSales(Map<String,Object> param,JsonData jsonData);
+	
+	/**
+	 * 统计店铺销量排名
+	 * 
+	 * @param param
+	 */
+	void getSumCoonShopSales(Map<String,Object> param,JsonData jsonData);
 }

@@ -26,7 +26,9 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         // 修改通知url
         // paramMap.put("attach", paramMap.get("notify_url"));
         // paramMap.put("notify_url", bisHost + "/pay/weixin/sendPayResult");
-        paramMap.put("trade_type", "JSAPI");
+        if (paramMap.get("trade_type") == null) {
+            paramMap.put("trade_type", "JSAPI"); // APP或网页支付
+        }
         generateMap(paramMap);
         
         // xml格式发送请求
@@ -36,12 +38,17 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         TreeMap<String, Object> resultMap = WeixinPayUtil.transXmlToMap(result);
         // 生成微信支付请求参数
         TreeMap<String, Object> requestMap = new TreeMap<String, Object>();
-        requestMap.put("appId", APPID);
-        requestMap.put("timeStamp", System.currentTimeMillis() / 1000 + ""); // 转为String
-        requestMap.put("nonceStr", Identities.uuid());
-        requestMap.put("package", "prepay_id=" + resultMap.get("prepay_id")); // 预付款id
-        requestMap.put("signType", "MD5");
-        requestMap.put("paySign", WeixinPayUtil.encryptString(WeixinPayUtil.getParameter(requestMap), KEY));
+        
+        if ("NATIVE".equals(resultMap.get("trade_type"))){ // 扫码支付
+            requestMap.put("code_url", resultMap.get("code_url")); // 支付二维码的链接
+        } else {
+            requestMap.put("appId", APPID);
+            requestMap.put("timeStamp", System.currentTimeMillis() / 1000 + ""); // 转为String
+            requestMap.put("nonceStr", Identities.uuid());
+            requestMap.put("package", "prepay_id=" + resultMap.get("prepay_id")); // 预付款id
+            requestMap.put("signType", "MD5");
+            requestMap.put("paySign", WeixinPayUtil.encryptString(WeixinPayUtil.getParameter(requestMap), KEY));
+        }
         
         return requestMap;
     }

@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.member.dao.CoolMemberMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.member.vo.CoolMember">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="realname" jdbcType="VARCHAR" property="realname"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="location_p" jdbcType="VARCHAR" property="locationP"/>
+        <result column="location_c" jdbcType="VARCHAR" property="locationC"/>
+        <result column="location_a" jdbcType="VARCHAR" property="locationA"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="first_update" jdbcType="BIT" property="firstUpdate"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="score" jdbcType="INTEGER" property="score"/>
+        <result column="reg_state" jdbcType="CHAR" property="regState"/>
+        <result column="openid" jdbcType="VARCHAR" property="openid"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
+        <result column="petname" jdbcType="VARCHAR" property="petname"/>
+        <result column="distributors" jdbcType="INTEGER" property="distributors"/>
+        <result column="shopname" jdbcType="VARCHAR" property="shopname"/>
+        <result column="audit_info" jdbcType="VARCHAR" property="auditInfo"/>
+        <result column="distributors_token" jdbcType="VARCHAR" property="distributorsToken"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
+        <result column="p_id" jdbcType="INTEGER" property="pId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="no" jdbcType="VARCHAR" property="no"/>
+        <result column="skin" jdbcType="INTEGER" property="skin"/>
+        <result column="hair" jdbcType="INTEGER" property="hair"/>
+        <result column="cost_per_year" jdbcType="INTEGER" property="costPerYear"/>
+        <result column="description" jdbcType="LONGVARCHAR" property="description"/>
+        <result column="verify_code" jdbcType="VARCHAR" property="verifyCode"/>
+        <result column="verify_email" jdbcType="VARCHAR" property="verifyEmail"/>
+        <result column="pay_num" jdbcType="VARCHAR" property="payNum"/>
+    </resultMap>
+    <select id="getCoolMemberById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_member
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolMember" resultMap="BaseResultMap">
+          SELECT * FROM cool_member 
+    </select>
+    
+    <delete id="deleteCoolMember">
+        DELETE
+        FROM
+             cool_member
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolMember" parameterType="com.isell.service.member.vo.CoolMember" >
+        INSERT INTO cool_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="realname != null" >
+                realname,
+            </if>
+            <if test="sex != null" >
+                sex,
+            </if>
+            <if test="email != null" >
+                email,
+            </if>
+            <if test="locationP != null" >
+                location_p,
+            </if>
+            <if test="locationC != null" >
+                location_c,
+            </if>
+            <if test="locationA != null" >
+                location_a,
+            </if>
+            <if test="birthday != null" >
+                birthday,
+            </if>
+            <if test="firstUpdate != null" >
+                first_update,
+            </if>
+            <if test="qq != null" >
+                qq,
+            </if>
+            <if test="level != null" >
+                level,
+            </if>
+            <if test="score != null" >
+                score,
+            </if>
+            <if test="regState != null" >
+                reg_state,
+            </if>
+            <if test="openid != null" >
+                openid,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="idcard != null" >
+                idcard,
+            </if>
+            <if test="petname != null" >
+                petname,
+            </if>
+            <if test="distributors != null" >
+                distributors,
+            </if>
+            <if test="shopname != null" >
+                shopname,
+            </if>
+            <if test="auditInfo != null" >
+                audit_info,
+            </if>
+            <if test="distributorsToken != null" >
+                distributors_token,
+            </if>
+            <if test="logo != null" >
+                logo,
+            </if>
+            <if test="parentId != null" >
+                parent_id,
+            </if>
+            <if test="pId != null" >
+                p_id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="no != null" >
+                no,
+            </if>
+            <if test="skin != null" >
+                skin,
+            </if>
+            <if test="hair != null" >
+                hair,
+            </if>
+            <if test="costPerYear != null" >
+                cost_per_year,
+            </if>
+            <if test="description != null" >
+                description,
+            </if>
+            <if test="verifyCode != null" >
+                verify_code,
+            </if>
+            <if test="verifyEmail != null" >
+                verify_email,
+            </if>
+            <if test="payNum != null" >
+                pay_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="mobile != null" >
+                #{mobile,jdbcType=VARCHAR},
+            </if> 
+            <if test="realname != null" >
+                #{realname,jdbcType=VARCHAR},
+            </if> 
+            <if test="sex != null" >
+                #{sex,jdbcType=VARCHAR},
+            </if> 
+            <if test="email != null" >
+                #{email,jdbcType=VARCHAR},
+            </if> 
+            <if test="locationP != null" >
+                #{locationP,jdbcType=VARCHAR},
+            </if> 
+            <if test="locationC != null" >
+                #{locationC,jdbcType=VARCHAR},
+            </if> 
+            <if test="locationA != null" >
+                #{locationA,jdbcType=VARCHAR},
+            </if> 
+            <if test="birthday != null" >
+                #{birthday,jdbcType=DATE},
+            </if> 
+            <if test="firstUpdate != null" >
+                #{firstUpdate,jdbcType=BIT},
+            </if> 
+            <if test="qq != null" >
+                #{qq,jdbcType=VARCHAR},
+            </if> 
+            <if test="level != null" >
+                #{level,jdbcType=INTEGER},
+            </if> 
+            <if test="score != null" >
+                #{score,jdbcType=INTEGER},
+            </if> 
+            <if test="regState != null" >
+                #{regState,jdbcType=CHAR},
+            </if> 
+            <if test="openid != null" >
+                #{openid,jdbcType=VARCHAR},
+            </if> 
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if> 
+            <if test="idcard != null" >
+                #{idcard,jdbcType=VARCHAR},
+            </if> 
+            <if test="petname != null" >
+                #{petname,jdbcType=VARCHAR},
+            </if> 
+            <if test="distributors != null" >
+                #{distributors,jdbcType=INTEGER},
+            </if> 
+            <if test="shopname != null" >
+                #{shopname,jdbcType=VARCHAR},
+            </if> 
+            <if test="auditInfo != null" >
+                #{auditInfo,jdbcType=VARCHAR},
+            </if> 
+            <if test="distributorsToken != null" >
+                #{distributorsToken,jdbcType=VARCHAR},
+            </if> 
+            <if test="logo != null" >
+                #{logo,jdbcType=VARCHAR},
+            </if> 
+            <if test="parentId != null" >
+                #{parentId,jdbcType=VARCHAR},
+            </if> 
+            <if test="pId != null" >
+                #{pId,jdbcType=INTEGER},
+            </if> 
+            <if test="userId != null" >
+                #{userId,jdbcType=INTEGER},
+            </if> 
+            <if test="no != null" >
+                #{no,jdbcType=VARCHAR},
+            </if> 
+            <if test="skin != null" >
+                #{skin,jdbcType=INTEGER},
+            </if> 
+            <if test="hair != null" >
+                #{hair,jdbcType=INTEGER},
+            </if> 
+            <if test="costPerYear != null" >
+                #{costPerYear,jdbcType=INTEGER},
+            </if> 
+            <if test="description != null" >
+                #{description,jdbcType=LONGVARCHAR},
+            </if> 
+            <if test="verifyCode != null" >
+                #{verifyCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="verifyEmail != null" >
+                #{verifyEmail,jdbcType=VARCHAR},
+            </if> 
+            <if test="payNum != null" >
+                #{payNum,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolMember" parameterType="com.isell.service.member.vo.CoolMember" >
+        UPDATE cool_member
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="realname != null" >
+                realname = #{realname,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null" >
+                sex = #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null" >
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="locationP != null" >
+                location_p = #{locationP,jdbcType=VARCHAR},
+            </if>
+            <if test="locationC != null" >
+                location_c = #{locationC,jdbcType=VARCHAR},
+            </if>
+            <if test="locationA != null" >
+                location_a = #{locationA,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null" >
+                birthday = #{birthday,jdbcType=DATE},
+            </if>
+            <if test="firstUpdate != null" >
+                first_update = #{firstUpdate,jdbcType=BIT},
+            </if>
+            <if test="qq != null" >
+                qq = #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null" >
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="score != null" >
+                score = #{score,jdbcType=INTEGER},
+            </if>
+            <if test="regState != null" >
+                reg_state = #{regState,jdbcType=CHAR},
+            </if>
+            <if test="openid != null" >
+                openid = #{openid,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="idcard != null" >
+                idcard = #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="petname != null" >
+                petname = #{petname,jdbcType=VARCHAR},
+            </if>
+            <if test="distributors != null" >
+                distributors = #{distributors,jdbcType=INTEGER},
+            </if>
+            <if test="shopname != null" >
+                shopname = #{shopname,jdbcType=VARCHAR},
+            </if>
+            <if test="auditInfo != null" >
+                audit_info = #{auditInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="distributorsToken != null" >
+                distributors_token = #{distributorsToken,jdbcType=VARCHAR},
+            </if>
+            <if test="logo != null" >
+                logo = #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null" >
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="pId != null" >
+                p_id = #{pId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="no != null" >
+                no = #{no,jdbcType=VARCHAR},
+            </if>
+            <if test="skin != null" >
+                skin = #{skin,jdbcType=INTEGER},
+            </if>
+            <if test="hair != null" >
+                hair = #{hair,jdbcType=INTEGER},
+            </if>
+            <if test="costPerYear != null" >
+                cost_per_year = #{costPerYear,jdbcType=INTEGER},
+            </if>
+            <if test="description != null" >
+                description = #{description,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="verifyCode != null" >
+                verify_code = #{verifyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="verifyEmail != null" >
+                verify_email = #{verifyEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="payNum != null" >
+                pay_num = #{payNum,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

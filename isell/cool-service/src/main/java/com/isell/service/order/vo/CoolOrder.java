@@ -223,9 +223,9 @@ public class CoolOrder {
     private Byte orderType;
     
     /**
-     * 逻辑删除标志
+     * 逻辑删除标志（酷店是否删除）
      */
-    private Boolean isDel;
+    private int isDel;
     
     /**
      * 分享人
@@ -235,7 +235,7 @@ public class CoolOrder {
     /**
      * 是否已二次分佣
      */
-    private Boolean shareAdded;
+    private int shareAdded;
     
     /**
      * 快递公司返回的大头笔
@@ -246,6 +246,37 @@ public class CoolOrder {
      * 运单号条形码
      */
     private String barcode;
+    
+    /**
+     * 身份证号
+     */
+    private String idcard;
+    
+    /**
+     * 逻辑删除标志（会员是否删除）
+     */
+    private int isDelM;
+    
+    private Boolean isout;
+    
+    private String outdays;
+    
+    private int count;
+    
+    /**
+     * 开始时间
+     */
+    private Date startTime;
+    
+    /**
+     * 结束时间
+     */
+    private Date endTime;
+    
+    /**
+     * 商铺名称
+     */
+    private String supName;
     
     /**
      * 订单详情列表
@@ -532,15 +563,15 @@ public class CoolOrder {
         this.orderType = orderType;
     }
     
-    public Boolean getIsDel() {
-        return isDel;
-    }
-    
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-    
-    public String getShareUser() {
+    public int getIsDel() {
+		return isDel;
+	}
+
+	public void setIsDel(int isDel) {
+		this.isDel = isDel;
+	}
+
+	public String getShareUser() {
         return shareUser;
     }
     
@@ -548,11 +579,11 @@ public class CoolOrder {
         this.shareUser = shareUser;
     }
     
-    public Boolean getShareAdded() {
+    public int getShareAdded() {
         return shareAdded;
     }
     
-    public void setShareAdded(Boolean shareAdded) {
+    public void setShareAdded(int shareAdded) {
         this.shareAdded = shareAdded;
     }
     
@@ -572,11 +603,75 @@ public class CoolOrder {
         this.barcode = barcode;
     }
     
-    public List<CoolOrderItem> getItemList() {
+    public String getIdcard() {
+		return idcard;
+	}
+
+	public void setIdcard(String idcard) {
+		this.idcard = idcard;
+	}
+
+	public int getIsDelM() {
+		return isDelM;
+	}
+
+	public void setIsDelM(int isDelM) {
+		this.isDelM = isDelM;
+	}
+
+	public List<CoolOrderItem> getItemList() {
         return itemList;
     }
     
     public void setItemList(List<CoolOrderItem> itemList) {
         this.itemList = itemList;
     }
+
+	public Boolean getIsout() {
+		return isout;
+	}
+
+	public void setIsout(Boolean isout) {
+		this.isout = isout;
+	}
+
+	public String getOutdays() {
+		return outdays;
+	}
+
+	public void setOutdays(String outdays) {
+		this.outdays = outdays;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getSupName() {
+		return supName;
+	}
+
+	public void setSupName(String supName) {
+		this.supName = supName;
+	}
 }

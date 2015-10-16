@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.alipay.dao.CoolAlipayMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.alipay.vo.CoolAlipay">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="alipayname" jdbcType="VARCHAR" property="alipayname"/>
+        <result column="partner" jdbcType="VARCHAR" property="partner"/>
+        <result column="key" jdbcType="VARCHAR" property="key"/>
+        <result column="b_id" jdbcType="INTEGER" property="bId"/>
+    </resultMap>
+    <select id="getCoolAlipayById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_alipay
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolAlipay" resultMap="BaseResultMap">
+          SELECT * FROM cool_alipay 
+    </select>
+    
+    <!-- 根据条件查询 -->
+    <select id="findCoolAlipay" resultMap="BaseResultMap" parameterType="com.isell.service.alipay.vo.CoolAlipay">
+          SELECT * FROM cool_alipay 
+          where 1=1
+          <if test="bId != null">
+          	and b_id = #W{bId}
+          </if>
+    </select>
+    
+    <delete id="deleteCoolAlipay">
+        DELETE
+        FROM
+             cool_alipay
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolAlipay" parameterType="com.isell.service.alipay.vo.CoolAlipay" >
+        INSERT INTO cool_alipay
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="alipayname != null" >
+                alipayname,
+            </if>
+            <if test="partner != null" >
+                partner,
+            </if>
+            <if test="key != null" >
+                key,
+            </if>
+            <if test="bId != null" >
+                b_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="alipayname != null" >
+                #{alipayname,jdbcType=VARCHAR},
+            </if> 
+            <if test="partner != null" >
+                #{partner,jdbcType=VARCHAR},
+            </if> 
+            <if test="key != null" >
+                #{key,jdbcType=VARCHAR},
+            </if> 
+            <if test="bId != null" >
+                #{bId,jdbcType=INTEGER},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolAlipay" parameterType="com.isell.service.alipay.vo.CoolAlipay" >
+        UPDATE cool_alipay
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="alipayname != null" >
+                alipayname = #{alipayname,jdbcType=VARCHAR},
+            </if>
+            <if test="partner != null" >
+                partner = #{partner,jdbcType=VARCHAR},
+            </if>
+            <if test="key != null" >
+                key = #{key,jdbcType=VARCHAR},
+            </if>
+            <if test="bId != null" >
+                b_id = #{bId,jdbcType=INTEGER},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

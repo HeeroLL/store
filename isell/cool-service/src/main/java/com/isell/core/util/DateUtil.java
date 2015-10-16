@@ -19,6 +19,24 @@ import org.apache.log4j.Logger;
 public class DateUtil {
 	private static Logger log = Logger.getLogger(DateUtil.class);
 	
+	public final static String yyyy_MM_dd = "yyyy-MM-dd";
+    
+    public final static String yyyyMMdd = "yyyyMMdd";
+    
+    public final static String yyyyMM = "yyyyMM";
+    
+    public final static String yyyy_MM = "yyyy-MM";
+    
+    public final static String yyyy_MM_dd_HH_mm = "yyyy-MM-dd HH:mm";
+    
+    public final static String yyyyMMddHHmm = "yyyyMMddHHmm";
+    
+    public final static String yyyyMMddHHmmss = "yyyyMMddHHmmss";
+    
+    public final static String yyyy_MM_dd_HH_mm_ss = "yyyy-MM-dd HH:mm:ss";
+    
+    public final static String yyyy_MM_dd_HH = "yyyy-MM-dd HH";
+	
 	
 	/**
 	 * 根据一个格式返回当前系统时间
@@ -118,4 +136,43 @@ public class DateUtil {
 		return format.format(d.getTime());
 	}
 	
+	/**
+     * 将Date时间转成字符串
+     * 
+     * @param format
+     * @param date
+     * @return
+     */
+    public static String dateToStr(String format, Date date) {
+        
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        
+        return simpleDateFormat.format(date);
+    }
+    
+    /**
+     * 给出日期添加一段时间后的日期
+     * 
+     * @param dateStr
+     * @param plus
+     * @return
+     */
+    public static String getPlusDays(String format, Date date, long plus) {
+        if (date == null) {
+            date = new Date();
+        }
+        long time = date.getTime() + plus * 24 * 60 * 60 * 1000;
+        
+        return DateUtil.dateToStr(format, new Date(time));
+    }
+	
+	/**
+	 * 生成随机四位数字
+	 * 
+	 * @return int
+	 */
+	public static int randomFour() {
+		int index = (int) (Math.random() * 9000 + 1000);
+		return index;
+	}
 }

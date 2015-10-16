@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.product.dao.CoolProductMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.product.vo.CoolProduct">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+        <result column="tuijian" jdbcType="BIT" property="tuijian"/>
+        <result column="shouye" jdbcType="BIT" property="shouye"/>
+        <result column="bp" jdbcType="VARCHAR" property="bp"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="orderby" jdbcType="INTEGER" property="orderby"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="gt" jdbcType="CHAR" property="gt"/>
+        <result column="click" jdbcType="INTEGER" property="click"/>
+        <result column="b_id" jdbcType="INTEGER" property="bId"/>
+        <result column="intro" jdbcType="VARCHAR" property="intro"/>
+        <result column="shelves" jdbcType="BIT" property="shelves"/>
+        <result column="kuajing" jdbcType="BIT" property="kuajing"/>
+        <result column="brand_id" jdbcType="INTEGER" property="brandId"/>
+        <result column="gg_max_code" jdbcType="INTEGER" property="ggMaxCode"/>
+        <result column="country_code" jdbcType="VARCHAR" property="countryCode"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="fav_price" jdbcType="DECIMAL" property="favPrice"/>
+        <result column="added" jdbcType="BIT" property="added"/>
+        <result column="wap_click" jdbcType="INTEGER" property="wapClick"/>
+        <result column="sales" jdbcType="INTEGER" property="sales"/>
+        <result column="qr_code" jdbcType="VARCHAR" property="qrCode"/>
+        <result column="divide" jdbcType="DECIMAL" property="divide"/>
+        <result column="tag" jdbcType="VARCHAR" property="tag"/>
+        <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime"/>
+    </resultMap>
+    <select id="getCoolProductById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolProduct" resultMap="BaseResultMap">
+          SELECT * FROM cool_product 
+    </select>
+    
+    <delete id="deleteCoolProduct">
+        DELETE
+        FROM
+             cool_product
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolProduct" parameterType="com.isell.service.product.vo.CoolProduct" >
+        INSERT INTO cool_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="nameEn != null" >
+                name_en,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="tuijian != null" >
+                tuijian,
+            </if>
+            <if test="shouye != null" >
+                shouye,
+            </if>
+            <if test="bp != null" >
+                bp,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+            <if test="orderby != null" >
+                orderby,
+            </if>
+            <if test="logo != null" >
+                logo,
+            </if>
+            <if test="stock != null" >
+                stock,
+            </if>
+            <if test="gt != null" >
+                gt,
+            </if>
+            <if test="click != null" >
+                click,
+            </if>
+            <if test="bId != null" >
+                b_id,
+            </if>
+            <if test="intro != null" >
+                intro,
+            </if>
+            <if test="shelves != null" >
+                shelves,
+            </if>
+            <if test="kuajing != null" >
+                kuajing,
+            </if>
+            <if test="brandId != null" >
+                brand_id,
+            </if>
+            <if test="ggMaxCode != null" >
+                gg_max_code,
+            </if>
+            <if test="countryCode != null" >
+                country_code,
+            </if>
+            <if test="code != null" >
+                code,
+            </if>
+            <if test="price != null" >
+                price,
+            </if>
+            <if test="favPrice != null" >
+                fav_price,
+            </if>
+            <if test="added != null" >
+                added,
+            </if>
+            <if test="wapClick != null" >
+                wap_click,
+            </if>
+            <if test="sales != null" >
+                sales,
+            </if>
+            <if test="qrCode != null" >
+                qr_code,
+            </if>
+            <if test="divide != null" >
+                divide,
+            </if>
+            <if test="tag != null" >
+                tag,
+            </if>
+            <if test="updatetime != null" >
+                updatetime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="nameEn != null" >
+                #{nameEn,jdbcType=VARCHAR},
+            </if> 
+            <if test="type != null" >
+                #{type,jdbcType=INTEGER},
+            </if> 
+            <if test="remark != null" >
+                #{remark,jdbcType=VARCHAR},
+            </if> 
+            <if test="content != null" >
+                #{content,jdbcType=LONGVARCHAR},
+            </if> 
+            <if test="tuijian != null" >
+                #{tuijian,jdbcType=BIT},
+            </if> 
+            <if test="shouye != null" >
+                #{shouye,jdbcType=BIT},
+            </if> 
+            <if test="bp != null" >
+                #{bp,jdbcType=VARCHAR},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="orderby != null" >
+                #{orderby,jdbcType=INTEGER},
+            </if> 
+            <if test="logo != null" >
+                #{logo,jdbcType=VARCHAR},
+            </if> 
+            <if test="stock != null" >
+                #{stock,jdbcType=INTEGER},
+            </if> 
+            <if test="gt != null" >
+                #{gt,jdbcType=CHAR},
+            </if> 
+            <if test="click != null" >
+                #{click,jdbcType=INTEGER},
+            </if> 
+            <if test="bId != null" >
+                #{bId,jdbcType=INTEGER},
+            </if> 
+            <if test="intro != null" >
+                #{intro,jdbcType=VARCHAR},
+            </if> 
+            <if test="shelves != null" >
+                #{shelves,jdbcType=BIT},
+            </if> 
+            <if test="kuajing != null" >
+                #{kuajing,jdbcType=BIT},
+            </if> 
+            <if test="brandId != null" >
+                #{brandId,jdbcType=INTEGER},
+            </if> 
+            <if test="ggMaxCode != null" >
+                #{ggMaxCode,jdbcType=INTEGER},
+            </if> 
+            <if test="countryCode != null" >
+                #{countryCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="code != null" >
+                #{code,jdbcType=VARCHAR},
+            </if> 
+            <if test="price != null" >
+                #{price,jdbcType=DECIMAL},
+            </if> 
+            <if test="favPrice != null" >
+                #{favPrice,jdbcType=DECIMAL},
+            </if> 
+            <if test="added != null" >
+                #{added,jdbcType=BIT},
+            </if> 
+            <if test="wapClick != null" >
+                #{wapClick,jdbcType=INTEGER},
+            </if> 
+            <if test="sales != null" >
+                #{sales,jdbcType=INTEGER},
+            </if> 
+            <if test="qrCode != null" >
+                #{qrCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="divide != null" >
+                #{divide,jdbcType=DECIMAL},
+            </if> 
+            <if test="tag != null" >
+                #{tag,jdbcType=VARCHAR},
+            </if> 
+            <if test="updatetime != null" >
+                #{updatetime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolProduct" parameterType="com.isell.service.product.vo.CoolProduct" >
+        UPDATE cool_product
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="nameEn != null" >
+                name_en = #{nameEn,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="tuijian != null" >
+                tuijian = #{tuijian,jdbcType=BIT},
+            </if>
+            <if test="shouye != null" >
+                shouye = #{shouye,jdbcType=BIT},
+            </if>
+            <if test="bp != null" >
+                bp = #{bp,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderby != null" >
+                orderby = #{orderby,jdbcType=INTEGER},
+            </if>
+            <if test="logo != null" >
+                logo = #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="stock != null" >
+                stock = #{stock,jdbcType=INTEGER},
+            </if>
+            <if test="gt != null" >
+                gt = #{gt,jdbcType=CHAR},
+            </if>
+            <if test="click != null" >
+                click = #{click,jdbcType=INTEGER},
+            </if>
+            <if test="bId != null" >
+                b_id = #{bId,jdbcType=INTEGER},
+            </if>
+            <if test="intro != null" >
+                intro = #{intro,jdbcType=VARCHAR},
+            </if>
+            <if test="shelves != null" >
+                shelves = #{shelves,jdbcType=BIT},
+            </if>
+            <if test="kuajing != null" >
+                kuajing = #{kuajing,jdbcType=BIT},
+            </if>
+            <if test="brandId != null" >
+                brand_id = #{brandId,jdbcType=INTEGER},
+            </if>
+            <if test="ggMaxCode != null" >
+                gg_max_code = #{ggMaxCode,jdbcType=INTEGER},
+            </if>
+            <if test="countryCode != null" >
+                country_code = #{countryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null" >
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null" >
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="favPrice != null" >
+                fav_price = #{favPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="added != null" >
+                added = #{added,jdbcType=BIT},
+            </if>
+            <if test="wapClick != null" >
+                wap_click = #{wapClick,jdbcType=INTEGER},
+            </if>
+            <if test="sales != null" >
+                sales = #{sales,jdbcType=INTEGER},
+            </if>
+            <if test="qrCode != null" >
+                qr_code = #{qrCode,jdbcType=VARCHAR},
+            </if>
+            <if test="divide != null" >
+                divide = #{divide,jdbcType=DECIMAL},
+            </if>
+            <if test="tag != null" >
+                tag = #{tag,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null" >
+                updatetime = #{updatetime,jdbcType=TIMESTAMP},
+            </if> 
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+    
+    <select id="getCoolProductPageList" resultMap="BaseResultMap" parameterType="com.isell.service.product.po.CoolProductSelect">
+    	select * from cool_product
+    	<include refid="where_sql"></include>
+    	order by createtime desc
+    </select>
+    
+    <select id="getCoolProductPageListCount" parameterType="com.isell.service.product.po.CoolProductSelect">
+    	select count(*) from cool_product
+    	<include refid="where_sql"></include>
+    </select>
+    
+     <sql id="where_sql">
+     where 1 = 1
+     <if test="startUpdatetime != null">
+     	and updatetime <![CDATA[>=]]> #{startUpdatetime}
+     </if>
+     <if test="endUpdatetime != null">
+     	and updatetime <![CDATA[<=]]> #{endUpdatetime}
+     </if>
+     </sql>
+</mapper>

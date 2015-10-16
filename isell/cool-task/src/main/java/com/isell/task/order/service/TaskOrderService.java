@@ -11,4 +11,9 @@ public interface TaskOrderService {
      * 批量取消订单
      */
     void cancelOrder();
+    
+    /**
+     * 批量确认收货
+     */
+    void signOrder();
 }

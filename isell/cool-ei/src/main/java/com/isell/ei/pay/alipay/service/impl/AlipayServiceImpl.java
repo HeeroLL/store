@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.isell.ei.pay.alipay.service.AlipayService;
@@ -23,6 +24,12 @@ public class AlipayServiceImpl implements AlipayService {
      */
     private Logger log = Logger.getLogger(AlipayServiceImpl.class);
     
+    /**
+     * 服务的域名
+     */
+    @Value("${service_domain}")
+    private String serviceDomain;
+    
     @Override
     public String getPayParams(Map<String, String> paramMap) {
         // 删除空参数
@@ -32,6 +39,9 @@ public class AlipayServiceImpl implements AlipayService {
         paramMap.put("_input_charset", INPUT_CHARSET);
         paramMap.put("sign_type", SIGN_TYPE);
         paramMap.put("payment_type", PAYMENT_TYPE);
+        paramMap.put("notify_url", serviceDomain + "/payNotify/alipay");
+        // 如果需要使用网银功能才设此参数
+        //paramMap.put("defaultbank", "CCB");
         
         paramMap.put("sign", AlipayUtil.encryptString(AlipayUtil.getParameter(paramMap), KEY));
         

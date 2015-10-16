@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.fare.dao.CoonFareTempMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.fare.vo.CoonFareTemp">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="temp_name" jdbcType="VARCHAR" property="tempName"/>
+        <result column="parcel" jdbcType="BIT" property="parcel"/>
+        <result column="pricing" jdbcType="INTEGER" property="pricing"/>
+        <result column="express_code" jdbcType="VARCHAR" property="expressCode"/>
+        <result column="acquiesce" jdbcType="BIT" property="acquiesce"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+    </resultMap>
+    <select id="getCoonFareTempById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_fare_temp
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonFareTemp" resultMap="BaseResultMap">
+          SELECT * FROM coon_fare_temp 
+    </select>
+    
+    <delete id="deleteCoonFareTemp">
+        DELETE
+        FROM
+             coon_fare_temp
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonFareTemp" parameterType="com.isell.service.fare.vo.CoonFareTemp" >
+        INSERT INTO coon_fare_temp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="tempName != null" >
+                temp_name,
+            </if>
+            <if test="parcel != null" >
+                parcel,
+            </if>
+            <if test="pricing != null" >
+                pricing,
+            </if>
+            <if test="expressCode != null" >
+                express_code,
+            </if>
+            <if test="acquiesce != null" >
+                acquiesce,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="tempName != null" >
+                #{tempName,jdbcType=VARCHAR},
+            </if> 
+            <if test="parcel != null" >
+                #{parcel,jdbcType=BIT},
+            </if> 
+            <if test="pricing != null" >
+                #{pricing,jdbcType=INTEGER},
+            </if> 
+            <if test="expressCode != null" >
+                #{expressCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="acquiesce != null" >
+                #{acquiesce,jdbcType=BIT},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonFareTemp" parameterType="com.isell.service.fare.vo.CoonFareTemp" >
+        UPDATE coon_fare_temp
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="tempName != null" >
+                temp_name = #{tempName,jdbcType=VARCHAR},
+            </if>
+            <if test="parcel != null" >
+                parcel = #{parcel,jdbcType=BIT},
+            </if>
+            <if test="pricing != null" >
+                pricing = #{pricing,jdbcType=INTEGER},
+            </if>
+            <if test="expressCode != null" >
+                express_code = #{expressCode,jdbcType=VARCHAR},
+            </if>
+            <if test="acquiesce != null" >
+                acquiesce = #{acquiesce,jdbcType=BIT},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

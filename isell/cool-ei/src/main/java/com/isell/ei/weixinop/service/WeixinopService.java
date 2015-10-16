@@ -18,7 +18,7 @@ public interface WeixinopService {
     /**
      * 微信公众号密钥
      */
-    String SECRET = "fa680c94cf63719cec68d369ccef2242";
+    String SECRET = "31c7b6b59836a5cd2e3e3f54308c41dc";// old = "fa680c94cf63719cec68d369ccef2242";
     
     /**
      * 微信获取token的URL

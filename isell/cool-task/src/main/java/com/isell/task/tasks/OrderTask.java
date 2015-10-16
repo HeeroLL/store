@@ -32,6 +32,7 @@ public class OrderTask {
     public void execute() {
         log.debug("in OrderTask");
         taskOrderService.cancelOrder();
+        taskOrderService.signOrder();
         log.debug("out OrderTask");
     }
 }
