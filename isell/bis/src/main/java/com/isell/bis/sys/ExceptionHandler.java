@@ -46,9 +46,6 @@ public class ExceptionHandler implements HandlerExceptionResolver {
         // 记录日志
         log.error(ex.getMessage(), ex);
         
-        map.put("success", false);
-        // map.put("errorTrace", Exceptions.getStackTraceAsString(ex));
-        
         String message = MessageUtil.getMessage(ex.getMessage());
         
         if (StringUtils.isEmpty(message)) {
@@ -62,7 +59,14 @@ public class ExceptionHandler implements HandlerExceptionResolver {
         if (StringUtils.isEmpty(message)) {
             message = MessageUtil.getMessage("exception.defaultException");
         }
-        map.put("msg", message);
+        // 对于不同hander需要组装不同的json返回
+        if (handler != null && handler.toString().indexOf("JoogeGatewayController") != -1) {
+            map.put("Code", "2"); 
+            map.put("Desc", message);
+        } else {
+            map.put("success", false);
+            map.put("msg", message);
+        }
         
         view.setAttributesMap(map);
         return new ModelAndView(view);

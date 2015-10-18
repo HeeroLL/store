@@ -11,33 +11,35 @@ import org.apache.ibatis.annotations.Param;
  * 商品规格mapper
  * 
  * @author wangpeng
- * @version [版本号, 2015-10-04] 
+ * @version [版本号, 2015-10-04]
  */
 @Mapper
-public interface CoolProductGgMapper{   
+public interface CoolProductGgMapper {
     /**
      * 根据主键查询
      */
-    public CoolProductGg getCoolProductGgById(@Param("id")Integer id); 
-
+    CoolProductGg getCoolProductGgById(@Param("id") Integer id);
+    
     /**
-     * 查询出所有记录
+     * 根据商品id查询规格列表
+     *
+     * @param goodsId 商品id
+     * @return 规格列表
      */
-    public List<CoolProductGg> findAllCoolProductGg();    
+    List<CoolProductGg> findCoolProductGgList(Integer goodsId);
     
     /**
      * 保存
      */
-    public int saveCoolProductGg(CoolProductGg coolProductGg);
+    int saveCoolProductGg(CoolProductGg coolProductGg);
     
     /**
      * 根据主键更新（参数对象中的主键将作为更新条件）
      */
-    public int updateCoolProductGg(CoolProductGg coolProductGg);
+    int updateCoolProductGg(CoolProductGg coolProductGg);
     
     /**
      * 根据主键删除
      */
-    public int deleteCoolProductGg(@Param("id")Integer id);
+    int deleteCoolProductGg(@Param("id") Integer id);
 }
-

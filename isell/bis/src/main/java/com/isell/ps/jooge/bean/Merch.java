@@ -1,9 +1,9 @@
 package com.isell.ps.jooge.bean;
 
+import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.exolab.castor.types.DateTime;
 
 /**
  * 商品
@@ -70,7 +70,7 @@ public class Merch {
      * 商品最后修改时间
      */
     @JsonProperty("Modified")
-    private DateTime modified;
+    private Date modified;
     
     public String getId() {
         return id;
@@ -143,12 +143,12 @@ public class Merch {
     public void setSkus(List<SKU> skus) {
         this.skus = skus;
     }
-    
-    public DateTime getModified() {
+
+    public Date getModified() {
         return modified;
     }
-    
-    public void setModified(DateTime modified) {
+
+    public void setModified(Date modified) {
         this.modified = modified;
     }
     

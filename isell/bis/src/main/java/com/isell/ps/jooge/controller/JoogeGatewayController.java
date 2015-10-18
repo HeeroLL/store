@@ -1,15 +1,11 @@
 package com.isell.ps.jooge.controller;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.exolab.castor.types.DateTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,15 +17,25 @@ import com.isell.core.util.DateUtil;
 import com.isell.core.util.JsonUtil;
 import com.isell.ps.jooge.bean.JoogeParam;
 import com.isell.ps.jooge.bean.Merch;
+import com.isell.ps.jooge.bean.Order;
+import com.isell.ps.jooge.bean.OrderDetail;
 import com.isell.ps.jooge.bean.OrderInfo;
 import com.isell.ps.jooge.bean.OrderList;
+import com.isell.ps.jooge.bean.OrderRow;
+import com.isell.ps.jooge.bean.OrderSend;
+import com.isell.ps.jooge.bean.Payment;
+import com.isell.ps.jooge.bean.ProductInfo;
 import com.isell.ps.jooge.bean.ProductList;
+import com.isell.ps.jooge.bean.Prop;
+import com.isell.ps.jooge.bean.SKU;
 import com.isell.service.order.po.CoolOrderSelect;
 import com.isell.service.order.service.OrderService;
 import com.isell.service.order.vo.CoolOrder;
+import com.isell.service.order.vo.CoolOrderItem;
 import com.isell.service.product.po.CoolProductSelect;
 import com.isell.service.product.service.ProductService;
 import com.isell.service.product.vo.CoolProduct;
+import com.isell.service.product.vo.CoolProductGg;
 
 /**
  * 对珊瑚云系统统一网关入口
@@ -48,7 +54,7 @@ public class JoogeGatewayController {
     /**
      * 加密密钥
      */
-    private static final String APPSECRET = "3e38778c39bb4558a3f38515d07e80fa";
+    private static final String APPSECRET = "3e38778c37bb4558a3f38515d07e80fa";
     
     /**
      * 订单服务层接口
@@ -90,7 +96,7 @@ public class JoogeGatewayController {
             throw new RuntimeException("exception.access.authcode-wrong");
         }
         
-        return "forward:jooge/" + param.getMethod().replace(".", "/");// 默认为forward模式
+        return "forward:" + param.getMethod().replace(".", "/");// 默认为forward模式
     }
     
     /**
@@ -100,53 +106,164 @@ public class JoogeGatewayController {
      * @return 订单列表信息
      */
     @SuppressWarnings("unchecked")
-    @RequestMapping("order/detail/get")
+    @RequestMapping("order/list/get")
     @ResponseBody
     public OrderList getOrderList(@RequestBody JoogeParam param) {
         Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
         CoolOrderSelect paramOrder = new CoolOrderSelect();
         paramOrder.setRows((Integer)paramMap.get("PageSize")); // 当前页
         paramOrder.setPage((Integer)paramMap.get("PageNo")); // 当前页
-        paramOrder.setStartUpdatetime((Date)paramMap.get("StartModified")); // 起始的修改时间
-                                                                            // DateUtil.parseDate(paramMap.get("StartModified"),
-                                                                            // DateUtil.yyyy_MM_dd_HH_mm_ss)
-        paramOrder.setEndUpdatetime((Date)paramMap.get("EndModified")); // 起始的修改时间
-                                                                        // DateUtil.parseDate(paramMap.get("EndModified"),
-                                                                        // DateUtil.yyyy_MM_dd_HH_mm_ss)
+        paramOrder.setStartUpdatetime(DateUtil.parseDate((String)paramMap.get("StartModified"),
+            DateUtil.yyyy_MM_dd_HH_mm_ss)); // 起始的修改时间
+        paramOrder.setEndUpdatetime(DateUtil.parseDate((String)paramMap.get("EndModified"),
+            DateUtil.yyyy_MM_dd_HH_mm_ss)); // 结束的修改时间
         paramOrder.setState(CoolOrder.ORDER_STATE_2); // 已发货
-        // paramOrder.setPsfs(""); // 配送方式
+        paramOrder.setFhfs(CoolOrder.FHFS_10); // 发货方式
         
         PageInfo<CoolOrder> page = orderService.getCoolOrderListPage(paramOrder);
         OrderList orderList = new OrderList();
         orderList.setCode("0");
         orderList.setDesc("");
         orderList.setTotalResult(page.getTotal());
-        
         orderList.setOrders(new ArrayList<OrderInfo>());
         if (page.getRows() != null) {
             for (CoolOrder order : page.getRows()) {
                 OrderInfo orderInfo = new OrderInfo();
                 orderInfo.setOrderId(order.getOrderNo());
                 orderInfo.setModified(DateUtil.dateToStr(DateUtil.yyyy_MM_dd_HH_mm_ss, order.getUpdatetime()));
-                
                 orderList.getOrders().add(orderInfo);
             }
         }
-        
         return orderList;
     }
     
+    /**
+     * 请求订单详情
+     * 
+     * @param param 参数
+     * @return 订单详情信息
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping("order/detail/get")
+    @ResponseBody
+    public OrderDetail getOrderDetail(@RequestBody JoogeParam param) {
+        Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
+        String orderNo = (String)paramMap.get("Id");
+        CoolOrder coolOrder = orderService.getCoolOrderDetailByOrderNo(orderNo);
+        if (coolOrder == null || coolOrder.getUpdatetime() == null || coolOrder.getZffs() == null
+            || coolOrder.getFhfs() == null || coolOrder.getFhfs() != CoolOrder.FHFS_10) {
+            throw new RuntimeException("exception.order.null");
+        }
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setCode("0");
+        orderDetail.setDesc("");
+        Order order = new Order();
+        order.setOrderId(orderNo);// 订单号，可唯一标识订单的编号
+        order.setCreated(DateUtil.dateToStr(DateUtil.yyyy_MM_dd_HH_mm_ss, coolOrder.getCreatetime())); // 订单创建时间
+        order.setModified(DateUtil.dateToStr(DateUtil.yyyy_MM_dd_HH_mm_ss, coolOrder.getUpdatetime())); // 订单最后修改时间
+        if (coolOrder.getPayTime() != null) {
+            order.setPayTime(DateUtil.dateToStr(DateUtil.yyyy_MM_dd_HH_mm_ss, coolOrder.getPayTime())); // 订单付款时间，未付款订单可以不填
+        }
+        if (coolOrder.getPsCode() == null) {
+            order.setStatus("40"); // 已付款未发货
+        } else {
+            order.setStatus("50"); // 已发货
+        }
+        order.setReceiverName(coolOrder.getLinkman()); // 收货人姓名
+        order.setReceiverProvince(coolOrder.getLocationP()); // 收货人所在省
+        order.setReceiverCity(coolOrder.getLocationC()); // 收货人所在市
+        order.setReceiverDistrict(coolOrder.getLocationA()); // 收货人所在区县
+        order.setReceiverAddress(coolOrder.getAddress()); // 收货人街道地址
+        order.setReceiverPhone1(coolOrder.getMobile()); // 收货人手机，和座机必须要有一项不能为空
+        order.setReceiverPhone2(coolOrder.getTel()); // 收货人座机，和手机必须要有一项不能为空
+        order.setHasInvoice("0"); // 是否需要发票，0：否，1：是，默认值0
+        order.setBuyerCode(coolOrder.getmId() + ""); // 顾客编码
+        order.setBuyerTrueName(coolOrder.getLinkman()); // 买家真实姓名，跨境订单必填
+        order.setBuyerIdCardNo(coolOrder.getIdcard()); // 买家身份证号码，跨境订单必填
+        order.setBuyerEmail("admin@i-sell.cn"); // TODO: 买家邮箱地址，跨境订单必填
+        order.setBuyerPhone(coolOrder.getMobile()); // 买家手机号，跨境订单必填
+        order.setFeeAmount(coolOrder.getPsPrice().multiply(new BigDecimal(100))); // 向买家收取的运费
+        order.setDiscount(0); // 整单优惠金额
+        order.setPayAmount(coolOrder.getTotal().multiply(new BigDecimal(100))); // 整单付款金额
+        order.setDeliveryWay("物流"); // 发货方式（物流，自提）
+        order.setPayments(new ArrayList<Payment>(1)); // 订单支付信息，跨境订单必填
+        Payment pay = new Payment();
+        switch (coolOrder.getZffs()) {
+            case 2:
+                pay.setPaymentMethod("10"); // 支付宝
+                break;
+            case 3:
+                pay.setPaymentMethod("30"); // 微信支付
+                break;
+            default:
+                pay.setPaymentMethod("20"); // 网银支付
+                break;
+        }
+        pay.setAmount(order.getPayAmount()); // 支付金额，精确到分
+        pay.setPayNumber(coolOrder.getTradeNo()); // 支付流水号
+        order.getPayments().add(pay);
+        order.setRows(new ArrayList<OrderRow>());// 订单行信息
+        if (coolOrder.getItemList() != null) {
+            for (CoolOrderItem item : coolOrder.getItemList()) {
+                OrderRow row = new OrderRow();
+                row.setOrderRowId(item.getId() + ""); // 订单行Id
+                row.setMerchId(item.getGid() + "");// 商品Id 或 Sku Id
+                row.setRowDesc(item.getName());// 行描述
+                row.setQty(item.getCount()); // 行数量
+                row.setPrice(item.getPrice().multiply(new BigDecimal(100)));// 单价
+                row.setAdjustFee(0); // 行调整金额
+                // 行金额，应等于Qty * Price – AdjustFee
+                row.setAmount(item.getPrice().multiply(new BigDecimal(item.getCount() * 100)));
+                
+                order.getRows().add(row);
+            }
+        }
+        
+        orderDetail.setOrder(order);
+        return orderDetail;
+    }
+    
+    /**
+     * 推送订单发货信息
+     * 
+     * @param param 参数
+     * @return 订单发货信息
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping("order/send")
+    @ResponseBody
+    public OrderSend sendOrder(@RequestBody JoogeParam param) {
+        Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
+        CoolOrder coolOrder = new CoolOrder();
+        coolOrder.setOrderNo((String)paramMap.get("Id")); // 订单ID
+        coolOrder.setPsfs((String)paramMap.get("LogisticCompany")); // 物流公司名称
+        coolOrder.setPsCode((String)paramMap.get("LogisiticNumber")); // 运单号，多个运单号的话用逗号隔开
+        orderService.updateOrder(coolOrder); // 更新订单信息
+        
+        OrderSend orderSend = new OrderSend();
+        orderSend.setCode("0");
+        orderSend.setDesc("");
+        return orderSend;
+    }
+    
+    /**
+     * 请求商品列表
+     * 
+     * @param param 参数
+     * @return 商品列表信息
+     */
     @SuppressWarnings("unchecked")
     @RequestMapping("merch/list/get")
     @ResponseBody
-    public ProductList getProductList(@RequestBody JoogeParam param)
-        throws ParseException {
+    public ProductList getProductList(@RequestBody JoogeParam param) {
         Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
         CoolProductSelect coolProductSelect = new CoolProductSelect();
         coolProductSelect.setRows((Integer)paramMap.get("PageSize"));
         coolProductSelect.setPage((Integer)paramMap.get("PageNo"));
-        coolProductSelect.setStartUpdatetime((Date)paramMap.get("StartModified"));
-        coolProductSelect.setEndUpdatetime((Date)paramMap.get("EndModified"));
+        coolProductSelect.setStartUpdatetime(DateUtil.parseDate((String)paramMap.get("StartModified"),
+            DateUtil.yyyy_MM_dd_HH_mm_ss));
+        coolProductSelect.setEndUpdatetime(DateUtil.parseDate((String)paramMap.get("EndModified"),
+            DateUtil.yyyy_MM_dd_HH_mm_ss));
         PageInfo<CoolProduct> page = productService.getCoolProductPageList(coolProductSelect);
         ProductList productList = new ProductList();
         productList.setCode("0");
@@ -154,21 +271,64 @@ public class JoogeGatewayController {
         productList.setTotalResult(page.getTotal());
         productList.setItems(new ArrayList<Merch>());
         if (page.getRows() != null) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); // Date类型转DateTime类型
             for (CoolProduct coolProduct : page.getRows()) {
                 Merch merch = new Merch();
                 merch.setId(String.valueOf(coolProduct.getId()));
                 merch.setName(coolProduct.getNameEn());
                 merch.setPrice(coolProduct.getPrice());
                 // 商品计量单位，如个、件
-                //merch.setUnit(unit);
+                merch.setUnit("个");
                 
-                
-                merch.setModified(DateTime.parse(simpleDateFormat.format(coolProduct.getUpdatetime()).toString()));
+                merch.setModified(coolProduct.getUpdatetime());
                 productList.getItems().add(merch);
             }
         }
         return productList;
+    }
+    
+    /**
+     * 请求商品详情
+     * 
+     * @param param 参数
+     * @return 商品详情信息
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping("merch/detail/get")
+    @ResponseBody
+    public ProductInfo getProductDetail(@RequestBody JoogeParam param) {
+        Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
+        CoolProductSelect coolProductSelect = new CoolProductSelect();
+        coolProductSelect.setId(Integer.parseInt((String)paramMap.get("Id")));
+        coolProductSelect.setSearchDetail(true);
         
+        ProductInfo productInfo = new ProductInfo();
+        productInfo.setCode("0");
+        productInfo.setDesc("");
+        CoolProduct coolProduct = productService.getCoolProductById(coolProductSelect);
+        if (coolProduct == null) {
+            throw new RuntimeException("exception.product.null");
+        }
+        Merch merch = new Merch();
+        merch.setId(String.valueOf(coolProduct.getId()));
+        merch.setName(coolProduct.getNameEn());
+        merch.setPrice(coolProduct.getPrice());
+        // 商品计量单位，如个、件
+        merch.setUnit("个");
+        merch.setModified(coolProduct.getUpdatetime());
+        if (coolProduct.getGgList() != null) {
+            merch.setSkus(new ArrayList<SKU>());
+            for (CoolProductGg gg : coolProduct.getGgList()) {
+                SKU sku = new SKU();
+                sku.setSkuId(gg.getId() + "");
+                sku.setPrice(gg.getCxjg());
+                sku.setProps(new ArrayList<Prop>(1));
+                sku.getProps().add(new Prop("规格", gg.getGg()));
+                
+                merch.getSkus().add(sku);
+            }
+        }
+        
+        productInfo.setItem(merch);
+        return productInfo;
     }
 }

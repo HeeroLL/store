@@ -21,6 +21,21 @@ public class Prop {
     @JsonProperty("Value")
     private String value;
     
+    /**
+     * 默认构造函数
+     */
+    public Prop() {
+        
+    }
+    
+    /**
+     * 默认构造函数
+     */
+    public Prop(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+    
     public String getName() {
         return name;
     }

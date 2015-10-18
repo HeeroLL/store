@@ -37,14 +37,15 @@
         <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
         <result column="pay_state" jdbcType="TINYINT" property="payState"/>
         <result column="order_type" jdbcType="TINYINT" property="orderType"/>
-        <result column="is_del" jdbcType="BIT" property="isDel"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
         <result column="share_user" jdbcType="VARCHAR" property="shareUser"/>
         <result column="share_added" jdbcType="BIT" property="shareAdded"/>
         <result column="bigpen" jdbcType="VARCHAR" property="bigpen"/>
         <result column="barcode" jdbcType="VARCHAR" property="barcode"/>
-        <result column="is_del_m" jdbcType="BIT" property="isDelM"/>
+        <result column="is_del_m" jdbcType="TINYINT" property="isDelM"/>
         <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
         <result column="sup_Name" jdbcType="VARCHAR" property="supName"/>
+        <result column="fhfs" jdbcType="TINYINT" property="fhfs"/>
     </resultMap>
     <!-- 导出返回类 -->
     <resultMap id="ExportMap" type="com.isell.service.order.po.CoolOrderExport">
@@ -229,15 +230,19 @@
     		and updatetime <![CDATA[>=]]> #{startUpdatetime} 
     	</if>
         <if test="endUpdatetime != null"> 
-        	and createtime <![CDATA[<=]]> #{endUpdatetime} 
+        	and updatetime <![CDATA[<=]]> #{endUpdatetime} 
         </if>
+        <if test="fhfs != null"> 
+        	and fhfs = #{fhfs} 
+        </if>
+        
     </sql>
     <select id="getCoolOrderPageList" resultMap="BaseResultMap" parameterType="com.isell.service.order.po.CoolOrderSelect">
     	select * from cool_order
     	<include refid="where_sql"></include>
     	 order by createtime desc
     </select>
-    <select id="getCoolOrderPageListCount" parameterType="com.isell.service.order.po.CoolOrderSelect">
+    <select id="getCoolOrderPageListCount" parameterType="com.isell.service.order.po.CoolOrderSelect" resultType="int">
     	select count(*) from cool_order
     	<include refid="where_sql"></include>
     </select>
@@ -416,6 +421,9 @@
             <if test="isDelM != null" >
                 is_del_m,
             </if>
+            <if test="fhfs != null" >
+                fhfs,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -544,6 +552,10 @@
             <if test="isDelM != null" >
                 #{is_Del_m,jdbcType=BIT},
             </if>
+            <if test="fhfs != null" >
+                #{fhfs,jdbcType=TINYINT},
+            </if>
+            
         </trim>
     </insert>
 
@@ -670,8 +682,16 @@
             <if test="isDelM != null" >
                 is_Del_m = #{isDelM,jdbcType=BIT},
             </if>
+            <if test="fhfs != null" >
+                fhfs = #{fhfs,jdbcType=TINYINT},
+            </if>
         </set>
         WHERE 
-            id = #{id,jdbcType=INTEGER}
+        	<if test="id != null" >
+            	id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="id == null and orderNo != null" >
+                order_no = #{orderNo,jdbcType=VARCHAR}
+            </if>
     </update>
 </mapper>

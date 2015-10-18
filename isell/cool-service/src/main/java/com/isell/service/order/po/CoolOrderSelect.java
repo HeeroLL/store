@@ -238,6 +238,11 @@ public class CoolOrderSelect extends PageConfig {
     private String supName;
     
     /**
+     * 发货方式
+     */
+    private Byte fhfs;
+    
+    /**
      * 是否查询详情信息
      */
     private boolean searchDetail;
@@ -634,5 +639,13 @@ public class CoolOrderSelect extends PageConfig {
 
     public void setEndUpdatetime(Date endUpdatetime) {
         this.endUpdatetime = endUpdatetime;
+    }
+
+    public Byte getFhfs() {
+        return fhfs;
+    }
+
+    public void setFhfs(Byte fhfs) {
+        this.fhfs = fhfs;
     }
 }

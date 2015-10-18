@@ -1,7 +1,5 @@
 package com.isell.service.product.service;
 
-import java.util.List;
-
 import com.isell.core.mybatis.page.PageInfo;
 import com.isell.service.product.po.CoolProductSelect;
 import com.isell.service.product.vo.CoolProduct;
@@ -19,4 +17,12 @@ public interface ProductService {
 	 * 分页批量获取商品数据
 	 */
     PageInfo<CoolProduct> getCoolProductPageList(CoolProductSelect coolProductSelect);
+    
+    /**
+     * 根据查询条件获取商品信息
+     *
+     * @param param 查询条件
+     * @return 商品详情
+     */
+    CoolProduct getCoolProductById(CoolProductSelect param);
 }

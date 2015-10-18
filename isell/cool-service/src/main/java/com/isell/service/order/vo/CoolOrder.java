@@ -48,6 +48,21 @@ public class CoolOrder {
     public static final byte ORDER_STATE_99 = 99;
     
     /**
+     * 自提
+     */
+    public static final byte FHFS_0 = 0;
+    
+    /**
+     * 内贸-圆通
+     */
+    public static final byte FHFS_1 = 1;
+    
+    /**
+     * 宁波保税仓
+     */
+    public static final byte FHFS_10 = 10;
+    
+    /**
      * 主键id
      */
     private Integer id;
@@ -225,7 +240,7 @@ public class CoolOrder {
     /**
      * 逻辑删除标志（酷店是否删除）
      */
-    private int isDel;
+    private Byte isDel;
     
     /**
      * 分享人
@@ -235,7 +250,7 @@ public class CoolOrder {
     /**
      * 是否已二次分佣
      */
-    private int shareAdded;
+    private Boolean shareAdded;
     
     /**
      * 快递公司返回的大头笔
@@ -255,7 +270,12 @@ public class CoolOrder {
     /**
      * 逻辑删除标志（会员是否删除）
      */
-    private int isDelM;
+    private Byte isDelM;
+    
+    /**
+     * 发货方式
+     */
+    private Byte fhfs;
     
     private Boolean isout;
     
@@ -282,396 +302,405 @@ public class CoolOrder {
      * 订单详情列表
      */
     private List<CoolOrderItem> itemList;
-    
+
     public Integer getId() {
         return id;
     }
-    
+
     public void setId(Integer id) {
         this.id = id;
     }
-    
+
     public String getLocationP() {
         return locationP;
     }
-    
+
     public void setLocationP(String locationP) {
         this.locationP = locationP;
     }
-    
+
     public String getLocationC() {
         return locationC;
     }
-    
+
     public void setLocationC(String locationC) {
         this.locationC = locationC;
     }
-    
+
     public String getLocationA() {
         return locationA;
     }
-    
+
     public void setLocationA(String locationA) {
         this.locationA = locationA;
     }
-    
+
     public String getAddress() {
         return address;
     }
-    
+
     public void setAddress(String address) {
         this.address = address;
     }
-    
+
     public String getLinkman() {
         return linkman;
     }
-    
+
     public void setLinkman(String linkman) {
         this.linkman = linkman;
     }
-    
+
     public String getMobile() {
         return mobile;
     }
-    
+
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
-    
+
     public String getTel() {
         return tel;
     }
-    
+
     public void setTel(String tel) {
         this.tel = tel;
     }
-    
+
     public String getPsfs() {
         return psfs;
     }
-    
+
     public void setPsfs(String psfs) {
         this.psfs = psfs;
     }
-    
+
     public BigDecimal getPsPrice() {
         return psPrice;
     }
-    
+
     public void setPsPrice(BigDecimal psPrice) {
         this.psPrice = psPrice;
     }
-    
+
     public Integer getZffs() {
         return zffs;
     }
-    
+
     public void setZffs(Integer zffs) {
         this.zffs = zffs;
     }
-    
+
     public String getComments() {
         return comments;
     }
-    
+
     public void setComments(String comments) {
         this.comments = comments;
     }
-    
+
     public BigDecimal getTotal() {
         return total;
     }
-    
+
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
-    
+
     public Byte getState() {
         return state;
     }
-    
+
     public void setState(Byte state) {
         this.state = state;
     }
-    
+
     public Date getCreatetime() {
         return createtime;
     }
-    
+
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
     }
-    
+
     public String getOrderNo() {
         return orderNo;
     }
-    
+
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
-    
+
     public Integer getmId() {
         return mId;
     }
-    
+
     public void setmId(Integer mId) {
         this.mId = mId;
     }
-    
+
     public Date getUpdatetime() {
         return updatetime;
     }
-    
+
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
-    
+
     public String getRemark() {
         return remark;
     }
-    
+
     public void setRemark(String remark) {
         this.remark = remark;
     }
-    
+
     public Integer getScore() {
         return score;
     }
-    
+
     public void setScore(Integer score) {
         this.score = score;
     }
-    
+
     public Byte getoType() {
         return oType;
     }
-    
+
     public void setoType(Byte oType) {
         this.oType = oType;
     }
-    
+
     public Integer getbId() {
         return bId;
     }
-    
+
     public void setbId(Integer bId) {
         this.bId = bId;
     }
-    
+
     public String getReason() {
         return reason;
     }
-    
+
     public void setReason(String reason) {
         this.reason = reason;
     }
-    
+
     public String getPsCode() {
         return psCode;
     }
-    
+
     public void setPsCode(String psCode) {
         this.psCode = psCode;
     }
-    
+
     public String getOidBillno() {
         return oidBillno;
     }
-    
+
     public void setOidBillno(String oidBillno) {
         this.oidBillno = oidBillno;
     }
-    
+
     public Date getPayTime() {
         return payTime;
     }
-    
+
     public void setPayTime(Date payTime) {
         this.payTime = payTime;
     }
-    
+
     public String getTradeNo() {
         return tradeNo;
     }
-    
+
     public void setTradeNo(String tradeNo) {
         this.tradeNo = tradeNo;
     }
-    
+
     public Integer getDistributors() {
         return distributors;
     }
-    
+
     public void setDistributors(Integer distributors) {
         this.distributors = distributors;
     }
-    
+
     public String getSupplier() {
         return supplier;
     }
-    
+
     public void setSupplier(String supplier) {
         this.supplier = supplier;
     }
-    
+
     public Boolean getSupplierSettle() {
         return supplierSettle;
     }
-    
+
     public void setSupplierSettle(Boolean supplierSettle) {
         this.supplierSettle = supplierSettle;
     }
-    
+
     public String getZipcode() {
         return zipcode;
     }
-    
+
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
-    
+
     public BigDecimal getSupplierProfit() {
         return supplierProfit;
     }
-    
+
     public void setSupplierProfit(BigDecimal supplierProfit) {
         this.supplierProfit = supplierProfit;
     }
-    
+
     public Date getFinishTime() {
         return finishTime;
     }
-    
+
     public void setFinishTime(Date finishTime) {
         this.finishTime = finishTime;
     }
-    
+
     public Byte getPayState() {
         return payState;
     }
-    
+
     public void setPayState(Byte payState) {
         this.payState = payState;
     }
-    
+
     public Byte getOrderType() {
         return orderType;
     }
-    
+
     public void setOrderType(Byte orderType) {
         this.orderType = orderType;
     }
-    
-    public int getIsDel() {
-		return isDel;
-	}
 
-	public void setIsDel(int isDel) {
-		this.isDel = isDel;
-	}
+    public Byte getIsDel() {
+        return isDel;
+    }
 
-	public String getShareUser() {
+    public void setIsDel(Byte isDel) {
+        this.isDel = isDel;
+    }
+
+    public String getShareUser() {
         return shareUser;
     }
-    
+
     public void setShareUser(String shareUser) {
         this.shareUser = shareUser;
     }
-    
-    public int getShareAdded() {
+
+    public Boolean getShareAdded() {
         return shareAdded;
     }
-    
-    public void setShareAdded(int shareAdded) {
+
+    public void setShareAdded(Boolean shareAdded) {
         this.shareAdded = shareAdded;
     }
-    
+
     public String getBigpen() {
         return bigpen;
     }
-    
+
     public void setBigpen(String bigpen) {
         this.bigpen = bigpen;
     }
-    
+
     public String getBarcode() {
         return barcode;
     }
-    
+
     public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
-    
+
     public String getIdcard() {
-		return idcard;
-	}
+        return idcard;
+    }
 
-	public void setIdcard(String idcard) {
-		this.idcard = idcard;
-	}
+    public void setIdcard(String idcard) {
+        this.idcard = idcard;
+    }
 
-	public int getIsDelM() {
-		return isDelM;
-	}
+    public Byte getIsDelM() {
+        return isDelM;
+    }
 
-	public void setIsDelM(int isDelM) {
-		this.isDelM = isDelM;
-	}
+    public void setIsDelM(Byte isDelM) {
+        this.isDelM = isDelM;
+    }
 
-	public List<CoolOrderItem> getItemList() {
+    public Byte getFhfs() {
+        return fhfs;
+    }
+
+    public void setFhfs(Byte fhfs) {
+        this.fhfs = fhfs;
+    }
+
+    public Boolean getIsout() {
+        return isout;
+    }
+
+    public void setIsout(Boolean isout) {
+        this.isout = isout;
+    }
+
+    public String getOutdays() {
+        return outdays;
+    }
+
+    public void setOutdays(String outdays) {
+        this.outdays = outdays;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getSupName() {
+        return supName;
+    }
+
+    public void setSupName(String supName) {
+        this.supName = supName;
+    }
+
+    public List<CoolOrderItem> getItemList() {
         return itemList;
     }
-    
+
     public void setItemList(List<CoolOrderItem> itemList) {
         this.itemList = itemList;
     }
-
-	public Boolean getIsout() {
-		return isout;
-	}
-
-	public void setIsout(Boolean isout) {
-		this.isout = isout;
-	}
-
-	public String getOutdays() {
-		return outdays;
-	}
-
-	public void setOutdays(String outdays) {
-		this.outdays = outdays;
-	}
-
-	public int getCount() {
-		return count;
-	}
-
-	public void setCount(int count) {
-		this.count = count;
-	}
-
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-
-	public String getSupName() {
-		return supName;
-	}
-
-	public void setSupName(String supName) {
-		this.supName = supName;
-	}
+    
 }

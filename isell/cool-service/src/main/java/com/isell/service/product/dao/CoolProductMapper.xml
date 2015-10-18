@@ -44,6 +44,30 @@
             id = #{id,jdbcType=INTEGER}
     </select>
     
+    <select id="getCoolProductPageList" resultMap="BaseResultMap" parameterType="com.isell.service.product.po.CoolProductSelect">
+    	select * from cool_product
+    	<include refid="where_sql"></include>
+    	order by createtime desc
+    </select>
+    
+    <select id="getCoolProductPageListCount" parameterType="com.isell.service.product.po.CoolProductSelect" resultType="int">
+    	select count(*) from cool_product
+    	<include refid="where_sql"></include>
+    </select>
+    
+     <sql id="where_sql">
+	     where 1 = 1
+	     <if test="shelves != null">
+	     	and shelves = #{shelves}
+	     </if>
+	     <if test="startUpdatetime != null">
+	     	and updatetime <![CDATA[>=]]> #{startUpdatetime}
+	     </if>
+	     <if test="endUpdatetime != null">
+	     	and updatetime <![CDATA[<=]]> #{endUpdatetime}
+	     </if>
+     </sql>
+    
     <select id="findAllCoolProduct" resultMap="BaseResultMap">
           SELECT * FROM cool_product 
     </select>
@@ -359,25 +383,4 @@
         WHERE 
             id = #{id,jdbcType=INTEGER}
     </update>
-    
-    <select id="getCoolProductPageList" resultMap="BaseResultMap" parameterType="com.isell.service.product.po.CoolProductSelect">
-    	select * from cool_product
-    	<include refid="where_sql"></include>
-    	order by createtime desc
-    </select>
-    
-    <select id="getCoolProductPageListCount" parameterType="com.isell.service.product.po.CoolProductSelect">
-    	select count(*) from cool_product
-    	<include refid="where_sql"></include>
-    </select>
-    
-     <sql id="where_sql">
-     where 1 = 1
-     <if test="startUpdatetime != null">
-     	and updatetime <![CDATA[>=]]> #{startUpdatetime}
-     </if>
-     <if test="endUpdatetime != null">
-     	and updatetime <![CDATA[<=]]> #{endUpdatetime}
-     </if>
-     </sql>
 </mapper>

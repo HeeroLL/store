@@ -26,8 +26,8 @@
             id = #{id,jdbcType=INTEGER}
     </select>
     
-    <select id="findAllCoolProductGg" resultMap="BaseResultMap">
-          SELECT * FROM cool_product_gg 
+    <select id="findCoolProductGgList" resultMap="BaseResultMap">
+          select * from cool_product_gg where goods_id = #{goodsId}
     </select>
     
     <delete id="deleteCoolProductGg">

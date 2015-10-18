@@ -325,7 +325,7 @@ public class OrderServiceImpl implements OrderService {
         boolean canSplitBrokerage = (param.getShareUser() != null && !param.getShareUser().equals(userId));
         if (canSplitBrokerage) {
             order.setShareUser(param.getShareUser());
-            order.setShareAdded(0);
+            order.setShareAdded(false);
         }
         
         // 配送方式
@@ -787,10 +787,10 @@ public class OrderServiceImpl implements OrderService {
             for (int id : ids) {
                 CoolOrder order = coolOrderMapper.getCoolOrderById(id);
                 if (order != null && param.get("mId") != null) { // 会员删除
-                    order.setIsDelM(1);
+                    order.setIsDelM((byte)1);
                 }
                 if (order != null && param.get("sId") != null) { // 酷店删除
-                    order.setIsDel(1);
+                    order.setIsDel((byte)1);
                 }
                 coolOrderMapper.updateCoolOrder(order);
                 success = true;

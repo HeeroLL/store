@@ -112,7 +112,7 @@ public class Order {
      * 是否需要发票，0：否，1：是，默认值0
      */
     @JsonProperty("HasInvoice")
-    private boolean hasInvoice;
+    private String hasInvoice;
     
     /**
      * 发票抬头，需要开具发票时，必填
@@ -332,14 +332,6 @@ public class Order {
         this.sellerComment = sellerComment;
     }
     
-    public boolean isHasInvoice() {
-        return hasInvoice;
-    }
-    
-    public void setHasInvoice(boolean hasInvoice) {
-        this.hasInvoice = hasInvoice;
-    }
-    
     public String getInvoiceHead() {
         return invoiceHead;
     }
@@ -458,6 +450,14 @@ public class Order {
     
     public void setRows(List<OrderRow> rows) {
         this.rows = rows;
+    }
+    
+    public String getHasInvoice() {
+        return hasInvoice;
+    }
+    
+    public void setHasInvoice(String hasInvoice) {
+        this.hasInvoice = hasInvoice;
     }
     
 }

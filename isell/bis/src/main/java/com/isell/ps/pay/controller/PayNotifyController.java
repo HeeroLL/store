@@ -13,6 +13,12 @@ import com.isell.ps.pay.vo.AlipayNotifyInfo;
 import com.isell.service.order.service.OrderService;
 import com.isell.service.order.vo.CoolOrder;
 
+/**
+ * 支付异步通知Controller
+ * 
+ * @author lilin
+ * @version [版本号, 2015年10月17日]
+ */
 @RequestMapping("payNotify")
 @Controller
 public class PayNotifyController {

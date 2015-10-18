@@ -2,6 +2,7 @@ package com.isell.service.product.vo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -151,6 +152,11 @@ public class CoolProduct{
      * 规格
      */
     private CoolProductGg standard;
+    
+    /**
+     * 规格列表
+     */
+    private List<CoolProductGg> ggList;
     
     /**
      * 
@@ -556,14 +562,6 @@ public class CoolProduct{
         this.tag = tag;
     }
 
-    public CoolProductGg getStandard() {
-        return standard;
-    }
-
-    public void setStandard(CoolProductGg standard) {
-        this.standard = standard;
-    }
-
     public Integer getQuantity() {
         return quantity;
     }
@@ -578,5 +576,21 @@ public class CoolProduct{
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public List<CoolProductGg> getGgList() {
+        return ggList;
+    }
+
+    public void setGgList(List<CoolProductGg> ggList) {
+        this.ggList = ggList;
+    }
+
+    public CoolProductGg getStandard() {
+        return standard;
+    }
+
+    public void setStandard(CoolProductGg standard) {
+        this.standard = standard;
     }    
 }
