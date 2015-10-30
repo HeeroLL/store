@@ -20,6 +20,37 @@ public class CoolOrderParam {
 	private String locationP;
 	
 	/**
+	 * 收货地市
+	 */
+	private String locationC;
+	
+	/**
+	 * 收货地区
+	 */
+	private String locationA;
+	
+	/**
+	 * 收货地详细
+	 */
+	private String address;
+	
+	/**
+	 * 联系人
+	 */
+	private String linkman;
+	
+	/**
+	 * 电话号码
+	 */
+	private String tel;
+	
+	private String mobile;
+	
+	private String zipcode;
+	
+	private String idcard;
+	
+	/**
 	 * 登录会员id
 	 */
 	private Integer userId;
@@ -38,6 +69,11 @@ public class CoolOrderParam {
 	 * 分享人
 	 */
 	private String shareUser;
+	
+	/**
+	 * 店铺id
+	 */
+	private String supplier;
 	
 	/**
      * 配送方式
@@ -83,6 +119,11 @@ public class CoolOrderParam {
      * 0：手机订单，1：PC订单
      */
     private Byte oType;
+    
+    /**
+     * 是否批量（0：否  1：是）
+     */
+    private String isBatch;
 	
 	/**
 	 * 订单详情
@@ -208,5 +249,85 @@ public class CoolOrderParam {
     public void setoType(Byte oType) {
         this.oType = oType;
     }
+
+	public String getLocationC() {
+		return locationC;
+	}
+
+	public void setLocationC(String locationC) {
+		this.locationC = locationC;
+	}
+
+	public String getLocationA() {
+		return locationA;
+	}
+
+	public void setLocationA(String locationA) {
+		this.locationA = locationA;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
+	}
+
+	public String getIsBatch() {
+		return isBatch;
+	}
+
+	public void setIsBatch(String isBatch) {
+		this.isBatch = isBatch;
+	}
+
+	public String getLinkman() {
+		return linkman;
+	}
+
+	public void setLinkman(String linkman) {
+		this.linkman = linkman;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+
+	public String getIdcard() {
+		return idcard;
+	}
+
+	public void setIdcard(String idcard) {
+		this.idcard = idcard;
+	}
 
 }

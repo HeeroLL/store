@@ -46,6 +46,9 @@
         <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
         <result column="sup_Name" jdbcType="VARCHAR" property="supName"/>
         <result column="fhfs" jdbcType="TINYINT" property="fhfs"/>
+        <result column="is_batch" jdbcType="TINYINT" property="isBatch"/>
+        <result column="source" jdbcType="VARCHAR" property="source"/>
+        <result column="tax_price" jdbcType="DECIMAL" property="taxPrice"/>
     </resultMap>
     <!-- 导出返回类 -->
     <resultMap id="ExportMap" type="com.isell.service.order.po.CoolOrderExport">
@@ -424,6 +427,15 @@
             <if test="fhfs != null" >
                 fhfs,
             </if>
+            <if test="isBatch != null" >
+                is_batch,
+            </if>
+            <if test="source != null" >
+                source,
+            </if>
+            <if test="taxPrice != null" >
+                tax_price,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -555,7 +567,15 @@
             <if test="fhfs != null" >
                 #{fhfs,jdbcType=TINYINT},
             </if>
-            
+            <if test="isBatch != null" >
+                #{isBatch,jdbcType=TINYINT},
+            </if> 
+            <if test="source != null" >
+                #{source,jdbcType=VARCHAR},
+            </if>
+             <if test="taxPrice != null" >
+                #{taxPrice,jdbcType=DECIMAL},
+            </if>
         </trim>
     </insert>
 
@@ -684,6 +704,18 @@
             </if>
             <if test="fhfs != null" >
                 fhfs = #{fhfs,jdbcType=TINYINT},
+            </if>
+            <if test="isBatch != null" >
+                is_batch = #{isBatch,jdbcType=TINYINT},
+            </if>
+            <if test="source != null" >
+                source = #{source,jdbcType=VARCHAR},
+            </if>
+            <if test="taxPrice != null" >
+                tax_price = #{taxPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="barcode != null" >
+                barcode = #{barcode,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE 

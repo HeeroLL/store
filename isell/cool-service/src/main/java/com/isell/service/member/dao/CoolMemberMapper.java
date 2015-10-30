@@ -19,11 +19,21 @@ public interface CoolMemberMapper{
      * 根据主键查询
      */
     public CoolMember getCoolMemberById(@Param("id")Integer id); 
+    
+    /**
+     * 根据用户id查询
+     */
+    public CoolMember getCoolMemberByUserId(@Param("userId")Integer userId); 
 
     /**
      * 查询出所有记录
      */
     public List<CoolMember> findAllCoolMember();    
+    
+    /**
+     * 根据条件查询
+     */
+    public List<CoolMember> findCoolMember(CoolMember coolMember);
     
     /**
      * 保存
@@ -39,5 +49,17 @@ public interface CoolMemberMapper{
      * 根据主键删除
      */
     public int deleteCoolMember(@Param("id")Integer id);
+    
+    /**
+     * 获取最大的编号
+     */
+    public String getMaxCoolMemberNo();
+    
+    /**
+     * 校验身份证
+     */
+    public int getNumberForCheckIdCard(@Param("userId")Integer id,@Param("idcard")String idcard);
+    
+    
 }
 

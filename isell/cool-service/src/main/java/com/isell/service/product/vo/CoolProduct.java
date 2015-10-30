@@ -149,6 +149,11 @@ public class CoolProduct{
     private Date updatetime;
     
     /**
+     * 税率
+     */
+    private BigDecimal tax;
+    
+    /**
      * 规格
      */
     private CoolProductGg standard;
@@ -578,7 +583,15 @@ public class CoolProduct{
         this.updatetime = updatetime;
     }
 
-    public List<CoolProductGg> getGgList() {
+    public BigDecimal getTax() {
+		return tax;
+	}
+
+	public void setTax(BigDecimal tax) {
+		this.tax = tax;
+	}
+
+	public List<CoolProductGg> getGgList() {
         return ggList;
     }
 

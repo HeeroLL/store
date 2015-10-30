@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.member.dao.CoolUserMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.member.vo.CoolUser">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="locked" jdbcType="BIT" property="locked"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="petname" jdbcType="VARCHAR" property="petname"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="audit_user_id" jdbcType="INTEGER" property="auditUserId"/>
+        <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime"/>
+        <result column="audit_reason" jdbcType="VARCHAR" property="auditReason"/>
+        <result column="login_time" jdbcType="TIMESTAMP" property="loginTime"/>
+        <result column="distributors" jdbcType="INTEGER" property="distributors"/>
+        <result column="o2o_store_id" jdbcType="INTEGER" property="o2oStoreId"/>
+        <result column="parent_store_id" jdbcType="INTEGER" property="parentStoreId"/>
+    </resultMap>
+    <select id="getCoolUserById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_user
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>    
+    
+    <select id="findAllCoolUser" resultMap="BaseResultMap">
+          SELECT * FROM cool_user 
+    </select>
+    
+    <!-- 根据用户名查询注册用户数量 -->
+    <select id="getRegisterNumberByUserName">
+          select count(*) 
+          from cool_user 
+          where (username=#{userName} or email=#{userName} or mobile=#{userName}) and type=0  
+    </select>
+    
+    <!-- 平台用户检验 -->
+    <select id="getNumberForCheckUser">
+          select count(*) from cool_user 
+          where (username=#{email} or email=#{email} or mobile=#{email}) and id  <![CDATA[<>]]>#{id} 
+    </select>
+    
+    <delete id="deleteCoolUser">
+        DELETE
+        FROM
+             cool_user
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolUser" parameterType="com.isell.service.member.vo.CoolUser" >
+        INSERT INTO cool_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="username != null" >
+                username,
+            </if>
+            <if test="password != null" >
+                password,
+            </if>
+            <if test="locked != null" >
+                locked,
+            </if>
+            <if test="state != null" >
+                state,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="petname != null" >
+                petname,
+            </if>
+            <if test="email != null" >
+                email,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+            <if test="logo != null" >
+                logo,
+            </if>
+            <if test="auditUserId != null" >
+                audit_user_id,
+            </if>
+            <if test="auditTime != null" >
+                audit_time,
+            </if>
+            <if test="auditReason != null" >
+                audit_reason,
+            </if>
+            <if test="loginTime != null" >
+                login_time,
+            </if>
+            <if test="distributors != null" >
+                distributors,
+            </if>
+            <if test="o2oStoreId != null" >
+                o2o_store_id,
+            </if>
+            <if test="parentStoreId != null" >
+                parent_store_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="username != null" >
+                #{username,jdbcType=VARCHAR},
+            </if> 
+            <if test="password != null" >
+                #{password,jdbcType=VARCHAR},
+            </if> 
+            <if test="locked != null" >
+                #{locked,jdbcType=BIT},
+            </if> 
+            <if test="state != null" >
+                #{state,jdbcType=INTEGER},
+            </if> 
+            <if test="type != null" >
+                #{type,jdbcType=INTEGER},
+            </if> 
+            <if test="petname != null" >
+                #{petname,jdbcType=VARCHAR},
+            </if> 
+            <if test="email != null" >
+                #{email,jdbcType=VARCHAR},
+            </if> 
+            <if test="mobile != null" >
+                #{mobile,jdbcType=VARCHAR},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="logo != null" >
+                #{logo,jdbcType=VARCHAR},
+            </if> 
+            <if test="auditUserId != null" >
+                #{auditUserId,jdbcType=INTEGER},
+            </if> 
+            <if test="auditTime != null" >
+                #{auditTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="auditReason != null" >
+                #{auditReason,jdbcType=VARCHAR},
+            </if> 
+            <if test="loginTime != null" >
+                #{loginTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="distributors != null" >
+                #{distributors,jdbcType=INTEGER},
+            </if> 
+            <if test="o2oStoreId != null" >
+                #{o2oStoreId,jdbcType=INTEGER},
+            </if> 
+            <if test="parentStoreId != null" >
+                #{parentStoreId,jdbcType=INTEGER},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolUser" parameterType="com.isell.service.member.vo.CoolUser" >
+        UPDATE cool_user
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="username != null" >
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="locked != null" >
+                locked = #{locked,jdbcType=BIT},
+            </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="petname != null" >
+                petname = #{petname,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null" >
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="logo != null" >
+                logo = #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="auditUserId != null" >
+                audit_user_id = #{auditUserId,jdbcType=INTEGER},
+            </if>
+            <if test="auditTime != null" >
+                audit_time = #{auditTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="auditReason != null" >
+                audit_reason = #{auditReason,jdbcType=VARCHAR},
+            </if>
+            <if test="loginTime != null" >
+                login_time = #{loginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="distributors != null" >
+                distributors = #{distributors,jdbcType=INTEGER},
+            </if>
+            <if test="o2oStoreId != null" >
+                o2o_store_id = #{o2oStoreId,jdbcType=INTEGER},
+            </if>
+            <if test="parentStoreId != null" >
+                parent_store_id = #{parentStoreId,jdbcType=INTEGER},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
-import com.isell.core.common.StatisticsPo;
 import com.isell.core.mybatis.Mapper;
 import com.isell.service.order.po.CoolOrderExport;
 import com.isell.service.order.po.CoolOrderSelect;
@@ -96,22 +95,7 @@ public interface CoolOrderMapper {
      */
     int deleteCoolOrder(@Param("id") Integer id);
     
-    /**
-     * 统计订单数
-     * 
-     * @param selectType 查询条件
-     * @return
-     */
-    List<StatisticsPo> getSumCoolOrderNumber(@Param("selectType") String selectType, @Param("time") String time);
-    
-    /**
-     * 统计销售额
-     * 
-     * @param selectType 查询条件
-     * @return
-     */
-    List<StatisticsPo> getSumCoolOrderSales(@Param("selectType") String selectType, @Param("time") String time);
-    
+
     /**
      * 统计店铺销售额排名
      * 
@@ -119,4 +103,21 @@ public interface CoolOrderMapper {
      * @return 符合条件的订单列表
      */
     List<CoolOrder> getSumCoonShopSales(CoolOrderSelect orderSelect);
+    
+//    /**
+//     * 统计订单数
+//     * 
+//     * @param selectType 查询条件
+//     * @return
+//     */
+//    List<StatisticsPo> getSumCoolOrderNumber(@Param("selectType") String selectType, @Param("time") String time);
+//    
+//    /**
+//     * 统计销售额
+//     * 
+//     * @param selectType 查询条件
+//     * @return
+//     */
+//    List<StatisticsPo> getSumCoolOrderSales(@Param("selectType") String selectType, @Param("time") String time);
+    
 }

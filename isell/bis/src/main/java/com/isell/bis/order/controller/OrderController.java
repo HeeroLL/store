@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.isell.core.util.JsonData;
 import com.isell.service.order.po.CoolOrderParam;
-import com.isell.service.order.po.CoolOrderSelect;
 import com.isell.service.order.service.OrderService;
 import com.isell.service.order.vo.CoolOrder;
 
@@ -142,20 +141,6 @@ public class OrderController {
     }
 	
 	/**
-	 * 导出订单
-	 * 
-	 * @param param
-	 * @return
-	 */
-	@RequestMapping("exportCoolOrderList")
-    @ResponseBody
-	public JsonData exportCoolOrderList(@RequestBody CoolOrderSelect param) {
-        JsonData jsonData = new JsonData();
-		orderService.exportCoolOrderList(param,jsonData);
-        return jsonData;
-    }
-	
-	/**
 	 * 查询订单流水
 	 * 
 	 * @param param
@@ -168,6 +153,21 @@ public class OrderController {
 		orderService.getCoolOrderListSerial(param,jsonData);
         return jsonData;
     }
+	
+	/**
+	 * 获取根据id获取订单信息
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("getCoolOrderById")
+	@ResponseBody
+	public JsonData getCoolOrderById(Integer id){
+	    JsonData jsonData = new JsonData();
+	    jsonData.setData(orderService.getCoolOrderDetailById(id));
+        return jsonData;
+	   // return null;
+	}
 	
 	/**
 	 * 商品销量统计
@@ -184,34 +184,6 @@ public class OrderController {
     }
 	
 	/**
-	 * 统计订单数
-	 * 
-	 * @param param
-	 * @return
-	 */
-	@RequestMapping("getSumCoolOrderNumber")
-    @ResponseBody
-	public JsonData getSumCoolOrderNumber(@RequestBody Map<String,Object> param) {
-        JsonData jsonData = new JsonData();
-        orderService.getSumCoolOrderNumber(param,jsonData);
-	    return jsonData;
-    }
-	
-	/**
-	 * 统计销售额
-	 * 
-	 * @param param
-	 * @return
-	 */
-	@RequestMapping("getSumCoolOrderSales")
-    @ResponseBody
-	public JsonData getSumCoolOrderSales(@RequestBody Map<String,Object> param) {
-        JsonData jsonData = new JsonData();
-        orderService.getSumCoolOrderSales(param,jsonData);
-	    return jsonData;
-    }
-	
-	/**
 	 * 统计店铺销量排名
 	 * 
 	 * @param param
@@ -224,5 +196,65 @@ public class OrderController {
         orderService.getSumCoonShopSales(param,jsonData);
 	    return jsonData;
     }
+	
+//	/**
+//     * 导出订单
+//     * 
+//     * @param param
+//     * @return
+//     */
+//    @RequestMapping("exportCoolOrderList")
+//    @ResponseBody
+//    public JsonData exportCoolOrderList(@RequestBody CoolOrderSelect param) {
+//        JsonData jsonData = new JsonData();
+//        orderService.exportCoolOrderList(param,jsonData);
+//        return jsonData;
+//    }
+//	
+//	/**
+//	 * 统计订单数
+//	 * 
+//	 * @param param
+//	 * @return
+//	 */
+//	@RequestMapping("getSumCoolOrderNumber")
+//    @ResponseBody
+//	public JsonData getSumCoolOrderNumber(@RequestBody Map<String,Object> param) {
+//        JsonData jsonData = new JsonData();
+//        orderService.getSumCoolOrderNumber(param,jsonData);
+//	    return jsonData;
+//    }
+//	
+//	/**
+//	 * 统计销售额
+//	 * 
+//	 * @param param
+//	 * @return
+//	 */
+//	@RequestMapping("getSumCoolOrderSales")
+//    @ResponseBody
+//	public JsonData getSumCoolOrderSales(@RequestBody Map<String,Object> param) {
+//        JsonData jsonData = new JsonData();
+//        orderService.getSumCoolOrderSales(param,jsonData);
+//	    return jsonData;
+//    }
+//	
+	
+//	
+//	/**
+//	 * 导入订单（银科金典）
+//	 * 
+//	 * @param param
+//	 * @return
+//	 */
+//	@RequestMapping("importCoolOrderYkjd")
+//    @ResponseBody
+//	public JsonData importCoolOrderYkjd(@RequestBody Map<String,Object> param) {
+//        JsonData jsonData = new JsonData();
+//        jsonData.setData(orderService.saveCoolOrderYkjd(param));        
+//	    return jsonData;
+//    }
+	
+	
 	
 }

@@ -39,5 +39,10 @@ public interface CoolMemberReceiverMapper{
      * 根据主键删除
      */
     public int deleteCoolMemberReceiver(@Param("id")Integer id);
+    
+    /**
+     * 根据会员id查询
+     */
+    public List<CoolMemberReceiver> getCoolMemberReceiver(@Param("mId")Integer mId,@Param("id")Integer id); 
 }
 

@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/ServiceForOrder/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	name="ServiceForOrder" targetNamespace="http://www.example.org/ServiceForOrder/">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://www.example.org/ServiceForOrder/">
+			<xsd:complexType name="HeaderRequest">
+				<xsd:sequence>
+					<xsd:element name="customerCode" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+					<xsd:element name="appToken" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+					<xsd:element name="appKey" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+
+			<xsd:element name="createOrder">
+				<xsd:complexType>
+					<xsd:sequence>
+
+						<xsd:element name="HeaderRequest" type="tns:HeaderRequest"></xsd:element>
+						<xsd:element name="OrderInfo" type="tns:OrderInfo">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createOrderResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+
+						<xsd:element name="ask" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+						<xsd:element name="message" type="xsd:string" maxOccurs="1" minOccurs="1">
+						</xsd:element>
+						<xsd:element name="orderCode" type="xsd:string" maxOccurs="1" minOccurs="0">
+						</xsd:element>
+						<xsd:element name="error" type="tns:errorType" maxOccurs="unbounded" minOccurs="0">
+						</xsd:element>
+                        <xsd:element name="referenceNo" type="tns:errorType" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="OrderInfo">
+				<xsd:sequence>
+					<xsd:element name="orderCode" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="orderModel" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="warehouseCode" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="toWarehouseCode" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="oabCounty" type="xsd:string"
+						maxOccurs="1" minOccurs="1"></xsd:element>
+					<xsd:element name="oabStateName" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="oabCity" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="oabDistrict" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="smCode" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="referenceNo" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="oabName" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+
+					<xsd:element name="oabCompany" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="oabPostcode" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="oabStreetAddress1"
+						type="xsd:string" maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="oabStreetAddress2"
+						type="xsd:string" maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="oabPhone" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="oabEmail" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="grossWt" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					
+					
+					
+					<xsd:element name="currencyCode" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+
+					<xsd:element name="idType" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="idNumber" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="remark" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+
+					<xsd:element name="orderStatus" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="shippingFeeEstimate" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="shipperCountry" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="shipperPhone" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="shipperAddress" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="orderProduct"
+						type="tns:productDeatilType" maxOccurs="unbounded"
+						minOccurs="1">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+            <xsd:element name="updateOrder">
+            	<xsd:complexType>
+            		<xsd:sequence>
+						<xsd:element name="HeaderRequest" type="tns:HeaderRequest"></xsd:element>
+						<xsd:element name="OrderInfo" type="tns:OrderInfo"></xsd:element>
+					</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="updateOrderResponse">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="ask" type="xsd:string"></xsd:element>
+            			<xsd:element name="message" type="xsd:string">
+            			</xsd:element>
+            			<xsd:element name="orderCode"
+            				type="xsd:string">
+            			</xsd:element>
+
+            			<xsd:element name="error"
+            				type="tns:errorType" maxOccurs="unbounded" minOccurs="0">
+            			</xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="updateOrderStatus">
+            	<xsd:complexType>
+            		<xsd:sequence>
+						<xsd:element name="HeaderRequest" type="tns:HeaderRequest"></xsd:element>
+            			<xsd:element name="orderCode" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+            			<xsd:element name="orderStatus" type="xsd:int" maxOccurs="1" minOccurs="1">
+            				<xsd:annotation>
+            					<xsd:documentation>0,Delete; 1,draft; 2,confirm; 3,processing;</xsd:documentation>
+            				</xsd:annotation>
+            			</xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="updateOrderStatusResponse">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="ask" type="xsd:string"
+            				maxOccurs="unbounded" minOccurs="1">
+            			</xsd:element>
+            			<xsd:element name="orderCode"
+            				type="xsd:string" maxOccurs="1" minOccurs="0">
+            			</xsd:element>
+            			<xsd:element name="message" type="xsd:string"
+            				maxOccurs="unbounded" minOccurs="1">
+            			</xsd:element>
+            			<xsd:element name="error" type="tns:errorType"
+            				maxOccurs="unbounded" minOccurs="0">
+            			</xsd:element>
+
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getOrderByCode">
+            	<xsd:complexType>
+            		<xsd:sequence>
+						<xsd:element name="HeaderRequest" type="tns:HeaderRequest"></xsd:element>
+            			<xsd:element name="orderCode" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getOrderByCodeResponse">
+            	<xsd:complexType>
+            		<xsd:sequence>
+
+						<xsd:element name="ask" type="xsd:string"></xsd:element>
+                        <xsd:element name="message" type="xsd:string"></xsd:element>
+						<xsd:element name="Data" type="tns:OrderData" maxOccurs="1" minOccurs="0">
+						</xsd:element>
+						<xsd:element name="Error"
+							type="tns:errorType" maxOccurs="unbounded" minOccurs="0">
+						</xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+		
+            <xsd:complexType name="OrderData">
+            	<xsd:sequence>
+
+            		<xsd:element name="orderCode" type="xsd:string"></xsd:element>
+            		<xsd:element name="orderType" type="xsd:string"></xsd:element>
+            		<xsd:element name="warehouseCode"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="toWarehouseCode"
+            			type="xsd:string" maxOccurs="1" minOccurs="0">
+            		</xsd:element>
+            		<xsd:element name="smCode" type="xsd:string"></xsd:element>
+            		<xsd:element name="orderStatus" type="xsd:string"></xsd:element>
+
+            		<xsd:element name="countryName" type="xsd:string"></xsd:element>
+            		<xsd:element name="provinceName"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="referenceNo" type="xsd:string"></xsd:element>
+            		<xsd:element name="trackingNumber" type="xsd:string"></xsd:element>
+            		<xsd:element name="consigneeName"
+            			type="xsd:string">
+            		</xsd:element>
+
+            		<xsd:element name="consigneeCompany"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="consigneePostcode"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="consigneeAddress1"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="consigneeAddress2"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="consigneePhone"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="consigneeEmail"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="grossWt" type="xsd:string"></xsd:element>
+            		<xsd:element name="currencyCode" type="xsd:string"></xsd:element>
+            		<xsd:element name="idType" type="xsd:string"></xsd:element>
+            		<xsd:element name="idNumber" type="xsd:string"></xsd:element>
+					<xsd:element name="shippingFeeEstimate" type="xsd:string"></xsd:element>
+					<xsd:element name="shipperCountry" type="xsd:string"></xsd:element>
+					<xsd:element name="shipperPhone" type="xsd:string"></xsd:element>
+					<xsd:element name="shipperAddress" type="xsd:string"></xsd:element>
+					<xsd:element name="remark" type="xsd:string"></xsd:element>
+            		<xsd:element name="OrderDetailType" type="tns:OrderDetailType"
+            			maxOccurs="unbounded" minOccurs="0">
+            		</xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="OrderResponse">
+            	<xsd:sequence>
+            		<xsd:element name="ask" type="xsd:string"></xsd:element>
+            		<xsd:element name="message" type="xsd:string"></xsd:element>
+            		<xsd:element name="orderCode" type="xsd:string"></xsd:element>
+            		<xsd:element name="orderStatu" type="xsd:int"></xsd:element>
+            		
+            	</xsd:sequence>
+            </xsd:complexType>
+            
+            <xsd:complexType name="Error">
+            	<xsd:sequence>
+            		<xsd:element name="errorCode" type="xsd:string"></xsd:element>
+            		<xsd:element name="errorMessage" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="productDeatilType">
+            	<xsd:sequence>
+            		<xsd:element name="productSku" type="xsd:string"
+            			maxOccurs="1" minOccurs="1">
+            		</xsd:element>
+            		<xsd:element name="transactionPrice" type="xsd:float" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+            		<xsd:element name="dealPrice" type="xsd:float" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+            		<xsd:element name="opQuantity" type="xsd:int"
+            			maxOccurs="1" minOccurs="1">
+            		</xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+		
+            <xsd:complexType name="errorType">
+            	<xsd:sequence>
+            		<xsd:element name="errorMessage" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="OrderDetailType">
+            	<xsd:sequence>
+            		<xsd:element name="skuNo" type="xsd:string"></xsd:element>
+            		<xsd:element name="skuName" type="xsd:string"></xsd:element>
+            		<xsd:element name="skuCnName" type="xsd:string"></xsd:element>
+            		<xsd:element name="quantity" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="createOrderRequest">
+		<wsdl:part name="parameters" element="tns:createOrder"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createOrderResponse">
+		<wsdl:part name="parameters" element="tns:createOrderResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateOrderRequest">
+		<wsdl:part name="parameters" element="tns:updateOrder"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateOrderResponse">
+		<wsdl:part name="parameters" element="tns:updateOrderResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateOrderStatusRequest">
+		<wsdl:part name="parameters" element="tns:updateOrderStatus"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateOrderStatusResponse">
+		<wsdl:part name="parameters" element="tns:updateOrderStatusResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderByCodeRequest">
+		<wsdl:part name="parameters" element="tns:getOrderByCode"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderByCodeResponse">
+		<wsdl:part name="parameters" element="tns:getOrderByCodeResponse"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="ServiceForOrder">
+
+		<wsdl:operation name="createOrder">
+			<wsdl:input message="tns:createOrderRequest"></wsdl:input>
+			<wsdl:output message="tns:createOrderResponse"></wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="updateOrderStatus">
+			<wsdl:input message="tns:updateOrderStatusRequest"></wsdl:input>
+			<wsdl:output message="tns:updateOrderStatusResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getOrderByCode">
+			<wsdl:input message="tns:getOrderByCodeRequest"></wsdl:input>
+			<wsdl:output message="tns:getOrderByCodeResponse"></wsdl:output>
+		</wsdl:operation>
+
+
+		<wsdl:operation name="updateOrder">
+			<wsdl:input message="tns:updateOrderRequest"></wsdl:input>
+			<wsdl:output message="tns:updateOrderResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ServiceForOrderSOAP" type="tns:ServiceForOrder">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+
+
+		<wsdl:operation name="createOrder">
+			<soap:operation soapAction="http://www.example.org/ServiceForOrder/createOrder" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="updateOrder">
+			<soap:operation soapAction="http://www.example.org/ServiceForOrder/createOrder" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>	
+		<wsdl:operation name="updateOrderStatus">
+			<soap:operation soapAction="http://www.example.org/ServiceForOrder/updateOrderStatus" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>	
+		<wsdl:operation name="getOrderByCode">
+			<soap:operation soapAction="http://www.example.org/ServiceForOrder/getOrderByCode" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+	</wsdl:binding>
+
+	
+	<wsdl:service name="ServiceForOrder">
+		<wsdl:port binding="tns:ServiceForOrderSOAP" name="ServiceForOrderSOAP">
+			<soap:address location="http://import.ehaiwaigou.cn/default/order-soap/web-service" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

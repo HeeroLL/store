@@ -1,6 +1,7 @@
 package com.isell.core.util;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -191,6 +192,20 @@ public final class Coder {
     public static String encodeUrl(String url) {
         try {
             return URLEncoder.encode(url, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
+     * deodeUrl
+     * 
+     * @param url url
+     * @return encodeUrl
+     */
+    public static String deodeUrl(String url) {
+        try {
+            return URLDecoder.decode(url, UTF8);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/ServiceForProduct/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	name="ServiceForProduct" targetNamespace="http://www.example.org/ServiceForProduct/">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://www.example.org/ServiceForProduct/">
+			
+			<xsd:complexType name="HeaderRequest">
+				<xsd:sequence>
+					<xsd:element name="customerCode" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+					<xsd:element name="appToken" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+					<xsd:element name="appKey" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="createProduct">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="HeaderRequest"  type="tns:HeaderRequest" ></xsd:element>
+						<xsd:element name="ProductInfo"  type="tns:ProductInfo" >
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createProductResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ask" type="xsd:string"
+							maxOccurs="1" minOccurs="1">
+						</xsd:element>
+						<xsd:element name="message" type="xsd:string"
+							maxOccurs="1" minOccurs="0">
+						</xsd:element>
+						<xsd:element name="error" type="tns:errorType"
+							maxOccurs="unbounded" minOccurs="0">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="ProductInfo">
+				<xsd:sequence>
+					<xsd:element name="skuNo" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="skuName" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="skuEnName " type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="skuCategory" type="xsd:int"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="UOM" type="xsd:string" maxOccurs="1"
+						minOccurs="0">
+					</xsd:element>
+					<xsd:element name="barcodeType" type="xsd:int"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="barcodeDefine" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="length" type="xsd:float"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="width" type="xsd:float"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="height" type="xsd:float"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="netWeight" type="xsd:float"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="weight" type="xsd:float"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="productDeclaredValue"
+						type="xsd:float" minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="productLink"
+						type="xsd:string" minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="hsCode" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="distributorCode" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="hsGoodsName" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="originCountry" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="brand" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="manufactory" type="xsd:string"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="specificationsAndModels" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+					<xsd:element name="isFlash" type="xsd:string"
+						maxOccurs="1" minOccurs="0">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:element name="createProductAndConfirm">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="HeaderRequest"  type="tns:HeaderRequest" ></xsd:element>
+						<xsd:element name="ProductInfo"  type="tns:ProductInfo" >
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createProductAndConfirmResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ask" type="xsd:string"
+							maxOccurs="1" minOccurs="1">
+						</xsd:element>
+						<xsd:element name="message" type="xsd:string"
+							maxOccurs="1" minOccurs="0">
+						</xsd:element>
+						<xsd:element name="error" type="tns:errorType"
+							maxOccurs="unbounded" minOccurs="0">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+            <xsd:complexType name="errorType">
+            	<xsd:sequence>
+            		<xsd:element name="errorMessage" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+			<xsd:element name="getProduct">
+            	<xsd:complexType>
+            		<xsd:sequence>
+						<xsd:element name="HeaderRequest" type="tns:HeaderRequest"></xsd:element>
+						<xsd:element name="productSku" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+            		</xsd:sequence>                                                                                
+            	</xsd:complexType>                                                                                 
+            </xsd:element>                                                                                         
+			<xsd:element name="getProductResponse">                                                                
+            	<xsd:complexType>                                                                                  
+            		<xsd:sequence>                                                                                 
+						<xsd:element name="ask" type="xsd:string"></xsd:element>                                   
+						<xsd:element name="data" type="tns:productData" maxOccurs="unbounded" minOccurs="0">       
+						</xsd:element>                                                                             
+						<xsd:element name="error"                                                                  
+							type="tns:errorType" maxOccurs="unbounded" minOccurs="0">                              
+						</xsd:element>                                                                             
+            		</xsd:sequence>                                                                                
+            	</xsd:complexType>                                                                                 
+            </xsd:element>                                                                                         
+			<xsd:complexType name="productData">                                                                   
+            	<xsd:sequence>                                                                                     
+            		<xsd:element name="productSku" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>    
+            		<xsd:element name="productBarcode" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+            		<xsd:element name="productTitle" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>  
+            		<xsd:element name="productTitleEN" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productStatus" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="hsCode" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="hsGoodsName" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="currencyCode" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="unitCode" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="unitName" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productLength" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productWidth" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productHeight" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productNetWeight" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productWeight" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productDeclaredValue" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productBarcodeType" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productCateoryName" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productAddTime" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productUpdateTime" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="originCountry" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="applyEnterpriseCode" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="goodTaxCode" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="goodTaxRate" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="brand" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productDescription" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="isFlash" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="specificationsAndModels" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="productLink" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="manufactory" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="getStock">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="HeaderRequest"
+            				type="tns:HeaderRequest">
+            			</xsd:element>
+            			<xsd:element name="skuNo"
+            				type="xsd:string" minOccurs="1">
+            			</xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getStockResponse">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="ask" type="xsd:string"></xsd:element>
+            			<xsd:element name="message" type="xsd:string">
+            			</xsd:element>
+            			<xsd:element name="data"
+            				type="tns:inventoryRow" maxOccurs="unbounded" minOccurs="0">
+            			</xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getBatchStock">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="HeaderRequest"
+                                     type="tns:HeaderRequest">
+                        </xsd:element>
+                        <xsd:element name="skuNoArr"
+                                     type="xsd:string"
+                                     maxOccurs="unbounded" minOccurs="1">
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getBatchStockResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+
+                        <xsd:element name="ask" type="xsd:string"></xsd:element>
+                        <xsd:element name="message" type="xsd:string">
+                        </xsd:element>
+                        <xsd:element name="error" type="xsd:string"
+                                     maxOccurs="unbounded" minOccurs="0"></xsd:element>
+                        <xsd:element name="data"
+                                     type="tns:inventoryRow" maxOccurs="unbounded" minOccurs="0">
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+		
+            <xsd:complexType name="inventoryRow">
+            	<xsd:sequence>
+            		<xsd:element name="skuNo" type="xsd:string" minOccurs="0"></xsd:element>
+            		<xsd:element name="warehouseCode"
+            			type="xsd:string" minOccurs="0" maxOccurs="1">
+            		</xsd:element>
+            		<xsd:element name="onwayQty" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+            		<xsd:element name="pendingQty" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+            		<xsd:element name="sellableQty"
+            			type="xsd:string" minOccurs="0" maxOccurs="1">
+            		</xsd:element>
+            		<xsd:element name="unsellableQty"
+            			type="xsd:string" minOccurs="0" maxOccurs="1">
+            		</xsd:element>
+            		<xsd:element name="reservedQty" type="xsd:string" minOccurs="1"></xsd:element>
+            		<xsd:element name="shippedQty" type="xsd:string" minOccurs="0"></xsd:element>
+                    <xsd:element name="expireQty" type="xsd:string" minOccurs="0"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="createProductRequest">
+		<wsdl:part name="parameters"  element="tns:createProduct"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createProductResponse">
+		<wsdl:part name="parameters" element="tns:createProductResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createProductAndConfirmRequest">
+		<wsdl:part name="parameters"  element="tns:createProductAndConfirm"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createProductAndConfirmResponse">
+		<wsdl:part name="parameters" element="tns:createProductAndConfirmResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getStockRequest">
+		<wsdl:part name="parameters" element="tns:getStock"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getStockResponse">
+		<wsdl:part name="parameters" element="tns:getStockResponse"></wsdl:part>
+	</wsdl:message>
+    <wsdl:message name="getBatchStockRequest">
+        <wsdl:part name="parameters" element="tns:getBatchStock"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getBatchStockResponse">
+        <wsdl:part name="parameters" element="tns:getBatchStockResponse"></wsdl:part>
+    </wsdl:message>
+	<wsdl:message name="getProductRequest">
+		<wsdl:part name="parameters" element="tns:getProduct"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductResponse">
+		<wsdl:part name="parameters" element="tns:getProductResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="ServiceForProduct">
+		<wsdl:operation name="createProduct">
+			<wsdl:input message="tns:createProductRequest"></wsdl:input>
+			<wsdl:output message="tns:createProductResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createProductAndConfirm">
+			<wsdl:input message="tns:createProductAndConfirmRequest"></wsdl:input>
+			<wsdl:output message="tns:createProductAndConfirmResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getStock">
+			<wsdl:input message="tns:getStockRequest"></wsdl:input>
+			<wsdl:output message="tns:getStockResponse"></wsdl:output>
+		</wsdl:operation>
+        <wsdl:operation name="getBatchStock">
+            <wsdl:input message="tns:getBatchStockRequest"></wsdl:input>
+            <wsdl:output message="tns:getBatchStockResponse"></wsdl:output>
+        </wsdl:operation>
+		<wsdl:operation name="getProduct">
+			<wsdl:input message="tns:getProductRequest"></wsdl:input>
+			<wsdl:output message="tns:getProductResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	
+	<wsdl:binding name="ServiceForProductSOAP" type="tns:ServiceForProduct">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="createProduct">
+			<soap:operation soapAction="http://www.example.org/ServiceForProduct/createProduct" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createProductAndConfirm">
+			<soap:operation soapAction="http://www.example.org/ServiceForProduct/createProductAndConfirm" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getStock">	
+			<soap:operation soapAction="http://www.example.org/ServiceForProduct/getStock" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+        <wsdl:operation name="getBatchStock">
+            <soap:operation soapAction="http://www.example.org/ServiceForProduct/getBatchStock" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+		<wsdl:operation name="getProduct">
+			<soap:operation soapAction="http://www.example.org/ServiceForProduct/getProduct" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ServiceForProduct">
+		<wsdl:port binding="tns:ServiceForProductSOAP" name="ServiceForProductSOAP">
+			<soap:address location="http://import.ehaiwaigou.cn/default/product-soap/web-service" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

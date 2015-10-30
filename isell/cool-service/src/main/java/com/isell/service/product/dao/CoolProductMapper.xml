@@ -34,6 +34,7 @@
         <result column="divide" jdbcType="DECIMAL" property="divide"/>
         <result column="tag" jdbcType="VARCHAR" property="tag"/>
         <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime"/>
+        <result column="tax" jdbcType="DECIMAL" property="tax"/>
     </resultMap>
     <select id="getCoolProductById" resultMap="BaseResultMap">
         SELECT
@@ -179,6 +180,9 @@
             <if test="updatetime != null" >
                 updatetime,
             </if>
+            <if test="tax != null" >
+                tax,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -276,6 +280,9 @@
             </if> 
             <if test="updatetime != null" >
                 #{updatetime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="tax != null" >
+                #{tax,jdbcType=DECIMAL},
             </if> 
         </trim>
     </insert>
@@ -378,6 +385,9 @@
             </if>
             <if test="updatetime != null" >
                 updatetime = #{updatetime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="tax != null" >
+                tax = #{updatetime,DECIMAL=TIMESTAMP},
             </if> 
         </set>
         WHERE 

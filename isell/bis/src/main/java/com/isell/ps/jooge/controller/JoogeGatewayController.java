@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -75,7 +74,7 @@ public class JoogeGatewayController {
      * @return 处理结果
      */
     @RequestMapping("gateway")
-    public String gateway(@RequestBody JoogeParam param) {
+    public String gateway(JoogeParam param) {
         if (param.getMethod() == null) {
             throw new RuntimeException("exception.access.service.null");
         }
@@ -108,16 +107,16 @@ public class JoogeGatewayController {
     @SuppressWarnings("unchecked")
     @RequestMapping("order/list/get")
     @ResponseBody
-    public OrderList getOrderList(@RequestBody JoogeParam param) {
+    public OrderList getOrderList(JoogeParam param) {
         Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
         CoolOrderSelect paramOrder = new CoolOrderSelect();
-        paramOrder.setRows((Integer)paramMap.get("PageSize")); // 当前页
-        paramOrder.setPage((Integer)paramMap.get("PageNo")); // 当前页
+        paramOrder.setRows(Integer.parseInt(paramMap.get("PageSize").toString())); // 当前页
+        paramOrder.setPage(Integer.parseInt(paramMap.get("PageNo").toString())); // 当前页
         paramOrder.setStartUpdatetime(DateUtil.parseDate((String)paramMap.get("StartModified"),
             DateUtil.yyyy_MM_dd_HH_mm_ss)); // 起始的修改时间
         paramOrder.setEndUpdatetime(DateUtil.parseDate((String)paramMap.get("EndModified"),
             DateUtil.yyyy_MM_dd_HH_mm_ss)); // 结束的修改时间
-        paramOrder.setState(CoolOrder.ORDER_STATE_2); // 已发货
+        paramOrder.setState(CoolOrder.ORDER_STATE_11); // 已通知海关发货
         paramOrder.setFhfs(CoolOrder.FHFS_10); // 发货方式
         
         PageInfo<CoolOrder> page = orderService.getCoolOrderListPage(paramOrder);
@@ -146,7 +145,7 @@ public class JoogeGatewayController {
     @SuppressWarnings("unchecked")
     @RequestMapping("order/detail/get")
     @ResponseBody
-    public OrderDetail getOrderDetail(@RequestBody JoogeParam param) {
+    public OrderDetail getOrderDetail(JoogeParam param) {
         Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
         String orderNo = (String)paramMap.get("Id");
         CoolOrder coolOrder = orderService.getCoolOrderDetailByOrderNo(orderNo);
@@ -182,9 +181,9 @@ public class JoogeGatewayController {
         order.setBuyerIdCardNo(coolOrder.getIdcard()); // 买家身份证号码，跨境订单必填
         order.setBuyerEmail("admin@i-sell.cn"); // TODO: 买家邮箱地址，跨境订单必填
         order.setBuyerPhone(coolOrder.getMobile()); // 买家手机号，跨境订单必填
-        order.setFeeAmount(coolOrder.getPsPrice().multiply(new BigDecimal(100))); // 向买家收取的运费
+        order.setFeeAmount(coolOrder.getPsPrice()); // 向买家收取的运费
         order.setDiscount(0); // 整单优惠金额
-        order.setPayAmount(coolOrder.getTotal().multiply(new BigDecimal(100))); // 整单付款金额
+        order.setPayAmount(coolOrder.getTotal()); // 整单付款金额
         order.setDeliveryWay("物流"); // 发货方式（物流，自提）
         order.setPayments(new ArrayList<Payment>(1)); // 订单支付信息，跨境订单必填
         Payment pay = new Payment();
@@ -210,10 +209,10 @@ public class JoogeGatewayController {
                 row.setMerchId(item.getGid() + "");// 商品Id 或 Sku Id
                 row.setRowDesc(item.getName());// 行描述
                 row.setQty(item.getCount()); // 行数量
-                row.setPrice(item.getPrice().multiply(new BigDecimal(100)));// 单价
+                row.setPrice(item.getPrice());// 单价
                 row.setAdjustFee(0); // 行调整金额
                 // 行金额，应等于Qty * Price – AdjustFee
-                row.setAmount(item.getPrice().multiply(new BigDecimal(item.getCount() * 100)));
+                row.setAmount(item.getPrice().multiply(new BigDecimal(item.getCount())));
                 
                 order.getRows().add(row);
             }
@@ -232,11 +231,22 @@ public class JoogeGatewayController {
     @SuppressWarnings("unchecked")
     @RequestMapping("order/send")
     @ResponseBody
-    public OrderSend sendOrder(@RequestBody JoogeParam param) {
+    public OrderSend sendOrder(JoogeParam param) {
         Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
         CoolOrder coolOrder = new CoolOrder();
         coolOrder.setOrderNo((String)paramMap.get("Id")); // 订单ID
-        coolOrder.setPsfs((String)paramMap.get("LogisticCompany")); // 物流公司名称
+        // 物流公司名称
+        if ("中通速递".equals(paramMap.get("LogisticCompany"))) {
+            coolOrder.setPsfs("zhongtong");
+        } else if ("邮政速递".equals(paramMap.get("LogisticCompany"))) {
+            coolOrder.setPsfs("ems");
+        } else if ("韵达速递".equals(paramMap.get("LogisticCompany"))) {
+            coolOrder.setPsfs("yunda");
+        } else {
+            coolOrder.setPsfs((String)paramMap.get("LogisticCompany"));
+        }
+        coolOrder.setState(CoolOrder.ORDER_STATE_2); // 已发货
+        coolOrder.setFhfs(CoolOrder.FHFS_10); // 发货方式：宁波保税仓
         coolOrder.setPsCode((String)paramMap.get("LogisiticNumber")); // 运单号，多个运单号的话用逗号隔开
         orderService.updateOrder(coolOrder); // 更新订单信息
         
@@ -255,11 +265,11 @@ public class JoogeGatewayController {
     @SuppressWarnings("unchecked")
     @RequestMapping("merch/list/get")
     @ResponseBody
-    public ProductList getProductList(@RequestBody JoogeParam param) {
+    public ProductList getProductList(JoogeParam param) {
         Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
         CoolProductSelect coolProductSelect = new CoolProductSelect();
-        coolProductSelect.setRows((Integer)paramMap.get("PageSize"));
-        coolProductSelect.setPage((Integer)paramMap.get("PageNo"));
+        coolProductSelect.setRows(Integer.parseInt(paramMap.get("PageSize").toString()));
+        coolProductSelect.setPage(Integer.parseInt(paramMap.get("PageNo").toString()));
         coolProductSelect.setStartUpdatetime(DateUtil.parseDate((String)paramMap.get("StartModified"),
             DateUtil.yyyy_MM_dd_HH_mm_ss));
         coolProductSelect.setEndUpdatetime(DateUtil.parseDate((String)paramMap.get("EndModified"),
@@ -295,7 +305,7 @@ public class JoogeGatewayController {
     @SuppressWarnings("unchecked")
     @RequestMapping("merch/detail/get")
     @ResponseBody
-    public ProductInfo getProductDetail(@RequestBody JoogeParam param) {
+    public ProductInfo getProductDetail(JoogeParam param) {
         Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
         CoolProductSelect coolProductSelect = new CoolProductSelect();
         coolProductSelect.setId(Integer.parseInt((String)paramMap.get("Id")));

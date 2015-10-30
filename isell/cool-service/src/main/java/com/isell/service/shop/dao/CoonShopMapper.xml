@@ -21,6 +21,8 @@
         <result column="turnover_orders" jdbcType="INTEGER" property="turnoverOrders"/>
         <result column="show_model" jdbcType="TINYINT" property="showModel"/>
         <result column="tbd_amount" jdbcType="DECIMAL" property="tbdAmount"/>
+        <result column="recommend_id" jdbcType="VARCHAR" property="recommendId"/>
+        <result column="recommend_amount" jdbcType="DECIMAL" property="recommendAmount"/>
     </resultMap>
     <select id="getCoonShopById" resultMap="BaseResultMap">
         SELECT
@@ -112,6 +114,12 @@
             <if test="tbdAmount != null" >
                 tbd_amount,
             </if>
+            <if test="recommendId != null" >
+                recommend_id,
+            </if>
+            <if test="recommendAmount != null" >
+                recommend_amount,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -170,6 +178,12 @@
             </if> 
             <if test="tbdAmount != null" >
                 #{tbdAmount,jdbcType=DECIMAL},
+            </if> 
+            <if test="recommendId != null" >
+                #{recommendId,jdbcType=VARCHAR},
+            </if> 
+            <if test="recommendAmount != null" >
+                #{recommendAmount,jdbcType=DECIMAL},
             </if> 
         </trim>
     </insert>
@@ -230,6 +244,12 @@
             </if>
             <if test="tbdAmount != null" >
                 tbd_amount = #{tbdAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="recommendId != null" >
+                recommend_id = #{recommendId,jdbcType=VARCHAR},
+            </if>
+            <if test="recommendAmount != null" >
+                recommend_amount = #{recommendAmount,jdbcType=DECIMAL},
             </if>
         </set>
         WHERE 

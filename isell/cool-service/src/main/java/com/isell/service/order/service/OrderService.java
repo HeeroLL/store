@@ -144,13 +144,6 @@ public interface OrderService {
      */
     PageInfo<CoolOrder> getCoolOrderListPage(CoolOrderSelect orderSelect);
     
-    /**
-     * 导出订单
-     * 
-     * @param param
-     * @param jsonData
-     */
-    void exportCoolOrderList(CoolOrderSelect orderSelect,JsonData jsonData);
     
     /**
      * 查询订单流水
@@ -176,23 +169,42 @@ public interface OrderService {
 	void getSumCoolProductSales(Map<String,Object> param,JsonData jsonData);
 	
 	/**
-	 * 统计订单数
-	 * 
-	 * @param param
-	 */
-	void getSumCoolOrderNumber(Map<String,Object> param,JsonData jsonData);
-	
-	/**
-	 * 统计销售额
-	 * 
-	 * @param param
-	 */
-	void getSumCoolOrderSales(Map<String,Object> param,JsonData jsonData);
-	
-	/**
 	 * 统计店铺销量排名
 	 * 
 	 * @param param
 	 */
 	void getSumCoonShopSales(Map<String,Object> param,JsonData jsonData);
+	
+//	 /**
+//     * 导出订单
+//     * 
+//     * @param param
+//     * @param jsonData
+//     */
+//    void exportCoolOrderList(CoolOrderSelect orderSelect,JsonData jsonData);
+//	
+//	/**
+//	 * 统计订单数
+//	 * 
+//	 * @param param
+//	 */
+//	void getSumCoolOrderNumber(Map<String,Object> param,JsonData jsonData);
+//	
+//	/**
+//	 * 统计销售额
+//	 * 
+//	 * @param param
+//	 */
+//	void getSumCoolOrderSales(Map<String,Object> param,JsonData jsonData);
+//	
+	
+//	
+//	/**
+//     * 导入订单（银科金典）
+//     * 
+//     * @param param
+//     * @return Record
+//     */
+//    Record saveCoolOrderYkjd(Map<String,Object> param);
+
 }

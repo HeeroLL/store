@@ -2,15 +2,12 @@ package com.isell.service.member.vo;
 
 import java.util.Date;
 
-import com.isell.core.mybatis.Mapper;
-
 /**
  * 会员收货地址mapper
  * 
  * @author wangpeng
  * @version [版本号, 2015-10-04] 
  */
-@Mapper
 public class CoolMemberReceiver{
     /**
      * 

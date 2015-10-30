@@ -24,6 +24,21 @@
             id = #{id,jdbcType=INTEGER}
     </select>
     
+    <select id="getCoolMemberReceiver" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_member_receiver
+        WHERE 1=1
+        	<if test="mId != null">
+            	and m_id = #{mId,jdbcType=INTEGER}
+            </if>
+            <if test="id != null">
+            	and id = #{id,jdbcType=INTEGER}
+            </if>
+        order by createtime desc
+    </select>
+    
     <select id="findAllCoolMemberReceiver" resultMap="BaseResultMap">
           SELECT * FROM cool_member_receiver 
     </select>

@@ -105,6 +105,16 @@ public class CoonShop {
      */
     private BigDecimal tbdAmount;
     
+    /**
+     * 推荐店铺id
+     */
+    private String recommendId;
+    
+    /**
+     * 推荐店铺获得的佣金
+     */
+    private BigDecimal recommendAmount;
+    
     public String getId() {
         return id;
     }
@@ -256,4 +266,20 @@ public class CoonShop {
     public void setTbdAmount(BigDecimal tbdAmount) {
         this.tbdAmount = tbdAmount;
     }
+
+	public String getRecommendId() {
+		return recommendId;
+	}
+
+	public void setRecommendId(String recommendId) {
+		this.recommendId = recommendId;
+	}
+
+	public BigDecimal getRecommendAmount() {
+		return recommendAmount;
+	}
+
+	public void setRecommendAmount(BigDecimal recommendAmount) {
+		this.recommendAmount = recommendAmount;
+	}
 }

@@ -23,7 +23,7 @@
 	<!-- org.apache.log4j.WriterAppender(将日志信息以流格式发送到任意指定的地方) -->
 	<!-- ========================================================================== -->
 	<appender name="app_log" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${catalina.home}/logs/bis.log" />
+		<param name="File" value="${catalina.home}/logs/msg/bis.log" />
 		<param name="Append" value="true" />
 		<param name="MaxBackupIndex" value="10" />
 		<param name="MaxFileSize" value="1MB" />
@@ -33,7 +33,7 @@
 	</appender>
 
 	<appender name="receiveMessage_log" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${catalina.home}/logs/receiveMessage.log" />
+		<param name="File" value="${catalina.home}/logs/msg/receiveMessage.log" />
 		<param name="Append" value="true" />
 		<param name="MaxBackupIndex" value="10" />
 		<param name="MaxFileSize" value="1MB" />
@@ -43,7 +43,17 @@
 	</appender>
 
 	<appender name="sendMessage_log" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${catalina.home}/logs/sendMessage.log" />
+		<param name="File" value="${catalina.home}/logs/msg/sendMessage.log" />
+		<param name="Append" value="true" />
+		<param name="MaxBackupIndex" value="10" />
+		<param name="MaxFileSize" value="1MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%p] - %m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="webservice_log" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${catalina.home}/logs/msg/ws.log" />
 		<param name="Append" value="true" />
 		<param name="MaxBackupIndex" value="10" />
 		<param name="MaxFileSize" value="1MB" />
@@ -68,6 +78,11 @@
 	<logger name="com.isell.core.util.HttpUtils" additivity="false">
 		<level value="info" />
 		<appender-ref ref="sendMessage_log" />
+	</logger>
+	
+	<logger name="com.isell.ws" additivity="false">
+		<level value="info" />
+		<appender-ref ref="webservice_log" />
 	</logger>
 
 	<!-- 通过<category></category>的定义可以将各个包中的类日志输出到不同的日志文件中 additivity指示是否遵循缺省的继承机制 -->

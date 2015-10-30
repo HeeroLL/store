@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.message.dao.CoolMessageMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.message.vo.CoolMessage">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="belong_id" jdbcType="INTEGER" property="belongId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="click" jdbcType="INTEGER" property="click"/>
+        <result column="sendtime" jdbcType="TIMESTAMP" property="sendtime"/>
+        <result column="operator_id" jdbcType="INTEGER" property="operatorId"/>
+    </resultMap>
+    <select id="getCoolMessageById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_message
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolMessage" resultMap="BaseResultMap">
+          SELECT * FROM cool_message 
+    </select>
+    
+    <delete id="deleteCoolMessage">
+        DELETE
+        FROM
+             cool_message
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolMessage" parameterType="com.isell.service.message.vo.CoolMessage" >
+        INSERT INTO cool_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="belongId != null" >
+                belong_id,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="click != null" >
+                click,
+            </if>
+            <if test="sendtime != null" >
+                sendtime,
+            </if>
+            <if test="operatorId != null" >
+                operator_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="userId != null" >
+                #{userId,jdbcType=INTEGER},
+            </if> 
+            <if test="type != null" >
+                #{type,jdbcType=VARCHAR},
+            </if> 
+            <if test="belongId != null" >
+                #{belongId,jdbcType=INTEGER},
+            </if> 
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if> 
+            <if test="click != null" >
+                #{click,jdbcType=INTEGER},
+            </if> 
+            <if test="sendtime != null" >
+                #{sendtime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="operatorId != null" >
+                #{operatorId,jdbcType=INTEGER},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolMessage" parameterType="com.isell.service.message.vo.CoolMessage" >
+        UPDATE cool_message
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="belongId != null" >
+                belong_id = #{belongId,jdbcType=INTEGER},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="click != null" >
+                click = #{click,jdbcType=INTEGER},
+            </if>
+            <if test="sendtime != null" >
+                sendtime = #{sendtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operatorId != null" >
+                operator_id = #{operatorId,jdbcType=INTEGER},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

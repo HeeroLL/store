@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopPartnerMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShopPartner">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="o_id" jdbcType="INTEGER" property="oId"/>
+        <result column="supplier" jdbcType="VARCHAR" property="supplier"/>
+        <result column="partner_id" jdbcType="VARCHAR" property="partnerId"/>
+        <result column="partner_name" jdbcType="VARCHAR" property="partnerName"/>
+        <result column="partner_amount" jdbcType="DECIMAL" property="partnerAmount"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+    </resultMap>
+    <select id="getCoonShopPartnerById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_partner
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonShopPartner" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_partner 
+    </select>
+    
+    <delete id="deleteCoonShopPartner">
+        DELETE
+        FROM
+             coon_shop_partner
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShopPartner" parameterType="com.isell.service.shop.vo.CoonShopPartner" >
+        INSERT INTO coon_shop_partner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="oId != null" >
+                o_id,
+            </if>
+            <if test="supplier != null" >
+                supplier,
+            </if>
+            <if test="partnerId != null" >
+                partner_id,
+            </if>
+            <if test="partnerName != null" >
+                partner_name,
+            </if>
+            <if test="partnerAmount != null" >
+                partner_amount,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="oId != null" >
+                #{oId,jdbcType=INTEGER},
+            </if> 
+            <if test="supplier != null" >
+                #{supplier,jdbcType=VARCHAR},
+            </if> 
+            <if test="partnerId != null" >
+                #{partnerId,jdbcType=VARCHAR},
+            </if> 
+            <if test="partnerName != null" >
+                #{partnerName,jdbcType=VARCHAR},
+            </if> 
+            <if test="partnerAmount != null" >
+                #{partnerAmount,jdbcType=DECIMAL},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopPartner" parameterType="com.isell.service.shop.vo.CoonShopPartner" >
+        UPDATE coon_shop_partner
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="oId != null" >
+                o_id = #{oId,jdbcType=INTEGER},
+            </if>
+            <if test="supplier != null" >
+                supplier = #{supplier,jdbcType=VARCHAR},
+            </if>
+            <if test="partnerId != null" >
+                partner_id = #{partnerId,jdbcType=VARCHAR},
+            </if>
+            <if test="partnerName != null" >
+                partner_name = #{partnerName,jdbcType=VARCHAR},
+            </if>
+            <if test="partnerAmount != null" >
+                partner_amount = #{partnerAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

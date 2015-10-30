@@ -43,6 +43,11 @@ public class CoolOrder {
     public static final byte ORDER_STATE_5 = 5;
     
     /**
+     * 已通知海关发货
+     */
+    public static final byte ORDER_STATE_11 = 11;
+    
+    /**
      * 已取消
      */
     public static final byte ORDER_STATE_99 = 99;
@@ -271,6 +276,21 @@ public class CoolOrder {
      * 逻辑删除标志（会员是否删除）
      */
     private Byte isDelM;
+    
+    /**
+     * 订单来源
+     */
+    private String source;
+    
+    /**
+     * 是否批量删除 0：否 /1：是  
+     */
+    private Byte isBatch;
+    
+    /**
+     * 行邮税
+     */
+    private BigDecimal taxPrice;
     
     /**
      * 发货方式
@@ -701,6 +721,30 @@ public class CoolOrder {
 
     public void setItemList(List<CoolOrderItem> itemList) {
         this.itemList = itemList;
+    }
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public Byte getIsBatch() {
+		return isBatch;
+	}
+
+	public void setIsBatch(Byte isBatch) {
+		this.isBatch = isBatch;
+	}
+
+    public BigDecimal getTaxPrice() {
+        return taxPrice;
+    }
+
+    public void setTaxPrice(BigDecimal taxPrice) {
+        this.taxPrice = taxPrice;
     }
     
 }

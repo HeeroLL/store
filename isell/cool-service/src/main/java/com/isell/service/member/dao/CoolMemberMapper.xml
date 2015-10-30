@@ -50,6 +50,34 @@
           SELECT * FROM cool_member 
     </select>
     
+    <select id="getCoolMemberByUserId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_member
+        WHERE            
+            user_id = #{userId,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getNumberForCheckIdCard">
+    	select count(*) from cool_member where idcard=#{idcard,jdbcType=VARCHAR} and user_id = #{userId,jdbcType=INTEGER}
+    </select>
+    
+    <!-- 获取最大的编号 -->
+    <select id="getMaxCoolMemberNo" resultType="java.lang.String">
+          select max(no) as no from cool_member 
+    </select>
+    
+    <!-- 根据条件查询 -->
+    <select id="findCoolMember" resultMap="BaseResultMap" parameterType="com.isell.service.member.vo.CoolMember">
+          SELECT * FROM cool_member 
+          where 1=1 
+          <if test="verify_code != null and verify_code != ''">
+          	and verify_code = #{verify_code}
+          </if>
+          
+    </select>
+    
     <delete id="deleteCoolMember">
         DELETE
         FROM

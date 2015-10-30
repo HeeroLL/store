@@ -9,7 +9,6 @@ import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
-import com.isell.service.common.GeneralDef;
 /**
  * 生成条形码工具类
  * 
@@ -19,12 +18,12 @@ import com.isell.service.common.GeneralDef;
 public class GetBarCode {
     /**
      * 
-     *
+     * 
      * @param path 生成路径
      * @param content 条形码内容
      * @return
      */
-    public static void getBarCode(String path,String fileName, String content) {
+    public static void getBarCode(String path, String fileName, String content) {
         try {
             // Create the barcode bean
             Code39Bean bean = new Code39Bean();
@@ -38,10 +37,10 @@ public class GetBarCode {
             bean.setFontSize(1.0);
             // 条形码两端是否留白
             bean.doQuietZone(true);
-            File dirFile = new File(GeneralDef.IMG_LOCAL+path);
+            File dirFile = new File(path);
             dirFile.mkdirs();
-           // File outputFile = new File("C:\\Users\\Administrator\\Desktop\\out.png");
-            File outputFile = new File(GeneralDef.IMG_LOCAL+path+fileName);
+            // File outputFile = new File("C:\\Users\\Administrator\\Desktop\\out.png");
+            File outputFile = new File(path + fileName);
             OutputStream out = new FileOutputStream(outputFile);
             try {
                 // Set up the canvas provider for monochrome JPEG output

@@ -37,6 +37,12 @@ public class BisConfig {
     private SysMappingMapper sysMappingMapper;
     
     /**
+     * 本地图片路径
+     */
+    @Value("${img_local}")
+    private String imgLocal;
+    
+    /**
      * 基础域名
      */
     @Value("${base_domain}")
@@ -121,5 +127,9 @@ public class BisConfig {
 
     public String getDefaultShopId() {
         return defaultShopId;
+    }
+
+    public String getImgLocal() {
+        return imgLocal;
     }
 }
