@@ -14,17 +14,17 @@ public interface ZhongtongService {
     /**
      * 商家账号
      */
-    String COMPANY_ID = "aaabbbccc";
+    String COMPANY_ID = "HECBSCCL";
     
     /**
      * 商家密钥
      */
-    String KEY = "asdasdsadsadasdasd";
+    String KEY = "k3Nzc0QkQxRDgzNkQzNTA=";
     
     /**
      * 请求地址
      */
-    String REQUEST_URL = "http://116.228.70.118:9001/zto/api_utf8/importController";
+    String GET_BIGPEN_URL = "http://japi.zto.cn/zto/api_utf8/mark";
     
     /**
      * 获取大头笔内容

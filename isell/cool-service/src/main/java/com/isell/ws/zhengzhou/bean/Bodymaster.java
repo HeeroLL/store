@@ -30,7 +30,7 @@ public class Bodymaster {
      * 电商代码
      */
     @XmlElement(name = "CBECODE")
-    private String cbecode = "4101W68065";
+    private String cbecode = "D461200044";
     
     /**
      * 电商名称
@@ -42,7 +42,7 @@ public class Bodymaster {
      * 电商平台代码
      */
     @XmlElement(name = "ECPCODE")
-    private String ecpcode = "4101W68065";
+    private String ecpcode = "W461200040";
     
     /**
      * 电商平台名称
@@ -192,19 +192,19 @@ public class Bodymaster {
      * 电商检验检疫备案编号
      */
     @XmlElement(name = "CBECODEINSP")
-    private String cbecodeinsp = "4100606221";
+    private String cbecodeinsp = "4100102324";
     
     /**
      * 电商平台检验检疫备案编号
      */
     @XmlElement(name = "ECPCODEINSP")
-    private String ecpcodeinsp = "4100606221";
+    private String ecpcodeinsp = "4100102324";
     
     /**
      * 物流企业检验检疫备案编号
      */
     @XmlElement(name = "TREPCODEINSP")
-    private String trepcodeinsp = "4100910023";
+    private String trepcodeinsp = "4100102324";
     
     /**
      * 订单提交时间
@@ -312,7 +312,7 @@ public class Bodymaster {
      * 报关企业海关备案编号
      */
     @XmlElement(name = "DECLCODE")
-    private String declcode = "4101W68065";
+    private String declcode = "D461200044";
     
     /**
      * 是否退税 1： 是 2： 否

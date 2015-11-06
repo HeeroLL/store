@@ -179,7 +179,7 @@ public class JoogeGatewayController {
         order.setBuyerCode(coolOrder.getmId() + ""); // 顾客编码
         order.setBuyerTrueName(coolOrder.getLinkman()); // 买家真实姓名，跨境订单必填
         order.setBuyerIdCardNo(coolOrder.getIdcard()); // 买家身份证号码，跨境订单必填
-        order.setBuyerEmail("admin@i-sell.cn"); // TODO: 买家邮箱地址，跨境订单必填
+        order.setBuyerEmail("admin@i-coolshop.cn"); // TODO: 买家邮箱地址，跨境订单必填
         order.setBuyerPhone(coolOrder.getMobile()); // 买家手机号，跨境订单必填
         order.setFeeAmount(coolOrder.getPsPrice()); // 向买家收取的运费
         order.setDiscount(0); // 整单优惠金额

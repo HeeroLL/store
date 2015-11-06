@@ -49,6 +49,9 @@
         <result column="is_batch" jdbcType="TINYINT" property="isBatch"/>
         <result column="source" jdbcType="VARCHAR" property="source"/>
         <result column="tax_price" jdbcType="DECIMAL" property="taxPrice"/>
+        <result column="arrears" jdbcType="INTEGER" property="arrears"/>
+        <result column="refund_state" jdbcType="INTEGER" property="refundState"/>
+        <result column="refund_amount" jdbcType="DECIMAL" property="refundAmount"/>
     </resultMap>
     <!-- 导出返回类 -->
     <resultMap id="ExportMap" type="com.isell.service.order.po.CoolOrderExport">
@@ -99,6 +102,7 @@
     <select id="getCoolOrderList" resultMap="BaseResultMap">
         select * from cool_order where 1=1 
         <if test="state != null"> and state=#{state} </if>
+        <if test="fhfs != null"> and fhfs=#{fhfs} </if>
         <if test="createtime != null"> and createtime <![CDATA[<]]> #{createtime} </if>
         <if test="updatetime != null"> and updatetime <![CDATA[<]]> #{updatetime} </if>
         <if test="startTime != null"> and createtime <![CDATA[>]]> #{startTime} </if>
@@ -295,6 +299,8 @@
             id = #{id,jdbcType=INTEGER}
     </delete>
 
+   
+   
     <insert id="saveCoolOrder" parameterType="com.isell.service.order.vo.CoolOrder" >
         INSERT INTO cool_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -436,6 +442,15 @@
             <if test="taxPrice != null" >
                 tax_price,
             </if>
+             <if test="arrears != null" >
+                arrears,
+            </if>
+             <if test="refundState != null" >
+                refund_state,
+            </if>
+             <if test="refundAmount != null" >
+                refund_amount,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -575,6 +590,15 @@
             </if>
              <if test="taxPrice != null" >
                 #{taxPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="arrears != null" >
+                #{arrears,jdbcType=INTEGER},
+            </if>
+            <if test="refundState != null" >
+                #{refund_state,jdbcType=DECIMAL},
+            </if>
+            <if test="refundAmount != null" >
+                #{refund_amount,jdbcType=DECIMAL},
             </if>
         </trim>
     </insert>
@@ -716,6 +740,15 @@
             </if>
             <if test="barcode != null" >
                 barcode = #{barcode,jdbcType=VARCHAR},
+            </if>
+            <if test="arrears != null" >
+                arrears = #{arrears,jdbcType=INTEGER},
+            </if>
+            <if test="refundState != null" >
+                refund_state = #{refundState,jdbcType=DECIMAL},
+            </if>
+            <if test="refundAmount != null" >
+                refund_amount = #{refundAmount,jdbcType=DECIMAL},
             </if>
         </set>
         WHERE 

@@ -9,6 +9,7 @@
         <result column="partner_name" jdbcType="VARCHAR" property="partnerName"/>
         <result column="partner_amount" jdbcType="DECIMAL" property="partnerAmount"/>
         <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="order_amount" jdbcType="DECIMAL" property="orderAmount"/>
     </resultMap>
     <select id="getCoonShopPartnerById" resultMap="BaseResultMap">
         SELECT
@@ -55,6 +56,9 @@
             <if test="createtime != null" >
                 createtime,
             </if>
+            <if test="orderAmount != null" >
+                order_amount,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -77,6 +81,9 @@
             </if> 
             <if test="createtime != null" >
                 #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="orderAmount != null" >
+                #{orderAmount,jdbcType=DECIMAL},
             </if> 
         </trim>
     </insert>
@@ -104,6 +111,9 @@
             </if>
             <if test="createtime != null" >
                 createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderAmount != null" >
+                order_amount = #{orderAmount,jdbcType=DECIMAL},
             </if>
         </set>
         WHERE 

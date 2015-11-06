@@ -2,6 +2,8 @@ package com.isell.ei.pay.alipay.service;
 
 import java.util.Map;
 
+import com.isell.ei.pay.alipay.bean.SendOrderResponse;
+
 /**
  * 支付宝支付service层接口
  * 
@@ -57,6 +59,11 @@ public interface AlipayService {
     String PAYMENT_TYPE = "1";
     
     /**
+     * 订单业务类型，目前仅支持： FAST_INSTANT_TRADE_PAY（快捷即时到帐）
+     */
+    String PRODUCT_CODE = "FAST_INSTANT_TRADE_PAY";
+    
+    /**
      * 获取封装后的支付信息map
      * 
      * @param paramMap map参数
@@ -65,10 +72,26 @@ public interface AlipayService {
     String getPayParams(Map<String, String> paramMap);
     
     /**
+     * 获取封装后的支付信息map
+     * 
+     * @param paramMap map参数
+     * @return 返回的参数字符串
+     */
+    String getPayParamsNew(Map<String, String> paramMap);
+    
+    /**
      * 获取封装后的打款信息map
      * 
      * @param paramMap map参数
      * @return 返回的参数字符串
      */
     String getBatchTransParams(Map<String, String> paramMap);
+    
+    /**
+     * 支付宝报关
+     *
+     * @param paramMap map参数
+     * @return 支付宝返回的同步信息
+     */
+    SendOrderResponse sendOrder(Map<String, String> paramMap);
 }

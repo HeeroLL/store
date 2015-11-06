@@ -1,143 +1,179 @@
+/**
+ * ProductDeatilType.java
+ * 
+ * This file was auto-generated from WSDL by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
+ */
+
 package com.isell.ws.youxinda.order;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
-
-/**
- * <p>
- * Java class for productDeatilType complex type.
- * 
- * <p>
- * The following schema fragment specifies the expected content contained within
- * this class.
- * 
- * <pre>
- * &lt;complexType name="productDeatilType">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="productSku" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="transactionPrice" type="{http://www.w3.org/2001/XMLSchema}float" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="dealPrice" type="{http://www.w3.org/2001/XMLSchema}float" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="opQuantity" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "productDeatilType", propOrder = { "productSku",
-		"transactionPrice", "dealPrice", "opQuantity" })
-public class ProductDeatilType {
-
-	@XmlElement(required = true)
-	protected String productSku;
-	@XmlElement(type = Float.class)
-	protected List<Float> transactionPrice;
-	@XmlElement(type = Float.class)
-	protected List<Float> dealPrice;
-	protected int opQuantity;
-
-	/**
-	 * Gets the value of the productSku property.
-	 * 
-	 * @return possible object is {@link String }
-	 * 
-	 */
-	public String getProductSku() {
-		return productSku;
-	}
-
-	/**
-	 * Sets the value of the productSku property.
-	 * 
-	 * @param value
-	 *            allowed object is {@link String }
-	 * 
-	 */
-	public void setProductSku(String value) {
-		this.productSku = value;
-	}
-
-	/**
-	 * Gets the value of the transactionPrice property.
-	 * 
-	 * <p>
-	 * This accessor method returns a reference to the live list, not a
-	 * snapshot. Therefore any modification you make to the returned list will
-	 * be present inside the JAXB object. This is why there is not a
-	 * <CODE>set</CODE> method for the transactionPrice property.
-	 * 
-	 * <p>
-	 * For example, to add a new item, do as follows:
-	 * 
-	 * <pre>
-	 * getTransactionPrice().add(newItem);
-	 * </pre>
-	 * 
-	 * 
-	 * <p>
-	 * Objects of the following type(s) are allowed in the list {@link Float }
-	 * 
-	 * 
-	 */
-	public List<Float> getTransactionPrice() {
-		if (transactionPrice == null) {
-			transactionPrice = new ArrayList<Float>();
-		}
-		return this.transactionPrice;
-	}
-
-	/**
-	 * Gets the value of the dealPrice property.
-	 * 
-	 * <p>
-	 * This accessor method returns a reference to the live list, not a
-	 * snapshot. Therefore any modification you make to the returned list will
-	 * be present inside the JAXB object. This is why there is not a
-	 * <CODE>set</CODE> method for the dealPrice property.
-	 * 
-	 * <p>
-	 * For example, to add a new item, do as follows:
-	 * 
-	 * <pre>
-	 * getDealPrice().add(newItem);
-	 * </pre>
-	 * 
-	 * 
-	 * <p>
-	 * Objects of the following type(s) are allowed in the list {@link Float }
-	 * 
-	 * 
-	 */
-	public List<Float> getDealPrice() {
-		if (dealPrice == null) {
-			dealPrice = new ArrayList<Float>();
-		}
-		return this.dealPrice;
-	}
-
-	/**
-	 * Gets the value of the opQuantity property.
-	 * 
-	 */
-	public int getOpQuantity() {
-		return opQuantity;
-	}
-
-	/**
-	 * Sets the value of the opQuantity property.
-	 * 
-	 */
-	public void setOpQuantity(int value) {
-		this.opQuantity = value;
-	}
-
+public class ProductDeatilType implements java.io.Serializable {
+    /**
+     * 注释内容
+     */
+    private static final long serialVersionUID = -7650162960979334621L;
+    
+    private java.lang.String productSku;
+    
+    private float[] transactionPrice;
+    
+    private float[] dealPrice;
+    
+    private int opQuantity;
+    
+    public ProductDeatilType() {
+    }
+    
+    public ProductDeatilType(java.lang.String productSku, float[] transactionPrice, float[] dealPrice, int opQuantity) {
+        this.productSku = productSku;
+        this.transactionPrice = transactionPrice;
+        this.dealPrice = dealPrice;
+        this.opQuantity = opQuantity;
+    }
+    
+    /**
+     * Gets the productSku value for this ProductDeatilType.
+     * 
+     * @return productSku
+     */
+    public java.lang.String getProductSku() {
+        return productSku;
+    }
+    
+    /**
+     * Sets the productSku value for this ProductDeatilType.
+     * 
+     * @param productSku
+     */
+    public void setProductSku(java.lang.String productSku) {
+        this.productSku = productSku;
+    }
+    
+    /**
+     * Gets the transactionPrice value for this ProductDeatilType.
+     * 
+     * @return transactionPrice
+     */
+    public float[] getTransactionPrice() {
+        return transactionPrice;
+    }
+    
+    /**
+     * Sets the transactionPrice value for this ProductDeatilType.
+     * 
+     * @param transactionPrice
+     */
+    public void setTransactionPrice(float[] transactionPrice) {
+        this.transactionPrice = transactionPrice;
+    }
+    
+    public float getTransactionPrice(int i) {
+        return this.transactionPrice[i];
+    }
+    
+    public void setTransactionPrice(int i, float _value) {
+        this.transactionPrice[i] = _value;
+    }
+    
+    /**
+     * Gets the dealPrice value for this ProductDeatilType.
+     * 
+     * @return dealPrice
+     */
+    public float[] getDealPrice() {
+        return dealPrice;
+    }
+    
+    /**
+     * Sets the dealPrice value for this ProductDeatilType.
+     * 
+     * @param dealPrice
+     */
+    public void setDealPrice(float[] dealPrice) {
+        this.dealPrice = dealPrice;
+    }
+    
+    public float getDealPrice(int i) {
+        return this.dealPrice[i];
+    }
+    
+    public void setDealPrice(int i, float _value) {
+        this.dealPrice[i] = _value;
+    }
+    
+    /**
+     * Gets the opQuantity value for this ProductDeatilType.
+     * 
+     * @return opQuantity
+     */
+    public int getOpQuantity() {
+        return opQuantity;
+    }
+    
+    /**
+     * Sets the opQuantity value for this ProductDeatilType.
+     * 
+     * @param opQuantity
+     */
+    public void setOpQuantity(int opQuantity) {
+        this.opQuantity = opQuantity;
+    }
+    
+    private java.lang.Object __equalsCalc = null;
+    
+    public synchronized boolean equals(java.lang.Object obj) {
+        if (obj == null)
+            return false;
+        if (!(obj instanceof ProductDeatilType))
+            return false;
+        ProductDeatilType other = (ProductDeatilType)obj;
+        if (this == obj)
+            return true;
+        if (__equalsCalc != null) {
+            return (__equalsCalc == obj);
+        }
+        __equalsCalc = obj;
+        boolean _equals;
+        _equals =
+            true
+                && ((this.productSku == null && other.getProductSku() == null) || (this.productSku != null && this.productSku.equals(other.getProductSku())))
+                && ((this.transactionPrice == null && other.getTransactionPrice() == null) || (this.transactionPrice != null && java.util.Arrays.equals(this.transactionPrice,
+                    other.getTransactionPrice())))
+                && ((this.dealPrice == null && other.getDealPrice() == null) || (this.dealPrice != null && java.util.Arrays.equals(this.dealPrice,
+                    other.getDealPrice()))) && this.opQuantity == other.getOpQuantity();
+        __equalsCalc = null;
+        return _equals;
+    }
+    
+    private boolean __hashCodeCalc = false;
+    
+    public synchronized int hashCode() {
+        if (__hashCodeCalc) {
+            return 0;
+        }
+        __hashCodeCalc = true;
+        int _hashCode = 1;
+        if (getProductSku() != null) {
+            _hashCode += getProductSku().hashCode();
+        }
+        if (getTransactionPrice() != null) {
+            for (int i = 0; i < java.lang.reflect.Array.getLength(getTransactionPrice()); i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getTransactionPrice(), i);
+                if (obj != null && !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
+        if (getDealPrice() != null) {
+            for (int i = 0; i < java.lang.reflect.Array.getLength(getDealPrice()); i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getDealPrice(), i);
+                if (obj != null && !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
+        _hashCode += getOpQuantity();
+        __hashCodeCalc = false;
+        return _hashCode;
+    }
+    
 }

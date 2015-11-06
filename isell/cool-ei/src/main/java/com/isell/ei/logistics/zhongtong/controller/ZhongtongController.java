@@ -39,9 +39,9 @@ public class ZhongtongController {
     public JsonData getMarkService(@RequestBody Map<String, String> param) {
         ZTOrderResponse orderResponse = zhongtongService.getMarkService(param);
         JsonData jsonData = new JsonData();
-        jsonData.setSuccess(orderResponse.isStatus());
-        jsonData.setData(orderResponse.getData());
-        jsonData.setMsg(orderResponse.getMsg());
+        jsonData.setSuccess(orderResponse.getStatus());
+        jsonData.setData(orderResponse.getResult());
+        jsonData.setMsg(orderResponse.getMessage());
         
         return jsonData;
     }

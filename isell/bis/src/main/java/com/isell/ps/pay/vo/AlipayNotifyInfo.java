@@ -41,6 +41,17 @@ public class AlipayNotifyInfo {
     private String out_trade_no;
     
     /**
+     * 通知动作类型： 创建： createDirectPayTradeBy BuyerAction 支付： payByAccountAction 退款：refundFPAction 撤销：reverseAction
+     * 关闭：closeTradeAction 交易完成： finishFPAction
+     */
+    private String notify_action_type;
+    
+    /**
+     * 该交易在支付宝系统中的交易流水号。最长 64 位。
+     */
+    private String trade_no;
+    
+    /**
      * 重写 toString
      * 
      * @return String
@@ -49,11 +60,6 @@ public class AlipayNotifyInfo {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
-    
-    /**
-     * 该交易在支付宝系统中的交易流水号。最长 64 位。
-     */
-    private String trade_no;
     
     public String getNotify_type() {
         return notify_type;
@@ -109,5 +115,13 @@ public class AlipayNotifyInfo {
     
     public void setNotify_time(String notify_time) {
         this.notify_time = notify_time;
+    }
+
+    public String getNotify_action_type() {
+        return notify_action_type;
+    }
+
+    public void setNotify_action_type(String notify_action_type) {
+        this.notify_action_type = notify_action_type;
     }
 }

@@ -125,8 +125,8 @@ public class ShopRankingDaoImpl implements ShopRankingDao {
     @Override
     public void batchUpdate(List<ShopRanking> shopRankingList) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(shopRankingList.toArray());
-        coolJdbcTemplate.batchUpdate("update coon_shop set y_income=:dayIncome,all_amount=:totalIncome,nwd_amount=:totalIncome-wd_amount where id=:sId",
-            batch);
+        //coolJdbcTemplate.batchUpdate("update coon_shop set y_income=:dayIncome,all_amount=:totalIncome,nwd_amount=:totalIncome-wd_amount where id=:sId",batch);
+        coolJdbcTemplate.batchUpdate("update coon_shop set y_income=:dayIncome where id=:sId",batch);
     }
     
     @Override

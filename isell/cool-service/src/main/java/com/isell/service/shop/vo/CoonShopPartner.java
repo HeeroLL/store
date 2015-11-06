@@ -39,6 +39,10 @@ public class CoonShopPartner{
      * 创建时间
      */
     private Date createtime;
+    /**
+     * 订单金额
+     */
+    private BigDecimal orderAmount;
 
     /**
      * 主键id
@@ -130,5 +134,13 @@ public class CoonShopPartner{
      */
     public void setCreatetime(Date createtime){
         this.createtime = createtime;
-    }    
+    }
+
+	public BigDecimal getOrderAmount() {
+		return orderAmount;
+	}
+
+	public void setOrderAmount(BigDecimal orderAmount) {
+		this.orderAmount = orderAmount;
+	}    
 }

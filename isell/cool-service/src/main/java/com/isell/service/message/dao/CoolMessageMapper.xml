@@ -5,7 +5,7 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
-        <result column="belong_id" jdbcType="INTEGER" property="belongId"/>
+        <result column="belong_id" jdbcType="VARCHAR" property="belongId"/>
         <result column="content" jdbcType="VARCHAR" property="content"/>
         <result column="click" jdbcType="INTEGER" property="click"/>
         <result column="sendtime" jdbcType="TIMESTAMP" property="sendtime"/>
@@ -71,7 +71,7 @@
                 #{type,jdbcType=VARCHAR},
             </if> 
             <if test="belongId != null" >
-                #{belongId,jdbcType=INTEGER},
+                #{belongId,jdbcType=VARCHAR},
             </if> 
             <if test="content != null" >
                 #{content,jdbcType=VARCHAR},
@@ -101,7 +101,7 @@
                 type = #{type,jdbcType=VARCHAR},
             </if>
             <if test="belongId != null" >
-                belong_id = #{belongId,jdbcType=INTEGER},
+                belong_id = #{belongId,jdbcType=VARCHAR},
             </if>
             <if test="content != null" >
                 content = #{content,jdbcType=VARCHAR},

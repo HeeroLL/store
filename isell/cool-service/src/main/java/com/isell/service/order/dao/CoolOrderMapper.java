@@ -104,6 +104,13 @@ public interface CoolOrderMapper {
      */
     List<CoolOrder> getSumCoonShopSales(CoolOrderSelect orderSelect);
     
+    /**
+     * 批量插入
+     * @param orderList
+     * @return
+     */
+    public int insertBatch(List<CoolOrder>  orderList);
+    
 //    /**
 //     * 统计订单数
 //     * 

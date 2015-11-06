@@ -24,12 +24,12 @@ public class ZhongtongServiceImpl implements ZhongtongService {
         String data = JsonUtil.writeValueAsString(param);
         param.clear();
         param.put("data", data);
-        param.put("msg_type", "zto.intlmark.get");
+        param.put("msg_type", "GETMARK");
         genarateMap(param);
         
-        String result = HttpUtils.httpPost(REQUEST_URL, param);
-        System.out.println(result);
-        return JsonUtil.readValue(result, ZTOrderResponse.class);
+        String result = HttpUtils.httpPost(GET_BIGPEN_URL, param);
+        ZTOrderResponse response = JsonUtil.readValue(result, ZTOrderResponse.class);
+        return response;
     }
     
     private void genarateMap(Map<String, String> param) {

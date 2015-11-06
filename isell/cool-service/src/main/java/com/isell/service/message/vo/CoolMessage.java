@@ -22,7 +22,7 @@ public class CoolMessage{
     /**
      * 
      */
-    private Integer belongId;
+    private String belongId;
     /**
      * 
      */
@@ -79,20 +79,15 @@ public class CoolMessage{
     public void setType(String type){
         this.type = type;
     }    
-    /**
-     * 
-     */
-    public Integer getBelongId(){
-        return this.belongId;
-    }
+    public String getBelongId() {
+		return belongId;
+	}
 
-    /**
-     * 
-     */
-    public void setBelongId(Integer belongId){
-        this.belongId = belongId;
-    }    
-    /**
+	public void setBelongId(String belongId) {
+		this.belongId = belongId;
+	}
+
+	/**
      * 
      */
     public String getContent(){

@@ -60,11 +60,14 @@ public class PayNotifyController {
             order.setState(CoolOrder.ORDER_STATE_1);
             order.setPayTime(new Date());
             orderService.updateOrder(order);
-            TemplateSMS templateSMS = new TemplateSMS();
-            templateSMS.setTemplateId("15127");
-            templateSMS.setTo(order.getMobile());
-            templateSMS.setParam(order.getOrderNo());
-            smsService.sendMessage(templateSMS);
+            
+            if (!"56510b6f384c4f8e881ee1614913a3ef".equals(order.getSupplier())) {// 可爱淘不需要发货短信
+                TemplateSMS templateSMS = new TemplateSMS();
+                templateSMS.setTemplateId("15127");
+                templateSMS.setTo(order.getMobile());
+                templateSMS.setParam(order.getOrderNo());
+                smsService.sendMessage(templateSMS);
+            }
         }
         map.put("result", "success");
         return "result";
@@ -99,11 +102,14 @@ public class PayNotifyController {
             order.setState(CoolOrder.ORDER_STATE_1);
             order.setPayTime(new Date());
             orderService.updateOrder(order);
-            TemplateSMS templateSMS = new TemplateSMS();
-            templateSMS.setTemplateId("15127");
-            templateSMS.setTo(order.getMobile());
-            templateSMS.setParam(order.getOrderNo());
-            smsService.sendMessage(templateSMS);
+            
+            if (!"56510b6f384c4f8e881ee1614913a3ef".equals(order.getSupplier())) {// 可爱淘不需要发货短信
+                TemplateSMS templateSMS = new TemplateSMS();
+                templateSMS.setTemplateId("15127");
+                templateSMS.setTo(order.getMobile());
+                templateSMS.setParam(order.getOrderNo());
+                smsService.sendMessage(templateSMS);
+            }
         }
         map.put("result", "success");
         return "result";

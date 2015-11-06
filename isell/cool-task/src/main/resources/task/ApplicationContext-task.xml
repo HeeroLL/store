@@ -13,6 +13,9 @@
 	<task:scheduled-tasks scheduler="taskScheduler">
 		<task:scheduled ref="coolshopRankingTask" method="execute" cron="1 0 0 * * ?" />
 		<task:scheduled ref="orderTask" method="execute" cron="0 * * * * ?" />
+		<!-- 每小时查询一下订单的物流信息是否更新 
+		<task:scheduled ref="logisticTask" method="execute" cron="2 0 * * * ?" />
+		 -->
 	</task:scheduled-tasks>
 	
 	<!-- 

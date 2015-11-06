@@ -60,7 +60,7 @@ public class OrderInfo {
      * HS 编码
      */
     @XmlElement(name = "BARCODE")
-    private String barcode;
+    private String barcode = "3304990010";
     
     /**
      * 行邮税号
@@ -114,7 +114,7 @@ public class OrderInfo {
      * 检验检疫商品备案编号
      */
     @XmlElement(name = "GOODIDINSP")
-    private String goodidinsp;
+    private String goodidinsp = "4100605453AW1239";
     
     /**
      * 订单编号

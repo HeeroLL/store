@@ -197,6 +197,20 @@ public class OrderController {
 	    return jsonData;
     }
 	
+	/**
+	 * 导入订单
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping("importCoolOrder")
+    @ResponseBody
+	public JsonData importCoolOrder(@RequestBody Map<String,Object> param) {
+		JsonData jsonData = new JsonData();
+		jsonData.setData(orderService.saveCoolOrderForImport(param).getColumns());
+		return jsonData;
+	}
+	
 //	/**
 //     * 导出订单
 //     * 

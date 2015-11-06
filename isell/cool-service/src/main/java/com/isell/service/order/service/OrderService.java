@@ -113,7 +113,7 @@ public interface OrderService {
     Record updateCoolOrderZfb(Map<String,Object> param);
     
     /**
-     * 修改订单（发货） 0 自提， 1 圆通 2 费舍尔
+     * 修改订单（订单发货）0 自提，1 圆通，2 费舍尔，10 宁波艾购保税仓，11 宁波优贝保税仓，20 郑州海关
      * 
      * @param param
      * @return Record
@@ -154,7 +154,7 @@ public interface OrderService {
     void getCoolOrderListSerial(CoolOrder order,JsonData jsonData);
     
     /**
-     * 通用查询
+     * 通用更新
      * 
      * @param param
      * @return Record
@@ -174,6 +174,13 @@ public interface OrderService {
 	 * @param param
 	 */
 	void getSumCoonShopSales(Map<String,Object> param,JsonData jsonData);
+	
+	/**
+	 * 导入订单
+	 * 
+	 * @param param
+	 */
+	Record saveCoolOrderForImport(Map<String,Object> param);
 	
 //	 /**
 //     * 导出订单

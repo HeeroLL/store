@@ -12,11 +12,11 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.isell.core.util.DateUtil;
+import com.isell.core.util.Identities;
 import com.isell.task.shop.dao.ShopRankingDao;
 import com.isell.task.shop.service.ShopRankingService;
 import com.isell.task.shop.vo.ShopRanking;
-import com.isell.task.util.DateUtil;
-import com.isell.task.util.Identities;
 
 /**
  * 酷店排名服务接口实现类

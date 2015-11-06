@@ -12,39 +12,53 @@ public class ZTOrderResponse {
     /**
      * 状态
      */
-    private boolean status;
+    private Boolean status;
+    
+    /**
+     * 状态码
+     */
+    private String statusCode;
     
     /**
      * 消息
      */
-    private String msg;
+    private String message;
     
     /**
      * 响应数据
      */
-    private Map<String, String> data;
+    private Map<String, String> result;
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getStatusCode() {
+        return statusCode;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
     }
 
-    public Map<String, String> getData() {
-        return data;
+    public String getMessage() {
+        return message;
     }
 
-    public void setData(Map<String, String> data) {
-        this.data = data;
+    public void setMessage(String message) {
+        this.message = message;
     }
+
+    public Map<String, String> getResult() {
+        return result;
+    }
+
+    public void setResult(Map<String, String> result) {
+        this.result = result;
+    }
+
 }

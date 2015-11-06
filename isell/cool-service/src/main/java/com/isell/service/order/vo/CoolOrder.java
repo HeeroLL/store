@@ -63,9 +63,19 @@ public class CoolOrder {
     public static final byte FHFS_1 = 1;
     
     /**
-     * 宁波保税仓
+     * 宁波艾购保税仓
      */
     public static final byte FHFS_10 = 10;
+    
+    /**
+     * 宁波优贝保税仓
+     */
+    public static final byte FHFS_11 = 11;
+    
+    /**
+     * 郑州保税仓
+     */
+    public static final byte FHFS_20 = 20;
     
     /**
      * 主键id
@@ -238,7 +248,7 @@ public class CoolOrder {
     private Byte payState;
     
     /**
-     * 订单类型：0：普通订单/1：一件代发
+     * 订单类型：0：普通订单/1：一件代发/2:采购订单
      */
     private Byte orderType;
     
@@ -286,6 +296,23 @@ public class CoolOrder {
      * 是否批量删除 0：否 /1：是  
      */
     private Byte isBatch;
+    
+    /**
+     * 0.正常订单 1.欠费订单 2.欠费后已缴费的订单
+     */
+    private Integer arrears;
+    
+    /**
+     * 0.正常订单 1.退款中2.退款完成
+     */
+    private Integer refundState;
+    
+    /**
+     * 退款金额
+     */
+    private BigDecimal refundAmount;
+    
+    
     
     /**
      * 行邮税
@@ -746,5 +773,29 @@ public class CoolOrder {
     public void setTaxPrice(BigDecimal taxPrice) {
         this.taxPrice = taxPrice;
     }
+
+	public Integer getArrears() {
+		return arrears;
+	}
+
+	public void setArrears(Integer arrears) {
+		this.arrears = arrears;
+	}
+
+	public Integer getRefundState() {
+		return refundState;
+	}
+
+	public void setRefundState(Integer refundState) {
+		this.refundState = refundState;
+	}
+
+	public BigDecimal getRefundAmount() {
+		return refundAmount;
+	}
+
+	public void setRefundAmount(BigDecimal refundAmount) {
+		this.refundAmount = refundAmount;
+	}
     
 }

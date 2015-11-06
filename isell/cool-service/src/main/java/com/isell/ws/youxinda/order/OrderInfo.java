@@ -1,7 +1,5 @@
 package com.isell.ws.youxinda.order;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -106,7 +104,8 @@ public class OrderInfo {
 	protected String shipperPhone;
 	protected String shipperAddress;
 	@XmlElement(required = true)
-	protected List<ProductDeatilType> orderProduct;
+	//protected List<ProductDeatilType> orderProduct;
+	protected ProductDeatilType[] orderProduct;
 
 	/**
 	 * Gets the value of the orderCode property.
@@ -675,6 +674,14 @@ public class OrderInfo {
 		this.shipperAddress = value;
 	}
 
+	public ProductDeatilType[] getOrderProduct() {
+		return orderProduct;
+	}
+
+	public void setOrderProduct(ProductDeatilType[] orderProduct) {
+		this.orderProduct = orderProduct;
+	}
+
 	/**
 	 * Gets the value of the orderProduct property.
 	 * 
@@ -698,15 +705,15 @@ public class OrderInfo {
 	 * 
 	 * 
 	 */
-	public List<ProductDeatilType> getOrderProduct() {
-		if (orderProduct == null) {
-			orderProduct = new ArrayList<ProductDeatilType>();
-		}
-		return this.orderProduct;
-	}
-
-	public void setOrderProduct(List<ProductDeatilType> orderProduct) {
-		this.orderProduct = orderProduct;
-	}
+//	public List<ProductDeatilType> getOrderProduct() {
+//		if (orderProduct == null) {
+//			orderProduct = new ArrayList<ProductDeatilType>();
+//		}
+//		return this.orderProduct;
+//	}
+//
+//	public void setOrderProduct(List<ProductDeatilType> orderProduct) {
+//		this.orderProduct = orderProduct;
+//	}
 
 }
