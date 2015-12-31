@@ -14,6 +14,7 @@
         <result column="def" jdbcType="BIT" property="def"/>
         <result column="m_id" jdbcType="INTEGER" property="mId"/>
         <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
     </resultMap>
     <select id="getCoolMemberReceiverById" resultMap="BaseResultMap">
         SELECT
@@ -22,6 +23,17 @@
              cool_member_receiver
         WHERE            
             id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <!-- 根据会员主键查询收货信息 -->
+     <select id="findCoolMemberReceiverByMId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_member_receiver
+        WHERE            
+            m_id = #{mId,jdbcType=INTEGER}
+        order by createtime desc
     </select>
     
     <select id="getCoolMemberReceiver" resultMap="BaseResultMap">
@@ -88,7 +100,10 @@
                 m_id,
             </if>
             <if test="createtime != null" >
-                createtime,
+                createtime, 
+            </if>
+            <if test="idcard != null" >
+                idcard, 
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -128,8 +143,19 @@
             <if test="createtime != null" >
                 #{createtime,jdbcType=TIMESTAMP},
             </if> 
+            <if test="idcard != null" >
+                #{idcard,jdbcType=VARCHAR},
+            </if> 
         </trim>
     </insert>
+
+	<!-- 根据会员主键把默认收货地址改为非默认 -->
+	<update id="updateCoolMemberReceiverDef">
+        UPDATE cool_member_receiver
+        set def = 0
+        WHERE 
+            m_id = #{mId,jdbcType=INTEGER} and def = 1
+    </update>
 
     <update id="updateCoolMemberReceiver" parameterType="com.isell.service.member.vo.CoolMemberReceiver" >
         UPDATE cool_member_receiver
@@ -169,6 +195,9 @@
             </if>
             <if test="createtime != null" >
                 createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="idcard != null" >
+                idcard = #{idcard,jdbcType=TIMESTAMP},
             </if>
         </set>
         WHERE 

@@ -3,7 +3,6 @@ package com.isell.ei.logistics.youxinda.bean;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 创建商品第二层
@@ -12,7 +11,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version [版本号, 2015-10-27]
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "SOAP-ENV:Body")
 public class Body {
 	
 	@XmlElement(name = "ns1:createProduct")

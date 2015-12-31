@@ -11,6 +11,21 @@ import java.util.Date;
  *
  */
 public class CoolUser{
+	/**
+	 * 用户状态 0.未审核 1.审核通过 2.审核未通过
+	 */
+	public static final Integer USER_STATE_0 = 0;
+	
+	/**
+	 * 用户状态 0.未审核 1.审核通过 2.审核未通过
+	 */
+	public static final Integer USER_STATE_1 = 1;
+	
+	/**
+	 * 用户状态 0.未审核 1.审核通过 2.审核未通过
+	 */
+	public static final Integer USER_STATE_2 = 2;
+	
     /**
      * 
      */
@@ -83,6 +98,16 @@ public class CoolUser{
      * 
      */
     private Integer parentStoreId;
+    
+    /**
+     * 验证码接收参数用
+     */
+    private String sms;
+    
+    /**
+     * 旧密码
+     */
+    private String oldPssword;
 
     /**
      * 
@@ -317,5 +342,21 @@ public class CoolUser{
      */
     public void setParentStoreId(Integer parentStoreId){
         this.parentStoreId = parentStoreId;
-    }    
+    }
+
+	public String getSms() {
+		return sms;
+	}
+
+	public void setSms(String sms) {
+		this.sms = sms;
+	}
+
+	public String getOldPssword() {
+		return oldPssword;
+	}
+
+	public void setOldPssword(String oldPssword) {
+		this.oldPssword = oldPssword;
+	}
 }

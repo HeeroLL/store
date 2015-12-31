@@ -20,7 +20,7 @@ public interface AlipayService {
     /**
      * 付款方支付宝账户姓名
      */
-    String ACCOUNT_NAME = "杭州艾易售电子商务有限公司‍";// "magic.wang@i-coolshop.cn";
+    String ACCOUNT_NAME = "上海艾易售电子商务有限公司‍";// "magic.wang@i-coolshop.cn";
     
     /**
      * 付款方支付宝账户

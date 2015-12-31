@@ -34,8 +34,18 @@
           SELECT * FROM cool_user 
     </select>
     
+    <!-- 根据用户名查询 -->
+    <select id="getCoolUserByUserName" resultMap="BaseResultMap">
+          SELECT
+            *
+          FROM
+             cool_user
+             where
+			(username=#{username} or email=#{username} or mobile=#{username}) and type=0  
+    </select>
+    
     <!-- 根据用户名查询注册用户数量 -->
-    <select id="getRegisterNumberByUserName">
+    <select id="getRegisterNumberByUserName" resultType="java.lang.Integer">
           select count(*) 
           from cool_user 
           where (username=#{userName} or email=#{userName} or mobile=#{userName}) and type=0  

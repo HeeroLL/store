@@ -29,6 +29,7 @@
 							<value>com.isell.ei.pay.weixin.controller</value>
 							<!-- 这个包是提供对外服务的，不通过ip校验，通过特有的校验方式校验 -->
 							<value>com.isell.ps</value>
+							<value>com.isell.app</value>
 						</list>
 					</property>
 					<!-- 配置允许访问的ip -->
@@ -38,6 +39,7 @@
 							<value>localhost</value>
 							<value>0:0:0:0:0:0:0:1</value>
 							<value>121.41.113.175</value>
+							<value>121.199.31.238</value>
 						</list>
 					</property>
 				</bean>

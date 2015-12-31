@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.isell.core.util.JsonData;
+import com.isell.ei.pay.weixin.bean.WeixinCustomsResponse;
 import com.isell.ei.pay.weixin.bean.WeixinPayResultInfo;
 import com.isell.ei.pay.weixin.service.WeixinPayService;
 
@@ -83,5 +84,53 @@ public class WeixinPayController {
     @RequestMapping("sendPayResult")
     public WeixinPayResultInfo sendPayResult(@RequestBody WeixinPayResultInfo payResultInfo) {
         return weixinPayService.sendPayResult(payResultInfo);
+    }
+    
+    /**
+     * 财付通报关
+     *
+     * @param paramMap 财付通报关参数
+     * @return 封装后的报关响应
+     */
+    @ResponseBody
+    @RequestMapping("sendOrder")
+    public JsonData sendOrder(@RequestBody TreeMap<String, String> paramMap) {
+        JsonData jsonData = new JsonData();
+        WeixinCustomsResponse response = weixinPayService.sendOrder(paramMap);
+        jsonData.setSuccess("0".equals(response.getRetcode()));
+        jsonData.setMsg(response.getRetmsg());
+        jsonData.setData(response);
+        return jsonData;
+    }
+    
+    /**
+     * 支付单申报海关状态查询
+     *
+     * @param paramMap 查询参数
+     * @return 响应信息
+     */
+    @ResponseBody
+    @RequestMapping("customQuery")
+    public JsonData customQuery(@RequestBody TreeMap<String, String> paramMap) {
+        JsonData jsonData = new JsonData();
+        TreeMap<String, Object> responseMap = weixinPayService.customQuery(paramMap);
+        jsonData.setSuccess("0".equals(responseMap.get("retcode")));
+        jsonData.setMsg((String)responseMap.get("retmsg"));
+        jsonData.setData(responseMap);
+        return jsonData;
+    }
+    
+    /**
+     * 支付单申报结果下载
+     *
+     * @param paramMap 查询参数
+     * @return 响应信息
+     */
+    @ResponseBody
+    @RequestMapping("downloadBill")
+    public JsonData downloadBill(@RequestBody TreeMap<String, String> paramMap) {
+        JsonData jsonData = new JsonData();
+        jsonData.setData(weixinPayService.downloadBill(paramMap));
+        return jsonData;
     }
 }

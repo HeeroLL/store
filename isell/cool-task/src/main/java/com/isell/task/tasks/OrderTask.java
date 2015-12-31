@@ -31,8 +31,16 @@ public class OrderTask {
      */
     public void execute() {
         log.debug("in OrderTask");
-        taskOrderService.cancelOrder();
-        taskOrderService.signOrder();
+        try {
+            taskOrderService.cancelOrder();
+            taskOrderService.signOrder();
+            taskOrderService.backCommission();
+        } catch (Exception e) {
+            log.error(e);
+        }
+       
+        taskOrderService.getKJB2CLogisticsInfo();
+        taskOrderService.pushPinduoduoOrder();
         log.debug("out OrderTask");
     }
 }

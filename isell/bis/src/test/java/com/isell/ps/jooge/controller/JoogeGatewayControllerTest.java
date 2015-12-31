@@ -67,10 +67,10 @@ public class JoogeGatewayControllerTest {
     @Test
     public void testGetOrderDetail() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("Id", "CO201509221113049241");
+        paramMap.put("Id", "CO201512301729497213378");
         
         String result =
-            HttpUtils.httpPost("http://localhost:8080/bis/jooge/gateway", getParam(paramMap, "order.detail.get"));
+            HttpUtils.httpPost("http://service.i-coolshop.com/jooge/gateway", getParam(paramMap, "order.detail.get"));
         
         System.out.println(result);
     }
@@ -104,11 +104,22 @@ public class JoogeGatewayControllerTest {
     @Test
     public void testGetProductDetail() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("Id", "233");
+        paramMap.put("Id", "407");
         
         String result =
-            HttpUtils.httpPost("http://localhost:8080/bis/jooge/gateway", getParam(paramMap, "merch.detail.get"));
+            HttpUtils.httpPost("http://service.i-coolshop.com/jooge/gateway", getParam(paramMap, "merch.detail.get"));
         
         System.out.println(result);
+    }
+    
+    @Test
+    public void testStock(){
+    	  Map<String, Object> paramMap = new HashMap<String, Object>();
+    	  paramMap.put("Id","407");
+    	  paramMap.put("Warehouse","2");
+    	  paramMap.put("Qty",2);
+    	 String result = 
+    			   HttpUtils.httpPost("http://localhost:8080/bis/jooge/gateway", getParam(paramMap, "inventory.update"));
+    	  System.out.println(result);
     }
 }

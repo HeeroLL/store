@@ -10,7 +10,7 @@ import javax.xml.namespace.QName;
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the com.ygjt.csp.api package. 
+ * generated in the com.isell.ws.zhengzhou.ws package. 
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -30,7 +30,7 @@ public class ObjectFactory {
     private final static QName _ReceiveResponse_QNAME = new QName("http://api.csp.ygjt.com/", "receiveResponse");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.ygjt.csp.api
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.isell.ws.zhengzhou.ws
      * 
      */
     public ObjectFactory() {

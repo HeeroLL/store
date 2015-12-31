@@ -17,4 +17,11 @@ public interface SmsService {
      * @return 处理结果
      */
     SMSResponse sendMessage(TemplateSMS templateSMS);
+
+    /**
+     * 震荣的短信服务接口
+     * @param templateSMS
+     * @return
+     */
+	SMSResponse sendZhengRong(TemplateSMS templateSMS);
 }

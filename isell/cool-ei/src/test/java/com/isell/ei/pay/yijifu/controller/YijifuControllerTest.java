@@ -34,13 +34,15 @@ public class YijifuControllerTest {
     @Test
     public void testPaymentBillV2Order() {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("orderNo", "CO201510131317306109" + System.currentTimeMillis());
-        map.put("outOrderNo", "CO201510131317306109"); // 外部订单号
+        map.put("orderNo", "CO201510131317306110" + System.currentTimeMillis());
+        map.put("outOrderNo", "CO201510131317306110"); // 外部订单号
         map.put("payerName", "张三"); // 支付人姓名
         map.put("payerId", "320401198405273212"); // 支付人证件号码
         map.put("goodsAmount", "100"); // 货款金额
         map.put("taxAmount", "0"); // 税款金额
         map.put("freightAmount", "5"); // 物流金额
+        map.put("tradeNo", "asdjkfhadfjhewiou"); // 支付交易号
+        map.put("paymentType", "WECHAT"); // 支付方式 ALIPAY:支付宝 WECHAT:微信支付
         
         String result = HttpUtils.httpPost(ORDER_URL, JsonUtil.writeValueAsString(map));
         System.out.println(result);

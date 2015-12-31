@@ -181,5 +181,19 @@ public class MemberController {
         jsonData.setData(memberService.deleteCoolMemberReceiver(param).getColumns());
         return jsonData;
     }
+	
+	/**
+	 * 导入用户信息自动注册会员及酷店
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping("importCoolMemberAndShop")
+    @ResponseBody
+	public JsonData importCoolMemberAndShop(@RequestBody Map<String,Object> param) {
+        JsonData jsonData = new JsonData();
+        jsonData.setData(memberService.saveCoolMemberAndShopForImport(param).getColumns());
+        return jsonData;
+    }
 
 }

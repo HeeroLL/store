@@ -32,4 +32,10 @@ public class PayNotifyControllerTest {
         System.out.println(result);
     }
     
+    @Test
+    public void testEhkingNotify() {
+        String json = "{\"completeDateTime\":\"2015-12-02 16:11:59\",\"hmac\":\"cbfb602c4d166a0c2d317e9fa1c47eaf\",\"merchantId\":\"120140230\",\"orderAmount\":\"1\",\"orderCurrency\":\"CNY\",\"remark\":\"\",\"requestId\":\"CO201512021609552409\",\"serialNumber\":\"50934a405307493bbc476b64440add89\",\"status\":\"SUCCESS\",\"totalRefundAmount\":\"0\",\"totalRefundCount\":\"0\"}";
+        String result = HttpUtils.httpPost("http://localhost:8080/bis/payNotify/ehking", json);
+        System.out.println(result);
+    }
 }

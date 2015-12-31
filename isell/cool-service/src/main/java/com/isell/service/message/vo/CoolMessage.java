@@ -2,11 +2,17 @@ package com.isell.service.message.vo;
 
 import java.util.Date;
 
+import com.isell.core.mybatis.page.PageConfig;
+
 /**
+ * 
+ * 消息表VO
+ * 
+ * @author wangpeng
+ * @version [版本号, 2015-11-20]
  *
- * @author 
  */
-public class CoolMessage{
+public class CoolMessage extends PageConfig{
     /**
      * 
      */

@@ -1,11 +1,5 @@
 package com.isell.service.order.service.impl;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -16,17 +10,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -41,33 +32,52 @@ import com.isell.core.util.JsonData;
 import com.isell.core.util.JsonUtil;
 import com.isell.core.util.Record;
 import com.isell.core.util.SMSUtil;
+import com.isell.log.SendMessageLogUtil;
 import com.isell.pay.alipay.util.AlipayNotify;
 import com.isell.service.account.dao.CoonRunAccountMapper;
 import com.isell.service.account.vo.CoonRunAccount;
 import com.isell.service.alipay.dao.CoolAlipayMapper;
 import com.isell.service.alipay.vo.CoolAlipay;
+import com.isell.service.code.dao.CoolConfigMapper;
+import com.isell.service.code.vo.CoolConfig;
 import com.isell.service.common.GeneralDef;
 import com.isell.service.common.po.AddressInfo;
 import com.isell.service.common.po.ItemInfo;
 import com.isell.service.common.po.OrderRequest;
+import com.isell.service.custorms.po.CoolProductCustomsNbyb;
+import com.isell.service.custorms.po.CoolProductCustomsZz;
+import com.isell.service.custorms.service.CoolProductCustomsNbybService;
+import com.isell.service.custorms.service.CoolProductCustomsZzService;
 import com.isell.service.fare.dao.CoonFareTempProMapper;
 import com.isell.service.fare.vo.CoonFareTempPro;
+import com.isell.service.member.dao.CoolMemberMapper;
 import com.isell.service.member.dao.CoolMemberReceiverMapper;
+import com.isell.service.member.dao.CoolUserMapper;
 import com.isell.service.member.vo.CoolMemberReceiver;
 import com.isell.service.message.dao.CoolMessageMapper;
 import com.isell.service.message.vo.CoolMessage;
+import com.isell.service.order.dao.CoolDistributionCarMapper;
 import com.isell.service.order.dao.CoolOrderItemMapper;
 import com.isell.service.order.dao.CoolOrderMapper;
+import com.isell.service.order.dao.CoonShopcartMapper;
+import com.isell.service.order.po.CoolDistributionCarInfo;
 import com.isell.service.order.po.CoolOrderParam;
 import com.isell.service.order.po.CoolOrderSelect;
 import com.isell.service.order.po.CoolProductSales;
+import com.isell.service.order.po.CoonShopCartInfo;
+import com.isell.service.order.po.CoonShopCartParam;
 import com.isell.service.order.service.OrderService;
+import com.isell.service.order.vo.CoolDistributionCar;
 import com.isell.service.order.vo.CoolOrder;
 import com.isell.service.order.vo.CoolOrderItem;
+import com.isell.service.order.vo.CoonShopcart;
 import com.isell.service.product.dao.CoolProductGgMapper;
 import com.isell.service.product.dao.CoolProductMapper;
+import com.isell.service.product.dao.CoolProductReviewMapper;
+import com.isell.service.product.po.CoolProductInfo;
 import com.isell.service.product.vo.CoolProduct;
 import com.isell.service.product.vo.CoolProductGg;
+import com.isell.service.product.vo.CoolProductReview;
 import com.isell.service.shop.dao.CoonShopLevelMapper;
 import com.isell.service.shop.dao.CoonShopMapper;
 import com.isell.service.shop.dao.CoonShopPartnerMapper;
@@ -76,9 +86,11 @@ import com.isell.service.shop.vo.CoonShop;
 import com.isell.service.shop.vo.CoonShopLevel;
 import com.isell.service.shop.vo.CoonShopPartner;
 import com.isell.service.shop.vo.CoonShopProduct;
+import com.isell.ws.WebServiceClient;
 import com.isell.ws.ningbo.bean.Detail;
 import com.isell.ws.ningbo.bean.Order;
 import com.isell.ws.ningbo.bean.OrderMsg;
+import com.isell.ws.ningbo.bean.OrderSearchResult;
 import com.isell.ws.ningbo.bean.UserReg;
 import com.isell.ws.ningbo.service.YoubeiService;
 import com.isell.ws.ningbo.ws.order.KJB2CWebService;
@@ -88,7 +100,6 @@ import com.isell.ws.zhengzhou.bean.Cbecmessage;
 import com.isell.ws.zhengzhou.bean.Messagebody;
 import com.isell.ws.zhengzhou.bean.Messagehead;
 import com.isell.ws.zhengzhou.bean.OrderInfo;
-import com.isell.ws.zhengzhou.ws.WSRecvService;
 
 /**
  * 订单服务接口实现类
@@ -98,6 +109,19 @@ import com.isell.ws.zhengzhou.ws.WSRecvService;
  */
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
+    
+    /**
+     * 郑州商品海关备案业务层接口
+     */
+    @Resource
+    private CoolProductCustomsZzService coolProductCustomsZzService;
+    
+    /**
+     * 宁波优贝商品海关备案业务层接口
+     */
+    @Resource
+    private CoolProductCustomsNbybService coolProductCustomsNbybService;
+    
     /**
      * 订单查询mapper
      */
@@ -133,6 +157,18 @@ public class OrderServiceImpl implements OrderService {
      */
     @Resource
     private CoolMemberReceiverMapper coolMemberReceiverMapper;
+    
+    /**
+     * 用户表mapper
+     */
+    @Resource
+    private CoolUserMapper coolUserMapper;
+    
+    /**
+     * 会员表mapper
+     */
+    @Resource
+    private CoolMemberMapper coolMemberMapper;
     
     /**
      * 酷店表mapper
@@ -172,6 +208,27 @@ public class OrderServiceImpl implements OrderService {
     
     @Resource
     private CoolMessageMapper messageMapper;
+    
+    @Resource
+    private CoolConfigMapper coolConfigMapper;
+    
+    /**
+     * 一件代发进货单表
+     */
+    @Resource
+    private CoolDistributionCarMapper coolDistributionCarMapper;
+    
+    /**
+     * 商品评价表mapper
+     */
+    @Resource
+    private CoolProductReviewMapper coolProductReviewMapper;
+    
+    /**
+     * 购物车表mapper
+     */
+    @Resource
+    private CoonShopcartMapper coonShopcartMapper;
     
     /**
      * 配置信息
@@ -267,16 +324,19 @@ public class OrderServiceImpl implements OrderService {
     }
     
     /**
-     * 确认订单
+     * 确认订单（不保存订单）
      */
     @Override
     public Record getCoolOrderReturn(CoolOrderParam param) {
+        Record record = new Record();
+        boolean success = false;
+        
         Double psPrice = 0.0; // 邮费
         BigDecimal total = new BigDecimal(0); // 订单总金额
         Double totalWeight = 0.0; // 订单总重量，单位克
         int count = 0; // 订单商品数量
         double tax = 0.0; // 税
-        
+        BigDecimal chaiPrice = new BigDecimal(0); // 一件代发拆弹价格
         List<CoolProduct> products = new ArrayList<CoolProduct>();
         String isProducts = "0";
         List<CoolOrderItem> orderItems = param.getOrderItems();
@@ -285,7 +345,9 @@ public class OrderServiceImpl implements OrderService {
             CoolProductGg productGg;
             for (CoolOrderItem item : orderItems) {
                 productGg = coolProductGgMapper.getCoolProductGgById(item.getGid());
-                product = coolProductMapper.getCoolProductById(productGg.getGoodsId());
+                product = new CoolProduct();
+                CoolProduct productDb = coolProductMapper.getCoolProductById(productGg.getGoodsId());
+                BeanUtils.copyProperties(productDb, product);
                 
                 Byte orderType = param.getOrderType();
                 if (0 == orderType) { // 普通订单
@@ -296,18 +358,31 @@ public class OrderServiceImpl implements OrderService {
                     }
                 } else if (1 == orderType) { // 一件代发
                     Integer userId = param.getUserId();
-                    BigDecimal rate = coonShopLevelMapper.getLevelPrate(userId.toString());
-                    product.setPrice(productGg.getDrpPrice().multiply(rate));
+                    // 查询酷店的vip等级，来调取gg里边的vip价格
+                    CoonShop coonShop = coonShopMapper.getCoonShopByUserId(String.valueOf(userId));
+                    Integer vip = coonShop.getVip();
+                    BigDecimal price = new BigDecimal(0);
+                    if (vip == 1) {
+                        price = productGg.getVipPriceA();
+                    } else if (vip == 2) {
+                        price = productGg.getVipPriceB();
+                    } else if (vip == 3) {
+                        price = productGg.getVipPriceC();
+                    }
+                    // 如果vip等于0 或者有没有设置vip价格的商品就直接去原先的供货价
+                    if (price.compareTo(BigDecimal.ZERO) == 0) {
+                        BigDecimal rate = coonShopLevelMapper.getLevelPrate(userId.toString());
+                        price = productGg.getDrpPrice().multiply(rate);
+                    }
+                    product.setPrice(price);
+                    chaiPrice = price;
                 }
-                
                 count += item.getCount();
                 totalWeight += item.getCount() * (productGg.getWeight() == null ? 0 : productGg.getWeight());
                 total = total.add(product.getPrice().multiply(new BigDecimal(item.getCount())));
                 product.setStandard(productGg);
                 product.setQuantity(item.getCount());
-                
                 tax += product.getPrice().multiply(product.getTax()).doubleValue() * count / 100;
-                
                 products.add(product);
                 isProducts = "1";
             }
@@ -323,16 +398,19 @@ public class OrderServiceImpl implements OrderService {
                     total = total.add(new BigDecimal(tax));
                 }
             }
+            
+            record.set("count", count);
+            record.set("products", products);
+            record.set("total", total.add(new BigDecimal(psPrice)));
+            record.set("psPrice", psPrice);
+            record.set("taxPrice", tax);
+            record.set("isProducts", isProducts);
+            record.set("chaiPrice", chaiPrice);// 仅供拆单用
+            success = true;
+        } else {
+            record.set("msg", "参数错误，订单详情不能为空");
         }
-        
-        Record record = new Record();
-        record.set("count", count);
-        record.set("products", products);
-        record.set("total", total.add(new BigDecimal(psPrice)));
-        record.set("psPrice", psPrice);
-        record.set("taxPrice", tax);
-        record.set("isProducts", isProducts);
-        
+        record.set("success", success);
         return record;
     }
     
@@ -369,149 +447,205 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Record saveCoolOrder(CoolOrderParam param) {
         Record record = new Record();
+        boolean success = false;
         Date date = new Date();
         Integer userId = param.getUserId();
-        BigDecimal total = new BigDecimal(0);
-        
-        CoolOrder order = new CoolOrder();
-        order.setmId(userId);
-        order.setCreatetime(new Timestamp(date.getTime()));
-        
-        // Boolean flag = false;
-        
-        if (StringUtils.isNotEmpty(param.getIsBatch()) && "1".equals(param.getIsBatch())) {
-            // flag = true;
-            order.setIsBatch(new Byte("1"));
-        } else {
-            order.setIsBatch(new Byte("0"));
-        }
-        
-        // 收货地址
-        Integer recId = param.getRecId();
-        if (recId != null) {
-            CoolMemberReceiver recRec = coolMemberReceiverMapper.getCoolMemberReceiverById(recId);
-            order.setLocationP(recRec.getLocationP());
-            order.setLocationC(recRec.getLocationC());
-            order.setLocationA(recRec.getLocationA());
-            order.setAddress(recRec.getAddress());
-            order.setLinkman(recRec.getName());
-            order.setMobile(recRec.getMobile());
-            order.setTel(recRec.getTel());
-            order.setZipcode(recRec.getZipcode());
-        } else {
-            order.setLocationP(param.getLocationP());
-            order.setLocationC(param.getLocationC());
-            order.setLocationA(param.getLocationA());
-            order.setAddress(param.getAddress());
-            order.setLinkman(param.getLinkman());
-            order.setMobile(param.getMobile());
-            order.setTel(param.getTel());
-            order.setZipcode(param.getZipcode());
-            order.setIdcard(param.getIdcard());
-            order.setOrderType(param.getOrderType());
-        }
-        
-        // 旗舰店分佣
-        boolean canSplitBrokerage = (param.getShareUser() != null && !param.getShareUser().equals(userId));
-        if (canSplitBrokerage) {
-            order.setShareUser(param.getShareUser());
-            order.setShareAdded(false);
-        }
-        
-        // 配送方式
-        order.setPsfs(param.getPsfs());
-        // 支付方式
-        order.setZffs(param.getZffs());
-        // 生成订单号 20位 规则：CO+14位时间字符串+4位随机码
-        String orderNo = "CO" + DateUtil.dateToStr(DateUtil.yyyyMMddHHmmss, new Date()) + CommonUtils.randomFour();
-        order.setOrderNo(orderNo);
-        
-        // 处理商品信息
-        List<CoolOrderItem> items = param.getOrderItems();
-        if (CollectionUtils.isNotEmpty(items)) {
-            CoolProduct product;
-            CoolProductGg productGg;
-            for (CoolOrderItem item : items) {
-                product = coolProductMapper.getCoolProductById(item.getgId());
-                productGg = coolProductGgMapper.getCoolProductGgById(item.getGid());
+        if (userId != null) {
+            String mId = param.getmId();
+            if (StringUtils.isNotEmpty(mId)) {
+                BigDecimal total = new BigDecimal(0);
                 
-                int count = item.getCount();
-                // 保存商品清单
-                item.setName(product.getName());
-                item.setLogo(product.getLogo());
-                item.setGg(productGg.getGg());
-                item.setCount(count);
-                item.setOrderNo(orderNo);
-                item.setbId(product.getbId());
-                item.setGid(productGg.getId());
+                CoolOrder order = new CoolOrder();
+                order.setmId(userId);
+                order.setCreatetime(new Timestamp(date.getTime()));
                 
-                Byte orderType = param.getOrderType();
-                if (0 == orderType) { // 普通订单
-                    if (productGg.getCxjg().compareTo(new BigDecimal(0)) == 0) {
-                        total = total.add(productGg.getJg().multiply(new BigDecimal(count)));
-                        item.setPrice(productGg.getJg());
-                    } else {
-                        total = total.add(productGg.getCxjg().multiply(new BigDecimal(count)));
-                        item.setPrice(productGg.getCxjg());
-                    }
-                } else if (1 == orderType) { // 一件代发
-                    BigDecimal rate = coonShopLevelMapper.getLevelPrate(userId.toString());
-                    total = total.add(productGg.getDrpPrice().multiply(rate).multiply(new BigDecimal(count)));
-                    item.setPrice(productGg.getDrpPrice().multiply(rate));
+                // Boolean flag = false;
+                
+                if (StringUtils.isNotEmpty(param.getIsBatch()) && "1".equals(param.getIsBatch())) {
+                    // flag = true;
+                    order.setIsBatch(new Byte("1"));
+                } else {
+                    order.setIsBatch(new Byte("0"));
+                }
+                
+                // 收货地址
+                Integer recId = param.getRecId();
+                if (recId != null) {
+                    CoolMemberReceiver recRec = coolMemberReceiverMapper.getCoolMemberReceiverById(recId);
+                    order.setLocationP(recRec.getLocationP());
+                    order.setLocationC(recRec.getLocationC());
+                    order.setLocationA(recRec.getLocationA());
+                    order.setAddress(recRec.getAddress());
+                    order.setLinkman(recRec.getName());
+                    order.setMobile(recRec.getMobile());
+                    order.setTel(recRec.getTel());
+                    order.setZipcode(recRec.getZipcode());
+                } else {
+                    order.setLocationP(param.getLocationP());
+                    order.setLocationC(param.getLocationC());
+                    order.setLocationA(param.getLocationA());
+                    order.setAddress(param.getAddress());
+                    order.setLinkman(param.getLinkman());
+                    order.setMobile(param.getMobile());
+                    order.setTel(param.getTel());
+                    order.setZipcode(param.getZipcode());
+                    order.setIdcard(param.getIdcard());
+                    order.setOrderType(param.getOrderType());
                 }
                 
                 // 旗舰店分佣
-                if (canSplitBrokerage && param.getStoreId() != null) {
-                    CoonShopProduct shopProductP = new CoonShopProduct();
-                    shopProductP.setpId(item.getgId().toString());
-                    shopProductP.setsId(param.getStoreId().toString());
-                    CoonShopProduct shopProduct = coonShopProductMapper.getCoonShopProduct(shopProductP);
-                    BigDecimal brokerage = shopProduct.getBrokerage();
-                    if (brokerage != null) {
-                        // 二次分佣 = 分佣比例 * 商品价格 * 佣金比例 * 酷店等级佣金比例(旗舰店为100%)
-                        item.setBrokerage(brokerage.multiply(item.getPrice()).multiply(product.getDivide()));
-                    }
+                boolean canSplitBrokerage = (param.getShareUser() != null && !param.getShareUser().equals(userId));
+                if (canSplitBrokerage) {
+                    order.setShareUser(param.getShareUser());
+                    order.setShareAdded(false);
                 }
-                coolOrderItemMapper.saveCoolOrderItem(item);
                 
-                // 处理商品库存和销量
-                jdbcTemplate.update("update cool_product_gg set stock=stock-" + count + ",sales=sales+" + count
-                    + " where id=?", item.getGid());
-                jdbcTemplate.update("update cool_product set sales=sales+" + count + " where id=?", item.getgId());
-                // 删除购物车中对应商品，如果有的话
-                jdbcTemplate.update("delete from coon_shopcart where user_id=? and p_id=? and g_id=?",
-                    userId,
-                    item.getgId(),
-                    item.getGid());
-                order.setbId(product.getbId());
+                // 配送方式
+                order.setPsfs(param.getPsfs());
+                // 支付方式
+                order.setZffs(param.getZffs());
+                // 生成订单号 20位 规则：CO+14位时间字符串+4位随机码
+                String orderNo =
+                    "CO" + DateUtil.dateToStr(DateUtil.yyyyMMddHHmmss, new Date()) + CommonUtils.randomFour();
+                order.setOrderNo(orderNo);
+                
+                // 处理商品信息
+                List<CoolOrderItem> items = param.getOrderItems();
+                if (CollectionUtils.isNotEmpty(items)) {
+                    CoolProduct product;
+                    CoolProductGg productGg;
+                    boolean flag = false;
+                    for (CoolOrderItem item : items) {
+                        flag = false;
+                        Integer pId = item.getgId();
+                        if (pId != null) {
+                            Integer gid = item.getGid();
+                            if (gid != null) {
+                                product = coolProductMapper.getCoolProductById(item.getgId());
+                                if (product == null) {
+                                    record.set("msg", "参数错误，根据商品主键" + pId + "无法获取商品信息");
+                                    break;
+                                }
+                                productGg = coolProductGgMapper.getCoolProductGgById(item.getGid());
+                                if (productGg == null) {
+                                    record.set("msg", "参数错误，根据商品规格主键" + gid + "无法获取商品规格信息");
+                                    break;
+                                }
+                                BigDecimal divide = product.getDivide();
+                                int count = item.getCount();
+                                // 保存商品清单
+                                item.setName(product.getName());
+                                item.setLogo(product.getLogo());
+                                item.setGg(productGg.getGg());
+                                item.setCount(count);
+                                item.setOrderNo(orderNo);
+                                item.setbId(product.getbId());
+                                item.setGid(productGg.getId());
+                                
+                                Byte orderType = param.getOrderType();
+                                if (0 == orderType) { // 普通订单
+                                    if (productGg.getCxjg().compareTo(new BigDecimal(0)) == 0) {
+                                        total = total.add(productGg.getJg().multiply(new BigDecimal(count)));
+                                        item.setPrice(productGg.getJg());
+                                    } else {
+                                        total = total.add(productGg.getCxjg().multiply(new BigDecimal(count)));
+                                        item.setPrice(productGg.getCxjg());
+                                    }
+                                    // 添加佣金
+                                    BigDecimal profit =
+                                        item.getPrice().multiply(new BigDecimal(item.getCount())).multiply(divide);
+                                    item.setProfit(profit);
+                                } else if (1 == orderType) { // 一件代发
+                                    BigDecimal rate = coonShopLevelMapper.getLevelPrate(userId.toString());
+                                    total =
+                                        total.add(productGg.getDrpPrice()
+                                            .multiply(rate)
+                                            .multiply(new BigDecimal(count)));
+                                    item.setPrice(productGg.getDrpPrice().multiply(rate));
+                                }
+                                
+                                // 旗舰店分佣
+                                if (canSplitBrokerage && param.getStoreId() != null) {
+                                    CoonShopProduct shopProductP = new CoonShopProduct();
+                                    shopProductP.setpId(item.getgId().toString());
+                                    shopProductP.setsId(param.getStoreId().toString());
+                                    CoonShopProduct shopProduct =
+                                        coonShopProductMapper.getCoonShopProduct(shopProductP);
+                                    BigDecimal brokerage = shopProduct.getBrokerage();
+                                    if (brokerage != null) {
+                                        // 二次分佣 = 分佣比例 * 商品价格 * 佣金比例 * 酷店等级佣金比例(旗舰店为100%)
+                                        item.setBrokerage(brokerage.multiply(item.getPrice())
+                                            .multiply(product.getDivide()));
+                                    }
+                                }
+                                coolOrderItemMapper.saveCoolOrderItem(item);
+                                
+                                // 处理商品库存和销量
+                                jdbcTemplate.update("update cool_product_gg set stock=stock-" + count + ",sales=sales+"
+                                    + count + " where id=?", item.getGid());
+                                jdbcTemplate.update("update cool_product set sales=sales+" + count + " where id=?",
+                                    item.getgId());
+                                // 删除购物车中对应商品，如果有的话
+                                jdbcTemplate.update("delete from coon_shopcart where user_id=? and p_id=? and g_id=?",
+                                    userId,
+                                    item.getgId(),
+                                    item.getGid());
+                                order.setbId(product.getbId());
+                                
+                                flag = true;
+                            } else {
+                                record.set("msg", "参数错误，商品规格主键不能为空");
+                                break;
+                            }
+                        } else {
+                            record.set("msg", "参数错误，商品主键不能为空");
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        if (param.getPsPrice() != null) {
+                            order.setPsPrice(param.getPsPrice());
+                            total.add(param.getPsPrice());
+                        }
+                        order.setTotal(total);
+                        order.setSupplier(param.getSupplier());
+                        order.setoType(param.getoType());
+                        order.setmId(Integer.valueOf(mId));
+                        
+                        if (param.getStoreId() != null) {
+                            CoonShop shop = coonShopMapper.getCoonShopById(param.getStoreId().toString());
+                            CoonShopLevel level = coonShopLevelMapper.getCoonShopLevelById(shop.getLevel());
+                            
+                            // 计算订单佣金
+                            BigDecimal shopRate = level.getcRate();
+                            BigDecimal profit = coolOrderItemMapper.getMaxProfit(orderNo);// 订单最大佣金
+                            profit = profit.multiply(shopRate);
+                            order.setSupplierProfit(profit); // 设置订单的酷店分成金额
+                        }
+                        
+                        int result = coolOrderMapper.saveCoolOrder(order);
+                        
+                        record.set("id", order.getId());
+                        record.set("orderNo", order.getOrderNo());
+                        if (result > 0) {
+                            success = true;
+                        } else {
+                            record.set("msg", "订单保存失败");
+                        }
+                        // record.set("zffs",param.getZffs());
+                        // record.set("storeId",param.getStoreId());
+                    }
+                } else {
+                    record.set("msg", "参数错误，订单详情不能为空");
+                }
+            } else {
+                record.set("msg", "参数错误，会员主键不能为空");
             }
-        }
-        if (param.getPsPrice() != null) {
-            order.setPsPrice(param.getPsPrice());
-            total.add(param.getPsPrice());
-        }
-        order.setTotal(total);
-        order.setSupplier(param.getStoreId().toString());
-        order.setoType(param.getoType());
-        
-        if (param.getStoreId() != null) {
-            CoonShop shop = coonShopMapper.getCoonShopById(param.getStoreId().toString());
-            CoonShopLevel level = coonShopLevelMapper.getCoonShopLevelById(shop.getLevel());
-            
-            // 计算订单佣金
-            BigDecimal shopRate = level.getcRate();
-            BigDecimal profit = coolOrderItemMapper.getMaxProfit(orderNo);// 订单最大佣金
-            profit = profit.multiply(shopRate);
-            order.setSupplierProfit(profit); // 设置订单的酷店分成金额
+        } else {
+            record.set("msg", "参数错误，用户主键不能为空");
         }
         
-        int result = coolOrderMapper.saveCoolOrder(order);
-        
-        record.set("id", order.getId());
-        record.set("orderNo", order.getOrderNo());
-        record.set("success", result > 0 ? true : false);
-        // record.set("zffs",param.getZffs());
-        // record.set("storeId",param.getStoreId());
+        record.set("success", success);
         return record;
     }
     
@@ -682,7 +816,9 @@ public class OrderServiceImpl implements OrderService {
         
         String fhfs = param.get("fhfs").toString();
         int resultUpdate = 0;
+        
         if ("0".equals(fhfs)) {
+            orderR.setFhfs(Byte.parseByte(fhfs));
             CoolOrder order = new CoolOrder();
             order.setState(CoolOrder.ORDER_STATE_2);
             order.setPsfs("自提");
@@ -692,10 +828,11 @@ public class OrderServiceImpl implements OrderService {
             order.setId(orderR.getId());
             resultUpdate = coolOrderMapper.updateCoolOrder(order);
             
-            sendMessage(orderR, send_sms_url);
+            // sendMessage(orderR, send_sms_url);
             record.set("success", resultUpdate > 0 ? true : false);
             return record;
         } else if ("1".equals(fhfs)) {
+            orderR.setFhfs(Byte.parseByte(fhfs));
             String yuantong_surface_url = param.get("yuantong_surface_url").toString();
             CoolOrder order = new CoolOrder();
             OrderRequest request = new OrderRequest();
@@ -756,26 +893,39 @@ public class OrderServiceImpl implements OrderService {
             record.set("success", resultUpdate > 0 ? true : false);
             return record;
         } else if ("10".equals(fhfs)) { // 宁波艾购保税仓
+            orderR.setFhfs(Byte.parseByte(fhfs));
             CoolOrder order = new CoolOrder();
             order.setState(CoolOrder.ORDER_STATE_11); // 已通知海关发货
             order.setFhfs((byte)10);
             order.setUpdatetime(new Timestamp(System.currentTimeMillis()));
             
             order.setId(orderR.getId());
+            // 支付信息报关
+            sendPayInfo(order, orderR);
             resultUpdate = coolOrderMapper.updateCoolOrder(order);
             
-            sendMessage(orderR, send_sms_url);
+            // sendMessage(orderR, send_sms_url);
             record.set("success", resultUpdate > 0 ? true : false);
             return record;
         } else if ("11".equals(fhfs)) { // 宁波优贝保税仓
+            orderR.setFhfs(Byte.parseByte(fhfs));
             OrderMsg orderMsg = getOrderMsg(orderR);
             String xml = JaxbUtil.convertToXml(orderMsg);
             xml = xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "");
             
+            StringBuilder builder = new StringBuilder();
+            // 记录发送日志
+            builder.append("parameter: ")
+                .append(System.getProperty("line.separator", "\n"))
+                .append(xml)
+                .append(System.getProperty("line.separator", "\n"));
+            
             KJB2CWebService service = new KJB2CWebService();
             String result =
                 service.getKJB2CWebServiceSoap12().addOrderKJB2C(YoubeiService.ERPKEY, YoubeiService.ERPSECRET, xml);
-            System.out.println(result);
+            builder.append("response:  ").append(result);
+            
+            SendMessageLogUtil.info(builder.toString());
             if ("success".equals(result)) {
                 CoolOrder order = new CoolOrder();
                 order.setState(CoolOrder.ORDER_STATE_11); // 已通知海关发货
@@ -783,20 +933,25 @@ public class OrderServiceImpl implements OrderService {
                 order.setUpdatetime(new Timestamp(System.currentTimeMillis()));
                 
                 order.setId(orderR.getId());
+                // 支付信息报关
+                sendPayInfo(order, orderR);
                 resultUpdate = coolOrderMapper.updateCoolOrder(order);
-                
-                sendMessage(orderR, send_sms_url);
+                // sendMessage(orderR, send_sms_url);
             }
             
             record.set("success", resultUpdate > 0 ? true : false);
             return record;
         } else if ("20".equals(fhfs)) { // 郑州海关
+            orderR.setFhfs(Byte.parseByte(fhfs));
             String xml = JaxbUtil.convertToXml(getCbecmessage(orderR));
-            System.out.println(xml);
             // 发消息给海关
-            WSRecvService service = new WSRecvService();
-            String result = service.getWSRecvServicePort().receive(xml);
-            System.out.println(result);
+            String endpoint = "http://www.haeport.com:8000/com.ygjt.csp.api.WSRecvService?wsdl";
+            String methodName = "receive"; // 平台暴露的方法名
+            String namespace = "http://api.csp.ygjt.com/"; // 命名空间
+            String parametersName = "arg0"; // 参数名
+            String result = WebServiceClient.invokeRemoteFuc(endpoint, methodName, xml, namespace, parametersName);
+            // WSRecvService service = new WSRecvService();
+            // String result = service.getWSRecvServicePort().receive(xml);
             record.set("success", "SUCCESS".equals(result));
             
             if ("SUCCESS".equals(result)) {
@@ -806,8 +961,10 @@ public class OrderServiceImpl implements OrderService {
                 order.setUpdatetime(new Timestamp(System.currentTimeMillis()));
                 
                 order.setId(orderR.getId());
+                // 支付信息报关
+                sendPayInfo(order, orderR);
                 resultUpdate = coolOrderMapper.updateCoolOrder(order);
-                sendMessage(orderR, send_sms_url);
+                // sendMessage(orderR, send_sms_url);
             }
             
             // 发送消息给物流
@@ -818,8 +975,67 @@ public class OrderServiceImpl implements OrderService {
         return record;
     }
     
+    /**
+     * 发送支付信息给海关
+     * 
+     * @param order 订单信息
+     * @param orderDB 订单数据库信息
+     */
+    private void sendPayInfo(CoolOrder order,  CoolOrder orderDB) {
+        if (orderDB.getZffs() == null || orderDB.getFhfs() == null) {
+            return;
+        }
+        String customsPlace = "HENAN"; // 支付宝发送海关编码 新郑综合保税区：HENAN，宁波：NINGBO
+        String customs = "9"; // 微信发送海关编码 3宁波 9 郑州（综保区）
+        String mchCustomsNo = "3117964017"; // 微信商户备案号 3117964017：艾售-郑州综保，3302461678：宁兴优贝-宁波
+        if (orderDB.getFhfs() == CoolOrder.FHFS_10 || orderDB.getFhfs() == CoolOrder.FHFS_11) { // 宁波海关
+            customsPlace = "NINGBO";
+            customs = "3";
+            mchCustomsNo = "3302461678";
+        } else if (orderDB.getFhfs() == CoolOrder.FHFS_20) { // 郑州综保区海关
+            customsPlace = "HENAN";
+            customs = "9";
+            mchCustomsNo = "3117964017";
+        }
+        
+        if (orderDB.getZffs() == CoolOrder.ZFFS_2) {
+            Map<String, String> map = new HashMap<String, String>();
+            // 报关流水号，商户生成的用于唯一标识一次 报关操作的业务编号。 建议生成规则：yyyymmmdd 型 8位日期拼接 4 位序列号
+            map.put("out_request_no", "isell" + System.currentTimeMillis());
+            map.put("trade_no", orderDB.getTradeNo()); // 支付宝交易号
+            map.put("amount", orderDB.getTotal().toString()); // 报关金额
+            if (orderDB.getTotal().compareTo(new BigDecimal(100)) > 0) {
+                map.put("amount", new BigDecimal(99).add(orderDB.getPsPrice()).toString()); // 报关金额
+            }
+            map.put("merchant_customs_code", "3117964017"); // 商户海关备案编号
+            map.put("customs_place", customsPlace); // 海关编号 如果您的支付单要报关到新郑综合保税区，请在报关接口的海关字段中填写HENAN。
+            map.put("merchant_customs_name", "上海艾售电子商务有限公司"); // 商户海关备案名称 上海艾售电子商务有限公司jwyhanguo_card
+            String result =
+                HttpUtils.httpPost(config.getServiceDomain() + "/pay/alipay/sendOrder",
+                    JsonUtil.writeValueAsString(map));
+            JsonData jsonData = JsonUtil.readValue(result, JsonData.class);
+            if (jsonData.getSuccess()) {
+                order.setPayState((byte)1); // 设置支付报关状态
+            }
+        } else if (orderDB.getZffs() == CoolOrder.ZFFS_3) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("transaction_id", orderDB.getTradeNo()); // 微信支付交易号
+            map.put("mch_customs_no", mchCustomsNo); // 商户海关备案号（这个是宁兴优贝的）
+            map.put("customs", customs); // 海关编号：3宁波 9 郑州（综保区）
+            
+            String result =
+                HttpUtils.httpPost(config.getServiceDomain() + "/pay/weixin/sendOrder",
+                    JsonUtil.writeValueAsString(map));
+            JsonData jsonData = JsonUtil.readValue(result, JsonData.class);
+            if (jsonData.getSuccess()) {
+                order.setPayState((byte)1); // 设置支付报关状态
+            }
+        }
+    }
+    
     private void sendMessage(CoolOrder orderR, String url) {
-        if (!"56510b6f384c4f8e881ee1614913a3ef".equals(orderR.getSupplier())) {// 可爱淘不需要发货短信
+        if (!"56510b6f384c4f8e881ee1614913a3ef".equals(orderR.getSupplier())
+            && !"b4124c7271094479ae2c20cce611b5f4".equals(orderR.getSupplier())) {// 可爱淘、KK馆不需要发货短信
             SMSUtil.sendMsg("15129", orderR.getMobile(), orderR.getOrderNo(), url);
         }
     }
@@ -847,13 +1063,22 @@ public class OrderServiceImpl implements OrderService {
         order.setReceiverDistrict(orderDb.getLocationA());
         order.setReceiverAddress(orderDb.getAddress());
         order.setReceiverMobile(orderDb.getMobile());
+        if (orderDb.getZffs() == 2) { // 支付宝支付
+            order.setKjPayType("02");
+        } else if (orderDb.getZffs() == 3) { // 微信支付
+            order.setKjPayType("13");
+        }
+        // order.setKjPayType("02"); // 微信走不通，直接都写支付宝
+        
         orderMsg.setOrder(order);
         orderMsg.setOrderItems(new ArrayList<Detail>(orderDb.getItemList().size()));
         for (CoolOrderItem item : orderDb.getItemList()) {
             Detail detail = new Detail();
-            detail.setProductCode("310520156167801272"); // TODO： 这个要填货品在保税仓的批号
-            detail.setProductName(item.getName());
-            detail.setUnit("个");
+            CoolProductCustomsNbyb coolProductCustomsNbyb =
+                coolProductCustomsNbybService.getCustomsInfoByGid(item.getGid());
+            detail.setProductCode(coolProductCustomsNbyb.getProductCode()); // 这个要填货品在保税仓的商品编号
+            detail.setProductName(coolProductCustomsNbyb.getProductName()); // 货品名
+            detail.setUnit(coolProductCustomsNbyb.getUnit()); // 单位
             detail.setQuantity(item.getCount());
             detail.setPrice(item.getPrice());
             detail.setTotalPrice(detail.getPrice().multiply(new BigDecimal(detail.getQuantity())));
@@ -864,6 +1089,7 @@ public class OrderServiceImpl implements OrderService {
         userReg.setName(orderDb.getLinkman());
         userReg.setPhone(orderDb.getMobile());
         userReg.setIdnum(orderDb.getIdcard());
+        userReg.setEmail(orderDb.getMobile() + "@139.com");
         
         orderMsg.setUserReg(userReg);
         return orderMsg;
@@ -878,7 +1104,7 @@ public class OrderServiceImpl implements OrderService {
     private Cbecmessage getCbecmessage(CoolOrder orderDb) {
         Cbecmessage cbecmessage = new Cbecmessage();
         Messagehead messagehead = new Messagehead();
-        messagehead.setMessageid(orderDb.getOrderNo());
+        messagehead.setMessageid(orderDb.getOrderNo() + CommonUtils.randomFour());
         messagehead.setSendtime(DateUtil.getCurrentDate(DateUtil.yyyy_MM_dd_HH_mm_ss));
         messagehead.setSeqno(System.currentTimeMillis() + "");
         
@@ -899,29 +1125,35 @@ public class OrderServiceImpl implements OrderService {
         bodymaster.setSubmittime(DateUtil.dateToStr(DateUtil.yyyy_MM_dd_HH_mm_ss, orderDb.getCreatetime()));
         bodymaster.setPaynumber(orderDb.getTradeNo());
         if (orderDb.getZffs() == 2) { // 支付宝支付
-            bodymaster.setPayenterprisecode("P460400001");
-            bodymaster.setPayenterprisename("支付宝（杭州）信息技术有限公司");
+            bodymaster.setPayenterprisecode("P460400005");
+            bodymaster.setPayenterprisename("支付宝(中国)网络技术有限公司");
         } else if (orderDb.getZffs() == 3) { // 微信支付
             bodymaster.setPayenterprisecode("P460400004");
             bodymaster.setPayenterprisename("财付通支付科技有限公司");
         }
-        // TODO 测试平台支付企业备案号
-        bodymaster.setPayenterprisecode("P461200031");
         
         Bodydetail bodydetail = new Bodydetail();
         bodydetail.setOrderList(new ArrayList<OrderInfo>(orderDb.getItemList().size()));
         
         for (CoolOrderItem item : orderDb.getItemList()) {
             OrderInfo order = new OrderInfo();
-            order.setItemno("4100605453AW1239"); // 海关备案商品编号
-            order.setShelfgoodsname(item.getlName()); // 商品上架品名
-            order.setGoodid(item.getGid() + ""); // 商品货号
-            order.setSpecifications(item.getGg()); // 规格型号
+            CoolProductCustomsZz customsInfo = coolProductCustomsZzService.getCustomsInfoByGid(item.getGid());
+            
+            order.setGno(customsInfo.getGno()); // 关联 H2010 项号
+            order.setTaxid(customsInfo.getTaxId()); // 行邮税号
+            order.setBarcode(customsInfo.getBarcode()); // HS 编码
+            order.setUnit(customsInfo.getUnit()); // 计量单位（海）
+            order.setUnitinsp(customsInfo.getUnitinsp()); // 计量单位（检）
+            order.setItemno(customsInfo.getItemno()); // 海关备案商品编号
+            order.setShelfgoodsname(customsInfo.getShelfgoodsname()); // 商品上架品名
+            order.setGoodid(customsInfo.getGoodId()); // 商品货号 (有表格)
+            order.setGoodname(item.getName()); // 商品名
+            order.setSpecifications(customsInfo.getSpecifications()); // 规格型号
             order.setAmount(item.getCount() + ""); // 申报数量
             order.setGoodprice(item.getPrice() + ""); // 成交单价
             order.setOrdersum(item.getPrice().multiply(new BigDecimal(item.getCount())) + ""); // 成交总价
             order.setOrderid(orderDb.getOrderNo()); // 订单编号
-            order.setGoodidinsp("4100605453AW1239"); // 检验检疫商品备案编号
+            order.setGoodidinsp(customsInfo.getGoodIdinsp()); // 检验检疫商品备案编号
             
             bodydetail.getOrderList().add(order);
         }
@@ -941,96 +1173,159 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Record updateCoolOrderRec(Map<String, Object> param) {
         Record record = new Record();
+        boolean success = false;
         CoolOrder order = coolOrderMapper.getCoolOrderById((Integer)param.get("id"));
-        order.setState(CoolOrder.ORDER_STATE_3);
-        order.setFinishTime(new Timestamp(System.currentTimeMillis()));
-        
-        int result = 0;
-        String shopId = order.getSupplier();
-        if (StringUtils.isNotEmpty(shopId)) {
-            CoonShop shop = coonShopMapper.getCoonShopById(shopId);
-            CoonShopLevel level = coonShopLevelMapper.getCoonShopLevelById(shop.getLevel());
-            if (order.getOrderType() == 0) { // 订单类型：0：普通订单/1：一件代发
-                if (order.getSupplierProfit().compareTo(BigDecimal.ZERO) == 0) {
-                    // 计算订单佣金
-                    BigDecimal shopRate = level.getcRate();
-                    BigDecimal profit = coolOrderItemMapper.getMaxProfit(order.getOrderNo()); // 订单最大佣金
-                    profit = profit.multiply(shopRate);
-                    order.setSupplierProfit(profit);
-                    
-                }
-                // 记录佣金
-                CoonRunAccount bill = new CoonRunAccount();
-                bill.setId(CommonUtils.uuid());
-                bill.setUserId(shop.getUserId());
-                bill.setAmount(order.getSupplierProfit());
-                bill.setType(CoonRunAccount.TYPE_0);
-                bill.setCreateTime(new Date());
-                bill.setFinishTime(new Date());
-                bill.setWithdrawState(CoonRunAccount.WITHDRAW_STATE_3);
-                bill.setSerialNumber(DateUtil.dateToStr(DateUtil.yyyyMMddHHmmss, new Date()) + CommonUtils.randomFour());
-                
-                coonRunAccountMapper.saveCoonRunAccount(bill);
-                
-                // 更新酷店成交订单数
-                result =
-                    jdbcTemplate.update("update coon_shop set turnover_orders=turnover_orders+1,all_amount=all_amount+?,nwd_amount=nwd_amount+? where id=?",
-                        order.getSupplierProfit(),
-                        order.getSupplierProfit(),
-                        shopId);
-                
-                // 推荐店铺相关处理
-                String recommendId = shop.getRecommendId();
-                if (StringUtils.isNotEmpty(recommendId)) {
-                    CoonShopPartner partner = new CoonShopPartner();
-                    partner.setId(CommonUtils.uuid());
-                    partner.setoId(order.getId());
-                    partner.setSupplier(recommendId);
-                    partner.setPartnerId(shop.getId());
-                    partner.setPartnerName(shop.getName());
-                    partner.setPartnerAmount(order.getSupplierProfit().multiply(GeneralDef.RECOMMEND_RATE));
-                    partner.setCreatetime(new Date());
-                    partner.setOrderAmount(order.getTotal());
-                    coonShopPartnerMapper.saveCoonShopPartner(partner);
-                    
-                    // 记录佣金
-                    CoonRunAccount bill2 = new CoonRunAccount();
-                    CoonShop shop2 = coonShopMapper.getCoonShopById(recommendId);
-                    bill2.setId(CommonUtils.uuid());
-                    bill2.setUserId(shop2.getUserId());
-                    bill2.setAmount(order.getSupplierProfit().multiply(GeneralDef.RECOMMEND_RATE));
-                    bill2.setType(CoonRunAccount.TYPE_0);
-                    bill2.setCreateTime(new Date());
-                    bill2.setFinishTime(new Date());
-                    bill2.setWithdrawState(CoonRunAccount.WITHDRAW_STATE_3);
-                    bill2.setSerialNumber(DateUtil.dateToStr(DateUtil.yyyyMMddHHmmss, new Date())
-                        + CommonUtils.randomFour());
-                    
-                    coonRunAccountMapper.saveCoonRunAccount(bill2);
-                    
-                    jdbcTemplate.update("update coon_shop set all_amount=all_amount+?,nwd_amount=nwd_amount+?,recommend_amount=recommend_amount +? where id=?",
-                        order.getSupplierProfit().multiply(GeneralDef.RECOMMEND_RATE),
-                        order.getSupplierProfit().multiply(GeneralDef.RECOMMEND_RATE),
-                        order.getSupplierProfit().multiply(GeneralDef.RECOMMEND_RATE),
-                        recommendId);
-                }
-            } else if (order.getOrderType() == 1) { // 一件代发无佣金
-                result =
-                    jdbcTemplate.update("update coon_shop set turnover_orders=turnover_orders+1 where id=?", shopId);
-            }
+        if (order.getOrderType() == CoolOrder.ORDER_STATE_3) {
+            record.set("msg", "该订单已确认收货，无法再次确认收货");
+        } else if (order.getOrderType() == CoolOrder.ORDER_STATE_4) {
+            record.set("msg", "该订单已完成，无法再次确认收货");
+        } else if (order.getOrderType() == CoolOrder.ORDER_STATE_5) {
+            record.set("msg", "该订单已退款，无法再次确认收货");
+        } else {
+            order.setState(CoolOrder.ORDER_STATE_3);
+            order.setFinishTime(new Timestamp(System.currentTimeMillis()));
             
-            if (result > 0 && level.getLevel() != 25) {
-                // 判断是否到达下个等级
-                int res = coonShopMapper.getCoonShopNextLevel(shopId);
-                if (res > 0) {
-                    // 更新酷店等级
-                    result = coonShopMapper.updateCoonShopLevel(shopId);
+            int result = 0;
+            String shopId = order.getSupplier();
+            if (StringUtils.isNotEmpty(shopId)) {
+                CoonShop shop = coonShopMapper.getCoonShopById(shopId);
+                if (shop == null) {
+                    return null;
                 }
+                CoonShopLevel level = coonShopLevelMapper.getCoonShopLevelById(shop.getLevel());
+                if (order.getOrderType() == 0) { // 订单类型：0：普通订单/1：一件代发
+                    if (order.getSupplierProfit().compareTo(BigDecimal.ZERO) == 0) {
+                        // 计算订单佣金
+                        BigDecimal shopRate = level.getcRate();
+                        BigDecimal profit = coolOrderItemMapper.getMaxProfit(order.getOrderNo()); // 订单最大佣金
+                        profit = profit.multiply(shopRate);
+                        order.setSupplierProfit(profit);
+                        
+                    }
+                    // 记录佣金
+                    CoonRunAccount bill = new CoonRunAccount();
+                    bill.setId(CommonUtils.uuid());
+                    bill.setUserId(shop.getUserId());
+                    bill.setAmount(order.getSupplierProfit());
+                    bill.setType(CoonRunAccount.TYPE_0);
+                    bill.setCreateTime(new Date());
+                    bill.setFinishTime(new Date());
+                    bill.setWithdrawState(CoonRunAccount.WITHDRAW_STATE_3);
+                    bill.setSerialNumber(DateUtil.dateToStr(DateUtil.yyyyMMddHHmmss, new Date())
+                        + CommonUtils.randomFour());
+                    bill.setIsFreeze((byte)1);
+                    bill.setFreezeTime(new Date());
+                    bill.setFinishTime(new Date());
+                    bill.setShopId(shopId);
+                    bill.setShopName(shop.getName());
+                    bill.setOrderNo(order.getOrderNo());
+                    coonRunAccountMapper.saveCoonRunAccount(bill);
+                    
+                    // 更新酷店成交订单数,all_amount=all_amount+?,nwd_amount=nwd_amount+?
+                    result =
+                        jdbcTemplate.update("update coon_shop set turnover_orders=turnover_orders+1 where id=?", shopId);
+                    
+                    // 推荐店铺相关处理
+                    String recommendId = shop.getRecommendId();
+                    if (StringUtils.isNotEmpty(recommendId)) {
+                        CoonShopPartner partner = new CoonShopPartner();
+                        CoolConfig cc = coolConfigMapper.getPercentageByDevide("2");
+                        partner.setId(CommonUtils.uuid());
+                        partner.setoId(order.getId());
+                        partner.setSupplier(recommendId);
+                        partner.setPartnerId(shop.getId());
+                        partner.setPartnerName(shop.getName());
+                        partner.setPartnerAmount(order.getSupplierProfit().multiply(cc.getRateJpy()));
+                        partner.setCreatetime(new Date());
+                        partner.setOrderAmount(order.getTotal());
+                        coonShopPartnerMapper.saveCoonShopPartner(partner);
+                        
+                        // 记录佣金
+                        CoonRunAccount bill2 = new CoonRunAccount();
+                        CoonShop shop2 = coonShopMapper.getCoonShopById(recommendId);
+                        bill2.setId(CommonUtils.uuid());
+                        bill2.setUserId(shop2.getUserId());
+                        bill2.setAmount(order.getSupplierProfit().multiply(cc.getRateJpy()));
+                        bill2.setType(CoonRunAccount.TYPE_0);
+                        bill2.setCreateTime(new Date());
+                        bill2.setFinishTime(new Date());
+                        bill2.setWithdrawState(CoonRunAccount.WITHDRAW_STATE_6);
+                        bill2.setSerialNumber(DateUtil.dateToStr(DateUtil.yyyyMMddHHmmss, new Date())
+                            + CommonUtils.randomFour());
+                        bill2.setOrderNo(order.getOrderNo());
+                        bill2.setDevide("2");
+                        coonRunAccountMapper.saveCoonRunAccount(bill2);
+                        
+                        /*
+                         * jdbcTemplate.update(
+                         * "update coon_shop set all_amount=all_amount+?,nwd_amount=nwd_amount+?,recommend_amount=recommend_amount +? where id=?"
+                         * , order.getSupplierProfit().multiply(shop2.getsPercentage()),
+                         * order.getSupplierProfit().multiply(shop2.getsPercentage()),
+                         * order.getSupplierProfit().multiply(shop2.getsPercentage()), recommendId);
+                         */
+                        
+                        String recommendId2 = shop.getRecommendId();
+                        if (StringUtils.isNotEmpty(recommendId2)) {
+                            CoonShop shop3 = coonShopMapper.getCoonShopById(recommendId);
+                            CoolConfig cc2 = coolConfigMapper.getPercentageByDevide("3");
+                            CoonShopPartner partner2 = new CoonShopPartner();
+                            partner2.setId(CommonUtils.uuid());
+                            partner2.setoId(order.getId());
+                            partner2.setSupplier(recommendId2);
+                            partner2.setPartnerId(shop2.getId());
+                            partner2.setPartnerName(shop2.getName());
+                            partner2.setPartnerAmount(order.getSupplierProfit().multiply(cc2.getRateJpy()));
+                            partner2.setCreatetime(new Date());
+                            partner2.setOrderAmount(order.getTotal());
+                            coonShopPartnerMapper.saveCoonShopPartner(partner2);
+                            
+                            // 记录佣金
+                            CoonRunAccount bill3 = new CoonRunAccount();
+                            bill3.setId(CommonUtils.uuid());
+                            bill3.setUserId(shop3.getUserId());
+                            bill3.setAmount(order.getSupplierProfit().multiply(cc2.getRateJpy()));
+                            bill3.setType(CoonRunAccount.TYPE_0);
+                            bill3.setCreateTime(new Date());
+                            bill3.setFinishTime(new Date());
+                            bill3.setWithdrawState(CoonRunAccount.WITHDRAW_STATE_6);
+                            bill3.setSerialNumber(DateUtil.dateToStr(DateUtil.yyyyMMddHHmmss, new Date())
+                                + CommonUtils.randomFour());
+                            bill3.setOrderNo(order.getOrderNo());
+                            bill3.setDevide("3");
+                            coonRunAccountMapper.saveCoonRunAccount(bill3);
+                            
+                            /*
+                             * jdbcTemplate.update(
+                             * "update coon_shop set all_amount=all_amount+?,nwd_amount=nwd_amount+?,recommend_amount=recommend_amount +? where id=?"
+                             * , order.getSupplierProfit().multiply(shop3.getfPercentage()),
+                             * order.getSupplierProfit().multiply(shop3.getfPercentage()),
+                             * order.getSupplierProfit().multiply(shop3.getfPercentage()), recommendId2);
+                             */
+                        }
+                    }
+                } else if (order.getOrderType() == 1) { // 一件代发无佣金
+                    result =
+                        jdbcTemplate.update("update coon_shop set turnover_orders=turnover_orders+1 where id=?", shopId);
+                }
+                
+                if (result > 0 && level.getLevel() != 25) {
+                    // 判断是否到达下个等级
+                    int res = coonShopMapper.getCoonShopNextLevel(shopId);
+                    if (res > 0) {
+                        // 更新酷店等级
+                        result = coonShopMapper.updateCoonShopLevel(shopId);
+                    }
+                }
+            }
+            result = coolOrderMapper.updateCoolOrder(order);
+            if (result > 0) {
+                success = true;
+            } else {
+                record.set("msg", "订单更新失败");
             }
         }
-        result = coolOrderMapper.updateCoolOrder(order);
         
-        record.set("success", result > 0 ? true : false);
+        record.set("success", success);
         return record;
     }
     
@@ -1115,7 +1410,11 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void getSumCoolProductSales(Map<String, Object> param, JsonData jsonData) {
-        List<CoolProductSales> salesList = coolOrderItemMapper.getSumCoolProductSales(new CoolOrderSelect());
+        CoolOrderSelect c = new CoolOrderSelect();
+        if (param.get("supplier") != null) {
+            c.setSupplier(param.get("supplier").toString());
+        }
+        List<CoolProductSales> salesList = coolOrderItemMapper.getSumCoolProductSales(c);
         List<CoolProductSales> list = new ArrayList<CoolProductSales>();
         int count = 0; // 数量
         int countAll = 0; // 全部销数量
@@ -1190,345 +1489,440 @@ public class OrderServiceImpl implements OrderService {
     }
     
     /**
-     * 导入订单
-     */
-	@Override
-	public Record saveCoolOrderForImport(Map<String, Object> param) {
-		Record record = new Record();
-		String filePath = param.get("filePath").toString();
-		String importType = param.get("importType").toString();
-		String arrears = param.get("arrears").toString();
-		if("1".equals(importType)){   //拼多多
-			record = savePdd(filePath,arrears);
-			record.set("success", true);
-		}		
-		return record;
-	}
-    
-    /**
-     * 拼多多订单导入
+     * 判断是否存在中文
      * 
-     * @param filePath
+     * @param str
      * @return
      */
-    private Record savePdd(String filePath,String arrears) {
-        Record record = new Record();
-        File file = new File(filePath);
-        InputStream is = null;
-        boolean success = false;
-        try {
-            is = new FileInputStream(file);
-            BufferedInputStream binput = new BufferedInputStream(is);
-            Workbook hwb;
-            hwb = WorkbookFactory.create(binput);
-            
-            Sheet sheet = hwb.getSheetAt(0);
-            Row row = null;
-            Cell cell = null;
-            
-            // List<CoolOrder> orderList = new ArrayList<CoolOrder>();
-            // List<CoolOrderItem> orderItemList = new ArrayList<CoolOrderItem>();
-            int rowNum = sheet.getLastRowNum();
-            for(int i = 1; i <= rowNum; i++){
-            	success = false;
-            	//获取到的行数可能会存在问题，所以添加判断标志，都为空时结束循环
-            	int flag = 0;
-            	CoolOrder order = new CoolOrder();
-            	if("0".equals(arrears)){  //正常订单
-            		order.setArrears(0); 
-            	}else{
-            		order.setArrears(1); // 欠费订单
-            	}            	
-            	order.setoType(new Byte("1")); //pc 订单
-            	order.setOrderType(new Byte("1")); //一件代发
-            	order.setState(CoolOrder.ORDER_STATE_1); //待发货
-            	order.setSupplier("7b54557199554ee8bc392c514b8377ec");
-            	order.setmId(883);
-            	order.setSupName("拼多多商城");
-            	CoolOrderItem item = new CoolOrderItem();
-            	
-            	row = sheet.getRow(i);            	
-            	
-            	cell = row.getCell(0); //商品id
-            	if(cell != null){
-            		//将单元格格式设为string，方便判断是否为空             
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        CoolProduct product =
-                            coolProductMapper.getCoolProductById(Integer.valueOf(cell.getStringCellValue()
-                                .trim()
-                                .toString()));
-                        int gId = Integer.valueOf(cell.getStringCellValue().trim().toString());
-                        CoolProductGg gg = coolProductGgMapper.findCoolProductGgList(gId).get(0);
-                        item.setgId(gId);
-                        item.setName(product.getNameEn());
-                        if (StringUtils.isNotEmpty(gg.getLogo())) {
-                            item.setLogo(gg.getLogo());
-                        } else {
-                            item.setLogo(product.getLogo());
-                        }
-                        item.setGg(gg.getGg());
-                        item.setbId(product.getbId());
-                        item.setGid(gg.getId());
-                        
-                    } else {
-                        flag = flag + 1;
-                    }
+    public static boolean isContainsChinese(String str) {
+        String regEx = "[\u4e00-\u9fa5]";
+        Pattern pat = Pattern.compile(regEx);
+        Matcher matcher = pat.matcher(str);
+        boolean flg = false;
+        if (matcher.find()) {
+            flg = true;
+        }
+        return flg;
+    }
+    
+    @Override
+    public void updateRunAccount(Date date) {
+        SimpleDateFormat myFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date2 = myFmt.format(date);
+        List<CoonRunAccount> run = coonRunAccountMapper.findByEndDate(date2);
+        for (CoonRunAccount r : run) {
+            if (r != null) {
+                CoonRunAccount rr = new CoonRunAccount();
+                rr.setIsFreeze((byte)0);
+                rr.setId(r.getId());
+                coonRunAccountMapper.updateCoonRunAccount(rr);
+                // CoolConfig cc = coolConfigMapper.getPercentageByDevide(r.getDevide());
+                if (0 == r.getType()) {
+                    jdbcTemplate.update("update coon_shop set all_amount=all_amount+?,nwd_amount=nwd_amount+?,recommend_amount=recommend_amount+? where id=?",
+                        r.getAmount(),
+                        r.getAmount(),
+                        r.getAmount(),
+                        r.getShopId());
                 } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(1); // 数量
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        item.setCount(Integer.valueOf(cell.getStringCellValue().trim().toString()));
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(3); // 订单号
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        order.setOrderNo(cell.getStringCellValue().trim().toString());
-                        item.setOrderNo(cell.getStringCellValue().trim().toString());
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(6); // 订单金额
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        order.setTotal(new BigDecimal(cell.getStringCellValue().trim().toString()));
-                        item.setPrice(new BigDecimal(cell.getStringCellValue().trim().toString()).divide(new BigDecimal(
-                            item.getCount())));
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(7); // 身份证姓名
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        // order.setLinkman(cell.getStringCellValue().trim().toString());
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(8); // 身份证号码
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        order.setIdcard(cell.getStringCellValue().trim().toString());
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(9); // 收货人
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        order.setLinkman(cell.getStringCellValue().trim().toString());
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(10); // 手机
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        order.setMobile(cell.getStringCellValue().trim());
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(11); // 省
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        order.setLocationP(cell.getStringCellValue().trim());
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(12); // 市
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        order.setLocationC(cell.getStringCellValue().trim());
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(13); // 区
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        order.setLocationA(cell.getStringCellValue().trim());
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(14); // 确认时间
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        order.setCreatetime(DateUtil.parseDate(cell.getStringCellValue().toString(),
-                            DateUtil.yyyy_MM_dd_HH_mm));
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                cell = row.getCell(15); // 街道
-                if (cell != null) {
-                    // 将单元格格式设为string，方便判断是否为空
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
-                        order.setAddress(cell.getStringCellValue());
-                    } else {
-                        flag = flag + 1;
-                    }
-                } else {
-                    flag = flag + 1;
-                }
-                if (flag == 13) {
-                    break;
-                } else {
-                    // orderList.add(order);
-                    // orderItemList.add(item);
-                    coolOrderMapper.saveCoolOrder(order);
-                    coolOrderItemMapper.saveCoolOrderItem(item);
-                    
-                	// 处理商品库存和销量
-                    jdbcTemplate.update("update cool_product_gg set stock=stock-" + item.getCount() + ",sales=sales+" +  item.getCount()
-                        + " where id=?", item.getGid());
-                    jdbcTemplate.update("update cool_product set sales=sales+" +  item.getCount() + " where id=?", item.getgId());
-                	success = true;
-                }
-                // coolOrderMapper.insertBatch(orderList);
-
-            }
-            
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    jdbcTemplate.update("update coon_shop set all_amount=all_amount-?,nwd_amount=nwd_amount-?,recommend_amount=recommend_amount-? where id=?",
+                        r.getAmount(),
+                        r.getAmount(),
+                        r.getAmount(),
+                        r.getShopId());
                 }
             }
         }
-		record.set("success", success);
-		return record;
-	}
+    }
     
-    //
-    // /**
-    // * 统计订单数
-    // */
-    // @Override
-    // public void getSumCoolOrderNumber(Map<String, Object> param, JsonData jsonData) {
-    // String selectType = param.get("selectType").toString(); // 1 按年 2 按月 3 按日
-    // String time = null;
-    // if (param.get("time") != null) {
-    // time = param.get("time").toString();
-    // }
-    // List<StatisticsPo> poList = coolOrderMapper.getSumCoolOrderNumber(selectType, time);
-    // List<StatisticsPo> list = new ArrayList<StatisticsPo>();
-    // for (StatisticsPo po : poList) {
-    // if ("1".equals(selectType)) {
-    // po.setStatistics_k(po.getStatistics_k().substring(5, 7));
-    // }
-    // if ("2".equals(selectType)) {
-    // po.setStatistics_k(po.getStatistics_k().substring(8, 10));
-    // }
-    // if ("3".equals(selectType)) {
-    // po.setStatistics_k(po.getStatistics_k().substring(11, 13));
-    // }
-    // list.add(po);
-    // }
-    //
-    // jsonData.setRows(list);
-    // }
-    //
-    // /**
-    // * 统计销售额
-    // */
-    // @Override
-    // public void getSumCoolOrderSales(Map<String, Object> param, JsonData jsonData) {
-    // String selectType = param.get("selectType").toString(); // 1 按年 2 按月 3 按日
-    // String time = null;
-    // if (param.get("time") != null) {
-    // time = param.get("time").toString();
-    // }
-    // List<StatisticsPo> poList = coolOrderMapper.getSumCoolOrderSales(selectType, time);
-    // List<StatisticsPo> list = new ArrayList<StatisticsPo>();
-    // for (StatisticsPo po : poList) {
-    // if ("1".equals(selectType)) {
-    // po.setStatistics_k(po.getStatistics_k().substring(5, 7));
-    // }
-    // if ("2".equals(selectType)) {
-    // po.setStatistics_k(po.getStatistics_k().substring(8, 10));
-    // }
-    // if ("3".equals(selectType)) {
-    // po.setStatistics_k(po.getStatistics_k().substring(11, 13));
-    // }
-    // list.add(po);
-    // }
-    //
-    // jsonData.setRows(list);
-    // }
-    //
-    //
-    // /**
-    // * 导入订单（银科金典）
-    // */
-    // @Override
-    // public Record saveCoolOrderYkjd(Map<String, Object> param) {
-    // Record record = new Record();
-    // //String filePath = param.get("filePath").toString();
-    //
-    // return record;
-    // }o
+    /**
+     * 分页查询订单列表
+     * 
+     * @param orderSelect 查询条件
+     * @return 分页信息
+     */
+    @Override
+    public Record getOrderListPage(CoolOrderSelect orderSelect) {
+        Record record = new Record();
+        boolean success = false;
+        String supplier = orderSelect.getSupplier();
+        Integer mId = orderSelect.getmId();
+        if (StringUtils.isNotBlank(supplier) || mId != null) {
+            List<CoolOrder> list = coolOrderMapper.getCoolOrderPageList(orderSelect.getRowBounds(), orderSelect);
+            if (CollectionUtils.isNotEmpty(list)) {
+                List<CoolOrder> orderList = new ArrayList<CoolOrder>();
+                for (CoolOrder order : list) {
+                    List<CoolOrderItem> itemList = coolOrderItemMapper.findCoolOrderItemByOrderNo(order.getOrderNo());
+                    order.setItemList(itemList);
+                    orderList.add(order);
+                }
+                record.set("orderList", orderList);
+                success = true;
+            } else {
+                record.set("msg", "无数据");
+            }
+        } else {
+            record.set("msg", "参数错误，酷店主键或者会员主键不能都为空");
+        }
+        record.set("success", success);
+        return record;
+    }
     
+    /**
+     * 查询订单详情
+     * 
+     * @param order 查询条件
+     * @return 订单详情
+     */
+    @Override
+    public Record getOrderDetail(CoolOrder order) {
+        Record record = new Record();
+        boolean success = false;
+        Integer id = order.getId();
+        if (id != null) {
+            CoolOrder coolOrder = coolOrderMapper.getCoolOrderById(id);
+            if (coolOrder != null) {
+                List<CoolOrderItem> itemList = coolOrderItemMapper.findCoolOrderItemByOrderNo(coolOrder.getOrderNo());
+                coolOrder.setItemList(itemList);
+                record.set("order", coolOrder);
+                success = true;
+            } else {
+                record.set("msg", "参数错误，无法获取订单信息");
+            }
+        } else {
+            record.set("msg", "订单主键不能为空");
+        }
+        record.set("success", success);
+        return record;
+    }
+    
+    /**
+     * 删除订单
+     * 
+     * @param order 查询条件
+     * @return 是否删除成功
+     */
+    @Override
+    public Record deleteOrder(CoolOrder order) {
+        Record record = new Record();
+        boolean success = false;
+        Integer id = order.getId();
+        if (id != null) {
+            CoolOrder coolOrder = coolOrderMapper.getCoolOrderById(id);
+            if (coolOrder != null) {
+                String supplier = order.getSupplier();
+                if (StringUtils.isNotEmpty(supplier)) { // 酷店删除
+                    coolOrder.setIsDel(GeneralDef.BYTE_1);
+                }
+                Integer mId = order.getmId();
+                if (mId != null) { // 会员删除
+                    coolOrder.setIsDelM(GeneralDef.BYTE_1);
+                }
+                int result = coolOrderMapper.updateCoolOrder(coolOrder);
+                if (result > 0) {
+                    success = true;
+                } else {
+                    record.set("msg", "订单删除失败");
+                }
+            } else {
+                record.set("msg", "参数错误，无法获取订单信息");
+            }
+        } else {
+            record.set("msg", "订单主键不能为空");
+        }
+        record.set("success", success);
+        return record;
+    }
+    
+    /**
+     * 分页获取一件代发进货单列表
+     * 
+     * @param order 查询条件
+     * @return 进货单列表信息
+     */
+    @Override
+    public Record getDistributionCartListPage(CoolDistributionCar coolDistributionCar) {
+        Record record = new Record();
+        boolean success = false;
+        Integer userId = coolDistributionCar.getUserId();
+        if (userId != null) {
+            List<CoolDistributionCarInfo> list =
+                coolDistributionCarMapper.findCoolDistributionCarInfoListPage(coolDistributionCar.getRowBounds(),
+                    coolDistributionCar);
+            if (CollectionUtils.isNotEmpty(list)) {
+                List<CoolDistributionCarInfo> cartList = new ArrayList<CoolDistributionCarInfo>();
+                for (CoolDistributionCarInfo info : list) {
+                    if (new BigDecimal(0).compareTo(info.getCxjg()) == 0) {
+                        info.setPrice(info.getJg());
+                    } else {
+                        info.setPrice(info.getCxjg());
+                    }
+                    cartList.add(info);
+                }
+                record.set("cartList", cartList);
+                success = true;
+            } else {
+                record.set("msg", "无数据");
+            }
+        } else {
+            record.set("msg", "用户主键不能为空");
+        }
+        record.set("success", success);
+        return record;
+    }
+    
+    /**
+     * 分页获取一件代发购买过商品列表
+     * 
+     * @param coolOrderParam 查询条件
+     * @return 商品列表信息
+     */
+    @Override
+    public Record getBuyList(CoolOrderParam coolOrderParam) {
+        Record record = new Record();
+        boolean success = false;
+        String supplier = coolOrderParam.getSupplier();
+        if (StringUtils.isNotEmpty(supplier)) {
+            List<CoolProductInfo> list =
+                coolOrderMapper.getCoolProductInfoList(coolOrderParam.getRowBounds(), coolOrderParam);
+            if (CollectionUtils.isNotEmpty(list)) {
+                record.set("orderList", list);
+                success = true;
+            } else {
+                record.set("msg", "无数据");
+            }
+        } else {
+            record.set("msg", "参数错误，酷店主键不能为空");
+        }
+        record.set("success", success);
+        return record;
+    }
+    
+    /**
+     * 更新订单
+     * 
+     * @param coolOrder 订单参数
+     * @return 是否更新成功
+     */
+    @Override
+    public Record updateOrderReceive(CoolOrder coolOrder) {
+        Record record = new Record();
+        boolean success = false;
+        Integer id = coolOrder.getId();
+        if (id != null) {
+            coolOrder.setState(CoolOrder.ORDER_STATE_3);
+            int result = coolOrderMapper.updateCoolOrder(coolOrder);
+            if (result > 0) {
+                success = true;
+            } else {
+                record.set("msg", "更新订单失败");
+            }
+        } else {
+            record.set("msg", "参数错误，订单主键不能为空");
+        }
+        record.set("success", success);
+        return record;
+    }
+    
+    /**
+     * 保存评价
+     * 
+     * @param coolOrderParam 评价参数
+     * @return 是否保存成功
+     */
+    @Override
+    public Record saveOrderReview(CoolOrderParam coolOrderParam) {
+        Record record = new Record();
+        boolean success = false;
+        List<CoolProductReview> reviewList = coolOrderParam.getReviewList();
+        if (CollectionUtils.isNotEmpty(reviewList)) {
+            int result = 0;
+            for (CoolProductReview review : reviewList) {
+                result = 0;
+                success = false;
+                Integer mId = review.getmId();
+                if (mId != null) {
+                    Integer gId = review.getgId();
+                    if (gId != null) {
+                        Integer oId = review.getoId();
+                        if (oId != null) {
+                            Integer scoreP = review.getScoreP();
+                            Integer scoreB = review.getScoreB();
+                            Integer scoreD = review.getScoreD();
+                            if (scoreP != null && scoreB != null && scoreD != null) {
+                                result = coolProductReviewMapper.saveCoolProductReview(review);
+                                if (result > 0) {
+                                    // 更新订单状态
+                                    CoolOrder order = coolOrderMapper.getCoolOrderById(oId);
+                                    order.setState(CoolOrder.ORDER_STATE_4);
+                                    coolOrderMapper.updateCoolOrder(order);
+                                    success = true;
+                                } else {
+                                    record.set("msg", "商品主键为" + gId + "的评价保存失败");
+                                    break;
+                                }
+                            } else {
+                                record.set("msg", "参数错误，评价不能为空");
+                            }
+                        } else {
+                            record.set("msg", "参数错误，订单主键不能为空");
+                        }
+                    } else {
+                        record.set("msg", "参数错误，商品主键不能为空");
+                    }
+                } else {
+                    record.set("msg", "参数错误，会员主键不能为空");
+                }
+            }
+        } else {
+            record.set("msg", "参数错误，评价参数错误");
+        }
+        record.set("success", success);
+        return record;
+    }
+    
+    /**
+     * 保存购物车
+     * 
+     * @param coonShopCartParam 购物车参数
+     * @return 是否保存成功
+     */
+    @Override
+    public Record saveShopCart(CoonShopCartParam coonShopCartParam) {
+        Record record = new Record();
+        boolean success = false;
+        List<CoonShopcart> cartList = coonShopCartParam.getShopCartList();
+        if (CollectionUtils.isNotEmpty(cartList)) {
+            int result = 0;
+            for (CoonShopcart cart : cartList) {
+                result = 0;
+                success = false;
+                String userId = cart.getUserId();
+                if (StringUtils.isNotEmpty(userId)) {
+                    String pId = cart.getpId();
+                    if (StringUtils.isNotEmpty(pId)) {
+                        String gId = cart.getgId();
+                        if (StringUtils.isNotEmpty(gId)) {
+                            Integer quantity = cart.getQuantity();
+                            if (quantity != null) {
+                                cart.setId(CommonUtils.uuid());
+                                result = coonShopcartMapper.saveCoonShopcart(cart);
+                                if (result > 0) {
+                                    success = true;
+                                } else {
+                                    record.set("msg", "商品主键为" + pId + "，规格主键为" + gId + "的商品添加购物车失败");
+                                    break;
+                                }
+                            } else {
+                                record.set("msg", "参数错误， 数量不能为空");
+                            }
+                        } else {
+                            record.set("msg", "参数错误， 商品规格主键不能为空");
+                        }
+                    } else {
+                        record.set("msg", "参数错误， 商品主键不能为空");
+                    }
+                } else {
+                    record.set("msg", "参数错误， 用户主键不能为空");
+                }
+            }
+        } else {
+            record.set("msg", "参数错误，评价参数错误");
+        }
+        record.set("success", success);
+        return record;
+    }
+    
+    /**
+     * 获取购物车列表信息
+     * 
+     * @param coonShopcart 购物车参数
+     * @return 购物车列表
+     */
+    @Override
+    public Record getShopCartList(CoonShopcart coonShopcart) {
+        Record record = new Record();
+        boolean success = false;
+        String userId = coonShopcart.getUserId();
+        if (StringUtils.isNotEmpty(userId)) {
+            List<CoonShopCartInfo> shopCartList = coonShopcartMapper.findCoonShopCartInfoList(coonShopcart);
+            if (CollectionUtils.isNotEmpty(shopCartList)) {
+                record.set("shopCartList", shopCartList);
+                success = true;
+            } else {
+                record.set("msg", "无数据");
+            }
+        } else {
+            record.set("msg", "参数错误，用户主键不能为空");
+        }
+        record.set("success", success);
+        return record;
+    }
+    
+    /**
+     * 删除购物车
+     * 
+     * @param coonShopcart 购物车参数
+     * @return 是否删除成功
+     */
+    @Override
+    public Record deleteShopCart(CoonShopcart coonShopcart) {
+        Record record = new Record();
+        boolean success = false;
+        String ids = coonShopcart.getIds();
+        if (StringUtils.isNotEmpty(ids)) {
+            String[] idStr = ids.split(",");
+            int result = 0;
+            for (int i = 0; i < idStr.length; i++) {
+                result = 0;
+                success = false;
+                result = coonShopcartMapper.deleteCoonShopcart(idStr[i]);
+                if (result > 0) {
+                    success = true;
+                } else {
+                    record.set("msg", "主键为 " + idStr[i] + "的购物车商品信息删除失败");
+                    break;
+                }
+            }
+        } else {
+            record.set("msg", "参数错误，购物车主键不能为空");
+        }
+        record.set("success", success);
+        return record;
+    }
+    
+    @Override
+    public Record updateCoolOrderNbyb(String orderNo) {
+        // TODO: 临时查询订单的接口，之前的ws接口只会在货物放行时才能获取单号
+        String getUrl = "http://kf.celeka.cn/queryoid.php?orderno=";
+        String result = HttpUtils.httpGet(getUrl + orderNo);
+        
+        // LogisticsWebServiceSoap serviceSoap = new LogisticsWebService().getLogisticsWebServiceSoap12();
+        // String result =
+        // serviceSoap.getKJB2CLogisticsInfo(YoubeiService.ERPKEY,
+        // YoubeiService.ERPSECRET,
+        // YoubeiService.SHOPID,
+        // orderNo);
+        // StringBuilder builder = new StringBuilder();
+        // // 记录发送日志
+        // builder.append("parameter: orderNo=").append(orderNo).append(System.getProperty("line.separator", "\n"));
+        // builder.append("response:  ").append(result);
+        //
+        // SendMessageLogUtil.info(builder.toString());
+        OrderSearchResult orderResult = JaxbUtil.converyToJavaBean(result, OrderSearchResult.class);
+        
+        Record record = new Record();
+        record.set("result", orderResult);
+        
+        if ("T".equals(orderResult.getResult()) && orderResult.getBody() != null
+            && orderResult.getBody().getLogNo() != null && orderResult.getBody().getLogName() != null) {
+            CoolOrder order = new CoolOrder();
+            order.setOrderNo(orderNo);
+            order.setState(CoolOrder.ORDER_STATE_2);
+            order.setPsCode(orderResult.getBody().getLogNo());
+            order.setPsfs(orderResult.getBody().getLogName());
+            record.set("success", coolOrderMapper.updateCoolOrder(order) > 0);
+        }
+        
+        return record;
+    }
 }

@@ -1,6 +1,5 @@
 package com.isell.ws;
 
-import javax.annotation.PostConstruct;
 import javax.xml.ws.Endpoint;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +25,7 @@ public class WebserviceConfig {
     /**
      * 初始化
      */
-    @PostConstruct
+    // @PostConstruct
     public void init() {
         System.out.println("begin ws init.");
         Endpoint.publish(wsDomain + "/ws/zzWebService", new ZzWebServiceImpl());

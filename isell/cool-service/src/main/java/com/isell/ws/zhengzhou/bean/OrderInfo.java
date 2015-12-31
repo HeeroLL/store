@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = {})
 public class OrderInfo {
     /**
-     * 关联 H2010 项号
+     * 关联 H2010 项号(6种面膜的的项号是78  面霜的项号是79)
      */
     @XmlElement(name = "GNO")
     private String gno;
@@ -60,31 +60,31 @@ public class OrderInfo {
      * HS 编码
      */
     @XmlElement(name = "BARCODE")
-    private String barcode = "3304990010";
+    private String barcode;
     
     /**
      * 行邮税号
      */
     @XmlElement(name = "TAXID")
-    private String taxid = "09000000";
+    private String taxid;
     
     /**
      * 原产国
      */
     @XmlElement(name = "SOURCEPRODUCERCOUNTRY")
-    private String sourceproducercountry;
+    private String sourceproducercountry = "410"; // 韩国
     
     /**
      * 币制
      */
     @XmlElement(name = "COIN")
-    private String coin = "CNY";
+    private String coin = "142";
     
     /**
      * 计量单位
      */
     @XmlElement(name = "UNIT")
-    private String unit = "007";
+    private String unit;
     
     /**
      * 申报数量
@@ -114,7 +114,7 @@ public class OrderInfo {
      * 检验检疫商品备案编号
      */
     @XmlElement(name = "GOODIDINSP")
-    private String goodidinsp = "4100605453AW1239";
+    private String goodidinsp;
     
     /**
      * 订单编号
@@ -168,7 +168,7 @@ public class OrderInfo {
      * 计量单位（检验检疫代码）
      */
     @XmlElement(name = "UNITINSP")
-    private String unitinsp = "007";
+    private String unitinsp;
     
     /**
      * 原产国（检验检疫代码）

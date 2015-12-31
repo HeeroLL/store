@@ -23,7 +23,28 @@
         <result column="tbd_amount" jdbcType="DECIMAL" property="tbdAmount"/>
         <result column="recommend_id" jdbcType="VARCHAR" property="recommendId"/>
         <result column="recommend_amount" jdbcType="DECIMAL" property="recommendAmount"/>
+        <result column="arrears_total" jdbcType="DECIMAL" property="arrearsTotal"/>
+        <result column="jj_amount" jdbcType="DECIMAL" property="jjAmount"/>
+        <result column="f_percentage" jdbcType="DECIMAL" property="fPpercentage"/>
+        <result column="s_percentage" jdbcType="DECIMAL" property="sPercentage"/>
+        <result column="is_experience" jdbcType="VARCHAR" property="isExperience"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="is_channel_selected" jdbcType="VARCHAR" property="isChannelSelected"/>
+        <result column="vip" jdbcType="INTEGER" property="vip"/>
     </resultMap>
+    <resultMap id="CoonShopPartnerInfoMap" type="com.isell.service.shop.po.CoonShopPartnerInfo">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="o_id" jdbcType="INTEGER" property="oId"/>
+        <result column="supplier" jdbcType="VARCHAR" property="supplier"/>
+        <result column="partner_id" jdbcType="VARCHAR" property="partnerId"/>
+        <result column="partner_name" jdbcType="VARCHAR" property="partnerName"/>
+        <result column="partner_amount" jdbcType="DECIMAL" property="partnerAmount"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="order_amount" jdbcType="DECIMAL" property="orderAmount"/>
+         <result column="count" jdbcType="INTEGER" property="count"/>
+         <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+    </resultMap>
+    
     <select id="getCoonShopById" resultMap="BaseResultMap">
         SELECT
             *
@@ -31,6 +52,108 @@
              coon_shop
         WHERE            
             id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 查询体验店列表 -->
+    <select id="findAllCoonShopExperience" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop
+        WHERE  is_experience = '1' 
+    </select>
+    
+    <!-- 分页查询酷店信息 -->
+    <select id="getCoonShopListPage" resultMap="BaseResultMap" parameterType="com.isell.service.shop.vo.CoonShop">
+        SELECT
+            *
+        FROM
+             coon_shop
+        WHERE  1=1
+        	<if test="name != null and name!=''">
+        		and name like #{name,jdbcType=VARCHAR} || '%'
+        	</if>
+    </select>
+    
+    <!-- 获取合伙人奖励明细列表 -->
+    <select id="getCoonShopPartnerDetailList" resultMap="CoonShopPartnerInfoMap">
+		SELECT  shop.id as partner_id,shop.name as partner_name,shop.order_no as order_no, ifnull(a.amount,0) as partner_amount
+		FROM
+		(SELECT
+            s.id, s.name,r.order_no
+        FROM
+            coon_shop s  
+        LEFT JOIN 
+        	cool_order r on s.id = r.supplier
+       	WHERE 
+       		s.id =  #{partnerId,jdbcType=VARCHAR}
+       	) shop 
+        LEFT JOIN 
+        	coon_run_account a on a.order_no = shop.order_no and a.type = 0 and a.withdraw_state = 6 and a.is_freeze = 0 
+        		and a.devide = #{devide,jdbcType=VARCHAR}
+        		and a.shop_id = #{shopId,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根据酷店主键和分销等级获取合伙人及奖励息 -->
+    <select id="getCoonShopPartnerListByShopIdsAndDevide" resultMap="CoonShopPartnerInfoMap">
+		SELECT  shop.id as partner_id,shop.name as partner_name,ifnull(count(shop.order_no),0) as count, ifnull(sum(a.amount),0) as partner_amount
+		FROM
+		(SELECT
+            s.id, s.name,r.order_no
+        FROM
+            coon_shop s  
+        LEFT JOIN 
+        	cool_order r on s.id = r.supplier
+       	WHERE 
+       		s.id in 
+       		<foreach item="item" index="index" collection="shopIds" open="(" separator="," close=")">
+                #{item}
+        	</foreach>
+       	) shop 
+        LEFT JOIN 
+        	coon_run_account a on a.order_no = shop.order_no and a.type = 0 and a.withdraw_state = 6 and a.is_freeze = 0 
+        		and a.devide = #{devide,jdbcType=VARCHAR}
+        		and a.shop_id = #{shopId,jdbcType=VARCHAR}
+   		group by shop.id
+    </select>
+    
+    <!-- 根据酷店编码查询酷店信息 -->
+    <select id="getCoonShopByCode" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop
+        WHERE            
+            code = #{code,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根根据推荐店铺主键获取二级酷店信息 -->
+    <select id="getCoonShopListByRecommendL2" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop
+        WHERE            
+            recommend_id = #{recommendId,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根根据推荐店铺主键获取三级酷店信息 -->
+    <select id="getCoonShopListByRecommendL3" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop
+        WHERE            
+            recommend_id  in (select id from coon_shop where  recommend_id = #{recommendId,jdbcType=VARCHAR})
+    </select>
+    
+    <select id="getCoonShopByUserId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop
+        WHERE            
+            user_id = #{userId,jdbcType=VARCHAR}
     </select>
     
     <!-- 根据查询到的数量判断是否达到下个等级 -->
@@ -120,6 +243,21 @@
             <if test="recommendAmount != null" >
                 recommend_amount,
             </if>
+            <if test="arrearsTotal != null" >
+                arrears_total,
+            </if>
+             <if test="jjAmount != null" >
+                jj_amount,
+            </if>
+            <if test="isExperience != null" >
+                is_experience,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="isChannelSelected != null" >
+                is_channel_selected,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -185,6 +323,21 @@
             <if test="recommendAmount != null" >
                 #{recommendAmount,jdbcType=DECIMAL},
             </if> 
+            <if test="arrearsTotal != null" >
+                #{arrearsTotal,jdbcType=DECIMAL},
+            </if> 
+            <if test="jjAmount != null" >
+                #{jjAmount,jdbcType=DECIMAL},
+            </if> 
+            <if test="isExperience != null" >
+                #{isExperience,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="isChannelSelected != null" >
+                #{isChannelSelected,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
 
@@ -250,6 +403,21 @@
             </if>
             <if test="recommendAmount != null" >
                 recommend_amount = #{recommendAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="arrearsTotal != null" >
+                arrears_total = #{arrearsTotal,jdbcType=DECIMAL},
+            </if>
+            <if test="jjAmount != null" >
+                jj_amount = #{jjAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="isExperience != null" >
+                is_experience = #{isExperience,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="isChannelSelected != null" >
+                is_channel_selected = #{isChannelSelected,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE 

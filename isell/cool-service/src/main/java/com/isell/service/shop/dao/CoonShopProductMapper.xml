@@ -8,6 +8,26 @@
         <result column="s_id" jdbcType="VARCHAR" property="sId"/>
         <result column="qr_code" jdbcType="VARCHAR" property="qrCode"/>
         <result column="brokerage" jdbcType="DECIMAL" property="brokerage"/>
+        <result column="order" jdbcType="INTEGER" property="order"/>
+        <result column="is_new" jdbcType="VARCHAR" property="isNew"/>
+    </resultMap>
+    <!-- 酷店商品返回类 -->
+    <resultMap id="CoonShopProductInfoMap" type="com.isell.service.shop.po.CoonShopProductInfo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="gg" jdbcType="VARCHAR" property="gg"/>
+        <result column="jg" jdbcType="DECIMAL" property="jg"/>
+        <result column="cxjg" jdbcType="DECIMAL" property="cxjg"/>
+        <result column="xsjg" jdbcType="DECIMAL" property="xsjg"/>
+        <result column="sales" jdbcType="INTEGER" property="sales"/>
+        <result column="salesMonth" jdbcType="INTEGER" property="salesMonth"/>
+        <result column="drp_price" jdbcType="DECIMAL" property="drpPrice"/>
+        <result column="divide" jdbcType="DECIMAL" property="divide"/>   
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
     </resultMap>
     <select id="getCoonShopProductById" resultMap="BaseResultMap">
         SELECT
@@ -16,6 +36,117 @@
              coon_shop_product
         WHERE            
             id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 查询热销商品列表 -->
+    <select id="getHotSellProductList" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
+          select a.*,ifnull(b.salesMonth,0)
+		  from
+          (select g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime
+          from
+          (select i.g_id,i.gid
+          from cool_order o
+          inner join cool_order_item i on o.order_no = i.order_no
+          where o.supplier =  #{sId,jdbcType=VARCHAR}  and (o.state = 2 or o.state = 3 or o.state = 4 or o.state = 5 or o.state = 11)
+          group by  i.g_id,i.gid
+          order by sum(i.count * i.price) desc  limit #{showCount,jdbcType=INTEGER}) oi
+          left join cool_product p on p.id = oi.g_id
+          left join cool_product_gg g on g.id = oi.gid) a
+          left join
+			(SELECT i.gid,sum(i.count) as salesMonth  from cool_order_item i
+			inner join cool_order o on o.order_no = i.order_no 
+			where left(o.createtime,7) = left(now(),7) and (o.state=0 or o.state=1 or o.state=2 or o.state=3 or o.state=1 or o.state=11)
+			 group by  i.gid) b on b.gid = a.id          
+    </select>
+    
+    <!-- 分页获取商品列表 -->
+    <select id="getCoonShopProductInfoListPage" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
+          select a.*,ifnull(b.salesMonth,0)
+		  from
+          (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime
+          FROM cool_product_gg g
+          left join cool_product p on g.goods_id = p.id
+          where g.stock > 0 
+          <if test="type != null">
+          	and p.type = #{type,jdbcType=INTEGER}
+          </if>
+          <if test="name != null and name != ''">
+          	and (p.name  like '%' || #{name,jdbcType=VARCHAR} || '%' or p.name_en  like '%' || #{name,jdbcType=VARCHAR} || '%' )
+          </if>
+          <if test="pId != null and pId != ''">
+          	and p.id = #{pId,jdbcType=VARCHAR}
+          </if>
+          <if test="gId != null and gId != ''">
+          	and g.id = #{gId,jdbcType=VARCHAR}
+          </if>
+          <if test="orderBy == '1'.toString()">
+          	group by ifnull(g.cxjg,g.jg) * p.divide desc
+          </if>
+          <if test="orderBy == '2'.toString()">
+          	group by ifnull(g.cxjg,g.jg) desc
+          </if>
+          <if test="orderBy == '3'.toString()">
+            group by g.sales desc
+          </if>
+          ) a
+          left join
+			(SELECT i.gid,sum(i.count) as salesMonth  from cool_order_item i
+			inner join cool_order o on o.order_no = i.order_no 
+			where left(o.createtime,7) = left(now(),7) and (o.state=0 or o.state=1 or o.state=2 or o.state=3 or o.state=1 or o.state=11)
+			 group by  i.gid) b on b.gid = a.id
+    </select>
+    
+    <!-- 分页查询已上架商品信息 -->
+    <select id="getCoonShopProductAddedListPage" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
+          select a.*,ifnull(b.salesMonth,0)
+		  from
+          (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime
+          FROM coon_shop_product s
+          left join cool_product p on p.id = s.p_id
+          left join cool_product_gg g on g.goods_id = p.id          
+          where g.stock > 0 
+          <if test="sId != null and sId != ''">
+          	and s.s_id = #{sId,jdbcType=VARCHAR}
+          </if>
+          ) a
+          left join
+			(SELECT i.gid,sum(i.count) as salesMonth  from cool_order_item i
+			inner join cool_order o on o.order_no = i.order_no 
+			where left(o.createtime,7) = left(now(),7) and (o.state=0 or o.state=1 or o.state=2 or o.state=3 or o.state=1 or o.state=11)
+			 group by  i.gid) b on b.gid = a.id
+    </select>
+    
+    <!-- 分页查询未上架商品信息 -->
+    <select id="getCoonShopProductNoAddedListPage" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
+          select a.*,ifnull(b.salesMonth,0)
+		  from
+          (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime
+          FROM cool_product_gg g
+          left join cool_product p on g.goods_id = p.id
+          where g.stock > 0  and not exists(select 'x' from coon_shop_product where s_id = #{sId,jdbcType=VARCHAR} and added = 0 )
+          ) a
+          left join
+			(SELECT i.gid,sum(i.count) as salesMonth  from cool_order_item i
+			inner join cool_order o on o.order_no = i.order_no 
+			where left(o.createtime,7) = left(now(),7) and (o.state=0 or o.state=1 or o.state=2 or o.state=3 or o.state=1 or o.state=11)
+			 group by  i.gid) b on b.gid = a.id
+    </select> 
+    
+    <!-- 根据酷店主键和商品主键获取上架店铺数 -->
+    <select id="getCoonShopProductAddedCountByGoodsId" resultType="java.lang.Integer">
+          SELECT ifnull(count(1),0) FROM coon_shop_product 
+          where p_id = #{pId,jdbcType=VARCHAR}  and added = 1
+    </select>
+    
+    <!-- 根据商品主键和酷店主键获取上架数 -->
+    <select id="getCoonShopProductAddedCountByGoodsIdAndShopId" resultType="java.lang.Integer">
+          SELECT ifnull(count(1),0) FROM coon_shop_product 
+          where p_id = #{pId,jdbcType=VARCHAR} and s_id =  #{sId,jdbcType=VARCHAR} and added = 1
+    </select>
+    
+    <!-- 根据酷店最大的商品排序号 -->
+    <select id="getMaxOrderByShopId" resultType="java.lang.Integer">
+          select MAX(`order`) from coon_shop_product where s_id =  #{sId,jdbcType=VARCHAR} 
     </select>
     
     <select id="findAllCoonShopProduct" resultMap="BaseResultMap">
@@ -63,6 +194,12 @@
             <if test="brokerage != null" >
                 brokerage,
             </if>
+             <if test="order != null" >
+                `order`,
+            </if>
+             <if test="isNew != null" >
+                is_new,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -82,6 +219,12 @@
             </if> 
             <if test="brokerage != null" >
                 #{brokerage,jdbcType=DECIMAL},
+            </if> 
+            <if test="order != null" >
+                #{order,jdbcType=INTEGER},
+             </if>
+            <if test="isNew != null" >
+                #{isNew,jdbcType=VARCHAR},
             </if> 
         </trim>
     </insert>
@@ -106,6 +249,12 @@
             </if>
             <if test="brokerage != null" >
                 brokerage = #{brokerage,jdbcType=DECIMAL},
+            </if>
+            <if test="order != null" >
+                `order` = #{order,jdbcType=INTEGER},
+            </if>
+            <if test="isNew != null" >
+                is_new = #{isNew,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE 

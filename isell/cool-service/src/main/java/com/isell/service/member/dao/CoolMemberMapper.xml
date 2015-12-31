@@ -59,6 +59,16 @@
             user_id = #{userId,jdbcType=INTEGER}
     </select>
     
+    <!-- 根据用户名查询用户 -->
+     <select id="getCoolMemberByMobile" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_member
+        WHERE            
+            mobile = #{mobile}
+    </select>
+    
     <select id="getNumberForCheckIdCard">
     	select count(*) from cool_member where idcard=#{idcard,jdbcType=VARCHAR} and user_id = #{userId,jdbcType=INTEGER}
     </select>

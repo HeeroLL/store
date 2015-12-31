@@ -3,15 +3,16 @@ package com.isell.service.account.vo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.isell.core.mybatis.page.PageConfig;
+
 /**
  * 
- * 佣金流水记录表vo
+ * 账单流水记录表vo
  * 
  * @author wangpegn
  * @version [版本号, 2015-10-04]
  */
-public class CoonRunAccount{
-	
+public class CoonRunAccount extends PageConfig{
 	/**
      * 0.收入 1.支出
      */
@@ -23,25 +24,49 @@ public class CoonRunAccount{
     public static final Integer TYPE_1 = 1;
     
     /**
-     * 提现状态 0.未提现.1已提现 3.交易完成(未提现)4.转到付款中
+     * 提现状态 0.未提现.1已提现3.收入4转到体现中5.退款6.奖励
      */
     public static final Integer WITHDRAW_STATE_0 = 0;
     
     /**
-     * 提现状态 0.未提现.1已提现 3.交易完成(未提现)4.转到付款中
+     * 提现状态 0.未提现.1已提现3.收入4转到体现中5.退款6.奖励
      */
     public static final Integer WITHDRAW_STATE_1 = 1;
     
     /**
-     * 提现状态 0.未提现.1已提现 3.交易完成(未提现)4.转到付款中
+     * 提现状态 0.未提现.1已提现3.收入4转到体现中5.退款6.奖励
      */
     public static final Integer WITHDRAW_STATE_3 = 3;
     
     /**
-     * 提现状态 0.未提现.1已提现 3.交易完成(未提现)4.转到付款中
+     * 提现状态 0.未提现.1已提现3.收入4转到体现中5.退款6.奖励
      */
     public static final Integer WITHDRAW_STATE_4 = 4;
-	
+    
+    /**
+     * 提现状态 0.未提现.1已提现3.收入4转到体现中5.退款6.奖励
+     */
+    public static final Integer WITHDRAW_STATE_5 = 5;
+    
+    /**
+     * 提现状态 0.未提现.1已提现3.收入4转到体现中5.退款6.奖励
+     */
+    public static final Integer WITHDRAW_STATE_6 = 6;
+    
+    /**
+     * 0 支付宝
+     */
+    public static final Integer WITHDRAW_TYPE_0 = 0;
+    
+    /**
+     * 0未冻结1冻结
+     */
+    public static final Byte IS_FREEZE_0 = 0;
+    
+    /**
+     * 0未冻结1冻结
+     */
+    public static final Byte IS_FREEZE_1 = 1;
 	
     /**
      * 主键ID
@@ -72,7 +97,7 @@ public class CoonRunAccount{
      */
     private String serialNumber;
     /**
-     * 0.未提现.1已提现 3.4.转到付款中
+     * 0.未提现.1已提现3.收入4转到体现中5.退款6.奖励
      */
     private Integer withdrawState;
     /**
@@ -95,6 +120,44 @@ public class CoonRunAccount{
      * 批量付款批次号
      */
     private String batchNo;
+    /**
+     * 订单来源
+     */
+    private String orderNo;
+    /**
+     * 备注
+     */
+    private String maker;
+    /**
+     * 0未冻结1冻结
+     */
+    private Byte isFreeze;
+    /**
+     * 冻解时间
+     */
+    private Date freezeTime;
+    /**
+     * 订单店铺主键
+     */
+    private String shopId;
+    /**
+     * 订单店铺名称
+     */
+    private String shopName;
+    /**
+     * 是否显示 0或空：显示；1：不显示
+     */
+    private Byte isDel;
+    
+    /**
+     * 1级分销2级分销3级分销
+     */
+    private String devide;
+    
+    /**
+     * 流水状态 1：可提现 2：即将可用
+     */
+    private String state;
 
     /**
      * 主键ID
@@ -188,14 +251,14 @@ public class CoonRunAccount{
         this.serialNumber = serialNumber;
     }    
     /**
-     * 0.未提现.1已提现 3.4.转到付款中
+     * 0.未提现.1已提现3.收入4转到体现中5.退款6.奖励
      */
     public Integer getWithdrawState(){
         return this.withdrawState;
     }
 
     /**
-     * 0.未提现.1已提现 3.4.转到付款中
+     * 0.未提现.1已提现3.收入4转到体现中5.退款6.奖励
      */
     public void setWithdrawState(Integer withdrawState){
         this.withdrawState = withdrawState;
@@ -265,4 +328,111 @@ public class CoonRunAccount{
     public void setBatchNo(String batchNo){
         this.batchNo = batchNo;
     }    
+    /**
+     * 订单来源
+     */
+    public String getOrderNo(){
+        return this.orderNo;
+    }
+
+    /**
+     * 订单来源
+     */
+    public void setOrderNo(String orderNo){
+        this.orderNo = orderNo;
+    }    
+    /**
+     * 备注
+     */
+    public String getMaker(){
+        return this.maker;
+    }
+
+    /**
+     * 备注
+     */
+    public void setMaker(String maker){
+        this.maker = maker;
+    }    
+    /**
+     * 0未冻结1冻结
+     */
+    public Byte getIsFreeze(){
+        return this.isFreeze;
+    }
+
+    /**
+     * 0未冻结1冻结
+     */
+    public void setIsFreeze(Byte isFreeze){
+        this.isFreeze = isFreeze;
+    }    
+    /**
+     * 冻解时间
+     */
+    public Date getFreezeTime(){
+        return this.freezeTime;
+    }
+
+    /**
+     * 冻解时间
+     */
+    public void setFreezeTime(Date freezeTime){
+        this.freezeTime = freezeTime;
+    }    
+    /**
+     * 订单店铺主键
+     */
+    public String getShopId(){
+        return this.shopId;
+    }
+
+    /**
+     * 订单店铺主键
+     */
+    public void setShopId(String shopId){
+        this.shopId = shopId;
+    }    
+    /**
+     * 订单店铺名称
+     */
+    public String getShopName(){
+        return this.shopName;
+    }
+
+    /**
+     * 订单店铺名称
+     */
+    public void setShopName(String shopName){
+        this.shopName = shopName;
+    }    
+    /**
+     * 是否显示 0或空：显示；1：不显示
+     */
+    public Byte getIsDel(){
+        return this.isDel;
+    }
+
+    /**
+     * 是否显示 0或空：显示；1：不显示
+     */
+    public void setIsDel(Byte isDel){
+        this.isDel = isDel;
+    }
+
+	public String getDevide() {
+		return devide;
+	}
+
+	public void setDevide(String devide) {
+		this.devide = devide;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}    
 }

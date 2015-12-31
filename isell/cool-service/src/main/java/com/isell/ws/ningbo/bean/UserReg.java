@@ -37,7 +37,7 @@ public class UserReg {
      * 用户邮箱[可空]
      */
     @XmlElement(name = "Email")
-    private String email = "admin@i-coolshop.cn";
+    private String email;
     
     public String getIdnum() {
         return idnum;

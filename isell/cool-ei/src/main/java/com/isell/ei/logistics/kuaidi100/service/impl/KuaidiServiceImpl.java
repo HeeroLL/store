@@ -19,12 +19,35 @@ import com.isell.ei.logistics.kuaidi100.vo.ResultInfo;
  */
 @Service("kuaidiService")
 public class KuaidiServiceImpl implements KuaidiService {
+    /**
+     * 快递公司map集合
+     */
+    private Map<String, String> comMap;
+    
+    /**
+     * 默认构造函数
+     */
+    public KuaidiServiceImpl() {
+        comMap = new HashMap<String, String>();
+        comMap.put("yuantong", "yuantong");
+        comMap.put("yunda", "yunda");
+        comMap.put("huitongkuaidi", "huitongkuaidi");
+        comMap.put("zhongtong", "zhongtong");
+        comMap.put("shentong", "shentong");
+        comMap.put("ems", "ems");
+        comMap.put("中通速递", "zhongtong");
+        comMap.put("邮政速递", "ems");
+        comMap.put("圆通速递", "yuantong");
+        comMap.put("韵达快运", "yunda");
+        comMap.put("汇通快运", "huitongkuaidi");
+        comMap.put("申通快递", "shentong");
+    }
     
     @Override
     public JsonData jsonService(String com, String nu) {
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("id", KEY);
-        paramMap.put("com", com);
+        paramMap.put("com", comMap.get(com));
         paramMap.put("nu", nu);
         
         String result = HttpUtils.httpPost(API_URL, paramMap);
@@ -44,7 +67,7 @@ public class KuaidiServiceImpl implements KuaidiService {
     public String webService(String com, String nu) {
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("key", KEY);
-        paramMap.put("com", com);
+        paramMap.put("com", comMap.get(com));
         paramMap.put("nu", nu);
         
         return HttpUtils.httpPost(WEB_URL, paramMap);

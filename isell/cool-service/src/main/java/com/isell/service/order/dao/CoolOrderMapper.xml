@@ -52,6 +52,7 @@
         <result column="arrears" jdbcType="INTEGER" property="arrears"/>
         <result column="refund_state" jdbcType="INTEGER" property="refundState"/>
         <result column="refund_amount" jdbcType="DECIMAL" property="refundAmount"/>
+        <result column="order_oldno" jdbcType="VARCHAR" property="orderOldno"/>
     </resultMap>
     <!-- 导出返回类 -->
     <resultMap id="ExportMap" type="com.isell.service.order.po.CoolOrderExport">
@@ -71,6 +72,67 @@
     	<result column="statistics_v_b" jdbcType="DECIMAL" property="statistics_v_b"/>
     	<result column="statistics_v_i" jdbcType="INTEGER" property="statistics_v_i"/>
     </resultMap>
+    <!-- 商品信息返回类 -->
+    <resultMap id="CoolProductInfoMap" type="com.isell.service.product.po.CoolProductInfo">
+        <result column="pId" jdbcType="INTEGER" property="pId"/>
+        <result column="gId" jdbcType="INTEGER" property="gId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="gg" jdbcType="VARCHAR" property="gg"/>
+        <result column="drp_price" jdbcType="DECIMAL" property="drpPrice"/>
+    </resultMap>
+    
+    <!-- 获取订单金额 -->
+    <select id="getSumAmount" resultType="java.math.BigDecimal">
+        SELECT
+            ifnull(sum(o.total),0)
+        FROM
+             cool_order o
+        inner join 
+        	coon_run_account a on a.order_no = o.order_no
+        WHERE            
+            o.supplier = #{shopId,jdbcType=VARCHAR}
+            and (o.createtime between #{beginTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR})
+            and (a.create_time between #{beginTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR})
+            and a.type = 0 and a.is_freeze = 0
+    </select>
+    
+    <!-- 获取定单数 -->
+    <select id="getOrderCount" resultType="java.lang.Integer">
+        SELECT
+            ifnull(count(1),0)
+        FROM
+             cool_order o
+        inner join 
+        	coon_run_account a on a.order_no = o.order_no
+        WHERE            
+            o.supplier = #{shopId,jdbcType=VARCHAR}
+            and (o.createtime between #{beginTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR})
+            and (a.create_time between #{beginTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR})
+            and a.type = 0 and a.is_freeze = 0
+    </select>
+    
+    <!-- 获取一件代发购买过的商品列表 -->
+    <select id="getCoolProductInfoList" resultMap="CoolProductInfoMap"  parameterType="com.isell.service.order.po.CoolOrderParam">
+        SELECT g.id as  gId, p.id as pId, p.name as name, p.name_en as name_en, p.logo as logo, g.gg as gg, g.drp_price as drp_price
+        from
+        (SELECT
+            i.g_id,i.gid
+        FROM
+             cool_order o
+        INNER JOIN 
+         	cool_order_item i on i.order_no = o.order_no      	 
+        WHERE 1=1 
+        <if test="supplier != null and supplier != ''">
+        	and o.supplier = #{id,jdbcType=VARCHAR} 
+        </if>        
+       	) oi 
+       	left join 
+       		cool_product_gg g on g.id = oi.gid
+	    left join 
+	    	cool_product p on p.id = oi.g_id            
+    </select>
     
     <select id="getCoolOrderById" resultMap="BaseResultMap">
         SELECT
@@ -97,6 +159,16 @@
              cool_order
         WHERE            
             ps_code = #{psCode,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根据外部订单号查询 -->
+    <select id="getCoolOrderByOrderOldNoList" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_order
+        WHERE            
+            order_oldno = #{orderOldNo,jdbcType=VARCHAR}
     </select>
     
     <select id="getCoolOrderList" resultMap="BaseResultMap">
@@ -451,6 +523,9 @@
              <if test="refundAmount != null" >
                 refund_amount,
             </if>
+             <if test="orderOldno != null" > 
+                 order_oldno, 
+             </if> 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -600,6 +675,9 @@
             <if test="refundAmount != null" >
                 #{refund_amount,jdbcType=DECIMAL},
             </if>
+             <if test="orderOldno != null" > 
+                 #{orderOldno,jdbcType=VARCHAR}, 
+             </if> 
         </trim>
     </insert>
 
@@ -750,6 +828,9 @@
             <if test="refundAmount != null" >
                 refund_amount = #{refundAmount,jdbcType=DECIMAL},
             </if>
+             <if test="orderOldno != null" > 
+                 order_oldno = #{orderOldno,jdbcType=VARCHAR}, 
+             </if> 
         </set>
         WHERE 
         	<if test="id != null" >

@@ -15,7 +15,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
-import com.isell.core.pogo.TemplateSMS;
+import com.isell.core.pojo.TemplateSMS;
 
 public class SMSUtil {
 	

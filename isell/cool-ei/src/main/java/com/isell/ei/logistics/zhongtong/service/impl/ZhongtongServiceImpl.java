@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.isell.core.util.Coder;
 import com.isell.core.util.HttpUtils;
 import com.isell.core.util.JsonUtil;
+import com.isell.ei.logistics.zhongtong.bean.ZTInsertBillResponse;
 import com.isell.ei.logistics.zhongtong.bean.ZTOrderResponse;
 import com.isell.ei.logistics.zhongtong.service.ZhongtongService;
 
@@ -32,8 +33,22 @@ public class ZhongtongServiceImpl implements ZhongtongService {
         return response;
     }
     
+    @Override
+    public ZTInsertBillResponse insertBill(Map<String, String> param) {
+        String data = JsonUtil.writeValueAsString(param);
+        param.clear();
+        param.put("data", data);
+        param.put("msg_type", "zto.intlbill.insert");
+        genarateMap(param);
+        
+        String result = HttpUtils.httpPost(GET_BIGPEN_URL, param);
+        ZTInsertBillResponse response = JsonUtil.readValue(result, ZTInsertBillResponse.class);
+        return response;
+    }
+    
     private void genarateMap(Map<String, String> param) {
         param.put("company_id", ZhongtongService.COMPANY_ID);
         param.put("data_digest", Coder.encryptBASE64(Coder.encryptMD5(param.get("data") + KEY)));
     }
+
 }

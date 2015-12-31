@@ -44,6 +44,13 @@ public class SmsServiceImpl implements SmsService {
     /** BASEURL */
     private static final String BASEURL;
     
+    /**
+     * 震荣的
+     */
+    private static final String zrAppid = "b453ac0bdc9c4446981702d664086b7c";
+    private static final String zrAuthToken = "3f294a1555eb73125dd56fc5face796f";
+    private static final String zrAccountSid = "8816d13527727be721f6aad9fe5a90bf";
+    private static final String ZRURL;
     static {
         StringBuilder builder = new StringBuilder();
         builder.append("https://")
@@ -54,6 +61,16 @@ public class SmsServiceImpl implements SmsService {
             .append(accountSid)
             .append("/Messages/templateSMS");
         BASEURL = builder.toString();
+        //震荣
+        StringBuilder sb = new StringBuilder();
+        sb.append("https://")
+        .append(IP)
+        .append("/")
+        .append(VERSION)
+        .append("/Accounts/")
+        .append(zrAccountSid)
+        .append("/Messages/templateSMS");
+        ZRURL = sb.toString();
     }
     
     @Override
@@ -78,4 +95,26 @@ public class SmsServiceImpl implements SmsService {
         return JsonUtil.readValue(result, SMSResponse.class);
         
     }
+
+	@Override
+	public SMSResponse sendZhengRong(TemplateSMS templateSMS) {
+		 // 构造请求URL内容
+        String timestamp = DateUtil.getCurrentDate("yyyyMMddHHmmss");// 时间戳
+        String signature = DigestUtils.md5Hex(zrAccountSid + zrAuthToken + timestamp);
+        String url = ZRURL + "?sig=" + signature.toUpperCase();
+        
+        templateSMS.setAppId(zrAppid);
+        // templateSMS.setTemplateId(templateId);
+        String body = JsonUtil.writeValueAsString(templateSMS);
+        body = "{\"templateSMS\":" + body + "}";
+        
+        // 生成请求头认证信息
+        String src = zrAccountSid + ":" + timestamp;
+        String auth = Coder.encryptBASE64(src);
+        log.info(url + "sendMessageTo:" + "\nparam:" + body);
+        String result = HttpUtils.httpPost(url, body, "application/json", new BasicHeader("Authorization", auth));
+        log.info(result);
+        
+        return JsonUtil.readValue(result, SMSResponse.class);
+	}
 }

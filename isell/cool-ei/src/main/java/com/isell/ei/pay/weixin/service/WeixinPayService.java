@@ -2,6 +2,7 @@ package com.isell.ei.pay.weixin.service;
 
 import java.util.TreeMap;
 
+import com.isell.ei.pay.weixin.bean.WeixinCustomsResponse;
 import com.isell.ei.pay.weixin.bean.WeixinPayResultInfo;
 
 /**
@@ -48,6 +49,21 @@ public interface WeixinPayService {
     String CLOSEORDER = URL + "/closeorder";
     
     /**
+     * 财付通海关申报接口
+     */
+    String SENDORDER = "http://mch.tenpay.com/cgi-bin/mch_custom_declare.cgi";
+    
+    /**
+     * 财付通海关申报接口
+     */
+    String CUSTOMQUERY = "http://mch.tenpay.com/cgi-bin/mch_custom_query.cgi";
+    
+    /**
+     * 财付通海关申报接口
+     */
+    String DOWNLOADBILL = "http://mch.tenpay.com/cgi-bin/mch_custom_download_bill.cgi";
+    
+    /**
      * 统一下单服务(JSAPI)
      * 
      * @param paramMap map参数
@@ -79,4 +95,28 @@ public interface WeixinPayService {
      * @return 返回响应
      */
     WeixinPayResultInfo sendPayResult(WeixinPayResultInfo payResultInfo);
+    
+    /**
+     * 财付通报关
+     *
+     * @param paramMap 财付通报关参数
+     * @return 财付通报关响应
+     */
+    WeixinCustomsResponse sendOrder(TreeMap<String, String> paramMap);
+    
+    /**
+     * 支付单申报海关状态查询
+     *
+     * @param paramMap 查询参数
+     * @return 响应信息
+     */
+    TreeMap<String, Object> customQuery(TreeMap<String, String> paramMap);
+    
+    /**
+     * 支付单申报结果下载
+     *
+     * @param paramMap 查询参数
+     * @return 响应信息
+     */
+    String downloadBill(TreeMap<String, String> paramMap);
 }

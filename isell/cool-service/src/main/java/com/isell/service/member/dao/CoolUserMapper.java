@@ -19,6 +19,11 @@ public interface CoolUserMapper{
      * 根据主键查询
      */
     public CoolUser getCoolUserById(@Param("id")Integer id); 
+    
+    /**
+     * 根据用户名查询
+     */
+    public CoolUser getCoolUserByUserName(@Param("username")String username); 
 
     /**
      * 查询出所有记录

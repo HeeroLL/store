@@ -60,6 +60,26 @@ public class WeixinPayControllerTest {
     }
     
     @Test
+    public void testSendOrder() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("transaction_id", "1000280498201512132059367091");
+        
+        String result = HttpUtils.httpPost(URL + "sendOrder", JsonUtil.writeValueAsString(map));
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testSendOrder2() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("transaction_id", "1007270144201512302400375967");
+        map.put("mch_customs_no", "3302461678"); // 商户海关备案号（这个是宁兴优贝的）
+        map.put("customs", "3"); // 海关编号：3宁波 9 郑州（综保区）
+        
+        String result = HttpUtils.httpPost(URL + "sendOrder", JsonUtil.writeValueAsString(map));
+        System.out.println(result);
+    }
+    
+    @Test
     public void testSendPayResult() {
         WeixinPayResultInfo payResultInfo = new WeixinPayResultInfo();
         payResultInfo.setReturnCode("SUCCESS");
@@ -78,9 +98,28 @@ public class WeixinPayControllerTest {
         payResultInfo.setTimeEnd(DateUtil.getCurrentDate("yyyyMMddHHmmss"));
         payResultInfo.setAttach(host + "/bis/testPayResult");
         // 生成校验码
-        payResultInfo.setSign(WeixinPayUtil.encryptString(WeixinPayUtil.generateSign(payResultInfo), WeixinPayService.KEY));
+        payResultInfo.setSign(WeixinPayUtil.encryptString(WeixinPayUtil.generateSign(payResultInfo),
+            WeixinPayService.KEY));
         
-        String result = HttpUtils.httpPost(URL + "sendPayResult", JaxbUtil.convertToXml(payResultInfo), "application/xml");
+        String result =
+            HttpUtils.httpPost(URL + "sendPayResult", JaxbUtil.convertToXml(payResultInfo), "application/xml");
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testCustomQuery() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("transaction_id", "1006150509201512252303980924");
+        
+        String result = HttpUtils.httpPost(URL + "customQuery", JsonUtil.writeValueAsString(map));
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testDownloadBill() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("date", "20151216"); 
+        String result = HttpUtils.httpPost(URL + "downloadBill", JsonUtil.writeValueAsString(map));
         System.out.println(result);
     }
 }

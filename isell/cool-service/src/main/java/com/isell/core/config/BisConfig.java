@@ -73,6 +73,30 @@ public class BisConfig {
     private String defaultShopId;
     
     /**
+     * 图片上线
+     */
+    @Value("${img_maxSize}")
+    private long imgMaxSize;
+    
+    /**
+     * 用户信息缓存时间
+     */
+    @Value("${user_cache_time}")
+    private long userCacheTime;
+    
+    /**
+     * 短信发送接口
+     */
+    @Value("${send_sms_url}")
+    private String sendSmsUrl;
+    
+    /**
+     * 服务接口
+     */
+    @Value("${service_domain}")
+    private String serviceDomain;
+    
+    /**
      * 接入系统map集合
      */
     private Map<String, AccessSystem> accessSysMap;
@@ -132,4 +156,21 @@ public class BisConfig {
     public String getImgLocal() {
         return imgLocal;
     }
+
+    public long getUserCacheTime() {
+        return userCacheTime;
+    }
+
+	public String getSendSmsUrl() {
+		return sendSmsUrl;
+	}
+
+	public long getImgMaxSize() {
+		return imgMaxSize;
+	}
+
+	public String getServiceDomain() {
+		return serviceDomain;
+	}
+
 }

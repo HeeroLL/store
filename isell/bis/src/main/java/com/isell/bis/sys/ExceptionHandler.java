@@ -67,6 +67,13 @@ public class ExceptionHandler implements HandlerExceptionResolver {
             map.put("success", false);
             map.put("msg", message);
         }
+        // 设置errorCode
+        if (ex instanceof BisException) {
+            BisException e = (BisException)ex;
+            if (StringUtils.isNotEmpty(e.getCode())) {
+                map.put("errorCode", e.getCode());                
+            }
+        }
         
         view.setAttributesMap(map);
         return new ModelAndView(view);

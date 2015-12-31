@@ -1,6 +1,7 @@
 package com.isell.core.util;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
@@ -15,7 +16,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.http.Consts;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -50,11 +50,6 @@ public final class HttpUtils {
      * log
      */
     private static final Logger log = Logger.getLogger(HttpUtils.class);
-    
-    /**
-     * 默认字符集
-     */
-    private static final Charset CHARSET = Charset.forName("UTF-8");
     
     /**
      * http连接
@@ -255,6 +250,29 @@ public final class HttpUtils {
     }
     
     /**
+     * http post请求(form形式)
+     * 
+     * @param url 请求url
+     * @param paramMap 请求参数
+     * @param headers 请求头
+     * @return 响应字符串
+     */
+    public static String httpPostGBK(String url, Map<String, String> paramMap, Header... headers) {
+        HttpPost httpPost = new HttpPost(url);
+        if (ArrayUtils.isNotEmpty(headers)) {
+            for (Header header : headers) {
+                httpPost.setHeader(header);
+            }
+        }
+        
+        if (paramMap != null) {
+            httpPost.setEntity(getUrlEncodedFormEntity(paramMap, "GBK"));
+        }
+        
+        return http(HttpClients.createDefault(), httpPost, true, "GBK");
+    }
+    
+    /**
      * https get请求
      * 
      * @param url 请求url
@@ -306,6 +324,29 @@ public final class HttpUtils {
     }
     
     /**
+     * 双向认证模式：https post请求(字符串形式)
+     * 
+     * @param url 请求url
+     * @param param 请求参数
+     * @param contentType contentType
+     * @param headers 请求头
+     * @return 响应字符串
+     */
+    public static String httpsPostAuth(String url, String param, String contentType, Header... headers) {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setHeader("Accept", contentType);
+        httpPost.setHeader("Content-Type", contentType + ";charset=utf-8");
+        if (ArrayUtils.isNotEmpty(headers)) {
+            for (Header header : headers) {
+                httpPost.setHeader(header);
+            }
+        }
+        
+        httpPost.setEntity(new StringEntity(param, "UTF-8"));
+        return http(getSSLHttpClient(), httpPost, true);
+    }
+    
+    /**
      * https post请求(form形式)
      * 
      * @param url 请求url
@@ -334,6 +375,31 @@ public final class HttpUtils {
      * @param headers 请求头
      * @return 响应字符串
      */
+    public static String httpsPostGBK(String url, Map<String, String> paramMap, String contentType, Header... headers) {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setHeader("Accept", contentType);
+        httpPost.setHeader("Content-Type", contentType + ";charset=GBK");
+        if (ArrayUtils.isNotEmpty(headers)) {
+            for (Header header : headers) {
+                httpPost.setHeader(header);
+            }
+        }
+        if (paramMap != null) {
+            httpPost.setEntity(getUrlEncodedFormEntity(paramMap, "GBK"));
+        }
+        
+        return http(getSSLHttpClient(), httpPost, true, "GBK");
+    }
+    
+    /**
+     * https post请求(form形式)
+     * 
+     * @param url 请求url
+     * @param param 请求参数
+     * @param contentType contentType
+     * @param headers 请求头
+     * @return 响应字符串
+     */
     public static String httpsPost(String url, Map<String, String> paramMap, String contentType, Header... headers) {
         HttpPost httpPost = new HttpPost(url);
         httpPost.setHeader("Accept", contentType);
@@ -350,12 +416,20 @@ public final class HttpUtils {
         return http(getSSLHttpClient(), httpPost, true);
     }
     
-    private static UrlEncodedFormEntity getUrlEncodedFormEntity(Map<String, String> paramMap) {
+    private static UrlEncodedFormEntity getUrlEncodedFormEntity(Map<String, String> paramMap, String charsat) {
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         for (Entry<String, String> entry : paramMap.entrySet()) {
             formparams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
         }
-        return new UrlEncodedFormEntity(formparams, Consts.UTF_8);
+        try {
+            return new UrlEncodedFormEntity(formparams, charsat);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("exception.httprequest-error", e);
+        }
+    }
+    
+    private static UrlEncodedFormEntity getUrlEncodedFormEntity(Map<String, String> paramMap) {
+        return getUrlEncodedFormEntity(paramMap, "UTF-8");
     }
     
     private static CloseableHttpClient getSSLHttpClient() {
@@ -384,11 +458,26 @@ public final class HttpUtils {
         }
     }
     
-    private static String http(HttpUriRequest request) {
+    /**
+     * 发送HTTP消息
+     *
+     * @param request 请求
+     * @return 响应字符串
+     */
+    public static String http(HttpUriRequest request) {
         return http(HttpClients.createDefault(), request, true);
     }
     
-    private static String http(CloseableHttpClient httpclient, HttpUriRequest request, boolean isFinishClose) {
+    /**
+     * 发送HTTP消息
+     *
+     * @param httpclient httpClient
+     * @param request 请求
+     * @param isFinishClose 是否关闭连接
+     * @param charset 字符集
+     * @return 响应字符串
+     */
+    public static String http(CloseableHttpClient httpclient, HttpUriRequest request, boolean isFinishClose, String charset) {
         CloseableHttpResponse response = null;
         StringBuilder builder = new StringBuilder();
         builder.append("sendToUrl: ").append(request.getURI()).append(System.getProperty("line.separator", "\n"));
@@ -397,11 +486,11 @@ public final class HttpUtils {
                 HttpPost httpPost = ((HttpPost)request);
                 // 记录发送日志
                 builder.append("parameter: ")
-                    .append(StreamUtils.copyToString(httpPost.getEntity().getContent(), CHARSET))
+                    .append(StreamUtils.copyToString(httpPost.getEntity().getContent(), Charset.forName(charset)))
                     .append(System.getProperty("line.separator", "\n"));
             }
             response = httpclient.execute(request);
-            String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+            String result = EntityUtils.toString(response.getEntity(), charset);
             // 记录响应日志
             builder.append("response:  ").append(result);
             log.info(builder.toString());
@@ -423,6 +512,18 @@ public final class HttpUtils {
                 closeConnenction(httpclient);
             }
         }
+    }
+    
+    /**
+     * 发送HTTP消息
+     *
+     * @param httpclient httpClient
+     * @param request 请求
+     * @param isFinishClose 是否关闭连接
+     * @return 响应字符串
+     */
+    public static String http(CloseableHttpClient httpclient, HttpUriRequest request, boolean isFinishClose) {
+        return http(httpclient, request, isFinishClose, "UTF-8");
     }
     
     private static void closeConnenction(CloseableHttpClient httpclient) {

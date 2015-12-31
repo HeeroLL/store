@@ -94,6 +94,11 @@ public class CoolOrderItem {
      */
     private BigDecimal brokerage;
     
+    /**
+     * 佣金
+     */
+    private BigDecimal profit;
+    
     public Integer getId() {
         return id;
     }
@@ -229,4 +234,12 @@ public class CoolOrderItem {
     public void setBrokerage(BigDecimal brokerage) {
         this.brokerage = brokerage;
     }
+
+	public BigDecimal getProfit() {
+		return profit;
+	}
+
+	public void setProfit(BigDecimal profit) {
+		this.profit = profit;
+	}
 }

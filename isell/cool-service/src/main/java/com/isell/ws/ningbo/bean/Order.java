@@ -32,7 +32,7 @@ public class Order {
     private Integer shopID = YoubeiService.SHOPID;
     
     /**
-     * 支付方式(01中国银联，02支付宝，03盛付通，04建设银行，05中国银行)
+     * 支付方式(01中国银联，02支付宝，03盛付通，04建设银行，05中国银行，13微信支付，24易宝支付)
      */
     @XmlElement(name = "KJ_PayType")
     private String kjPayType = "02";

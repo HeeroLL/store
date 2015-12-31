@@ -1,5 +1,6 @@
 package com.isell.ei.pay.alipay.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -124,7 +125,8 @@ public class AlipayController {
         if (StringUtils.isNotEmpty(response.getError())) {
             jsonData.setMsg(response.getError());
         }
-        if (StringUtils.isNotEmpty(response.getResponse().getAlipay().getDetailErrorDes())) {
+        if (response.getResponse() != null && response.getResponse().getAlipay() != null
+            && StringUtils.isNotEmpty(response.getResponse().getAlipay().getDetailErrorDes())) {
             String msg = response.getResponse().getAlipay().getDetailErrorDes();
             if (StringUtils.isNotEmpty(jsonData.getMsg())) {
                 msg = jsonData.getMsg() + "|" + msg;
@@ -132,6 +134,14 @@ public class AlipayController {
             jsonData.setMsg(msg);
         }
         jsonData.setData(response);
+        if (jsonData.getSuccess()) {
+            Map<String, String> resultMap = new HashMap<String, String>();
+            resultMap.put("resultCode", response.getResponse().getAlipay().getResultCode());
+            resultMap.put("tradeNo", response.getResponse().getAlipay().getTradeNo());
+            resultMap.put("alipayDeclareNo", response.getResponse().getAlipay().getAlipayDeclareNo());
+            
+            jsonData.setData(resultMap);
+        }
         return jsonData;
     }
 }

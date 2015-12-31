@@ -84,6 +84,24 @@ public final class WeixinPayUtil {
     }
     
     /**
+     * 获取参数
+     * 
+     * @param map map
+     * @return 拼装后的参数
+     */
+    public static String getCustomsParameter(TreeMap<String, String> map) {
+        int index = 0;
+        StringBuilder builder = new StringBuilder();
+        for (Entry<String, String> entry : map.entrySet()) {
+            if (index++ != 0) {
+                builder.append('&');
+            }
+            builder.append(entry.getKey()).append('=').append(entry.getValue());
+        }
+        return builder.toString();
+    }
+    
+    /**
      * 生成签名
      * 
      * @param obj 参数对象

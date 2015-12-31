@@ -3,16 +3,20 @@ package com.isell.service.order.po;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.isell.core.mybatis.page.PageConfig;
 import com.isell.service.order.vo.CoolOrderItem;
+import com.isell.service.product.vo.CoolProductReview;
 
 /**
  * 
  * 订单参数类
  * 
- * @author wangpegn
+ * @author wangpeng
  * @version [版本号, 2015-10-05]
  */
-public class CoolOrderParam {
+public class CoolOrderParam  extends PageConfig{
+	
+	private String id;
 	
 	/**
 	 * 收货地省
@@ -124,11 +128,26 @@ public class CoolOrderParam {
      * 是否批量（0：否  1：是）
      */
     private String isBatch;
+    
+    /**
+     * 分销等级 2：二级 3：三级
+     */
+    private Integer level;
+    
+    /**
+     * 合伙人店铺id
+     */
+    private String partnerId;
 	
 	/**
 	 * 订单详情
 	 */
 	private List<CoolOrderItem> orderItems;
+	
+	/**
+	 * 评价列表
+	 */
+	private List<CoolProductReview> reviewList;
 
 	public String getLocationP() {
 		return locationP;
@@ -328,6 +347,38 @@ public class CoolOrderParam {
 
 	public void setIdcard(String idcard) {
 		this.idcard = idcard;
+	}
+
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+
+	public String getPartnerId() {
+		return partnerId;
+	}
+
+	public void setPartnerId(String partnerId) {
+		this.partnerId = partnerId;
+	}
+
+	public List<CoolProductReview> getReviewList() {
+		return reviewList;
+	}
+
+	public void setReviewList(List<CoolProductReview> reviewList) {
+		this.reviewList = reviewList;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

@@ -24,6 +24,22 @@
           SELECT * FROM cool_message 
     </select>
     
+    <!-- 分页查询条件 -->
+    <sql id="where_sql">
+    	where 1=1 
+          <if test="userId != null">
+          	and user_id =  #{userId,jdbcType=INTEGER}
+          </if>
+          <if test="type != null and type != ''">
+          	and type =  #{type,jdbcType=VARCHAR}
+          </if>
+    </sql>
+    <!-- 分页查询 -->
+    <select id="findCoolMessageListPage" resultMap="BaseResultMap" parameterType="com.isell.service.message.vo.CoolMessage">
+          SELECT * FROM cool_message 
+          <include refid="where_sql"></include>
+    </select>
+    
     <delete id="deleteCoolMessage">
         DELETE
         FROM

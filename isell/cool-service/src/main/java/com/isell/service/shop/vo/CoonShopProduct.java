@@ -9,20 +9,31 @@ import java.math.BigDecimal;
  * @version [版本号, 2015-10-04]
  */
 public class CoonShopProduct{
+	
+	/**
+	 * 是否新品 0：否 1：是
+	 */
+	public static final String IS_NEW_0 = "0";
+	
+	/**
+	 * 是否新品 0：否 1：是
+	 */
+	public static final String IS_NEW_1 = "1";
+	
     /**
      * 
      */
     private String id;
     /**
-     * 
+     * 商品主键
      */
     private String pId;
     /**
-     * 
+     * 0：仓库中（未上架） 1：出售中（已上架）
      */
     private Boolean added;
     /**
-     * 
+     * 酷店主键
      */
     private String sId;
     /**
@@ -33,6 +44,16 @@ public class CoonShopProduct{
      * 
      */
     private BigDecimal brokerage;
+    
+    /**
+     * 排序号
+     */
+    private Integer order;
+    
+    /**
+     * 是否新品 0：否 1：是
+     */
+    private String isNew;
 
     /**
      * 
@@ -111,5 +132,21 @@ public class CoonShopProduct{
      */
     public void setBrokerage(BigDecimal brokerage){
         this.brokerage = brokerage;
-    }    
+    }
+
+	public Integer getOrder() {
+		return order;
+	}
+
+	public void setOrder(Integer order) {
+		this.order = order;
+	}
+
+	public String getIsNew() {
+		return isNew;
+	}
+
+	public void setIsNew(String isNew) {
+		this.isNew = isNew;
+	}    
 }

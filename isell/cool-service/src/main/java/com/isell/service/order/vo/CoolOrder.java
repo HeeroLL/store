@@ -10,7 +10,7 @@ import java.util.List;
  * @author lilin
  * @version [版本号, 2015年9月24日]
  */
-public class CoolOrder {
+public class CoolOrder{
     
     /**
      * 待支付
@@ -78,6 +78,16 @@ public class CoolOrder {
     public static final byte FHFS_20 = 20;
     
     /**
+     * 支付方式：2-支付宝支付
+     */
+    public static final int ZFFS_2 = 2;
+    
+    /**
+     * 支付方式：3-微信支付
+     */
+    public static final int ZFFS_3 = 3;
+    
+    /**
      * 主键id
      */
     private Integer id;
@@ -143,7 +153,7 @@ public class CoolOrder {
     private BigDecimal total;
     
     /**
-     * 订单状态：0：待支付/1：待发货/2：待收货/3：待评价/4：已完成/5：已退款/99：已取消
+     * 订单状态：0：待支付/1：待发货/2：待收货/3：待评价/4：已完成/5：已退款/11：已通知海关发货/99：已取消
      */
     private Byte state;
     
@@ -318,6 +328,8 @@ public class CoolOrder {
      * 行邮税
      */
     private BigDecimal taxPrice;
+    
+    private String orderOldno;
     
     /**
      * 发货方式
@@ -796,6 +808,14 @@ public class CoolOrder {
 
 	public void setRefundAmount(BigDecimal refundAmount) {
 		this.refundAmount = refundAmount;
+	}
+
+	public String getOrderOldno() {
+		return orderOldno;
+	}
+
+	public void setOrderOldno(String orderOldno) {
+		this.orderOldno = orderOldno;
 	}
     
 }

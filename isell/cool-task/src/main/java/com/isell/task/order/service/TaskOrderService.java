@@ -16,4 +16,19 @@ public interface TaskOrderService {
      * 批量确认收货
      */
     void signOrder();
+    
+    /**
+     * 返还佣金
+     */
+	void backCommission();
+	
+	/**
+	 * 宁波优贝批量获取运单号
+	 */
+	void getKJB2CLogisticsInfo();
+	
+	/**
+	 * 拼多多订单推送
+	 */
+	void pushPinduoduoOrder();
 }

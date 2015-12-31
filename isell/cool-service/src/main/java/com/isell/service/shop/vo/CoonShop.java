@@ -2,6 +2,10 @@ package com.isell.service.shop.vo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
+import com.isell.core.mybatis.page.PageConfig;
+import com.isell.service.shop.po.CoonShopProductInfo;
 
 /**
  * 酷店表vo
@@ -9,7 +13,12 @@ import java.util.Date;
  * @author lilin
  * @version [版本号, 2015年9月25日]
  */
-public class CoonShop {
+public class CoonShop  extends PageConfig{
+	/**
+	 * 展示方式 
+	 */
+	public static final Byte SHOW_WAY_1 = 1;
+	
     /**
      * 主键id
      */
@@ -96,7 +105,7 @@ public class CoonShop {
     private Integer turnoverOrders;
     
     /**
-     * 展示模板
+     * 展示模板 1:甜蜜粉 2:炫酷黑 3:热情红 4:热情红 5:简洁蓝 6:青春绿 7:梦幻紫
      */
     private Byte showModel;
     
@@ -115,6 +124,78 @@ public class CoonShop {
      */
     private BigDecimal recommendAmount;
     
+    /**
+     * 费欠总金额
+     */
+    private BigDecimal arrearsTotal;
+   
+    /**
+     * 即将可用金额
+     */
+    private BigDecimal jjAmount;
+    
+    /**
+     * 是否体验店 0：否  1： 是
+     */
+    private String isExperience;
+    
+    /**
+     * 体验店地址
+     */
+    private String address;
+    
+    /**
+     * 是否渠道选中平台 0：否  1： 是
+     */
+    private String isChannelSelected;
+    
+    /**
+     * 一级分销比例
+     */
+    private BigDecimal fPercentage;
+    /**
+     * 二机分销比例
+     */
+    private BigDecimal sPercentage;
+    
+    /**
+     * 用户名（手机号）
+     */
+    private String username;
+    
+    /**
+     * 密码
+     */
+    private String password;
+    
+    /**
+     * 用户真实姓名
+     */
+    private String realname;
+    
+    /**
+     * 酷店商品
+     */
+    private List<CoonShopProductInfo> productList;
+   
+    /**
+     * 酷店vip等级
+     */
+    private Integer vip;
+    
+    
+    public Integer getVip() {
+        return vip;
+    }
+
+    public void setVip(Integer vip) {
+        this.vip = vip;
+    }
+
+    public static Byte getShowWay1() {
+        return SHOW_WAY_1;
+    }
+
     public String getId() {
         return id;
     }
@@ -282,4 +363,92 @@ public class CoonShop {
 	public void setRecommendAmount(BigDecimal recommendAmount) {
 		this.recommendAmount = recommendAmount;
 	}
+
+	public BigDecimal getArrearsTotal() {
+		return arrearsTotal;
+	}
+
+	public void setArrearsTotal(BigDecimal arrearsTotal) {
+		this.arrearsTotal = arrearsTotal;
+	}
+
+	public BigDecimal getJjAmount() {
+		return jjAmount;
+	}
+
+	public void setJjAmount(BigDecimal jjAmount) {
+		this.jjAmount = jjAmount;
+	}
+
+	public String getIsExperience() {
+		return isExperience;
+	}
+
+	public void setIsExperience(String isExperience) {
+		this.isExperience = isExperience;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public BigDecimal getfPercentage() {
+		return fPercentage;
+	}
+
+	public void setfPercentage(BigDecimal fPercentage) {
+		this.fPercentage = fPercentage;
+	}
+
+	public BigDecimal getsPercentage() {
+		return sPercentage;
+	}
+
+	public void setsPercentage(BigDecimal sPercentage) {
+		this.sPercentage = sPercentage;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getRealname() {
+		return realname;
+	}
+
+	public void setRealname(String realname) {
+		this.realname = realname;
+	}
+
+	public List<CoonShopProductInfo> getProductList() {
+		return productList;
+	}
+
+	public void setProductList(List<CoonShopProductInfo> productList) {
+		this.productList = productList;
+	}
+
+	public String getIsChannelSelected() {
+		return isChannelSelected;
+	}
+
+	public void setIsChannelSelected(String isChannelSelected) {
+		this.isChannelSelected = isChannelSelected;
+	}	 
 }

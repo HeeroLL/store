@@ -26,6 +26,11 @@ public interface CoolMemberReceiverMapper{
     public List<CoolMemberReceiver> findAllCoolMemberReceiver();    
     
     /**
+     * 根据会员主键查询收货信息
+     */
+    public List<CoolMemberReceiver> findCoolMemberReceiverByMId(@Param("mId")Integer mId);  
+    
+    /**
      * 保存
      */
     public int saveCoolMemberReceiver(CoolMemberReceiver coolMemberReceiver);
@@ -34,6 +39,11 @@ public interface CoolMemberReceiverMapper{
      * 根据主键更新（参数对象中的主键将作为更新条件）
      */
     public int updateCoolMemberReceiver(CoolMemberReceiver coolMemberReceiver);
+    
+    /**
+     * 根据会员主键把默认收货地址改为非默认
+     */
+    public int updateCoolMemberReceiverDef(@Param("mId")Integer mId);
     
     /**
      * 根据主键删除

@@ -60,6 +60,11 @@ public interface CoolMemberMapper{
      */
     public int getNumberForCheckIdCard(@Param("userId")Integer id,@Param("idcard")String idcard);
     
+    /**
+     * 根据用户名查询用户
+     */
+    public CoolMember getCoolMemberByMobile(@Param("mobile")String mobile);
+    
     
 }
 

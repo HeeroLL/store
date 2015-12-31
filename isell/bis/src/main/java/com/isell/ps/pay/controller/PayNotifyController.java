@@ -7,8 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.isell.ei.pay.ehking.bean.EhkingCustomsAsync;
+import com.isell.ei.pay.ehking.bean.EhkingPayNotify;
 import com.isell.ei.pay.yijifu.bean.YijifuPayResponse;
 import com.isell.ei.pay.yijifu.service.YijifuService;
 import com.isell.ei.pay.yijifu.util.YijifuUtil;
@@ -61,13 +64,7 @@ public class PayNotifyController {
             order.setPayTime(new Date());
             orderService.updateOrder(order);
             
-            if (!"56510b6f384c4f8e881ee1614913a3ef".equals(order.getSupplier())) {// 可爱淘不需要发货短信
-                TemplateSMS templateSMS = new TemplateSMS();
-                templateSMS.setTemplateId("15127");
-                templateSMS.setTo(order.getMobile());
-                templateSMS.setParam(order.getOrderNo());
-                smsService.sendMessage(templateSMS);
-            }
+            sendMessage(order);
         }
         map.put("result", "success");
         return "result";
@@ -103,14 +100,78 @@ public class PayNotifyController {
             order.setPayTime(new Date());
             orderService.updateOrder(order);
             
-            if (!"56510b6f384c4f8e881ee1614913a3ef".equals(order.getSupplier())) {// 可爱淘不需要发货短信
-                TemplateSMS templateSMS = new TemplateSMS();
-                templateSMS.setTemplateId("15127");
-                templateSMS.setTo(order.getMobile());
-                templateSMS.setParam(order.getOrderNo());
-                smsService.sendMessage(templateSMS);
-            }
+            sendMessage(order);
         }
+        map.put("result", "success");
+        return "result";
+    }
+    
+    /**
+     * 易汇金支付异步通知
+     * 
+     * @param ehkingPayNotify 易汇金异步参数
+     * @param map 返回参数
+     * @param response response
+     * @return String
+     */
+    @RequestMapping("/ehking")
+    public String ehkingNotify(@RequestBody EhkingPayNotify ehkingPayNotify, ModelMap map, HttpServletResponse response) {
+        response.setContentType("text/plain; charset=UTF-8");
+        CoolOrder order = orderService.getCoolOrderByOrderNo(ehkingPayNotify.getRequestId());
+        
+        if (order == null) {
+            throw new RuntimeException("exception.order.null");
+        }
+        if ("SUCCESS".equals(ehkingPayNotify.getStatus()) && (order.getState() == 0 || order.getState() == 99)) {
+            order.setTradeNo(ehkingPayNotify.getSerialNumber());
+            order.setState(CoolOrder.ORDER_STATE_1);
+            order.setPayTime(new Date());
+            orderService.updateOrder(order);
+            
+            sendMessage(order);
+        }
+        map.put("result", "success");
+        return "result";
+    }
+    
+    /**
+     * 易汇金报关异步通知
+     * 
+     * @param ehkingCustomsAsync 易汇金异步报关响应参数
+     * @param map 返回参数
+     * @param response response
+     * @return String
+     */
+    @RequestMapping("/ehkingBg")
+    public String ehkingNotifyBg(@RequestBody EhkingCustomsAsync ehkingCustomsAsync, ModelMap map, HttpServletResponse response) {
+        response.setContentType("text/plain; charset=UTF-8");
+        System.out.println(ehkingCustomsAsync.getCustomsInfos());
+        map.put("result", "success");
+        return "result";
+    }
+    
+    private void sendMessage(CoolOrder orderR) {
+        if (!"56510b6f384c4f8e881ee1614913a3ef".equals(orderR.getSupplier())
+            && !"b4124c7271094479ae2c20cce611b5f4".equals(orderR.getSupplier())) {// 可爱淘、KK馆不需要发货短信
+            TemplateSMS templateSMS = new TemplateSMS();
+            templateSMS.setTemplateId("15127");
+            templateSMS.setTo(orderR.getMobile());
+            templateSMS.setParam(orderR.getOrderNo());
+            // smsService.sendMessage(templateSMS);
+        }
+    }
+    
+    /**
+     * 易极付支付报关异步通知
+     * 
+     * @param payInfo 易极付异步参数
+     * @param map 返回参数
+     * @param response response
+     * @return String
+     */
+    @RequestMapping("/yijifuBg")
+    public String yijifuBg(ModelMap map, HttpServletResponse response) {
+        response.setContentType("text/plain; charset=UTF-8");
         map.put("result", "success");
         return "result";
     }

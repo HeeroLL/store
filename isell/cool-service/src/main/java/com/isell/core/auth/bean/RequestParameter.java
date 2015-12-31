@@ -15,7 +15,7 @@ public class RequestParameter extends BaseInfo {
     private static final long serialVersionUID = -5516034673381444676L;
 
     /**
-     * 接入编码（由BIS统一分配给客户）
+     * 接入编码
      */
     private String accessCode;
     

@@ -36,6 +36,24 @@
         <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime"/>
         <result column="tax" jdbcType="DECIMAL" property="tax"/>
     </resultMap>
+    <!-- 商品返回类 -->
+    <resultMap id="CoonShopProductInfoMap" type="com.isell.service.shop.po.CoonShopProductInfo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="gg" jdbcType="VARCHAR" property="gg"/>
+        <result column="jg" jdbcType="DECIMAL" property="jg"/>
+        <result column="cxjg" jdbcType="DECIMAL" property="cxjg"/>
+        <result column="xsjg" jdbcType="DECIMAL" property="xsjg"/>
+        <result column="sales" jdbcType="INTEGER" property="sales"/>
+        <result column="salesMonth" jdbcType="INTEGER" property="salesMonth"/>
+        <result column="drp_price" jdbcType="DECIMAL" property="drpPrice"/>
+        <result column="divide" jdbcType="DECIMAL" property="divide"/>   
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+    </resultMap>
     <select id="getCoolProductById" resultMap="BaseResultMap">
         SELECT
             *
@@ -43,6 +61,21 @@
              cool_product
         WHERE            
             id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <!-- 查询热门搜索商品列表 -->
+    <select id="getHotTrendProductList" resultMap="CoonShopProductInfoMap">
+          select g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime
+          from
+          (select i.g_id,i.gid
+          from cool_order o
+          inner join cool_order_item i on o.order_no = i.order_no
+          where (o.state = 2 or o.state = 3 or o.state = 4 or o.state = 5 or o.state = 11)
+          group by  i.g_id,i.gid
+          ) oi
+          left join cool_product p on p.id = oi.g_id
+          left join cool_product_gg g on g.id = oi.gid
+          order by g.sales desc  limit 5
     </select>
     
     <select id="getCoolProductPageList" resultMap="BaseResultMap" parameterType="com.isell.service.product.po.CoolProductSelect">

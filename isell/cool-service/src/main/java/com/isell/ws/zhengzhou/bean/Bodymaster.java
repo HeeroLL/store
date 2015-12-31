@@ -15,40 +15,40 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = {})
 public class Bodymaster {
     /**
-     * 账册号
+     * S账册号
      */
     @XmlElement(name = "LMSNO")
-    private String lmsno;
+    private String lmsno = "S4612I000003";
     
     /**
-     * 关联 H2010 账册号
+     * H账册号
      */
     @XmlElement(name = "MANUALNO")
-    private String manualno;
+    private String manualno = "H46125000004";
     
     /**
      * 电商代码
      */
     @XmlElement(name = "CBECODE")
-    private String cbecode = "D461200044";
+    private String cbecode = "3117964017";
     
     /**
      * 电商名称
      */
     @XmlElement(name = "CBENAME")
-    private String cbename = "郑州洲州海优电子商务有限公司";
+    private String cbename = "上海艾售电子商务有限公司";
     
     /**
      * 电商平台代码
      */
     @XmlElement(name = "ECPCODE")
-    private String ecpcode = "W461200040";
+    private String ecpcode = "3117964017";
     
     /**
      * 电商平台名称
      */
     @XmlElement(name = "ECPNAME")
-    private String ecpname = "郑州洲州海优电子商务有限公司";
+    private String ecpname = "上海艾售电子商务有限公司";
     
     /**
      * 收货人地址
@@ -132,7 +132,7 @@ public class Bodymaster {
      * 发货人的地址
      */
     @XmlElement(name = "SENDERUSERADDRESS")
-    private String senderuseraddress = "河南郑州保税仓";
+    private String senderuseraddress = "郑州综合保税区";
     
     /**
      * 发货人电话
@@ -192,19 +192,19 @@ public class Bodymaster {
      * 电商检验检疫备案编号
      */
     @XmlElement(name = "CBECODEINSP")
-    private String cbecodeinsp = "4100102324";
+    private String cbecodeinsp = "3100679042";
     
     /**
      * 电商平台检验检疫备案编号
      */
     @XmlElement(name = "ECPCODEINSP")
-    private String ecpcodeinsp = "4100102324";
+    private String ecpcodeinsp = "3100679042";
     
     /**
      * 物流企业检验检疫备案编号
      */
     @XmlElement(name = "TREPCODEINSP")
-    private String trepcodeinsp = "4100102324";
+    private String trepcodeinsp = "4100910023";
     
     /**
      * 订单提交时间
@@ -216,7 +216,7 @@ public class Bodymaster {
      * 贸易国别（代码）
      */
     @XmlElement(name = "TRADECOMPANY")
-    private String tradecompany = "601";
+    private String tradecompany = "142";
     
     /**
      * 总费用币制
@@ -234,7 +234,7 @@ public class Bodymaster {
      * 毛重
      */
     @XmlElement(name = "WEIGHT")
-    private String weight = "0.5";
+    private String weight = "0.75";
     
     /**
      * 毛重单位
@@ -246,7 +246,7 @@ public class Bodymaster {
      * 净重
      */
     @XmlElement(name = "NETWEIGHT")
-    private String netweight = "0.3";
+    private String netweight = "0.5";
     
     /**
      * 净重单位
@@ -309,10 +309,46 @@ public class Bodymaster {
     private String licenseNo;
     
     /**
+     * 报关企业名称
+     */
+    @XmlElement(name = "DECLNAME")
+    private String declname;
+    
+    /**
      * 报关企业海关备案编号
      */
     @XmlElement(name = "DECLCODE")
-    private String declcode = "D461200044";
+    private String declcode = "4101985808";
+    
+    /**
+     * 保金保函类 型【0-担保金，1-保函】 一般进口模式只能填写 0；保税模式 可以选择填 写 0或 1，出口为非必填
+     */
+    @XmlElement(name = "DEPOSITORGUARANTEE")
+    private String depositorguarantee = "0";
+    
+    /**
+     * 保函编号
+     */
+    @XmlElement(name = "GUARANTEENO")
+    private String guaranteeno;
+    
+    /**
+     * 预留字段 1
+     */
+    @XmlElement(name = "EXTENDFIELD1")
+    private String extendfield1;
+    
+    /**
+     * 预留字段 2
+     */
+    @XmlElement(name = "EXTENDFIELD2")
+    private String extendfield2;
+    
+    /**
+     * 预留字段 3
+     */
+    @XmlElement(name = "EXTENDFIELD3")
+    private String extendfield3;
     
     /**
      * 是否退税 1： 是 2： 否
@@ -712,12 +748,60 @@ public class Bodymaster {
         this.licenseNo = licenseNo;
     }
 
+    public String getDeclname() {
+        return declname;
+    }
+
+    public void setDeclname(String declname) {
+        this.declname = declname;
+    }
+
     public String getDeclcode() {
         return declcode;
     }
 
     public void setDeclcode(String declcode) {
         this.declcode = declcode;
+    }
+
+    public String getDepositorguarantee() {
+        return depositorguarantee;
+    }
+
+    public void setDepositorguarantee(String depositorguarantee) {
+        this.depositorguarantee = depositorguarantee;
+    }
+
+    public String getGuaranteeno() {
+        return guaranteeno;
+    }
+
+    public void setGuaranteeno(String guaranteeno) {
+        this.guaranteeno = guaranteeno;
+    }
+
+    public String getExtendfield1() {
+        return extendfield1;
+    }
+
+    public void setExtendfield1(String extendfield1) {
+        this.extendfield1 = extendfield1;
+    }
+
+    public String getExtendfield2() {
+        return extendfield2;
+    }
+
+    public void setExtendfield2(String extendfield2) {
+        this.extendfield2 = extendfield2;
+    }
+
+    public String getExtendfield3() {
+        return extendfield3;
+    }
+
+    public void setExtendfield3(String extendfield3) {
+        this.extendfield3 = extendfield3;
     }
 
     public String getTaxrefund() {

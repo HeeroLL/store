@@ -1,5 +1,6 @@
 package com.isell.service.order.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -7,8 +8,10 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.isell.core.mybatis.Mapper;
 import com.isell.service.order.po.CoolOrderExport;
+import com.isell.service.order.po.CoolOrderParam;
 import com.isell.service.order.po.CoolOrderSelect;
 import com.isell.service.order.vo.CoolOrder;
+import com.isell.service.product.po.CoolProductInfo;
 
 /**
  * 订单查询mapper
@@ -25,6 +28,42 @@ public interface CoolOrderMapper {
      * @return 订单信息
      */
     CoolOrder getCoolOrderById(@Param("id") Integer id);
+    
+    /**
+     * 获取定单金额
+     * 
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
+     * @param shopId 酷店主键
+     * @return 总金额
+     */
+    public BigDecimal getSumAmount(@Param("beginTime")String beginTime, @Param("endTime")String endTime, @Param("shopId")String shopId);
+    
+    /**
+     * 获取定单数
+     * 
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
+     * @param shopId 酷店主键
+     * @return 订单数
+     */
+    public int getOrderCount(@Param("beginTime")String beginTime, @Param("endTime")String endTime, @Param("shopId")String shopId);
+    
+    /**
+     * 根据外部订单号查询
+     * 
+     * @param orderOldNo 外部订单号
+     * @return 订单信息
+     */
+    List<CoolOrder> getCoolOrderByOrderOldNoList(String orderOldNo);
+    
+    /**
+     * 获取一件代发购买过的商品列表
+     * 
+     * @param coolOrderParam 参数
+     * @return 商品列表信息
+     */
+    List<CoolProductInfo> getCoolProductInfoList(RowBounds rowBounds, CoolOrderParam coolOrderParam);
     
     /**
      * 根据订单编号查询

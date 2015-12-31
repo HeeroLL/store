@@ -2,12 +2,13 @@ package com.isell.service.product.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
+
 import com.isell.core.mybatis.Mapper;
 import com.isell.service.product.po.CoolProductSelect;
 import com.isell.service.product.vo.CoolProduct;
-
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.session.RowBounds;
+import com.isell.service.shop.po.CoonShopProductInfo;
 
 /**
  * 商品mapper
@@ -26,6 +27,14 @@ public interface CoolProductMapper {
      * 查询出所有记录
      */
     List<CoolProduct> findAllCoolProduct();
+    
+    /**
+     * 查询热门搜索商品列表
+     * 
+     * @param 
+     * @return 热门搜索商品列表
+     */
+    public List<CoonShopProductInfo> getHotTrendProductList();
     
     /**
      * 保存

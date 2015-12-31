@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.isell.core.util.HttpUtils;
 import com.isell.core.util.Identities;
+import com.isell.core.util.JaxbUtil;
 import com.isell.core.util.JsonUtil;
+import com.isell.ei.pay.weixin.bean.WeixinCustomsResponse;
 import com.isell.ei.pay.weixin.bean.WeixinPayResultInfo;
 import com.isell.ei.pay.weixin.service.WeixinPayService;
 import com.isell.ei.pay.weixin.util.WeixinPayUtil;
@@ -39,7 +41,7 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         // 生成微信支付请求参数
         TreeMap<String, Object> requestMap = new TreeMap<String, Object>();
         
-        if ("NATIVE".equals(resultMap.get("trade_type"))){ // 扫码支付
+        if ("NATIVE".equals(resultMap.get("trade_type"))) { // 扫码支付
             requestMap.put("code_url", resultMap.get("code_url")); // 支付二维码的链接
         } else {
             requestMap.put("appId", APPID);
@@ -104,5 +106,44 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         paramMap.put("nonce_str", Identities.uuid());
         
         paramMap.put("sign", WeixinPayUtil.encryptString(WeixinPayUtil.getParameter(paramMap), KEY));
+    }
+    
+    @Override
+    public WeixinCustomsResponse sendOrder(TreeMap<String, String> paramMap) {
+        paramMap.put("input_charset", "UTF-8"); // 字符集
+        paramMap.put("partner", WeixinPayService.MCH_ID); // 微信商户号
+        if (paramMap.get("mch_customs_no") == null) {
+            paramMap.put("mch_customs_no", "3117964017"); // 商户海关备案号    
+        }
+        if (paramMap.get("customs") == null) {
+            paramMap.put("customs", "9"); // 海关编号：9 郑州（综保区）
+        } 
+        paramMap.put("action_type", "1"); // 操作类型 1 新增 2修改（修改暂只支持广州海关）
+        paramMap.put("sign", WeixinPayUtil.encryptString(WeixinPayUtil.getCustomsParameter(paramMap), KEY));
+        
+        String result = HttpUtils.httpPost(SENDORDER, paramMap);
+        
+        return JaxbUtil.converyToJavaBean(result, WeixinCustomsResponse.class);
+    }
+    
+    @Override
+    public TreeMap<String, Object> customQuery(TreeMap<String, String> paramMap) {
+        paramMap.put("input_charset", "UTF-8"); // 字符集
+        paramMap.put("partner", WeixinPayService.MCH_ID); // 微信商户号
+        paramMap.put("customs", "9"); // 海关编号：9 郑州（综保区）
+        paramMap.put("sign", WeixinPayUtil.encryptString(WeixinPayUtil.getCustomsParameter(paramMap), KEY));
+        
+        String result = HttpUtils.httpPost(CUSTOMQUERY, paramMap);
+        return WeixinPayUtil.transXmlToMap(result);
+    }
+
+    @Override
+    public String downloadBill(TreeMap<String, String> paramMap) {
+        paramMap.put("input_charset", "UTF-8"); // 字符集
+        paramMap.put("partner", WeixinPayService.MCH_ID); // 微信商户号
+        paramMap.put("sign", WeixinPayUtil.encryptString(WeixinPayUtil.getCustomsParameter(paramMap), WeixinPayService.KEY));
+        
+        String result = HttpUtils.httpPost(DOWNLOADBILL, paramMap);
+        return result;
     }
 }

@@ -19,6 +19,9 @@ public class JsonData {
     /** 列表数据 */
     private List<?> rows;
     
+    /** 异常码 */
+    private String errorCode;
+    
     /** 是否操作成功标识 */
     private boolean success = true;
     
@@ -161,5 +164,13 @@ public class JsonData {
      */
     public void setException(Exception e) {
         this.errorTrace = Exceptions.getStackTraceAsString(e);
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
     }
 }

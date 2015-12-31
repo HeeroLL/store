@@ -10,53 +10,58 @@ import java.util.Date;
  */
 public class CoolMemberReceiver{
     /**
-     * 
+     * 主键
      */
     private Integer id;
     /**
-     * 
+     * 省
      */
     private String locationP;
     /**
-     * 
+     * 市
      */
     private String locationC;
     /**
-     * 
+     * 区
      */
     private String locationA;
     /**
-     * 
+     * 地址
      */
     private String address;
     /**
-     * 
+     * 邮编
      */
     private String zipcode;
     /**
-     * 
+     * 姓名
      */
     private String name;
     /**
-     * 
+     * 手机号
      */
     private String mobile;
     /**
-     * 
+     * 电话号码
      */
     private String tel;
     /**
-     * 
+     * 是否默认收货地址 0：否 1：是 
      */
     private Boolean def;
     /**
-     * 
+     * 会员主键
      */
     private Integer mId;
     /**
-     * 
+     * 创建时间
      */
     private Date createtime;
+    
+    /**
+     * 身份号
+     */
+    private String idcard;
 
     /**
      * 
@@ -213,5 +218,13 @@ public class CoolMemberReceiver{
      */
     public void setCreatetime(Date createtime){
         this.createtime = createtime;
-    }    
+    }
+
+	public String getIdcard() {
+		return idcard;
+	}
+
+	public void setIdcard(String idcard) {
+		this.idcard = idcard;
+	}    
 }

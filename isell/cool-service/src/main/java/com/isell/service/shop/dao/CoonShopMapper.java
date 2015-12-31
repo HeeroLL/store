@@ -1,8 +1,12 @@
 package com.isell.service.shop.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import com.isell.core.mybatis.Mapper;
+import com.isell.service.shop.po.CoonShopPartnerInfo;
 import com.isell.service.shop.vo.CoonShop;
 
 /**
@@ -20,6 +24,74 @@ public interface CoonShopMapper{
      * @return 酷店信息
      */
     CoonShop getCoonShopById(@Param("id")String id); 
+    
+    /**
+     * 根据酷店编码查询酷店信息
+     *
+     * @param code 酷店编码
+     * @return 酷店信息
+     */
+    CoonShop getCoonShopByCode(@Param("code")String code);     
+    
+    /**
+     * 分页查询酷店信息
+     * 
+     * @param rowBounds 分页信息
+     * @param coonShop 参数
+     * @return 酷店列表
+     */
+    List<CoonShop> getCoonShopListPage(RowBounds rowBounds, CoonShop coonShop);
+    
+    /**
+     * 根据推荐店铺主键获取二级酷店信息
+     * 
+     * @param recommendId
+     * @return 酷店列表
+     */
+    List<CoonShop> getCoonShopListByRecommendL2(@Param("recommendId")String recommendId);
+    
+    /**
+     * 根据推荐店铺主键获取三级酷店信息
+     * 
+     * @param recommendId
+     * @return 酷店列表
+     */
+    List<CoonShop> getCoonShopListByRecommendL3(@Param("recommendId")String recommendId);
+    
+    /**
+     * 查询体验店列表
+     * 
+     * @return 酷店列表
+     */
+    List<CoonShop> findAllCoonShopExperience();
+    
+    /**
+     * 根据酷店主键和分销等级获取合伙人及奖励
+     * 
+     * @param shopIds 合伙人店铺主键数组
+     * @param devide 分销等级
+     * @param shopId 本酷店主键
+     * @return 合伙人及奖励列表
+     */
+    List<CoonShopPartnerInfo> getCoonShopPartnerListByShopIdsAndDevide(@Param("shopIds")String[] shopIds, @Param("devide")String devide, @Param("shopId")String shopId);
+    
+    /**
+     * 获取合伙人奖励明细列表
+     * 
+     * @param shopId 本酷店主键
+     * @param partnerId 合伙人店铺主键
+     * @param devide 分销等级
+     * @return 合伙人奖励明细列表
+     */
+    List<CoonShopPartnerInfo> getCoonShopPartnerDetailList(@Param("shopId")String shopId, @Param("partnerId")String partnerId, @Param("devide")String devide);
+    
+    /**
+     * 根据用户名查询酷店信息
+     *
+     * @param id 主键
+     * @return 酷店信息
+     */
+    CoonShop getCoonShopByUserId(@Param("userId")String userId); 
     
     /**
      * 保存酷店信息

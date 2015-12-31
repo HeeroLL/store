@@ -36,9 +36,9 @@ public class SMSController {
     @RequestMapping("sendMessage")
     @ResponseBody
     public JsonData sendMessage(@RequestBody TemplateSMS templateSMS) {
-        JsonData jsonData = new JsonData();
-        jsonData.setData(smsService.sendMessage(templateSMS));
-        return jsonData;
+    	   JsonData jsonData = new JsonData();
+           jsonData.setData(smsService.sendMessage(templateSMS));
+           return jsonData;
     }
     
     /**
@@ -50,5 +50,13 @@ public class SMSController {
     @ResponseBody
     public JsonData sendTestMessage(@RequestBody TemplateSMS templateSMS) {
         return new JsonData();
+    }
+    
+    @RequestMapping("sendZhengRong")
+    @ResponseBody
+    public JsonData sendZhengRong(@RequestBody TemplateSMS templateSMS) {
+    	JsonData jsonData = new JsonData();
+        jsonData.setData(smsService.sendZhengRong(templateSMS));
+        return jsonData;
     }
 }

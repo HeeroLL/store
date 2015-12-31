@@ -7,6 +7,27 @@ package com.isell.cache.service;
  * @version [版本号, 2015年7月30日]
  */
 public interface JVMCacheService {
+    
+    /**
+     * 一分钟
+     */
+    long MINUTE = 60;
+    
+    /**
+     * 一小时
+     */
+    long HOUR = MINUTE * 60;
+    
+    /**
+     * 一天
+     */
+    long DAY = HOUR * 24;
+    
+    /**
+     * 一周
+     */
+    long WEEK = DAY * 7;
+    
     /**
      * 在缓存中设置值
      * 

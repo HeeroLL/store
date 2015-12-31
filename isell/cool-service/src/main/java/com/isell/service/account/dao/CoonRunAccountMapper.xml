@@ -15,6 +15,14 @@
         <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
         <result column="withdraw_num" jdbcType="VARCHAR" property="withdrawNum"/>
         <result column="batch_no" jdbcType="VARCHAR" property="batchNo"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="maker" jdbcType="VARCHAR" property="maker"/>
+        <result column="is_freeze" jdbcType="TINYINT" property="isFreeze"/>
+        <result column="freeze_time" jdbcType="TIMESTAMP" property="freezeTime"/>
+        <result column="shop_id" jdbcType="VARCHAR" property="shopId"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="devide" jdbcType="VARCHAR" property="devide"/>
     </resultMap>
     <select id="getCoonRunAccountById" resultMap="BaseResultMap">
         SELECT
@@ -23,6 +31,48 @@
              coon_run_account
         WHERE            
             id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 获取账单金额 -->
+    <select id="getSumAmount" resultType="java.math.BigDecimal">
+        SELECT
+            ifnull(sum(amount),0)
+        FROM
+             coon_run_account
+        WHERE            
+            shop_id = #{shopId,jdbcType=VARCHAR}
+            and (create_time between #{beginTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR})
+            and type = 0 and is_freeze = 0
+    </select>
+    
+    <!-- 根据条件查询 -->
+    <select id="findCoonRunAccountList" resultMap="BaseResultMap" parameterType="com.isell.service.account.vo.CoonRunAccount">
+          SELECT * FROM coon_run_account 
+          where 1=1
+          <if test="createTime != null" >
+                and create_time like left(#{createTime,jdbcType=TIMESTAMP},10) || '%'
+            </if>
+            <if test="userId != null and userId != ''" >
+                and user_id = #{userId,jdbcType=VARCHAR}
+            </if>
+    </select>
+    
+    <!-- 分页查询 -->
+    <select id="findCoonRunAccountListPage" resultMap="BaseResultMap" parameterType="com.isell.service.account.vo.CoonRunAccount" >
+          SELECT * FROM coon_run_account 
+          where (is_del = 0 or is_del is null) 
+          <if test="userId != null">
+          	and user_id = #{userId,jdbcType=INTEGER}
+          </if>
+          <if test="type != null">
+          	and type = #{type,jdbcType=INTEGER}
+          </if>
+          <if test="isFreeze == 0">
+          	and (is_freeze = #{isFreeze,jdbcType=TINYINT} or is_freeze is null)
+          </if>
+          <if test="isFreeze == 1">
+          	and is_freeze = #{isFreeze,jdbcType=TINYINT}
+          </if>
     </select>
     
     <select id="findAllCoonRunAccount" resultMap="BaseResultMap">
@@ -79,6 +129,30 @@
             <if test="batchNo != null" >
                 batch_no,
             </if>
+            <if test="orderNo != null" >
+                order_no,
+            </if>
+            <if test="maker != null" >
+                maker,
+            </if>
+            <if test="isFreeze != null" >
+                is_freeze,
+            </if>
+            <if test="freezeTime != null" >
+                freeze_time,
+            </if>
+            <if test="shopId != null" >
+                shop_id,
+            </if>
+            <if test="shopName != null" >
+                shop_name,
+            </if>
+            <if test="isDel != null" >
+                is_del,
+            </if>
+            <if test="devide != null" >
+                devide,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -120,6 +194,30 @@
             <if test="batchNo != null" >
                 #{batchNo,jdbcType=VARCHAR},
             </if> 
+            <if test="orderNo != null" >
+                #{orderNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="maker != null" >
+                #{maker,jdbcType=VARCHAR},
+            </if> 
+            <if test="isFreeze != null" >
+                #{isFreeze,jdbcType=TINYINT},
+            </if> 
+            <if test="freezeTime != null" >
+                #{freezeTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="shopId != null" >
+                #{shopId,jdbcType=VARCHAR},
+            </if> 
+            <if test="shopName != null" >
+                #{shopName,jdbcType=VARCHAR},
+            </if> 
+            <if test="isDel != null" >
+                #{isDel,jdbcType=TINYINT},
+            </if> 
+            <if test="devide !=null">
+              #{devide,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
 
@@ -162,11 +260,48 @@
             <if test="withdrawNum != null" >
                 withdraw_num = #{withdrawNum,jdbcType=VARCHAR},
             </if>
+            <if test="orderNo != null" >
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="maker != null" >
+                maker = #{maker,jdbcType=VARCHAR},
+            </if>
+            <if test="isFreeze != null" >
+                is_freeze = #{isFreeze,jdbcType=TINYINT},
+            </if>
+            <if test="freezeTime != null" >
+                freeze_time = #{freezeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shopId != null" >
+                shop_id = #{shopId,jdbcType=VARCHAR},
+            </if>
+            <if test="shopName != null" >
+                shop_name = #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="isDel != null" >
+                is_del = #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="devide != null" >
+                devide = #{devide,jdbcType=VARCHAR},
+            </if>
             <if test="batchNo != null" >
                 batch_no = #{batchNo,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE 
             id = #{id,jdbcType=VARCHAR}
+    </update>
+    
+    <select id="findByEndDate" parameterType="java.lang.String" resultMap="BaseResultMap" >
+    	select * from coon_run_account where freeze_time <![CDATA[<]]> #{date}
+    		and is_freeze=1
+    </select>
+    
+  	<update id="runAccount"  parameterType="map">
+  		update coon_run_account set is_freeze = 1
+  		where 
+        <foreach collection="runAccount" item="items" open="" close="" separator="OR">  
+			id = #{items.id}
+	  </foreach>  
     </update>
 </mapper>

@@ -126,11 +126,9 @@ public class AlipayServiceImpl implements AlipayService {
         paramMap = AlipayUtil.paraFilter(paramMap);
         paramMap.put("partner", PARTNER);
         paramMap.put("_input_charset", INPUT_CHARSET);
-        paramMap.put("sign_type", SIGN_TYPE);
-        
         paramMap.put("sign", AlipayUtil.encryptString(AlipayUtil.getParameter(paramMap), KEY));
-        String result = HttpUtils.httpsPost(ALIPAY_GATEWAY_NEW, paramMap);
-        
+        paramMap.put("sign_type", SIGN_TYPE);
+        String result = HttpUtils.httpsPost(ALIPAY_GATEWAY_NEW, paramMap, "application/x-www-form-urlencoded");
         return JaxbUtil.converyToJavaBean(result, SendOrderResponse.class);
     }
 }

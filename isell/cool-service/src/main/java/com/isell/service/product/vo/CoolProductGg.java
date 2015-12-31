@@ -69,6 +69,46 @@ public class CoolProductGg{
     private BigDecimal drpPrice;
 
     /**
+     * vip1的价格
+     */
+    private BigDecimal vipPriceA;
+    
+    /**
+     * vip1的价格
+     */
+    private BigDecimal vipPriceB;
+    /**
+     * vip1的价格
+     */
+    private BigDecimal vipPriceC;
+    
+    
+    
+    public BigDecimal getVipPriceA() {
+        return vipPriceA;
+    }
+
+    public void setVipPriceA(BigDecimal vipPriceA) {
+        this.vipPriceA = vipPriceA;
+    }
+
+    public BigDecimal getVipPriceB() {
+        return vipPriceB;
+    }
+
+    public void setVipPriceB(BigDecimal vipPriceB) {
+        this.vipPriceB = vipPriceB;
+    }
+
+    public BigDecimal getVipPriceC() {
+        return vipPriceC;
+    }
+
+    public void setVipPriceC(BigDecimal vipPriceC) {
+        this.vipPriceC = vipPriceC;
+    }
+
+    /**
      * 
      */
     public Integer getId(){

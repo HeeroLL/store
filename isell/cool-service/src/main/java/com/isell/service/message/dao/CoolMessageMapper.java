@@ -3,13 +3,16 @@ package com.isell.service.message.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import com.isell.core.mybatis.Mapper;
 import com.isell.service.message.vo.CoolMessage;
 
 /**
- * TODO
- * @author 
+ * 消息mapper
+ * 
+ * @author wangpeng
+ * @version [版本号, 2015-11-12] 
  */
 @Mapper
 public interface CoolMessageMapper{   
@@ -22,6 +25,16 @@ public interface CoolMessageMapper{
      * 查询出所有记录
      */
     public List<CoolMessage> findAllCoolMessage();    
+    
+    /**
+     * 根据查询条件查询
+     */
+    public List<CoolMessage> findCoolMessageList(CoolMessage coolMessage);   
+    
+    /**
+     * 分页查询
+     */
+    public List<CoolMessage> findCoolMessageListPage(RowBounds rowBounds, CoolMessage coolMessage);   
     
     /**
      * 保存

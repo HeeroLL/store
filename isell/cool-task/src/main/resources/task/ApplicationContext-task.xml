@@ -7,15 +7,14 @@
 	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 	<!-- 声明线程池，每一个对象将获取同样的运行机会，如果任务执行时间较长，线程池大小可设成任务数，即有几个任务就起几个线程 -->
-	<task:scheduler id="taskScheduler" pool-size="2" />
+	<task:scheduler id="taskScheduler" pool-size="3" />
 
 	<!-- 引用线程池 -->
 	<task:scheduled-tasks scheduler="taskScheduler">
 		<task:scheduled ref="coolshopRankingTask" method="execute" cron="1 0 0 * * ?" />
-		<task:scheduled ref="orderTask" method="execute" cron="0 * * * * ?" />
-		<!-- 每小时查询一下订单的物流信息是否更新 
-		<task:scheduled ref="logisticTask" method="execute" cron="2 0 * * * ?" />
-		 -->
+		<task:scheduled ref="orderTask" method="execute" cron="0 0 * * * ?" />
+		<task:scheduled ref="biTask" method="execute" cron="0 0 1 * * ?" />
+		<!-- <task:scheduled ref="customsStockSyncTask" method="execute" cron="10 0 * * * ?" />-->
 	</task:scheduled-tasks>
 	
 	<!-- 

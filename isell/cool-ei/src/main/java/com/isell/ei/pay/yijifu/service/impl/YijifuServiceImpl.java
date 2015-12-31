@@ -71,7 +71,7 @@ public class YijifuServiceImpl implements YijifuService {
         paramMap.put("signType", SIGN_TYPE);
         // paramMap.put("version", "1.0"); // 只支持1.0
         paramMap.put("eshopType", "A"); // A: 特殊业务（易极付实现支付单生成，无支付信息的流程可设置）
-        paramMap.put("customsCode", "4600"); // 申请海关代码 4600：郑州关区 5100：广州海关
+        paramMap.put("customsCode", "4600"); // 申请海关代码
         paramMap.put("eshopEntCode", "aa"); // TODO:电商平台的海关备案编号或代码
         paramMap.put("eshopEntName", "bb"); // TODO:电商平台的海关备案名称
         paramMap.put("payerDocType", "01"); // 支付人证件类型 01:居民身份证。
@@ -81,7 +81,7 @@ public class YijifuServiceImpl implements YijifuService {
         paramMap.put("ieType", "1"); // 郑州海关必填 1：进口 2：出口 默认值为1
         
         // paramMap.put("returnUrl", "http://www.i-coolshop.com");
-        // paramMap.put("notifyUrl", serviceDomain + "/payNotify/yijifu");
+        paramMap.put("notifyUrl", serviceDomain + "/payNotify/yijifuBg");
         paramMap.put("sign", YijifuUtil.encryptString(YijifuUtil.getParameter(paramMap), KEY));
         String result = HttpUtils.httpsPost(YIJIFU_GATEWAY, paramMap);
         

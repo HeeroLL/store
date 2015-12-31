@@ -16,7 +16,11 @@
         <result column="unit" jdbcType="VARCHAR" property="unit"/>
         <result column="spec" jdbcType="VARCHAR" property="spec"/>
         <result column="drp_price" jdbcType="DECIMAL" property="drpPrice"/>
-    </resultMap>
+        <result column="vipPriceA" jdbcType="DECIMAL" property="vipPriceA"/>
+        <result column="vipPriceB" jdbcType="DECIMAL" property="vipPriceB"/>
+        <result column="vipPriceC" jdbcType="DECIMAL" property="vipPriceC"/>
+        
+    </resultMap>    
     <select id="getCoolProductGgById" resultMap="BaseResultMap">
         SELECT
             *

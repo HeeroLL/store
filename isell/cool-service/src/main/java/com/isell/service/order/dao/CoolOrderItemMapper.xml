@@ -19,6 +19,7 @@
         <result column="comments" jdbcType="VARCHAR" property="comments"/>
         <result column="gid" jdbcType="INTEGER" property="gid"/>
         <result column="brokerage" jdbcType="DECIMAL" property="brokerage"/>
+         <result column="profit" jdbcType="DECIMAL" property="profit"/>
     </resultMap>
     <!-- 商品销量Map -->
     <resultMap id="ProductSalesMap" type="com.isell.service.order.po.CoolProductSales">
@@ -61,6 +62,9 @@
 	    	SELECT i.name as p_name,i.gg,i.gid, sum(i.count) as sales, (sum(i.count*i.price)) as total
 			FROM cool_order_item i
 			inner join cool_order o on i.order_no = o.order_no and (o.state = 1 or o.state = 2 or o.state = 3 or o.state = 4)
+			<if test="supplier!=null"> 
+				and o.supplier=#{supplier}
+			</if>
 				and left(o.createtime,10) <![CDATA[<]]> left(now(),10)
 			group by i.gg			
 			order by sum(i.count) desc limit 10	) a1	
@@ -69,6 +73,9 @@
 			SELECT '' as p_name, '总计' as gg, '总计' as gid, sum(i2.count) as sales, (sum(i2.count*i2.price)) as total
 			FROM cool_order_item i2
 			inner join cool_order o2 on i2.order_no = o2.order_no and (o2.state = 1 or o2.state = 2 or o2.state = 3 or o2.state = 4)
+			<if test="supplier!=null"> 
+				and o2.supplier=#{supplier}
+			</if>
 				and left(o2.createtime,10) <![CDATA[<]]> left(now(),10)) a2				
     </select>
 
@@ -135,6 +142,9 @@
             <if test="brokerage != null" >
                 brokerage,
             </if>
+            <if test="profit != null" >
+                profit,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -187,6 +197,9 @@
             </if> 
             <if test="brokerage != null" >
                 #{brokerage,jdbcType=DECIMAL},
+            </if> 
+            <if test="profit != null" >
+                #{profit,jdbcType=DECIMAL},
             </if> 
         </trim>
     </insert>
@@ -241,6 +254,9 @@
             </if>
             <if test="brokerage != null" >
                 brokerage = #{brokerage,jdbcType=DECIMAL},
+            </if>
+            <if test="profit != null" >
+                profit = #{profit,jdbcType=DECIMAL},
             </if>
         </set>
         WHERE 
