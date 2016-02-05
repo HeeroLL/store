@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopBannerMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShopBanner">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="p_id" jdbcType="VARCHAR" property="pId"/>
+        <result column="s_id" jdbcType="VARCHAR" property="sId"/>
+    </resultMap>
+    <select id="getCoonShopBannerById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_banner
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根据酷店主键查询 -->
+    <select id="findCoonShopBannerBysId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_banner
+        WHERE            
+            s_id = #{sId,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonShopBanner" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_banner 
+    </select>
+    
+    <delete id="deleteCoonShopBanner">
+        DELETE
+        FROM
+             coon_shop_banner
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShopBanner" parameterType="com.isell.service.shop.vo.CoonShopBanner" >
+        INSERT INTO coon_shop_banner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="img != null" >
+                img,
+            </if>
+            <if test="pId != null" >
+                p_id,
+            </if>
+            <if test="sId != null" >
+                s_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="img != null" >
+                #{img,jdbcType=VARCHAR},
+            </if> 
+            <if test="pId != null" >
+                #{pId,jdbcType=VARCHAR},
+            </if> 
+            <if test="sId != null" >
+                #{sId,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopBanner" parameterType="com.isell.service.shop.vo.CoonShopBanner" >
+        UPDATE coon_shop_banner
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                img = #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="pId != null" >
+                p_id = #{pId,jdbcType=VARCHAR},
+            </if>
+            <if test="sId != null" >
+                s_id = #{sId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

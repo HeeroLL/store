@@ -14,9 +14,11 @@ public class YijifuControllerTest {
     
     private static final String PAY_URL = host + "/bis/pay/yijifu/webPay";
     
-    private static final String ORDER_URL = host + "/bis/pay/yijifu/paymentBillV2Order";
+    private static final String ORDER_URL = host + "/bis/pay/yijifu/singlePaymentUpload";
     
     private static final String QUERY_URL = host + "/bis/pay/yijifu/realNameQuery";
+    
+    private static final String TRADEREFUND_URL = host + "/bis/pay/yijifu/tradeRefund";
     
     @Test
     public void testWebPay() {
@@ -31,6 +33,18 @@ public class YijifuControllerTest {
         System.out.println(result);
     }
     
+    @Test
+    public void testTradeRefund() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("outOrderNo", "CO201601251345512366772");
+        map.put("tradeNo", "20160125000046411661");
+        map.put("refundReason", "退款");
+        
+        String result = HttpUtils.httpPost(TRADEREFUND_URL, JsonUtil.writeValueAsString(map));
+        System.out.println(result);
+    }
+    
+    @Deprecated
     @Test
     public void testPaymentBillV2Order() {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -51,10 +65,27 @@ public class YijifuControllerTest {
     @Test
     public void testRealNameQuery() {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("realName", "张三");
-        map.put("certNo", "320402198408273737");
+        map.put("realName", "金晓翔");
+        map.put("certNo", "330719197912230033");
         
         String result = HttpUtils.httpPost(QUERY_URL, JsonUtil.writeValueAsString(map));
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testSinglePaymentUpload() {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("tradeNo", "[\"20160119000041549024\"]"); // 易极付支付交易号
+        map.put("outOrderNo", "CO201601191021276252416"); // 订单号
+        map.put("eshopEntCode", "3117964017"); // 商户海关备案号
+        map.put("eshopEntName", "上海艾售电子商务有限公司"); // 商户海关备案名称
+        map.put("customsCode", "ZZ_4604"); // 易极付发送海关编码 ZZ_4604:郑州关区 NB_3100:宁波关区
+        map.put("payerId", "320402198408273738"); // 支付人证件号码
+        map.put("payerName", "李霖"); // 支付人姓名
+        map.put("goodsAmount", "68.00"); // 支付金额
+        map.put("ieType", "IMPORT"); // 进出口标示
+        
+        String result = HttpUtils.httpPost(ORDER_URL, JsonUtil.writeValueAsString(map));
         System.out.println(result);
     }
 }

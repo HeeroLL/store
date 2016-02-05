@@ -34,6 +34,7 @@ import com.isell.core.util.HttpUtils;
 import com.isell.core.util.JsonUtil;
 import com.isell.core.util.Record;
 import com.isell.service.member.dao.CoolIdentityAuthMapper;
+import com.isell.service.member.dao.CoolMemberFavoritesMapper;
 import com.isell.service.member.dao.CoolMemberMapper;
 import com.isell.service.member.dao.CoolMemberReceiverMapper;
 import com.isell.service.member.dao.CoolUserMapper;
@@ -41,6 +42,7 @@ import com.isell.service.member.dao.CoonShopFocusMapper;
 import com.isell.service.member.service.MemberService;
 import com.isell.service.member.vo.CoolIdentityAuth;
 import com.isell.service.member.vo.CoolMember;
+import com.isell.service.member.vo.CoolMemberFavorites;
 import com.isell.service.member.vo.CoolMemberReceiver;
 import com.isell.service.member.vo.CoolUser;
 import com.isell.service.member.vo.CoonShopFocus;
@@ -100,6 +102,12 @@ public class MemberServiceImpl implements MemberService {
 	 */
 	@Resource
 	private CoonShopFocusMapper coonShopFocusMapper;
+	
+	/**
+	 * 收藏商品mapper
+	 */
+	@Resource
+	private CoolMemberFavoritesMapper coolMemberFavoritesMapper;
 
 	/**
 	 * JVM缓存服务接口
@@ -130,6 +138,7 @@ public class MemberServiceImpl implements MemberService {
 					if(user.getPassword().equals(password)){
 					    UserInfo userInfo = new UserInfo();
 					    userInfo.setId(user.getId());
+					    userInfo.setmId(member.getId());
 					    userInfo.setNo(member.getNo());
 					    userInfo.setUsername(user.getUsername());
 					    userInfo.setPetname(member.getPetname());
@@ -139,6 +148,11 @@ public class MemberServiceImpl implements MemberService {
 					    userInfo.setLogo(user.getLogo());
 					    userInfo.setQq(member.getQq());
 					    userInfo.setLevel(member.getLevel());
+					    userInfo.setWeixin(member.getWeixin());
+					    userInfo.setLogo(member.getLogo());
+					    userInfo.setWeixinFlag(member.getWeixinFlag());
+					    userInfo.setQqFlag(member.getQqFlag());
+					    userInfo.setMobileFlag(member.getMobileFlag());
 					    // 店铺信息
 					    CoonShop shop = coonShopMapper.getCoonShopByUserId(user.getId() + "");
 					    if(shop != null){
@@ -154,7 +168,7 @@ public class MemberServiceImpl implements MemberService {
 					record.set("msg", "您输入的用户不存在");
 				}
 			}else{
-				record.set("msg", "参数错误，无法获取用户信息");
+				record.set("msg", "此用户不存在");
 			}
 		}else{
 			record.set("msg", "用户名不能为空");
@@ -799,6 +813,7 @@ public class MemberServiceImpl implements MemberService {
 			}else{
 				int result = 0;
 				CoolUser cUser = new CoolUser();
+				cUser.setPetname(username);
 				cUser.setUsername(username);
 				cUser.setPassword(password);
 				cUser.setState(CoolUser.USER_STATE_1);
@@ -816,6 +831,7 @@ public class MemberServiceImpl implements MemberService {
 	                    cMember.setUserId(u.getId());
 	                    cMember.setMobile(username);
 	                    cMember.setNo(no);
+	                    cMember.setPetname(username);
 	                    result = coolMemberMapper.saveCoolMember(cMember);
 	                    if(result > 0){
 	                    	success = true;
@@ -849,10 +865,12 @@ public class MemberServiceImpl implements MemberService {
 				String password = user.getPassword();
 				String oldPssword = user.getOldPssword();
 				if(StringUtils.isNotEmpty(password)){
+					boolean flag = false;
 					if(StringUtils.isEmpty(sms)){ //修改密码，需要验证旧密码
 						if(StringUtils.isNotEmpty(oldPssword)){
 							if(oldPssword.equals(cUser.getPassword())){
 								cUser.setPassword(password);
+								flag = true;
 							}else{
 								record.set("msg", "旧密码跟原密码不一致");
 							}
@@ -861,16 +879,19 @@ public class MemberServiceImpl implements MemberService {
 						}
 					}else{ //密码找回，不需要验证旧密码
 						cUser.setPassword(password);
+						flag = true;
 					}
+					if(flag){
+						int result = coolUserMapper.updateCoolUser(cUser);
+						if(result > 0 ){
+							success = true;
+						}else{
+							record.set("msg", "密码更新错误");
+						}
+					}					
 				}else{
 					record.set("msg", "密码不能为空");
-				}
-				int result = coolUserMapper.updateCoolUser(cUser);
-				if(result > 0 ){
-					success = true;
-				}else{
-					record.set("msg", "密码更新错误");
-				}
+				}				
 			}else{
 				record.set("msg", "用户名输入错误");
 			}
@@ -924,6 +945,11 @@ public class MemberServiceImpl implements MemberService {
 									result = coolIdentityAuthMapper.updateCoolIdentityAuth(auth);
 								}
 								if(result > 0){
+									//更新会员信息
+									CoolMember member = coolMemberMapper.getCoolMemberByMobile(tel);
+									member.setRealname(name);
+									member.setIdcard(idcard);
+									coolMemberMapper.updateCoolMember(member);
 									success = true;
 								}else{
 									record.set("msg", "提交实名认证申请失败");
@@ -942,6 +968,32 @@ public class MemberServiceImpl implements MemberService {
 				}
 			}else{
 				record.set("msg", "真实姓名不能为空");
+			}
+		}else{
+			record.set("msg", "用户主键不能为空");
+		}
+		record.set("success", success);
+		return record;
+	}
+	
+	/**
+     * 用户实名认证
+     *
+     * @param user
+     * @return
+     */
+	@Override
+	public Record getIdcardAuth(CoolIdentityAuth coolIdentityAuth) {
+		Record record = new Record();
+		Boolean success = false;
+		Integer userId = coolIdentityAuth.getUserId();
+		if(userId != null){
+			CoolIdentityAuth cauth = coolIdentityAuthMapper.getCoolIdentityAuthByUserId(userId);
+			if(cauth != null){
+				record.set("ispass", cauth.getIspass());
+				success = true;
+			}else{
+				record.set("msg", "该用户尚未提交实名认证");
 			}
 		}else{
 			record.set("msg", "用户主键不能为空");
@@ -1118,6 +1170,195 @@ public class MemberServiceImpl implements MemberService {
 			record.set("msg", "参数错误，会员主键不能为空"); 
 		}
 		
+		record.set("success", success);
+		return record;
+	}
+
+	/**
+     * 收藏商品接口
+     * 
+     * @param coolMemberFavorites 参数
+     * @return 是否保存成功
+     */
+	@Override
+	public Record saveMemberFavorites(CoolMemberFavorites coolMemberFavorites) {
+		Record record = new Record();
+		Boolean success = false;
+		Integer mId = coolMemberFavorites.getmId();
+		if(mId != null){
+			Integer pId = coolMemberFavorites.getpId(); 
+			if(pId != null){
+				String sId = coolMemberFavorites.getsId();
+				if(StringUtils.isNotEmpty(sId)){
+					CoolMemberFavorites fav = coolMemberFavoritesMapper.findCoolMemberFavoritesListBymIdAndpId(mId, pId);
+					if(fav != null){
+						record.set("msg", "该会员已收藏过该商品"); 
+					}else{
+						coolMemberFavorites.setCreatetime(new Date());
+						int result = coolMemberFavoritesMapper.saveCoolMemberFavorites(coolMemberFavorites);
+						if(result > 0){
+							success = true;
+						}else{
+							record.set("msg", "收藏商品失败"); 
+						}
+					}
+				}else{
+					record.set("msg", "参数错误，酷店主键不能为空");
+				}				
+			}else{
+				record.set("msg", "参数错误，商品主键不能为空"); 
+			}
+		}else{
+			record.set("msg", "参数错误，会员主键不能为空"); 
+		}
+		
+		record.set("success", success);
+		return record;
+	}
+
+	 /**
+     * 取消收藏商品接口
+     * 
+     * @param coolMemberFavorites 参数
+     * @return 是否保存成功
+     */
+	@Override
+	public Record deleteMemberFavorites(CoolMemberFavorites coolMemberFavorites) {
+		Record record = new Record();
+		Boolean success = false;
+		String ids = coolMemberFavorites.getIds();
+		if(StringUtils.isNotEmpty(ids)){
+			String[] id = ids.split(",");
+			if(id.length < 1){
+				record.set("msg", "参数格式错误");
+			}else{
+				for(int i=0;i<id.length;i++){
+					CoolMemberFavorites fav = coolMemberFavoritesMapper.getCoolMemberFavoritesById(Integer.valueOf(id[i]));
+					if(fav != null){
+						int result = coolMemberFavoritesMapper.deleteCoolMemberFavorites(Integer.valueOf(id[i]));
+						if(result > 0){
+							success = true;
+						}else{
+							record.set("msg", "取消收藏失败"); 
+						}
+					}else{
+						record.set("msg", "参数错误，无法获取该商品收藏信息"); 
+					}
+				}
+			}
+		}else{
+			record.set("msg", "参数错误，主键不能为空");
+		}
+		/**
+		Integer id = coolMemberFavorites.getId();
+		if(id != null){
+			CoolMemberFavorites fav = coolMemberFavoritesMapper.getCoolMemberFavoritesById(id);
+			if(fav != null){
+				int result = coolMemberFavoritesMapper.deleteCoolMemberFavorites(id);
+				if(result > 0){
+					success = true;
+				}else{
+					record.set("msg", "取消收藏失败"); 
+				}
+			}else{
+				record.set("msg", "参数错误，无法获取该商品收藏信息"); 
+			}
+		}else{
+			record.set("msg", "参数错误，主键不能为空"); 
+		}		
+		*/
+		record.set("success", success);
+		return record;
+	}
+
+	/**
+     * 获取收藏商品列表
+     * 
+     * @param coolMemberFavorites 参数
+     * @return 收藏商品列表
+     */
+	@Override
+	public Record getMemberFavoritesList(CoolMemberFavorites coolMemberFavorites) {
+		Record record = new Record();
+		Boolean success = false;
+		Integer mId = coolMemberFavorites.getmId();
+		if(mId != null){
+			List<CoolMemberFavorites> favList = coolMemberFavoritesMapper.findCoolMemberFavoritesListBymId(mId);
+			if(CollectionUtils.isNotEmpty(favList)){
+				record.set("favList",favList);
+				success = true;
+			}else{
+				record.set("msg", "无数据"); 
+			}
+		}else{
+			record.set("msg", "参数错误，会员主键不能为空"); 
+		}		
+		record.set("success", success);
+		return record;
+	}
+
+	/**
+     * 删除收货地址
+     * 
+     * @param coolMemberReceiver 参数
+     * @return 是否删除成功
+     */
+	@Override
+	public Record deleteMemberReceiver(CoolMemberReceiver coolMemberReceiver) {
+		Record record = new Record();
+		Boolean success = false;
+		Integer id = coolMemberReceiver.getId();
+		if(id != null){
+			CoolMemberReceiver receiver = coolMemberReceiverMapper.getCoolMemberReceiverById(id);
+			if(receiver  != null){
+				int result = coolMemberReceiverMapper.deleteCoolMemberReceiver(id);
+				if(result > 0){
+					success = true;
+				}else{
+					record.set("msg", "删除收货地址失败"); 
+				}				
+			}else{
+				record.set("msg", "参数错误，无法获取收货地址信息"); 
+			}
+		}else{
+			record.set("msg", "参数错误，主键不能为空"); 
+		}		
+		record.set("success", success);
+		return record;
+	}
+
+	  /**
+     * 修改会员信息
+     * 
+     * @param coolMember 参数
+     * @return 是否修改成功
+     */
+	@Override
+	public Record updateCoolMember(CoolMember coolMember) {
+		Record record = new Record();
+		Boolean success = false;
+		Integer id = coolMember.getId();
+		if(id != null){
+			CoolMember member;
+			if(coolMember.ismId()) {
+				member = coolMemberMapper.getCoolMemberById(id);
+			}else {
+				member = coolMemberMapper.getCoolMemberByUserId(id);
+				coolMember.setId(member.getId());
+			}
+			if(member  != null){
+				int result = coolMemberMapper.updateCoolMember(coolMember);
+				if(result > 0){
+					success = true;
+				}else{
+					record.set("msg", "修改会员信息失败"); 
+				}				
+			}else{
+				record.set("msg", "参数错误，无法获取会员信息"); 
+			}
+		}else{
+			record.set("msg", "参数错误，主键不能为空"); 
+		}		
 		record.set("success", success);
 		return record;
 	}

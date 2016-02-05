@@ -7,13 +7,16 @@ import com.isell.service.account.vo.CoonRunAccount;
 import com.isell.service.order.po.CoolOrderParam;
 import com.isell.service.order.vo.CoolDistributionCar;
 import com.isell.service.shop.po.CoonShopBusinessParam;
+import com.isell.service.shop.po.CoonShopFavInfo;
 import com.isell.service.shop.po.CoonShopProductParam;
+import com.isell.service.shop.po.CoonShopShareParam;
 import com.isell.service.shop.vo.CoonShop;
 import com.isell.service.shop.vo.CoonShopApply;
 import com.isell.service.shop.vo.CoonShopBanner;
 import com.isell.service.shop.vo.CoonShopClick;
 import com.isell.service.shop.vo.CoonShopFav;
 import com.isell.service.shop.vo.CoonShopShare;
+import com.isell.service.shop.vo.CoonShopShareExperience;
 import com.isell.service.shop.vo.CoonThirdParty;
 
 /**
@@ -112,7 +115,15 @@ public interface CoonShopService {
     Record getShopShare(CoonShopShare share);
     
     /**
-     * 获取海报列表信息
+     * 获取不属于该店铺海报列表信息
+     * 
+     * @param coonShopBanner 海报信息
+     * @return 海报列表信息
+     */
+    Record getBannerListPage(CoonShopBanner coonShopBanner);
+    
+    /**
+     * 获取该店铺海报列表信息
      * 
      * @param coonShopBanner 海报信息
      * @return 海报列表信息
@@ -224,12 +235,20 @@ public interface CoonShopService {
     Record saveShopFav(CoonShopFav coonShopFav);
     
     /**
+     *  取消收藏店铺
+     * 
+     * @param coonShopFavInfo  参数
+     * @return  是否取消成功
+     */
+    Record deleteShopFav(CoonShopFavInfo coonShopFavInfo );
+    
+    /**
      *  获取店铺及推荐商品列表
      * 
      * @param coonShop  参数
      * @return  coonShop
      */
-    Record saveShopFav(CoonShop coonShop);
+    Record getShopListForUser(CoonShop coonShop);
     
     /**
      *  获取店铺热销商品列表
@@ -242,9 +261,10 @@ public interface CoonShopService {
     /**
      * 获取体验店列表
      *
+     * @param coonShop  参数
      * @return 体验店列表
      */
-    Record getExperienceShopList();
+    Record getExperienceShopList(CoonShop coonShop);
     
     /**
      *  保存酷店点击信息
@@ -261,4 +281,28 @@ public interface CoonShopService {
      * @return 酷店分享信息
      */
     Record getShareList(CoonShopProductParam coonShopProductParam);
+    
+    /**
+     *  保存分享经验心得
+     * 
+     * @param CoonShopShareExperience coonShopShareExperience  参数
+     * @return  是否保存成功
+     */
+    Record saveShopShareExperience(CoonShopShareExperience coonShopShareExperience);
+    
+    /**
+     *  删除分享经验心得
+     * 
+     * @param CoonShopShareExperience coonShopShareExperience  参数
+     * @return  是否删除成功
+     */
+    Record deleteShopShareExperience(CoonShopShareExperience coonShopShareExperience);
+    
+    /**
+     *  获取分享经验心得
+     * 
+     * @param coonShopShareParam  参数
+     * @return  分享经验心得列表
+     */
+    Record getShopShareExperiencePage(CoonShopShareParam coonShopShareParam);
 }

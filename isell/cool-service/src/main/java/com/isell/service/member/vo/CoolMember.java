@@ -147,6 +147,31 @@ public class CoolMember{
      * 付支账号
      */
     private String payNum;
+    
+    /**
+     * 微信号
+     */
+    private String weixin;
+    
+    /**
+     * 是否显示微信号 0：不显示；1：显示
+     */
+    private String weixinFlag;
+    
+    /**
+     * 是否显示qq号 0：不显示；1：显示
+     */
+    private String qqFlag;
+    
+    /**
+     * 是否显示手机号 0：不显示；1：显示
+     */
+    private String mobileFlag;
+    
+    /**
+     * 传入的ID是否为会员主键，如果为否，那代表是用户主键
+     */
+    private boolean mId = true;
 
     /**
      * 
@@ -589,5 +614,45 @@ public class CoolMember{
      */
     public void setPayNum(String payNum){
         this.payNum = payNum;
-    }    
+    }
+
+	public String getWeixin() {
+		return weixin;
+	}
+
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
+	}
+
+	public boolean ismId() {
+		return mId;
+	}
+
+	public void setmId(boolean mId) {
+		this.mId = mId;
+	}
+
+	public String getWeixinFlag() {
+		return weixinFlag;
+	}
+
+	public void setWeixinFlag(String weixinFlag) {
+		this.weixinFlag = weixinFlag;
+	}
+
+	public String getQqFlag() {
+		return qqFlag;
+	}
+
+	public void setQqFlag(String qqFlag) {
+		this.qqFlag = qqFlag;
+	}
+
+	public String getMobileFlag() {
+		return mobileFlag;
+	}
+
+	public void setMobileFlag(String mobileFlag) {
+		this.mobileFlag = mobileFlag;
+	}    
 }

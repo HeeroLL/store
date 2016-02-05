@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.product.dao.CoolProductMapMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.product.vo.CoolProductMap">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="pid" jdbcType="INTEGER" property="pid"/>
+        <result column="gid" jdbcType="INTEGER" property="gid"/>
+        <result column="wid" jdbcType="VARCHAR" property="wid"/>
+        <result column="wsid" jdbcType="VARCHAR" property="wsid"/>
+        <result column="group_id" jdbcType="INTEGER" property="groupId"/>
+    </resultMap>
+    <select id="getCoolProductMapById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_map
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getCoolProductMap" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_map
+        where 1 = 1
+	     <if test="id != null">
+	     	and id = #{id}
+	     </if>
+	     <if test="pid != pid">
+	     	and updatetime = #{pid}
+	     </if>
+	     <if test="gid != null">
+	     	and gid = #{gid}
+	     </if>
+	     <if test="wid != null">
+	     	and wid = #{wid}
+	     </if>
+	     <if test="wsid != null">
+	     	and wsid = #{wsid}
+	     </if>
+	     <if test="groupId != null">
+	     	and groupId = #{groupId}
+	     </if>
+    </select>
+    
+    <select id="findAllCoolProductMap" resultMap="BaseResultMap">
+          SELECT * FROM cool_product_map 
+    </select>
+    
+    <delete id="deleteCoolProductMap">
+        DELETE
+        FROM
+             cool_product_map
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolProductMap" parameterType="com.isell.service.product.vo.CoolProductMap" >
+        INSERT INTO cool_product_map
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="pid != null" >
+                pid,
+            </if>
+            <if test="gid != null" >
+                gid,
+            </if>
+            <if test="wid != null" >
+                wid,
+            </if>
+            <if test="wsid != null" >
+                wsid,
+            </if>
+            <if test="groupId != null" >
+                group_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="pid != null" >
+                #{pid,jdbcType=INTEGER},
+            </if> 
+            <if test="gid != null" >
+                #{gid,jdbcType=INTEGER},
+            </if> 
+            <if test="wid != null" >
+                #{wid,jdbcType=VARCHAR},
+            </if> 
+            <if test="wsid != null" >
+                #{wsid,jdbcType=VARCHAR},
+            </if> 
+            <if test="groupId != null" >
+                #{groupId,jdbcType=INTEGER},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolProductMap" parameterType="com.isell.service.product.vo.CoolProductMap" >
+        UPDATE cool_product_map
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null" >
+                pid = #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="gid != null" >
+                gid = #{gid,jdbcType=INTEGER},
+            </if>
+            <if test="wid != null" >
+                wid = #{wid,jdbcType=VARCHAR},
+            </if>
+            <if test="wsid != null" >
+                wsid = #{wsid,jdbcType=VARCHAR},
+            </if>
+            <if test="groupId != null" >
+                group_id = #{groupId,jdbcType=INTEGER},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

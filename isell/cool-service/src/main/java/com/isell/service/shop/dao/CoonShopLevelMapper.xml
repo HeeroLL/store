@@ -29,6 +29,11 @@
           select p_rate from coon_shop_level where id = (select level from coon_shop where user_id = #{userId,jdbcType=VARCHAR})
     </select>
     
+    <!-- 查询店铺对应的比例 -->
+    <select id="getLevelCrate" resultType="java.math.BigDecimal">
+          select c_rate from coon_shop_level where id = (select level from coon_shop where id = #{sId,jdbcType=VARCHAR})
+    </select>
+    
     <delete id="deleteCoonShopLevel">
         DELETE
         FROM

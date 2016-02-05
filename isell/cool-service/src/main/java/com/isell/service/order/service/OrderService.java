@@ -7,8 +7,11 @@ import java.util.Map;
 import com.isell.core.mybatis.page.PageInfo;
 import com.isell.core.util.JsonData;
 import com.isell.core.util.Record;
+import com.isell.service.order.po.CoolOrderExternal;
 import com.isell.service.order.po.CoolOrderParam;
 import com.isell.service.order.po.CoolOrderSelect;
+import com.isell.service.order.po.CoolOrderWayBill;
+import com.isell.service.order.po.CoolOrderWayBillReturn;
 import com.isell.service.order.po.CoonShopCartParam;
 import com.isell.service.order.vo.CoolDistributionCar;
 import com.isell.service.order.vo.CoolOrder;
@@ -109,14 +112,6 @@ public interface OrderService {
     Record updateCoolOrderCheck(Map<String, Object> param);
     
     /**
-     * 支付宝付款更新订单
-     * 
-     * @param param
-     * @return Record
-     */
-    Record updateCoolOrderZfb(Map<String, Object> param);
-    
-    /**
      * 宁波优贝获取物流单号更新订单
      * 
      * @param orderNo
@@ -147,6 +142,14 @@ public interface OrderService {
      * @return Record
      */
     Record deleteCoolOrder(Map<String, Object> param);
+    
+    /**
+     * 取消订单
+     * 
+     * @param param
+     * @return Record
+     */
+    Record cancelCoolOrder(CoolOrder coolOrder);
     
     /**
      * 分页查询订单列表
@@ -273,4 +276,90 @@ public interface OrderService {
      * @return 是否删除成功
      */
     Record deleteShopCart(CoonShopcart coonShopcart);
+    
+    /**
+     * 获取订单各状态数量接口
+     * 
+     * @param param 参数
+     * @return 状态数量
+     */
+    Record getStateCount(CoolOrderParam param);
+    
+    /**
+     * 支付信息报关
+     * 
+     * @param orderNo 订单号
+     * @return 报关状态
+     */
+    Record sendPayInfo(String orderNo);
+    
+    /**
+     * 校验订单
+     * 
+     * @param order 订单信息
+     */
+    void validateOrder(CoolOrder order);
+    
+    /**
+     * 保存订单
+     * 
+     * @param order 订单参数
+     * @return 是否保存成功
+     */
+    Record saveCoolOrder(CoolOrder order);
+    
+    /**
+     * 对外修改订单部分字段
+     * 
+     * @param order
+     * @return
+     */
+    boolean updateOrderPartByOrderNo(CoolOrder order);
+    
+    /**
+     * 客户系统调用该接口获取订单信息数据
+     * 
+     * @param orderNo
+     * @param string
+     * @return
+     */
+    List<CoolOrderExternal> getOrderExternalByOrderOldNo(String shopId, String orderNo);
+    
+    /**
+     * 客户系统调用该接口获取运单相关信息
+     * 
+     * @param order
+     * @return
+     */
+    List<CoolOrderWayBillReturn> getWayBill(CoolOrderWayBill order);
+    
+    /**
+     * 确认收货
+     * 
+     * @param order
+     * @return
+     */
+    boolean confirmOrder(CoolOrder order);
+    
+    /**
+     * 
+     * @param order
+     */
+    boolean cancelOrder(CoolOrder order);
+    
+    /**
+     * 购买支付流水
+     *
+     * @param orderNo 订单编号集合
+     * @return 购买支付流水结果
+     */
+    JsonData buyTradeNo(String... orderNos);
+    
+    /**
+     * 根据物流单号查询订单编号
+     * 
+     * @param psCode 物流单号
+     * @return 订单编号
+     */
+    Record getOrderNoByPsCode(String psCode);
 }

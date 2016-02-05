@@ -36,6 +36,10 @@
         <result column="verify_code" jdbcType="VARCHAR" property="verifyCode"/>
         <result column="verify_email" jdbcType="VARCHAR" property="verifyEmail"/>
         <result column="pay_num" jdbcType="VARCHAR" property="payNum"/>
+        <result column="weixin" jdbcType="VARCHAR" property="weixin"/>
+        <result column="weixin_flag" jdbcType="VARCHAR" property="weixinFlag"/>
+        <result column="qq_flag" jdbcType="VARCHAR" property="qqFlag"/>
+        <result column="mobile_flag" jdbcType="VARCHAR" property="mobileFlag"/>
     </resultMap>
     <select id="getCoolMemberById" resultMap="BaseResultMap">
         SELECT
@@ -201,6 +205,18 @@
             <if test="payNum != null" >
                 pay_num,
             </if>
+            <if test="weixin != null" >
+                weixin,
+            </if>
+            <if test="weixinFlag != null" >
+                weixin_flag,
+            </if>
+            <if test="qqFlag != null" >
+                qq_flag,
+            </if>
+            <if test="mobileFlag != null" >
+                mobile_flag,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -305,6 +321,18 @@
             <if test="payNum != null" >
                 #{payNum,jdbcType=VARCHAR},
             </if> 
+            <if test="weixin != null" >
+                #{weixin,jdbcType=VARCHAR},
+            </if>
+            <if test="weixinFlag != null" >
+                #{weixinFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="qqFlag != null" >
+                #{qqFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileFlag != null" >
+                #{mobileFlag,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
 
@@ -412,6 +440,18 @@
             </if>
             <if test="payNum != null" >
                 pay_num = #{payNum,jdbcType=VARCHAR},
+            </if>
+            <if test="weixin != null" >
+                weixin = #{weixin,jdbcType=VARCHAR},
+            </if>
+            <if test="weixinFlag != null" >
+                weixin_flag = #{weixinFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="qqFlag != null" >
+                qq_flag = #{qqFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileFlag != null" >
+                mobile_flag = #{mobileFlag,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE 

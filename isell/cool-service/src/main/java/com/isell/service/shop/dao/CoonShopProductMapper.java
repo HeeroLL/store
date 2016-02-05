@@ -29,6 +29,11 @@ public interface CoonShopProductMapper{
     public Integer getMaxOrderByShopId(@Param("sId")String sId); 
     
     /**
+     * 查询商品列表
+     */
+    public List<CoonShopProduct> getCoonShopProductList(@Param("sId")String sId,@Param("pxh")Integer pxh,@Param("pId")String pId); 
+    
+    /**
      * 根据条件查询
      */
     public CoonShopProduct getCoonShopProduct(CoonShopProduct coonShopProduct); 
@@ -45,6 +50,14 @@ public interface CoonShopProductMapper{
      * @return 热销商品列表
      */
     public List<CoonShopProductInfo> getHotSellProductList(CoonShopProductParam coonShopProductParam);
+    
+    /**
+     * 随机获取上架商品
+     * 
+     * @param coonShopProductParam
+     * @return 上架商品列表
+     */
+    public List<CoonShopProductInfo> getShopProductRandList(CoonShopProductParam coonShopProductParam);
     
     /**
      * 分页查询商品信息	
@@ -65,6 +78,24 @@ public interface CoonShopProductMapper{
     public List<CoonShopProductInfo> getCoonShopProductAddedListPage(RowBounds rowBounds,CoonShopProductParam coonShopProductParam);
     
     /**
+     * 分页查询已上架商品信息(只查商品，不查询多规格)
+     * 
+     * @param rowBounds
+     * @param coonShopProductParam
+     * @return 商品分页信息
+     */
+    public List<CoonShopProductInfo> getCoonShopProductAddedPage(RowBounds rowBounds,CoonShopProductParam coonShopProductParam);
+    
+    /**
+     * 分页查询已上架商品信息总数(只查商品，不查询多规格)
+     * 
+     * @param rowBounds
+     * @param coonShopProductParam
+     * @return 商品信息总条数
+     */
+    public int getCoonShopProductAddedPageCount(CoonShopProductParam coonShopProductParam);
+    
+    /**
      * 分页查询未上架商品信息	
      * 
      * @param rowBounds
@@ -73,7 +104,16 @@ public interface CoonShopProductMapper{
      */
     public List<CoonShopProductInfo> getCoonShopProductNoAddedListPage(RowBounds rowBounds,CoonShopProductParam coonShopProductParam);
     
-   /**
+    /**
+     * 分页查询未上架商品信息(只查商品，不查询多规格)
+     * 
+     * @param rowBounds
+     * @param coonShopProductParam
+     * @return 商品分页信息
+     */
+    public List<CoonShopProductInfo> getCoonShopProductNoAddedPage(RowBounds rowBounds,CoonShopProductParam coonShopProductParam);
+    
+    /**
     * 根据商品主键获取上架店铺数
     * 
     * @param pId 商品主键

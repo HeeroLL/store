@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.isell.core.mybatis.page.PageInfo;
 import com.isell.core.util.Record;
+import com.isell.service.product.po.CoolProductExternal;
+import com.isell.service.product.po.CoolProductExternalStock;
+import com.isell.service.product.po.CoolProductExternalStockSelect;
 import com.isell.service.product.po.CoolProductSelect;
 import com.isell.service.product.vo.CoolProduct;
 import com.isell.service.product.vo.CoolProductReview;
@@ -65,6 +68,7 @@ public interface ProductService {
     
     /**
      * 保存商品上架（含批量）
+     * 该方法配合APP，忽略仓库，直接上架
      * 
      * @param  coonShopProductList 商品上架信息
      * @return  是否保存成功
@@ -109,4 +113,16 @@ public interface ProductService {
      * @return  商品列表
      */
     Record getHotTrendProductList();
+    /**
+     * 根据商品主键或者name查询
+     * @return
+     */
+    List<CoolProductExternal> getProductInfo(CoolProductExternal product);
+    /**
+     * 对外查询库存
+     * @param product
+     * @return
+     */
+	List<CoolProductExternalStockSelect> getProductStock(CoolProductExternalStock product);
+		
 }

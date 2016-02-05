@@ -56,12 +56,12 @@ public class ExceptionHandler implements HandlerExceptionResolver {
             message = MessageUtil.getMessage(ex.getCause().getClass().getName());
         }
         
-        if (StringUtils.isEmpty(message)) {
-            message = MessageUtil.getMessage("exception.defaultException");
-        }
+        // if (StringUtils.isEmpty(message)) {
+        // message = MessageUtil.getMessage("exception.defaultException");
+        // }
         // 对于不同hander需要组装不同的json返回
         if (handler != null && handler.toString().indexOf("JoogeGatewayController") != -1) {
-            map.put("Code", "2"); 
+            map.put("Code", "2");
             map.put("Desc", message);
         } else {
             map.put("success", false);
@@ -71,7 +71,7 @@ public class ExceptionHandler implements HandlerExceptionResolver {
         if (ex instanceof BisException) {
             BisException e = (BisException)ex;
             if (StringUtils.isNotEmpty(e.getCode())) {
-                map.put("errorCode", e.getCode());                
+                map.put("errorCode", e.getCode());
             }
         }
         

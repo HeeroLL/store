@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.payinfo.dao.CoolSendPayinfoMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.payinfo.vo.CoolSendPayinfo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="zf_flag" jdbcType="BIT" property="zfFlag"/>
+        <result column="zf_cause" jdbcType="VARCHAR" property="zfCause"/>
+        <result column="zf_sendtime" jdbcType="TIMESTAMP" property="zfSendtime"/>
+        <result column="wl_flag" jdbcType="BIT" property="wlFlag"/>
+        <result column="wl_cause" jdbcType="VARCHAR" property="wlCause"/>
+        <result column="wl_sendtime" jdbcType="TIMESTAMP" property="wlSendtime"/>
+    </resultMap>
+    <select id="getCoolSendPayinfoById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_send_payinfo
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getCoolSendPayinfoByOrderNo" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_send_payinfo
+        WHERE            
+            order_no = #{orderNo}
+    </select>
+    
+    <select id="findAllCoolSendPayinfo" resultMap="BaseResultMap">
+          SELECT * FROM cool_send_payinfo 
+    </select>
+    
+    <delete id="deleteCoolSendPayinfo">
+        DELETE
+        FROM
+             cool_send_payinfo
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolSendPayinfo" parameterType="com.isell.service.payinfo.vo.CoolSendPayinfo" >
+        INSERT INTO cool_send_payinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="orderNo != null" >
+                order_no,
+            </if>
+            <if test="zfFlag != null" >
+                zf_flag,
+            </if>
+            <if test="zfCause != null" >
+                zf_cause,
+            </if>
+            <if test="zfSendtime != null" >
+                zf_sendtime,
+            </if>
+            <if test="wlFlag != null" >
+                wl_flag,
+            </if>
+            <if test="wlCause != null" >
+                wl_cause,
+            </if>
+            <if test="wlSendtime != null" >
+                wl_sendtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="orderNo != null" >
+                #{orderNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="zfFlag != null" >
+                #{zfFlag,jdbcType=BIT},
+            </if> 
+            <if test="zfCause != null" >
+                #{zfCause,jdbcType=VARCHAR},
+            </if> 
+            <if test="zfSendtime != null" >
+                #{zfSendtime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="wlFlag != null" >
+                #{wlFlag,jdbcType=BIT},
+            </if> 
+            <if test="wlCause != null" >
+                #{wlCause,jdbcType=VARCHAR},
+            </if> 
+            <if test="wlSendtime != null" >
+                #{wlSendtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolSendPayinfo" parameterType="com.isell.service.payinfo.vo.CoolSendPayinfo" >
+        UPDATE cool_send_payinfo
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null" >
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="zfFlag != null" >
+                zf_flag = #{zfFlag,jdbcType=BIT},
+            </if>
+            <if test="zfCause != null" >
+                zf_cause = #{zfCause,jdbcType=VARCHAR},
+            </if>
+            <if test="zfSendtime != null" >
+                zf_sendtime = #{zfSendtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="wlFlag != null" >
+                wl_flag = #{wlFlag,jdbcType=BIT},
+            </if>
+            <if test="wlCause != null" >
+                wl_cause = #{wlCause,jdbcType=VARCHAR},
+            </if>
+            <if test="wlSendtime != null" >
+                wl_sendtime = #{wlSendtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

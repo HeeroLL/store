@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.order.dao.CoolOrderYihuijinMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.order.vo.CoolOrderYihuijin">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="order_id" jdbcType="INTEGER" property="orderId"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+    </resultMap>
+    <select id="getCoolOrderYihuijinById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_order_yihuijin
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getCoolOrderYihuijinByOrderNo" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_order_yihuijin
+        WHERE            
+            order_no = #{OrderNo,jdbcType=VARCHAR}
+    </select>
+    
+    
+    
+    <select id="findAllCoolOrderYihuijin" resultMap="BaseResultMap">
+          SELECT * FROM cool_order_yihuijin 
+    </select>
+    
+    <delete id="deleteCoolOrderYihuijin">
+        DELETE
+        FROM
+             cool_order_yihuijin
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolOrderYihuijin" parameterType="com.isell.service.order.vo.CoolOrderYihuijin" >
+        INSERT INTO cool_order_yihuijin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="orderId != null" >
+                order_id,
+            </if>
+            <if test="orderNo != null" >
+                order_no,
+            </if>
+            <if test="url != null" >
+                url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="orderId != null" >
+                #{orderId,jdbcType=INTEGER},
+            </if> 
+            <if test="orderNo != null" >
+                #{orderNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="url != null" >
+                #{url,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolOrderYihuijin" parameterType="com.isell.service.order.vo.CoolOrderYihuijin" >
+        UPDATE cool_order_yihuijin
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null" >
+                order_id = #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null" >
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null" >
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

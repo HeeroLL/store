@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.custorms.dao.CoolProductCustomsZzMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.custorms.po.CoolProductCustomsZz">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="p_id" jdbcType="INTEGER" property="pId"/>
+        <result column="g_id" jdbcType="INTEGER" property="gId"/>
+        <result column="gno" jdbcType="VARCHAR" property="gno"/>
+        <result column="tax_id" jdbcType="VARCHAR" property="taxId"/>
+        <result column="barcode" jdbcType="VARCHAR" property="barcode"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+        <result column="unitinsp" jdbcType="VARCHAR" property="unitinsp"/>
+        <result column="itemno" jdbcType="VARCHAR" property="itemno"/>
+        <result column="shelfgoodsname" jdbcType="VARCHAR" property="shelfgoodsname"/>
+        <result column="good_id" jdbcType="VARCHAR" property="goodId"/>
+        <result column="specifications" jdbcType="VARCHAR" property="specifications"/>
+        <result column="good_idinsp" jdbcType="VARCHAR" property="goodIdinsp"/>
+    </resultMap>
+    <select id="getCoolProductCustomsZzById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_customs_zz
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getCustomsInfoByGid" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_customs_zz
+        WHERE            
+            g_id = #{gId,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolProductCustomsZz" resultMap="BaseResultMap">
+          SELECT * FROM cool_product_customs_zz 
+    </select>
+    
+    <delete id="deleteCoolProductCustomsZz">
+        DELETE
+        FROM
+             cool_product_customs_zz
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolProductCustomsZz" parameterType="com.isell.service.custorms.po.CoolProductCustomsZz" >
+        INSERT INTO cool_product_customs_zz
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="pId != null" >
+                p_id,
+            </if>
+            <if test="gId != null" >
+                g_id,
+            </if>
+            <if test="gno != null" >
+                gno,
+            </if>
+            <if test="taxId != null" >
+                tax_id,
+            </if>
+            <if test="barcode != null" >
+                barcode,
+            </if>
+            <if test="unit != null" >
+                unit,
+            </if>
+            <if test="unitinsp != null" >
+                unitinsp,
+            </if>
+            <if test="itemno != null" >
+                itemno,
+            </if>
+            <if test="shelfgoodsname != null" >
+                shelfgoodsname,
+            </if>
+            <if test="goodId != null" >
+                good_id,
+            </if>
+            <if test="specifications != null" >
+                specifications,
+            </if>
+            <if test="goodIdinsp != null" >
+                good_idinsp,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="pId != null" >
+                #{pId,jdbcType=INTEGER},
+            </if> 
+            <if test="gId != null" >
+                #{gId,jdbcType=INTEGER},
+            </if> 
+            <if test="gno != null" >
+                #{gno,jdbcType=VARCHAR},
+            </if> 
+            <if test="taxId != null" >
+                #{taxId,jdbcType=VARCHAR},
+            </if> 
+            <if test="barcode != null" >
+                #{barcode,jdbcType=VARCHAR},
+            </if> 
+            <if test="unit != null" >
+                #{unit,jdbcType=VARCHAR},
+            </if> 
+            <if test="unitinsp != null" >
+                #{unitinsp,jdbcType=VARCHAR},
+            </if> 
+            <if test="itemno != null" >
+                #{itemno,jdbcType=VARCHAR},
+            </if> 
+            <if test="shelfgoodsname != null" >
+                #{shelfgoodsname,jdbcType=VARCHAR},
+            </if> 
+            <if test="goodId != null" >
+                #{goodId,jdbcType=VARCHAR},
+            </if> 
+            <if test="specifications != null" >
+                #{specifications,jdbcType=VARCHAR},
+            </if> 
+            <if test="goodIdinsp != null" >
+                #{goodIdinsp,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolProductCustomsZz" parameterType="com.isell.service.custorms.po.CoolProductCustomsZz" >
+        UPDATE cool_product_customs_zz
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="pId != null" >
+                p_id = #{pId,jdbcType=INTEGER},
+            </if>
+            <if test="gId != null" >
+                g_id = #{gId,jdbcType=INTEGER},
+            </if>
+            <if test="gno != null" >
+                gno = #{gno,jdbcType=VARCHAR},
+            </if>
+            <if test="taxId != null" >
+                tax_id = #{taxId,jdbcType=VARCHAR},
+            </if>
+            <if test="barcode != null" >
+                barcode = #{barcode,jdbcType=VARCHAR},
+            </if>
+            <if test="unit != null" >
+                unit = #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="unitinsp != null" >
+                unitinsp = #{unitinsp,jdbcType=VARCHAR},
+            </if>
+            <if test="itemno != null" >
+                itemno = #{itemno,jdbcType=VARCHAR},
+            </if>
+            <if test="shelfgoodsname != null" >
+                shelfgoodsname = #{shelfgoodsname,jdbcType=VARCHAR},
+            </if>
+            <if test="goodId != null" >
+                good_id = #{goodId,jdbcType=VARCHAR},
+            </if>
+            <if test="specifications != null" >
+                specifications = #{specifications,jdbcType=VARCHAR},
+            </if>
+            <if test="goodIdinsp != null" >
+                good_idinsp = #{goodIdinsp,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

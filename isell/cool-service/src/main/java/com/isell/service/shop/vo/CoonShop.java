@@ -13,12 +13,12 @@ import com.isell.service.shop.po.CoonShopProductInfo;
  * @author lilin
  * @version [版本号, 2015年9月25日]
  */
-public class CoonShop  extends PageConfig{
-	/**
-	 * 展示方式 
-	 */
-	public static final Byte SHOW_WAY_1 = 1;
-	
+public class CoonShop extends PageConfig {
+    /**
+     * 展示方式
+     */
+    public static final Byte SHOW_WAY_1 = 1;
+    
     /**
      * 主键id
      */
@@ -128,14 +128,14 @@ public class CoonShop  extends PageConfig{
      * 费欠总金额
      */
     private BigDecimal arrearsTotal;
-   
+    
     /**
      * 即将可用金额
      */
     private BigDecimal jjAmount;
     
     /**
-     * 是否体验店 0：否  1： 是
+     * 是否体验店 0：否 1： 是
      */
     private String isExperience;
     
@@ -145,14 +145,30 @@ public class CoonShop  extends PageConfig{
     private String address;
     
     /**
-     * 是否渠道选中平台 0：否  1： 是
+     * 是否渠道选中平台 0：否 1： 是
      */
     private String isChannelSelected;
+    
+    /**
+     * 酷店vip等级 0为关闭,依次123
+     */
+    private Integer vip;
+    
+    /**
+     * 经度
+     */
+    private String longitude;
+    
+    /**
+     * 纬度
+     */
+    private String latitude;
     
     /**
      * 一级分销比例
      */
     private BigDecimal fPercentage;
+    
     /**
      * 二机分销比例
      */
@@ -174,28 +190,42 @@ public class CoonShop  extends PageConfig{
     private String realname;
     
     /**
+     * 是否开启短信通知 0.开启短信通知1.关闭短信通知
+     */
+    private Integer smsEd;
+    
+    /**
      * 酷店商品
      */
     private List<CoonShopProductInfo> productList;
-   
+    
     /**
-     * 酷店vip等级
+     * 是否需要随机获取 0：不需要  1：需要
      */
-    private Integer vip;
+    private String rand;
     
     
+    
+    public Integer getSmsEd() {
+        return smsEd;
+    }
+
+    public void setSmsEd(Integer smsEd) {
+        this.smsEd = smsEd;
+    }
+
     public Integer getVip() {
         return vip;
     }
-
+    
     public void setVip(Integer vip) {
         this.vip = vip;
     }
-
+    
     public static Byte getShowWay1() {
         return SHOW_WAY_1;
     }
-
+    
     public String getId() {
         return id;
     }
@@ -229,6 +259,10 @@ public class CoonShop  extends PageConfig{
     }
     
     public String getLogo() {
+    	if(logo==null)
+    	{
+    		logo="";
+    	}
         return logo;
     }
     
@@ -347,108 +381,132 @@ public class CoonShop  extends PageConfig{
     public void setTbdAmount(BigDecimal tbdAmount) {
         this.tbdAmount = tbdAmount;
     }
+    
+    public String getRecommendId() {
+        return recommendId;
+    }
+    
+    public void setRecommendId(String recommendId) {
+        this.recommendId = recommendId;
+    }
+    
+    public BigDecimal getRecommendAmount() {
+        return recommendAmount;
+    }
+    
+    public void setRecommendAmount(BigDecimal recommendAmount) {
+        this.recommendAmount = recommendAmount;
+    }
+    
+    public BigDecimal getArrearsTotal() {
+        return arrearsTotal;
+    }
+    
+    public void setArrearsTotal(BigDecimal arrearsTotal) {
+        this.arrearsTotal = arrearsTotal;
+    }
+    
+    public BigDecimal getJjAmount() {
+        return jjAmount;
+    }
+    
+    public void setJjAmount(BigDecimal jjAmount) {
+        this.jjAmount = jjAmount;
+    }
+    
+    public String getIsExperience() {
+        return isExperience;
+    }
+    
+    public void setIsExperience(String isExperience) {
+        this.isExperience = isExperience;
+    }
+    
+    public String getAddress() {
+        return address;
+    }
+    
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    
+    public BigDecimal getfPercentage() {
+        return fPercentage;
+    }
+    
+    public void setfPercentage(BigDecimal fPercentage) {
+        this.fPercentage = fPercentage;
+    }
+    
+    public BigDecimal getsPercentage() {
+        return sPercentage;
+    }
+    
+    public void setsPercentage(BigDecimal sPercentage) {
+        this.sPercentage = sPercentage;
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    public String getRealname() {
+        return realname;
+    }
+    
+    public void setRealname(String realname) {
+        this.realname = realname;
+    }
+    
+    public List<CoonShopProductInfo> getProductList() {
+        return productList;
+    }
+    
+    public void setProductList(List<CoonShopProductInfo> productList) {
+        this.productList = productList;
+    }
+    
+    public String getIsChannelSelected() {
+        return isChannelSelected;
+    }
+    
+    public void setIsChannelSelected(String isChannelSelected) {
+        this.isChannelSelected = isChannelSelected;
+    }
+    
+    public String getLongitude() {
+        return longitude;
+    }
+    
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+    
+    public String getLatitude() {
+        return latitude;
+    }
+    
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
 
-	public String getRecommendId() {
-		return recommendId;
+	public String getRand() {
+		return rand;
 	}
 
-	public void setRecommendId(String recommendId) {
-		this.recommendId = recommendId;
+	public void setRand(String rand) {
+		this.rand = rand;
 	}
-
-	public BigDecimal getRecommendAmount() {
-		return recommendAmount;
-	}
-
-	public void setRecommendAmount(BigDecimal recommendAmount) {
-		this.recommendAmount = recommendAmount;
-	}
-
-	public BigDecimal getArrearsTotal() {
-		return arrearsTotal;
-	}
-
-	public void setArrearsTotal(BigDecimal arrearsTotal) {
-		this.arrearsTotal = arrearsTotal;
-	}
-
-	public BigDecimal getJjAmount() {
-		return jjAmount;
-	}
-
-	public void setJjAmount(BigDecimal jjAmount) {
-		this.jjAmount = jjAmount;
-	}
-
-	public String getIsExperience() {
-		return isExperience;
-	}
-
-	public void setIsExperience(String isExperience) {
-		this.isExperience = isExperience;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public BigDecimal getfPercentage() {
-		return fPercentage;
-	}
-
-	public void setfPercentage(BigDecimal fPercentage) {
-		this.fPercentage = fPercentage;
-	}
-
-	public BigDecimal getsPercentage() {
-		return sPercentage;
-	}
-
-	public void setsPercentage(BigDecimal sPercentage) {
-		this.sPercentage = sPercentage;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getRealname() {
-		return realname;
-	}
-
-	public void setRealname(String realname) {
-		this.realname = realname;
-	}
-
-	public List<CoonShopProductInfo> getProductList() {
-		return productList;
-	}
-
-	public void setProductList(List<CoonShopProductInfo> productList) {
-		this.productList = productList;
-	}
-
-	public String getIsChannelSelected() {
-		return isChannelSelected;
-	}
-
-	public void setIsChannelSelected(String isChannelSelected) {
-		this.isChannelSelected = isChannelSelected;
-	}	 
 }

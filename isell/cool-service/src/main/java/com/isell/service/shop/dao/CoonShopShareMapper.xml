@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopShareMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShopShare">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="subject" jdbcType="VARCHAR" property="subject"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="s_shop" jdbcType="VARCHAR" property="sShop"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="def" jdbcType="BIT" property="def"/>
+    </resultMap>
+    <select id="getCoonShopShareById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_share
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonShopShare" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_share 
+    </select>
+    
+    <!-- 根据查询条件查询 -->
+    <select id="findCoonShopShareList" resultMap="BaseResultMap" parameterType="com.isell.service.shop.vo.CoonShopShare">
+          SELECT a.*,s.level as shopLevel,s.name as shopName,s.logo as shopLogo FROM coon_shop_share a 
+          left join coon_shop s on a.s_shop=s.id
+          where 1=1 
+          <if test="sShop != null and sShop != ''">
+          	and a.s_shop = #{sShop,jdbcType=VARCHAR}
+          </if>
+          order by a.createtime desc
+    </select>
+    
+    <delete id="deleteCoonShopShare">
+        DELETE
+        FROM
+             coon_shop_share
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShopShare" parameterType="com.isell.service.shop.vo.CoonShopShare" >
+        INSERT INTO coon_shop_share
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="img != null" >
+                img,
+            </if>
+            <if test="subject != null" >
+                subject,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="sShop != null" >
+                s_shop,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+            <if test="def != null" >
+                def,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="img != null" >
+                #{img,jdbcType=VARCHAR},
+            </if> 
+            <if test="subject != null" >
+                #{subject,jdbcType=VARCHAR},
+            </if> 
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if> 
+            <if test="sShop != null" >
+                #{sShop,jdbcType=VARCHAR},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="def != null" >
+                #{def,jdbcType=BIT},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopShare" parameterType="com.isell.service.shop.vo.CoonShopShare" >
+        UPDATE coon_shop_share
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                img = #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null" >
+                subject = #{subject,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="sShop != null" >
+                s_shop = #{sShop,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="def != null" >
+                def = #{def,jdbcType=BIT},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopClickMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShopClick">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="sId" jdbcType="VARCHAR" property="sid"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+    </resultMap>
+    <select id="getCoonShopClickById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_click
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoonShopClick" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_click 
+    </select>
+    
+    <!-- 获取访客数 -->
+    <select id="getCountUV" resultType="java.lang.Integer">
+          SELECT ifnull(count(distinct ip),0) FROM coon_shop_click 
+          where createtime between #{beginTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 获取浏览数 -->
+    <select id="getCountPV" resultType="java.lang.Integer">
+          SELECT ifnull(count(1),0) FROM coon_shop_click 
+          where createtime between #{beginTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </select>
+    
+    <delete id="deleteCoonShopClick">
+        DELETE
+        FROM
+             coon_shop_click
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoonShopClick" parameterType="com.isell.service.shop.vo.CoonShopClick" >
+        INSERT INTO coon_shop_click
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="sid != null" >
+                sId,
+            </if>
+            <if test="ip != null" >
+                ip,
+            </if>
+            <if test="url != null" >
+                url,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="sid != null" >
+                #{sid,jdbcType=VARCHAR},
+            </if> 
+            <if test="ip != null" >
+                #{ip,jdbcType=VARCHAR},
+            </if> 
+            <if test="url != null" >
+                #{url,jdbcType=VARCHAR},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopClick" parameterType="com.isell.service.shop.vo.CoonShopClick" >
+        UPDATE coon_shop_click
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="sid != null" >
+                sId = #{sid,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null" >
+                ip = #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null" >
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -24,6 +24,37 @@ public class CommonUtils {
 		int index = (int) (Math.random() * 9000 + 1000);
 		return index;
 	}
+	
+	/**
+     * 加密后的用户名<br>
+     * name 名字
+     */
+    public static String getEncodeName(String name){
+        if (name != null) {
+            String p = name.substring(0,1);
+            String s = name.substring(name.length()-1);
+            name = p+"***" + s;
+        }
+        return name;
+    }
+    
+    /**
+     * 获取加密后的手机号
+     *
+     * @param mobile 手机号
+     * @return 加密后的手机号
+     */
+    public static String getEncodeMobile(String mobile) {
+        if (mobile != null) {
+            if (mobile.length() != 11) {
+                return mobile;
+            }
+            String p = mobile.substring(0,3);
+            String s = mobile.substring(7);
+            mobile = p + "****" + s;
+        } 
+        return mobile;
+    }
 
 	/**
 	 * 封装JDK自带的UUID, 通过Random数字生成, 中间无-分割.

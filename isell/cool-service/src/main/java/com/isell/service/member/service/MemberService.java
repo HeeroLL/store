@@ -4,6 +4,8 @@ import java.util.Map;
 
 import com.isell.core.util.Record;
 import com.isell.service.member.vo.CoolIdentityAuth;
+import com.isell.service.member.vo.CoolMember;
+import com.isell.service.member.vo.CoolMemberFavorites;
 import com.isell.service.member.vo.CoolMemberReceiver;
 import com.isell.service.member.vo.CoolUser;
 import com.isell.service.member.vo.CoonShopFocus;
@@ -178,10 +180,18 @@ public interface MemberService {
     /**
      * 用户实名认证
      * 
-     * @param user
+     * @param coolIdentityAuth
      * @return
      */
     Record saveIdcardAuth(CoolIdentityAuth coolIdentityAuth);
+    
+    /**
+     * 获取用户实名认证信息
+     * 
+     * @param coolIdentityAuth
+     * @return
+     */
+    Record getIdcardAuth(CoolIdentityAuth coolIdentityAuth);
     
     /**
      * 获取收货地址列表
@@ -206,5 +216,45 @@ public interface MemberService {
      * @return 是否保存成功
      */
     Record updateFocusShop(CoonShopFocus coonShopFocus);
+    
+    /**
+     * 收藏商品接口
+     * 
+     * @param coolMemberFavorites 参数
+     * @return 是否保存成功
+     */
+    Record saveMemberFavorites(CoolMemberFavorites coolMemberFavorites);
+    
+    /**
+     * 取消收藏商品接口
+     * 
+     * @param coolMemberFavorites 参数
+     * @return 是否删除成功
+     */
+    Record deleteMemberFavorites(CoolMemberFavorites coolMemberFavorites);
+    
+    /**
+     * 获取收藏商品列表
+     * 
+     * @param coolMemberFavorites 参数
+     * @return 收藏商品列表
+     */
+    Record getMemberFavoritesList(CoolMemberFavorites coolMemberFavorites);
+    
+    /**
+     * 删除收货地址
+     * 
+     * @param coolMemberReceiver 参数
+     * @return 是否删除成功
+     */
+    Record deleteMemberReceiver(CoolMemberReceiver coolMemberReceiver);
+    
+    /**
+     * 修改会员信息
+     * 
+     * @param coolMember 参数
+     * @return 是否修改成功
+     */
+    Record updateCoolMember(CoolMember coolMember);
     
 }

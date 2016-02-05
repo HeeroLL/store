@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.app.dao.AppUserMapper">
+ <resultMap type="com.isell.app.dao.entity.HomePageImage" id="resultQueryHomePageImages">
+ 	<result property="id" column="id"/>
+ 	<result property="titlename" column="titlename"/>
+ 	<result property="img" column="imagepath"/>
+ 	<result property="sort" column="sortnum"/>
+ 	<result property="url" column="imageurl"/>
+ </resultMap>	
+ <select id="queryHomePageImages" resultMap="resultQueryHomePageImages">
+ 	SELECT  id,titlename,sortnum,CONCAT(#{imgdomain},imagepath) as imagepath,imageurl
+FROM cool_app_loop_images WHERE STATUS=1  order by sortnum  LIMIT 0,5
+ </select>
+ <resultMap type="com.isell.app.dao.entity.Notice" id="resultQueryHomePageNotices">
+ 	<result property="id" column="id"/>
+ 	<result property="title" column="noticetitle"/>
+ 	<result property="content" column="content"/>
+ 	<result property="createtime" column="createtime"/>
+ 	<result property="noticetype" column="noticetype"/>
+ </resultMap>
+<select id="queryHomePageNotices" resultMap="resultQueryHomePageNotices">
+	SELECT id,noticetitle,noticetype
+	FROM cool_app_notice where   status=1 order by sortnum limit 0,5
+</select>
+<select id="queryHpnoticeinfo" resultMap="resultQueryHomePageNotices">
+	 SELECT id,noticetitle,content,DATE_FORMAT(createtime,'%Y-%m-%d') as createtime
+	 FROM cool_app_notice where id=#{id}
+</select>
+<resultMap type="com.isell.app.dao.entity.CoolMember" id="resultqueryUserDetailById">
+	 <result property="userId" column="user_id"/>
+	 <result property="mobile" column="mobile"/>
+	 <result property="realname" column="realname"/>
+	 <result property="sex" column="sex"/>
+	 <result property="email" column="email"/>
+	 <result property="level" column="level"/>
+	 <result property="birthday" column="birthday"/>
+	 <result property="logo" column="logo"/>
+	  <result property="qq" column="qq"/>
+	   <result property="idcard" column="idcard"/>
+	    <result property="mId" column="id"/>
+	     <result property="recid" column="recid"/>
+	      <result property="petname" column="petname"/>
+	       <result property="favshopcode" column="favshopcode"/>
+</resultMap>
+<select id="queryUserDetailById" resultMap="resultqueryUserDetailById">
+	<!-- 
+	SELECT  a.username,b.mobile,b.realname,b.sex,b.email,b.level,b.birthday,b.logo,b.user_id,b.qq,b.idcard,b.id
+			FROM cool_user a,cool_member b WHERE a.id=b.user_id AND a.id=#{id} -->
+	SELECT x.*,IFNULL(y.id,0) AS recid
+FROM 
+(
+ SELECT  a.username,b.mobile,b.realname,b.sex,b.email,b.level,b.birthday,b.logo,b.user_id,b.qq,b.idcard,b.id,b.petname,
+			 (select code  from coon_shop_fav m,coon_shop n where a.id=m.m_id and m.s_id=n.id and m.s_id is not null limit 0,1 )as favshopcode
+			FROM cool_user a,cool_member b WHERE a.id=b.user_id 
+			AND a.id=#{id}
+) X LEFT JOIN (SELECT id,m_id FROM  cool_member_receiver WHERE def=1)Y ON x.id=y.m_id
+    
+</select>
+<resultMap type="com.isell.app.dao.entity.Theme" id="resultqueryThemelist">
+	<result property="id" column="id"/>
+	<result property="themename" column="themename"/>
+	<result property="sortnum" column="sortnum"/>
+	<result property="type" column="type"/>
+	<result property="goodsid" column="goodsid"/>
+	<result property="shopid" column="shopid"/>
+	<result property="imgs" column="imgs"/>
+</resultMap>
+<select id="queryThemelist" resultMap="resultqueryThemelist">
+	select id,themename,sortnum,type,goodsid,shopid,imgs
+	from cool_app_theme a where a.status=1 order by sortnum
+</select>
+<resultMap type="com.isell.app.dao.entity.Product" id="resultqueryProductinfoById">
+	<result property="goodsid" column="id"/>
+	<result property="name" column="name"/>
+	<result property="img" column="img"/>
+	<result property="price" column="price"/>
+	<result property="shopid" column="shopid"/>
+	<result property="isrec" column="isrec"/>
+</resultMap>
+<select id="queryProductinfoById" resultMap="resultqueryProductinfoById">
+<if test="checkIsRec>0">
+  SELECT id,NAME,y.img AS img,price,shopid,isRec FROM 
+( SELECT a.id,NAME,CASE WHEN a.fav_price>0 THEN a.fav_price ELSE a.price END AS price,
+(SELECT CODE FROM coon_shop WHERE id=#{s_id}) AS shopid ,
+(SELECT COUNT(1) FROM coon_shop_product b WHERE a.id=b.p_id AND s_id=#{s_id}) AS isrec
+ FROM cool_product a WHERE id=#{goodsid}) X LEFT JOIN  (SELECT img,goods_id FROM  cool_product_img WHERE goods_id=#{goodsid} LIMIT 0,1)Y ON x.id=y.goods_id
+</if>
+<if test="checkIsRec==0">
+	 SELECT id,NAME,y.img as img,price,3 as isrec
+	  FROM 
+( SELECT a.id,NAME,CASE WHEN a.fav_price>0 THEN a.fav_price ELSE a.price END AS price
+ FROM cool_product a WHERE id=#{goodsid}) X LEFT JOIN  (SELECT img,goods_id FROM  cool_product_img WHERE goods_id=#{goodsid} LIMIT 0,1)Y ON x.id=y.goods_id
+</if>
+
+</select>
+
+<select id="checkUserIsRecGoods" resultType="java.lang.Integer">
+	select count(1) from cool_member_favorites a where a.m_id=#{mId} and a.p_id=#{pId}
+</select>
+<insert id="saveUserRecGoods">
+	insert into cool_member_favorites(m_id,p_id)values(#{mId},#{pId})
+</insert>
+
+<select id="queryHotwordlist" resultType="map">
+	select * from cool_app_hotword order by sort
+</select>
+
+<select id="querySearchGoodsAllNum" resultType="java.lang.Integer">
+	SELECT count(1)
+		FROM 
+		(	
+		SELECT
+		a.*,b.name AS cname
+		FROM 
+		(	
+		SELECT a.id,NAME,price,fav_price,CONCAT(ROUND(tax*100,2),'%')AS tax,a.country_code,
+		(SELECT CONCAT(#{img_domain},img)  FROM cool_product_img b WHERE a.id=b.goods_id LIMIT 0,1)AS img
+		FROM cool_product  a WHERE a.name like CONCAT(CONCAT('%', #{keywords}),'%')  
+		 
+		) a
+		LEFT JOIN 
+		cool_dict_gbdm  b ON a.country_code=b.id
+		 )k LEFT JOIN 
+		( SELECT 
+		MAX(h.num) ,h.g_id,h.supplier,j.code
+		FROM 
+		(
+		SELECT y.supplier,g_id,COUNT(1) AS num  FROM  (
+		SELECT id,order_no,g_id  FROM cool_order_item X WHERE EXISTS (SELECT 1 FROM cool_product Y WHERE y.name like CONCAT(CONCAT('%', #{keywords}),'%') AND x.g_id=y.id)) X,
+		cool_order Y WHERE x.order_no=y.order_no AND y.state>0 AND y.state!=99 AND y.state!=5
+		GROUP BY supplier,g_id 
+		ORDER BY COUNT(1) DESC 
+		) h,coon_shop j WHERE h.supplier=j.id    GROUP BY h.g_id
+		)l ON k.id=l.g_id where code is not null 
+</select>
+
+<select id="querySearchUnorderNum" resultType="java.lang.Integer">
+	SELECT 
+		count(1)
+		FROM 
+		(
+		SELECT a.id,NAME,price,fav_price,CONCAT(ROUND(tax*100,2),'%')AS tax,a.country_code,
+		(SELECT  img FROM cool_product_img b WHERE a.id=b.goods_id LIMIT 0,1)AS img FROM cool_product a
+		WHERE NAME like CONCAT(CONCAT('%', #{keywords}),'%') AND EXISTS (SELECT 1 FROM coon_shop_product b,coon_shop c WHERE a.id=b.p_id AND b.s_id=c.id AND c.code IS NOT NULL)
+		)a LEFT JOIN 
+		cool_dict_gbdm  b ON a.country_code=b.id
+</select>
+<resultMap type="com.isell.app.dao.entity.SearchProduct" id="resultquerySearchGoods">
+	<result property="goodid" column="id"/>
+	<result property="goodname" column="name"/>
+	<result property="price" column="price"/>
+	<result property="fav_price" column="fav_price"/>
+	<result property="tax" column="tax"/>
+	<result property="img" column="img"/>
+	<result property="cname" column="cname"/>
+	<result property="code" column="code"/>
+	<result property="shopname" column="shopname"/>
+	<result property="shopimg" column="shopimg"/>
+</resultMap>
+
+<select id="querySearchGoodsUnOrder" resultMap="resultquerySearchGoods">
+	SELECT 
+		a.*,b.name AS cname,(SELECT y.code FROM coon_shop_product X,coon_shop Y WHERE a.id=x.p_id AND x.s_id=y.id  AND y.code IS NOT NULL LIMIT 0,1)AS CODE,
+		(SELECT y.name FROM coon_shop_product X,coon_shop Y WHERE a.id=x.p_id AND x.s_id=y.id  AND y.code IS NOT NULL LIMIT 0,1)AS shopname,
+		(SELECT CONCAT(#{img_domain},y.logo) FROM coon_shop_product X,coon_shop Y WHERE a.id=x.p_id AND x.s_id=y.id  AND y.code IS NOT NULL LIMIT 0,1)AS shopimg
+		FROM 
+		(
+		SELECT a.id,NAME,price,fav_price,CONCAT(ROUND(tax*100,2),'%')AS tax,a.country_code,
+		(SELECT  CONCAT(#{img_domain},img) FROM cool_product_img b WHERE a.id=b.goods_id LIMIT 0,1)AS img FROM cool_product a
+		WHERE NAME like CONCAT(CONCAT('%', #{keywords}),'%') AND EXISTS (SELECT 1 FROM coon_shop_product b,coon_shop c WHERE a.id=b.p_id AND b.s_id=c.id AND c.code IS NOT NULL)
+		LIMIT #{start},#{limit}
+		)a LEFT JOIN 
+		cool_dict_gbdm  b ON a.country_code=b.id
+		<if test="type==2">
+			order by fav_price 
+		</if>
+		<if test="type==3">
+			order by fav_price desc
+		</if>
+</select>
+<select id="querySearchFavShopGoodsNum" resultType="java.lang.Integer">
+		SELECT count(a.id)
+		FROM 
+		(
+		SELECT a.id,NAME,price,fav_price,CONCAT(ROUND(tax*100,2),'%')AS tax,a.country_code,
+		(SELECT CONCAT(#{img_domain},img)  FROM cool_product_img b WHERE a.id=b.goods_id LIMIT 0,1)AS img,#{sid} AS s_id
+		FROM coon_shop_product b, cool_product a  
+		WHERE b.s_id=#{sid} AND b.p_id=a.id AND  a.name LIKE CONCAT(CONCAT('%', #{keywords}),'%')  
+		 )a LEFT JOIN 
+		cool_dict_gbdm  b ON a.country_code=b.id 
+		LEFT JOIN  coon_shop c ON a.s_id=c.id
+</select>
+<select id="querySearchFavShopGoods" resultMap="resultquerySearchGoods">
+		<!-- SELECT a.*,b.name AS cname,c.name AS shopname,c.logo AS shopimg,c.code 
+		FROM 
+		(
+		SELECT a.id,NAME,price,fav_price,CONCAT(ROUND(tax*100,2),'%')AS tax,a.country_code,
+		(SELECT CONCAT(#{img_domain},img)  FROM cool_product_img b WHERE a.id=b.goods_id LIMIT 0,1)AS img,#{sid} AS s_id
+		FROM coon_shop_product b, cool_product a  
+		WHERE b.s_id=#{sid} AND b.p_id=a.id AND  a.name LIKE CONCAT(CONCAT('%', #{keywords}),'%')  
+		LIMIT #{start},#{limit}
+		 )a LEFT JOIN 
+		cool_dict_gbdm  b ON a.country_code=b.id 
+		LEFT JOIN  coon_shop c ON a.s_id=c.id -->
+		
+		 SELECT a.*,b.name AS cname,c.name AS shopname,c.logo AS shopimg,c.code 
+		FROM 
+		(
+		SELECT x.*,IFNULL(y.buynum,0) AS buynum FROM 
+		(
+		SELECT a.id,NAME,price,fav_price,CONCAT(ROUND(tax*100,2),'%')AS tax,a.country_code,
+		(SELECT CONCAT(#{img_domain},img)  FROM cool_product_img b WHERE a.id=b.goods_id LIMIT 0,1)AS img,#{sid} AS s_id
+		FROM coon_shop_product b, cool_product a  
+		WHERE b.s_id=#{sid} AND b.p_id=a.id AND  a.name LIKE CONCAT(CONCAT('%', #{keywords}),'%') 
+		 ) X LEFT JOIN (SELECT b.g_id,COUNT(b.id)AS buynum
+		FROM cool_order a,cool_order_item b WHERE a.supplier=#{sid} AND a.state>0 AND a.order_no=b.order_no
+		GROUP BY b.g_id) Y ON x.id=y.g_id
+		<if test="type==1">
+			order by buynum desc
+		</if>
+		<if test="type==2">
+			order by fav_price 
+		</if>
+		<if test="type==3">
+			order by fav_price desc
+		</if>
+		LIMIT #{start},#{limit}
+		 )a LEFT JOIN 
+		cool_dict_gbdm  b ON a.country_code=b.id 
+		LEFT JOIN  coon_shop c ON a.s_id=c.id
+</select>
+
+<select id="querySearchGoods" resultMap="resultquerySearchGoods">
+	 SELECT k.*,l.code,l.shopname,l.shopimg
+		FROM 
+		(	
+		SELECT
+		a.*,b.name AS cname
+		FROM 
+		(	
+		SELECT a.id,NAME,price,fav_price,CONCAT(ROUND(tax*100,2),'%')AS tax,a.country_code,
+		(SELECT CONCAT(#{img_domain},img)  FROM cool_product_img b WHERE a.id=b.goods_id LIMIT 0,1)AS img
+		FROM cool_product  a WHERE a.name like CONCAT(CONCAT('%', #{keywords}),'%')  
+		LIMIT #{start},#{limit}
+		) a
+		LEFT JOIN 
+		cool_dict_gbdm  b ON a.country_code=b.id
+		 )k LEFT JOIN 
+		( SELECT 
+		MAX(h.num) ,h.g_id,h.supplier,j.code,j.name as shopname, CONCAT(#{img_domain},j.logo) as shopimg
+		FROM 
+		(
+		SELECT y.supplier,g_id,COUNT(1) AS num  FROM  (
+		SELECT id,order_no,g_id  FROM cool_order_item X WHERE EXISTS (SELECT 1 FROM cool_product Y WHERE y.name like CONCAT(CONCAT('%', #{keywords}),'%') AND x.g_id=y.id)) X,
+		cool_order Y WHERE x.order_no=y.order_no AND y.state>0 AND y.state!=99 AND y.state!=5
+		GROUP BY supplier,g_id 
+		ORDER BY COUNT(1) DESC 
+		) h,coon_shop j WHERE h.supplier=j.id    GROUP BY h.g_id
+		)l ON k.id=l.g_id where code is not null 
+		
+		<if test="type==2">
+			order by fav_price 
+		</if>
+		<if test="type==3">
+			order by fav_price desc
+		</if>
+</select>
+ <resultMap type="com.isell.app.dao.entity.SearchShop" id="resultquerySearchShop">
+ 	<result property="goodid" column="goodid"/>
+ 	<result property="shopname" column="name"/>
+ 	<result property="code" column="code"/>
+ 	<result property="shopimg" column="shopimg"/>
+ </resultMap>
+ <select id="querySearchShop" resultMap="resultquerySearchShop">
+ 	SELECT j.code,j.name,#{goodid} as goodid,CONCAT(#{img_domain},j.logo)as shopimg
+		FROM 
+		(
+		SELECT y.supplier,g_id,COUNT(1) AS num  FROM  (
+		SELECT id,order_no,g_id  FROM cool_order_item X WHERE EXISTS (SELECT 1 FROM cool_product Y WHERE y.id=#{goodid} AND x.g_id=y.id)) X,
+		cool_order Y WHERE x.order_no=y.order_no AND y.state>0 AND y.state!=99 AND y.state!=5
+		GROUP BY supplier,g_id 
+		ORDER BY COUNT(1) DESC limit 0,5)h,coon_shop j WHERE h.supplier=j.id AND j.code!=#{uncode} and j.code is not null
+ </select>
+<select id="querySearchShopUnOrder" resultMap="resultquerySearchShop">
+		SELECT b.name,b.code,#{goodid} as goodid,CONCAT(#{img_domain},b.logo)as shopimg
+		 FROM 
+		  coon_shop_product a,coon_shop b
+		  WHERE a.p_id=#{goodid}  AND a.s_id=b.id AND b.code IS NOT NULL and b.code!=#{uncode} LIMIT 0,5
+</select>
+<resultMap type="com.isell.app.dao.entity.SearchType" id="resultTypeSearch">
+	<result property="id" column="id"/>
+	<result property="name" column="name"/>
+</resultMap>
+<select id="typeSearch" resultMap="resultTypeSearch">
+	select id,name from cool_app_search_type a
+	where status=1 and exists(select 1 from cool_app_search_typelist b where a.id=b.typeid)
+	 order by sortnum
+</select>
+<resultMap type="com.isell.app.dao.entity.SearchTypelist" id="resultQuerySearchTpyeList">
+	<result property="id" column="id"/>
+	<result property="title" column="title"/>
+	<result property="img" column="img"/>
+</resultMap>
+
+<select id="querySearchTpyeList" resultMap="resultQuerySearchTpyeList">
+	select id,title,CONCAT(#{img_domain},img)as img
+	from cool_app_search_typelist a
+	 where a.typeid=#{typeid} order by sortnum limit 0,#{limit}
+</select>
+
+<select id="queryShopidByNO" resultType="java.lang.String">
+	select id from coon_shop where code=#{code}
+</select>
+
+<select id="checkOrderIsPaySuccess" resultType="java.lang.Integer">
+	select count(1) from  cool_order a where a.order_no=#{orderseq} and state=1
+</select>
+
+<select id="checkGoodsStockIsCanPay" resultType="java.lang.Integer">
+	select count(1) from cool_product_gg a where  a.stock>=#{quality}  and id=#{ggid}
+</select>
+<resultMap type="com.isell.app.dao.entity.CenterOrderItem" id="resultQueryOrderItem">
+	<result property="goodname" column="goodname"/>
+	<result property="goodimg" column="img"/>
+	<result property="orderitemid" column="orderitemid"/>
+	<result property="gname" column="gg"/>
+	<result property="quality" column="count"/>
+	<result property="price" column="price"/>
+</resultMap>
+<select id="queryOrderItem" resultMap="resultQueryOrderItem">
+	SELECT b.name AS goodname ,CONCAT(#{imgdomain},b.logo)AS img,b.id AS orderitemid,b.gg,b.count,b.price
+	FROM cool_order_item b  where b.order_no=#{order_no}
+</select>
+<select id="queryMyOrderTotalNum" resultType="java.lang.Integer">
+	SELECT  count(a.id)
+FROM cool_order a,coon_shop c
+WHERE a.m_id=#{mId}     AND a.supplier=c.id
+<if test="state!=-1">
+		and a.state=#{state}
+	</if>
+	<if test="keywords!=null and keywords!=''">
+		and c.name like CONCAT(CONCAT('%', #{keywords}),'%')
+	</if>
+</select>
+<resultMap type="com.isell.app.dao.entity.CenterOrder" id="resultqueryMyOrderPage">
+	<result property="orderid" column="id"/>
+	<result property="order_no" column="order_no"/>
+	<result property="total" column="total"/>
+	<result property="shopid" column="shopid"/>
+	<result property="shopcode" column="code"/>
+	<result property="shopname" column="shopname"/>
+	<result property="shopimg" column="shopimg"/>
+	<result property="state" column="state"/>
+	<result property="paytime" column="paytime"/>
+	<result property="postfee" column="ps_price"/>
+	<result property="taxfee" column="tax_price"/>
+</resultMap>
+<select id="queryMyOrderPage" resultMap="resultqueryMyOrderPage">
+	SELECT a.id,a.order_no,ps_price,tax_price,
+	a.total,c.id AS shopid,c.code,c.name AS shopname,CONCAT(#{imgdomain},c.logo)AS shopimg,
+	a.state,DATE_FORMAT(a.pay_time,'%Y-%m-%d %h:%i')AS paytime
+FROM cool_order a,coon_shop c
+WHERE a.m_id=#{mId}     AND a.supplier=c.id 
+	<if test="state!=-1">
+		and a.state=#{state}
+	</if>
+	<if test="keywords!=null and keywords!=''">
+		and c.name like CONCAT(CONCAT('%', #{keywords}),'%')
+	</if>
+	order by a.id desc
+	limit #{start},#{limit}
+	<!-- SELECT a.id,a.order_no,b.name as goodname ,CONCAT(#{imgdomain},b.logo)as img,b.id as orderitemid,
+	b.gg,b.count,b.price,a.total,c.id as shopid,c.code,c.name as shopname,CONCAT(#{imgdomain},c.logo)as shopimg,
+	 IFNULL((SELECT tax FROM cool_product X WHERE b.g_id=x.id),0)*b.price AS tax,a.state,
+	 DATE_FORMAT(a.pay_time,'%Y-%m-%d %h:%i')AS paytime
+FROM cool_order a,cool_order_item b,coon_shop c
+WHERE m_id=#{mId}    AND a.order_no=b.order_no AND a.supplier=c.id 
+
+	<if test="state!=-1">
+		and a.state=#{state}
+	</if>
+	<if test="keywords!=null and keywords!=''">
+		and (goodname like CONCAT(CONCAT('%', #{keywords}),'%') or  shopname like CONCAT(CONCAT('%', #{keywords}),'%'))
+	</if>
+	order by a.id desc
+	limit #{start},#{limit} -->
+</select>
+<resultMap type="com.isell.app.dao.entity.OrderDetail" id="resultqueryOrderDetail">
+	<result property="orderno" column="order_no"/>
+	<result property="linkman" column="linkman"/>
+	<result property="address" column="address"/>
+	 
+	<result property="paytype" column="paytype"/>
+	<result property="postfee" column="postfee"/>
+	<!-- <result property="goodimg" column="img"/>
+	<result property="goodname" column="name"/>
+	<result property="gname" column="gg"/> -->
+	<result property="pscode" column="ps_code"/>
+	<result property="mobile" column="mobile"/>
+</resultMap>
+<select id="queryOrderDetail" resultMap="resultqueryOrderDetail">
+  SELECT a.order_no,a.linkman,CONCAT(location_p,location_c,location_a,address)AS address,
+ 
+	CASE WHEN a.zffs=2 THEN '支付宝支付' WHEN zffs=3 THEN '微信支付' END AS paytype,
+	DATE_FORMAT(a.updatetime,'%Y-%m-%d %h:%i')AS paytime,psfs,total,ifnull(a.ps_price,0) AS postfee,
+	a.ps_code,mobile
+FROM cool_order a 
+WHERE a.order_no=#{orderseq}   
+</select>
+<resultMap type="com.isell.app.dao.entity.OrderGoods" id="resultQueryOrderGoods">
+	<result property="goodname" column="name"/>
+	<result property="gname" column="gg"/>
+	<result property="goodimg" column="img"/>
+	<result property="price" column="price"/>
+</resultMap>
+<select id="queryOrderGoods" resultMap="resultQueryOrderGoods">
+	select 
+		name,gg,CONCAT(#{imgdomain},logo)as img,price
+	 from cool_order_item where order_no=#{orderseq}
+</select>
+
+<resultMap type="com.isell.app.dao.entity.CollectInfo" id="resultQueryUserCollect">
+	<result property="id" column="id"/>
+	<result property="showname" column="name"/>
+	<result property="showimg" column="img"/>
+	<result property="price" column="price"/>
+	<result property="tax" column="tax"/>
+	<result property="postfee" column="postfee"/>
+	<result property="shopcode" column="code"/>
+	<result property="recid" column="recid"/>
+	<result property="shelves" column="shelves"/>
+	<result property="is_down" column="is_down"/>
+</resultMap>
+<select id="queryUserCollect" resultMap="resultQueryUserCollect">
+	<if test="type==1"><!--1 商品 2 店铺    -->
+		SELECT x.*,y.code
+		FROM 
+		(
+		SELECT  b.id,b.name,CONCAT(#{img_domain},b.logo)as img,CASE WHEN fav_price=0 THEN price ELSE fav_price END AS price,
+		CONCAT(ROUND(b.tax*100,2),'%')AS tax,
+			0 AS postfee,a.id as recid,b.shelves,
+			case when a.shopcode is null then 1 when a.shopcode is not null then (select count(1) from coon_shop x,coon_shop_product y where x.id=y.s_id and x.code=a.shopcode ) end as is_down
+		 FROM cool_member_favorites a,cool_product b
+		   WHERE  a.m_id=#{mId} AND a.p_id=b.id
+		 ) X, 
+		 (
+		 SELECT MAX(num),x.p_id,y.code
+		 FROM
+		 (
+		  SELECT  a.p_id,COUNT(c.id) AS num,d.supplier
+		  FROM cool_member_favorites a,cool_product b,cool_order_item c,cool_order d
+		  WHERE a.m_id=#{mId} AND a.p_id=b.id AND a.p_id=c.g_id AND c.order_no=d.order_no AND d.state>0 AND d.supplier IS NOT NULL
+		  AND EXISTS(SELECT 1 FROM coon_shop X WHERE d.supplier=x.id AND x.code IS NOT NULL )
+		  GROUP BY a.p_id,d.supplier ORDER BY p_id,num DESC
+		 ) X ,coon_shop Y WHERE x.supplier=y.id GROUP BY x.p_id
+		 ) Y WHERE x.id=y.p_id
+		  LIMIT #{start},#{limit}
+	</if>
+	<if test="type==2">
+		SELECT b.name,b.code,b.id,CONCAT(#{img_domain},b.logo)as img
+		FROM coon_shop_fav a,coon_shop b
+		WHERE m_id=#{mId} AND a.s_id IS NOT NULL AND a.s_id=b.id
+		LIMIT #{start},#{limit}
+	</if>
+</select>
+<select id="queryUserCollectTotalNum" resultType="java.lang.Integer">
+	<if test="type==1"><!--1 商品 2 店铺    -->
+		SELECT count(1)
+		FROM 
+		(
+		SELECT  b.id,b.name,CONCAT(#{img_domain},b.logo)as img,CASE WHEN fav_price=0 THEN price ELSE fav_price END AS price,
+		CONCAT(ROUND(b.tax*100,2),'%')AS tax,
+			0 AS postfee
+		 FROM cool_member_favorites a,cool_product b
+		   WHERE  a.m_id=#{mId} AND a.p_id=b.id
+		   
+		 ) X, 
+		 (
+		 SELECT MAX(num),x.p_id,y.code
+		 FROM
+		 (
+		  SELECT  a.p_id,COUNT(c.id) AS num,d.supplier
+		  FROM cool_member_favorites a,cool_product b,cool_order_item c,cool_order d
+		  WHERE a.m_id=#{mId} AND a.p_id=b.id AND a.p_id=c.g_id AND c.order_no=d.order_no AND d.state>0 AND d.supplier IS NOT NULL
+		  AND EXISTS(SELECT 1 FROM coon_shop X WHERE d.supplier=x.id AND x.code IS NOT NULL )
+		  GROUP BY a.p_id,d.supplier ORDER BY p_id,num DESC
+		 ) X ,coon_shop Y WHERE x.supplier=y.id GROUP BY x.p_id
+		 ) Y WHERE x.id=y.p_id
+	</if>
+	<if test="type==2">
+		SELECT count(1)
+		FROM coon_shop_fav a,coon_shop b
+		WHERE m_id=#{mId} AND a.s_id IS NOT NULL AND a.s_id=b.id
+		 
+	</if>
+</select>
+<resultMap type="com.isell.app.dao.entity.HelpType" id="resultQueryHelptypeList">
+	<result property="id" column="id"/>
+	<result property="name" column="name"/>
+	<result property="icon" column="img"/>
+</resultMap>
+<select id="queryHelptypeList" resultMap="resultQueryHelptypeList">
+	select id,name,CONCAT(#{img_domain},icon)as img
+	 from cool_app_help_type a order by sortnum
+</select>
+<resultMap type="com.isell.app.dao.entity.HelpList" id="resultQueryHelplist">
+	<result property="id" column="id"/>
+	<result property="typeid" column="typeid"/>
+	<result property="title" column="title"/>
+	<result property="content" column="content"/>
+</resultMap>
+<select id="queryHelplist" resultMap="resultQueryHelplist">
+	select id,typeid,title,content
+	from cool_app_help_list a where a.typeid=#{id} order by sortnum
+</select>
+<resultMap type="com.isell.app.dao.entity.MemberCommunity" id="resultQueryAllMemberCommunity">
+	<result property="mname" column="petname"/>
+	<result property="headimg" column="img"/>
+	<result property="createtime" column="createtime"/>
+	<result property="showimg" column="images"/>
+	<result property="content" column="content"/>
+	<result property="type" column="type"/>
+	<result property="userid" column="userid"/>
+	<result property="id" column="id"/>
+</resultMap>
+<select id="queryAllMemberCommunity" resultMap="resultQueryAllMemberCommunity">
+	SELECT case when length(b.petname)>0 then b.petname else b.mobile end as petname,
+	       case when length(b.logo)>0 then CONCAT(#{img_domain},b.logo) else null end as img,
+		   case when length(a.images)>0 then CONCAT(#{img_domain},a.images) else null end as images
+		,DATE_FORMAT(a.createtime,'%Y-%m-%d %h:%i')AS createtime,
+		content,a.type,a.userid,a.id
+	 FROM
+	 cool_app_community a ,cool_member  b
+	 WHERE a.userid=b.user_id
+	 <if test="mId>0">
+	 	and a.userid=#{mId}
+	 </if>
+	 <if test="type>0">
+	 	and a.type=#{type}
+	 </if>
+	 order by a.createtime desc
+	 limit #{start},#{limit}
+</select>
+<delete id="deleteMemberCommunity">
+	delete from cool_app_community where id=#{id}
+</delete>
+<resultMap type="com.isell.app.dao.entity.SearchShop" id="resultQueryShoplist">
+	<result property="shopid" column="id"/>
+	<result property="code" column="code"/>
+	<result property="shopname" column="name"/>
+	<result property="anninfo" column="ann_info"/>
+	<result property="shopimg" column="img"/>
+	<result property="address" column="address"/>
+	<result property="lon" column="longitude"/>
+	<result property="lat" column="latitude"/>
+	<result property="shopuserid" column="user_id"/>
+</resultMap>
+<select id="queryShpolist" resultMap="resultQueryShoplist">
+	SELECT id,CODE,NAME,ann_info,CONCAT(#{img_domain},a.img)as img,address,longitude,latitude,user_id
+ 	FROM coon_shop a WHERE is_experience=1
+ 	<if test="keywords!='' and keywords!=null">
+ 		and a.name like CONCAT(CONCAT('%', #{keywords}),'%')
+ 	</if>
+ 	 limit #{start},#{limit}
+</select>
+
+<select id="queryShopInfo" resultMap="resultQueryShoplist">
+	SELECT id,CODE,NAME,ann_info,a.img,address,longitude,latitude
+ 	FROM coon_shop a WHERE a.id=#{shopid}
+</select>
+<resultMap type="com.isell.service.member.vo.UserInfo" id="resultQueryLoginCoolUser">
+	<result property="id" column="id"/>
+	<result property="no" column="no"/>
+	<result property="username" column="username"/>
+	<result property="petname" column="petname"/>
+	<result property="realname" column="realname"/>
+	<result property="email" column="email"/>
+	<result property="mobile" column="mobile"/>
+	<result property="logo" column="logo"/>
+	<result property="qq" column="qq"/>
+	<result property="level" column="level"/>
+	<result property="password" column="password"/>
+	
+	<result property="sex" column="sex"/>
+	<result property="mId" column="mid"/>
+	<result property="idcard" column="idcard"/>
+	<result property="location_p" column="location_p"/>
+	<result property="recid" column="recid"/><result property="favshopcode" column="favshopcode"/>
+</resultMap>
+<select id="queryLoginCoolUser" resultMap="resultQueryLoginCoolUser">
+	SELECT a.id,b.no,a.username,b.petname,b.realname,a.email,a.mobile,
+	CONCAT(#{imagedomain},a.logo)as logo,
+	b.qq,b.level,a.password,
+		b.id as mid,b.sex,b.idcard,b.location_p,IFNULL((SELECT id FROM cool_member_receiver X WHERE x.m_id=a.id AND x.def=1 LIMIT 0,1 ),0) AS recid,
+		(SELECT y.code FROM coon_shop_fav X,coon_shop Y WHERE a.id=x.m_id AND x.s_id=y.id LIMIT 0,1) AS favshopcode
+ 	FROM cool_user a,cool_member b
+ 	WHERE a.id=b.user_id AND b.mobile=#{phone}
+</select>
+<!--  -->
+<select id="checkMemberIsFaved" resultType="java.lang.Integer">
+	select count(1) 
+	from cool_member_favorites a where a.m_id=#{mId} and a.p_id=#{pId} and a.shopcode=#{shopcode}
+</select>
+
+<insert id="saveMemberFavourte">
+	insert into cool_member_favorites(m_id,p_id,shopcode)values(#{mId},#{pId},#{shopcode})
+</insert>
+<delete id="deleteMemberFavGoods">
+	<if test="type==1"><!-- 全部删除 -->
+		delete from cool_member_favorites where m_id=#{mId}
+	</if>
+	<if test="type==2">
+		delete from cool_member_favorites where id=#{cid}
+	</if>
+	<if test="type==3">
+		delete from cool_member_favorites where id=#{cid}
+	</if>
+</delete>
+<delete id="deleteMemRecAddress">
+	delete from cool_member_receiver where id=#{cid}
+</delete>
+
+<select id="checkUserIsRecShop" resultType="java.lang.String">
+	select s_id 
+	from coon_shop_fav a where a.m_id=#{mId} and s_id is not null limit 0,1
+</select>
+
+<insert id="saveCoolMember">
+	insert into cool_member(mobile,user_id,no,petname)values(#{mobile},#{userId},#{no},#{petname})
+</insert>
+<select id="checkShopCodeisExists" resultType="java.lang.Integer">
+	select count(1) from coon_shop where code=#{mobile}
+</select>
+
+<insert id="saveNewMemberFavShop">
+	insert into coon_shop_fav(id,m_id,s_id)values(#{sms},(select id from cool_user where username=#{username} ),(select id from coon_shop where code=#{mobile}))
+</insert>
+<delete id="deleteUserOldFavShop">
+	delete from coon_shop_fav where m_id=#{mId}
+</delete>
+
+<insert id="saveUserFavShop">
+	insert into coon_shop_fav(id,m_id,s_id)values(#{uncode},#{mId},#{sid})
+</insert>
+<update id="updateUserOldFavGoodsShopCode">
+	update cool_member_favorites a
+		set s_id=#{sid},shopcode=(select code from coon_shop where id=#{sid} limit 0,1)
+	where m_id=#{mId} 
+</update>
+<select id="checkUserIsFavShop" resultType="java.lang.Integer">
+	select count(1) from coon_shop_fav where m_id=#{mId} and s_id=#{sid}
+</select>
+<delete id="cancelUserFavShop">
+	delete from coon_shop_fav where m_id=#{mId} and s_id=#{sid}
+</delete>
+<delete id="deleteUserFavGoods">
+	delete from cool_member_favorites where m_id=#{mId}
+</delete>
+<resultMap type="com.isell.app.dao.entity.CollectInfo" id="resultQueryMyFavShop">
+	<result property="id" column="s_id"/>
+	<result property="showimg" column="img"/>
+	<result property="showname" column="name"/>
+	<result property="shopcode" column="code"/>
+</resultMap>
+<select id="queryMyFavShop" resultMap="resultQueryMyFavShop">
+	SELECT a.s_id,CONCAT(#{img_domain},b.logo)as img,b.name,b.code
+	FROM coon_shop_fav a,coon_shop b 
+	WHERE a.m_id=#{mId} AND a.s_id=b.id LIMIT 0,1
+</select>
+
+<insert id="saveNewCommunity">
+	insert into cool_app_community(userid,content,images,type)values(#{userid},#{content},#{showimg},#{type})
+</insert>
+
+<update id="updateUserCommunity">
+	update cool_app_community 
+		set 
+			content=#{content},
+			images=#{images}
+	where id=#{id}
+</update>
+<update id="updateUserLogo">
+	update cool_user a set logo=#{logo} where id=#{userId}
+</update>
+<update id="saveUpdateMemberLogo">
+	update cool_member a set logo=#{logo} where user_id=#{userId}
+</update>
+<update id="updateUserInfo">
+	update cool_user a set 
+		 
+			a.petname=#{petname},
+		 
+			a.email=#{email}
+		 
+	where id=#{userId}
+</update>
+<update id="updateMemberInfo">
+	update cool_member a
+		set 
+		 
+			a.petname=#{petname},
+		 
+			a.email=#{email},
+		 
+			a.realname=#{realname},
+		 
+			a.sex=#{sex},
+		 
+			a.idcard=#{idcard}
+		 
+	where user_id=#{userId}
+</update>
+<insert id="saveNewWapCommunityinfo">
+	insert into cool_app_community(userid,content,images,type)values(#{userid},#{content},#{showimg},#{type})
+</insert>
+<update id="saveUpdateWapCommunityinfo">
+	update cool_app_community 
+		set content=#{content},images=#{showimg}
+	where id=#{id}
+</update>
+<update id="clearUserAddress">
+	update cool_member_receiver a 
+		set a.def=0
+	where a.m_id=#{mId}
+</update>
+<update id="updateMemberDefAddress">
+	update cool_member_receiver a
+	set def=1 where id=#{cid}
+</update>
+
+<update id="clearUserDefAddress">
+	update cool_member_receiver a
+		set def=0
+	where a.m_id=#{mId}
+</update>
+<update id="updateUserAddress">
+	update cool_member_receiver a
+		set location_p=#{locationP},location_c=#{locationC},location_a=#{locationA},address=#{address},name=#{name},mobile=#{mobile},def=#{def},idcard=#{idcard}
+	where a.id=#{id}
+</update>
+<insert id="saveNewUserAddress">
+	insert into cool_member_receiver(location_p,location_c,location_a,address,name,mobile,def,idcard,m_id)
+	values(#{locationP},#{locationC},#{locationA},#{address},#{name},#{mobile},#{def},#{idcard},#{mId})
+</insert>
+
+</mapper>

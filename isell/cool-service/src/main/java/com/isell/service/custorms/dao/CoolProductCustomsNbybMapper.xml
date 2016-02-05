@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.custorms.dao.CoolProductCustomsNbybMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.custorms.po.CoolProductCustomsNbyb">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="p_id" jdbcType="INTEGER" property="pId"/>
+        <result column="g_id" jdbcType="INTEGER" property="gId"/>
+        <result column="product_code" jdbcType="VARCHAR" property="productCode"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+    </resultMap>
+    <select id="getCoolProductCustomsNbybById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_customs_nbyb
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getCoolProductCustomsNbybByCode" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_customs_nbyb
+        WHERE            
+            product_code = #{code,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getCustomsInfoByGid" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_customs_nbyb
+        WHERE            
+            g_id = #{gId,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolProductCustomsNbyb" resultMap="BaseResultMap">
+          SELECT * FROM cool_product_customs_nbyb 
+    </select>
+    
+    <delete id="deleteCoolProductCustomsNbyb">
+        DELETE
+        FROM
+             cool_product_customs_nbyb
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolProductCustomsNbyb" parameterType="com.isell.service.custorms.po.CoolProductCustomsNbyb" >
+        INSERT INTO cool_product_customs_nbyb
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="pId != null" >
+                p_id,
+            </if>
+            <if test="gId != null" >
+                g_id,
+            </if>
+            <if test="productCode != null" >
+                product_code,
+            </if>
+            <if test="productName != null" >
+                product_name,
+            </if>
+            <if test="unit != null" >
+                unit,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="pId != null" >
+                #{pId,jdbcType=INTEGER},
+            </if> 
+            <if test="gId != null" >
+                #{gId,jdbcType=INTEGER},
+            </if> 
+            <if test="productCode != null" >
+                #{productCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="productName != null" >
+                #{productName,jdbcType=VARCHAR},
+            </if> 
+            <if test="unit != null" >
+                #{unit,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolProductCustomsNbyb" parameterType="com.isell.service.custorms.po.CoolProductCustomsNbyb" >
+        UPDATE cool_product_customs_nbyb
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="pId != null" >
+                p_id = #{pId,jdbcType=INTEGER},
+            </if>
+            <if test="gId != null" >
+                g_id = #{gId,jdbcType=INTEGER},
+            </if>
+            <if test="productCode != null" >
+                product_code = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null" >
+                product_name = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="unit != null" >
+                unit = #{unit,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

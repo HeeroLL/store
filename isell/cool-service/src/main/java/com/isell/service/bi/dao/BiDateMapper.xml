@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.bi.dao.BiDateMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.bi.vo.BiDate">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="date" jdbcType="VARCHAR" property="date"/>
+        <result column="year" jdbcType="VARCHAR" property="year"/>
+        <result column="quarter" jdbcType="VARCHAR" property="quarter"/>
+        <result column="month" jdbcType="VARCHAR" property="month"/>
+        <result column="day" jdbcType="VARCHAR" property="day"/>
+        <result column="week" jdbcType="VARCHAR" property="week"/>
+        <result column="longTime" jdbcType="VARCHAR" property="longtime"/>
+    </resultMap>
+    <select id="getBiDateById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             bi_date
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getBiDateByDate" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             bi_date
+        WHERE            
+            date = #{date,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllBiDate" resultMap="BaseResultMap">
+          SELECT * FROM bi_date 
+    </select>
+    
+    <delete id="deleteBiDate">
+        DELETE
+        FROM
+             bi_date
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveBiDate" parameterType="com.isell.service.bi.vo.BiDate" >
+        INSERT INTO bi_date
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="date != null" >
+                date,
+            </if>
+            <if test="year != null" >
+                year,
+            </if>
+            <if test="quarter != null" >
+                quarter,
+            </if>
+            <if test="month != null" >
+                month,
+            </if>
+            <if test="day != null" >
+                day,
+            </if>
+            <if test="week != null" >
+                week,
+            </if>
+            <if test="longtime != null" >
+                longTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="date != null" >
+                #{date,jdbcType=VARCHAR},
+            </if> 
+            <if test="year != null" >
+                #{year,jdbcType=VARCHAR},
+            </if> 
+            <if test="quarter != null" >
+                #{quarter,jdbcType=VARCHAR},
+            </if> 
+            <if test="month != null" >
+                #{month,jdbcType=VARCHAR},
+            </if> 
+            <if test="day != null" >
+                #{day,jdbcType=VARCHAR},
+            </if> 
+            <if test="week != null" >
+                #{week,jdbcType=VARCHAR},
+            </if> 
+            <if test="longtime != null" >
+                #{longtime,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateBiDate" parameterType="com.isell.service.bi.vo.BiDate" >
+        UPDATE bi_date
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="date != null" >
+                date = #{date,jdbcType=VARCHAR},
+            </if>
+            <if test="year != null" >
+                year = #{year,jdbcType=VARCHAR},
+            </if>
+            <if test="quarter != null" >
+                quarter = #{quarter,jdbcType=VARCHAR},
+            </if>
+            <if test="month != null" >
+                month = #{month,jdbcType=VARCHAR},
+            </if>
+            <if test="day != null" >
+                day = #{day,jdbcType=VARCHAR},
+            </if>
+            <if test="week != null" >
+                week = #{week,jdbcType=VARCHAR},
+            </if>
+            <if test="longtime != null" >
+                longTime = #{longtime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

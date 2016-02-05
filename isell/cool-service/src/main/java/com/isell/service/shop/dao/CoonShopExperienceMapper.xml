@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopExperienceMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShopExperience">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="ann_info" jdbcType="VARCHAR" property="annInfo"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="qr_code" jdbcType="VARCHAR" property="qrCode"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+    </resultMap>
+    <select id="getCoonShopExperienceById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_experience
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonShopExperience" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_experience 
+    </select>
+    
+    <delete id="deleteCoonShopExperience">
+        DELETE
+        FROM
+             coon_shop_experience
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShopExperience" parameterType="com.isell.service.shop.vo.CoonShopExperience" >
+        INSERT INTO coon_shop_experience
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="code != null" >
+                code,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="logo != null" >
+                logo,
+            </if>
+            <if test="annInfo != null" >
+                ann_info,
+            </if>
+            <if test="img != null" >
+                img,
+            </if>
+            <if test="qrCode != null" >
+                qr_code,
+            </if>
+            <if test="sort != null" >
+                sort,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="userId != null" >
+                #{userId,jdbcType=VARCHAR},
+            </if> 
+            <if test="code != null" >
+                #{code,jdbcType=VARCHAR},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if> 
+            <if test="logo != null" >
+                #{logo,jdbcType=VARCHAR},
+            </if> 
+            <if test="annInfo != null" >
+                #{annInfo,jdbcType=VARCHAR},
+            </if> 
+            <if test="img != null" >
+                #{img,jdbcType=VARCHAR},
+            </if> 
+            <if test="qrCode != null" >
+                #{qrCode,jdbcType=VARCHAR},
+            </if> 
+            <if test="sort != null" >
+                #{sort,jdbcType=INTEGER},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopExperience" parameterType="com.isell.service.shop.vo.CoonShopExperience" >
+        UPDATE coon_shop_experience
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null" >
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="logo != null" >
+                logo = #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="annInfo != null" >
+                ann_info = #{annInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                img = #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="qrCode != null" >
+                qr_code = #{qrCode,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

@@ -149,7 +149,28 @@ public class CoolOrderParam  extends PageConfig{
 	 */
 	private List<CoolProductReview> reviewList;
 
-	public String getLocationP() {
+	/**
+	 * 快递模板code 
+	 */
+	
+	private String expressCode;
+	
+	/**
+	 * 商品名称
+	 */
+	private String pName;
+	
+	
+	
+	public String getExpressCode() {
+        return expressCode;
+    }
+
+    public void setExpressCode(String expressCode) {
+        this.expressCode = expressCode;
+    }
+
+    public String getLocationP() {
 		return locationP;
 	}
 
@@ -379,6 +400,14 @@ public class CoolOrderParam  extends PageConfig{
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getpName() {
+		return pName;
+	}
+
+	public void setpName(String pName) {
+		this.pName = pName;
 	}
 
 }

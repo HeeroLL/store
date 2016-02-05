@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.task.product.dao.WhProductCustomsStockConMapper">
+    <resultMap id="BaseResultMap" type="com.isell.task.product.vo.WhProductCustomsStockCon">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="customs_type" jdbcType="VARCHAR" property="customsType"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime"/>
+    </resultMap>
+    <select id="getWhProductCustomsStockConById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             wh_product_customs_stock_con
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getWhProductCustomsStock" resultMap="BaseResultMap" parameterType="com.isell.task.product.vo.WhProductCustomsStockCon">
+        SELECT
+            *
+        FROM
+             wh_product_customs_stock_con
+        WHERE 1=1
+        	<if test="customsType != null and customsType != ''" >
+                and customs_type = #{customsType,jdbcType=INTEGER}
+            </if>
+    </select>
+    
+    
+    <select id="findAllWhProductCustomsStockCon" resultMap="BaseResultMap">
+          SELECT * FROM wh_product_customs_stock_con 
+    </select>
+    
+    <delete id="deleteWhProductCustomsStockCon">
+        DELETE
+        FROM
+             wh_product_customs_stock_con
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveWhProductCustomsStockCon" parameterType="com.isell.task.product.vo.WhProductCustomsStockCon" >
+        INSERT INTO wh_product_customs_stock_con
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="customsType != null" >
+                customs_type,
+            </if>
+            <if test="updatetime != null" >
+                updateTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="customsType != null" >
+                #{customsType,jdbcType=VARCHAR},
+            </if> 
+            <if test="updatetime != null" >
+                #{updatetime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateWhProductCustomsStockCon" parameterType="com.isell.task.product.vo.WhProductCustomsStockCon" >
+        UPDATE wh_product_customs_stock_con
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="customsType != null" >
+                customs_type = #{customsType,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null" >
+                updateTime = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

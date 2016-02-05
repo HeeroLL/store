@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.product.dao.CoolProductImgMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.product.vo.CoolProductImg">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="home" jdbcType="BIT" property="home"/>
+    </resultMap>
+    <select id="getCoolProductImgById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_img
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <!-- 根据商品主键查询 -->
+    <select id="findCoolProductImgListByGoodsId" resultMap="BaseResultMap">
+          SELECT * FROM cool_product_img where goods_id = #{goodsId,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolProductImg" resultMap="BaseResultMap">
+          SELECT * FROM cool_product_img 
+    </select>
+    
+    <delete id="deleteCoolProductImg">
+        DELETE
+        FROM
+             cool_product_img
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolProductImg" parameterType="com.isell.service.product.vo.CoolProductImg" >
+        INSERT INTO cool_product_img
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="img != null" >
+                img,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+            <if test="goodsId != null" >
+                goods_id,
+            </if>
+            <if test="home != null" >
+                home,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="img != null" >
+                #{img,jdbcType=VARCHAR},
+            </if> 
+            <if test="remark != null" >
+                #{remark,jdbcType=VARCHAR},
+            </if> 
+            <if test="goodsId != null" >
+                #{goodsId,jdbcType=INTEGER},
+            </if> 
+            <if test="home != null" >
+                #{home,jdbcType=BIT},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolProductImg" parameterType="com.isell.service.product.vo.CoolProductImg" >
+        UPDATE cool_product_img
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="img != null" >
+                img = #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsId != null" >
+                goods_id = #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="home != null" >
+                home = #{home,jdbcType=BIT},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

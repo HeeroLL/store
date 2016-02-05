@@ -45,6 +45,10 @@ public class CoolMessage extends PageConfig{
      * 
      */
     private Integer operatorId;
+    
+    private String role;
+    
+    private String title;
 
     /**
      * 
@@ -144,5 +148,21 @@ public class CoolMessage extends PageConfig{
      */
     public void setOperatorId(Integer operatorId){
         this.operatorId = operatorId;
-    }    
+    }
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}    
 }

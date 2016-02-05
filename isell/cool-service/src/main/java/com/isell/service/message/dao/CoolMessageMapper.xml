@@ -10,6 +10,8 @@
         <result column="click" jdbcType="INTEGER" property="click"/>
         <result column="sendtime" jdbcType="TIMESTAMP" property="sendtime"/>
         <result column="operator_id" jdbcType="INTEGER" property="operatorId"/>
+        <result column="role" jdbcType="VARCHAR" property="role"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
     </resultMap>
     <select id="getCoolMessageById" resultMap="BaseResultMap">
         SELECT
@@ -75,6 +77,12 @@
             <if test="operatorId != null" >
                 operator_id,
             </if>
+            <if test="role != null" >
+                role,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -100,6 +108,12 @@
             </if> 
             <if test="operatorId != null" >
                 #{operatorId,jdbcType=INTEGER},
+            </if> 
+            <if test="role != null" >
+                #{role,jdbcType=INTEGER},
+            </if> 
+            <if test="title != null" >
+                #{title,jdbcType=INTEGER},
             </if> 
         </trim>
     </insert>
@@ -130,6 +144,12 @@
             </if>
             <if test="operatorId != null" >
                 operator_id = #{operatorId,jdbcType=INTEGER},
+            </if>
+            <if test="role != null" >
+                role = #{role,jdbcType=INTEGER},
+            </if>
+            <if test="title != null" >
+                title = #{title,jdbcType=INTEGER},
             </if>
         </set>
         WHERE 

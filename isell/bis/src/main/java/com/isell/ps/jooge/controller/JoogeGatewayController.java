@@ -1,14 +1,12 @@
 package com.isell.ps.jooge.controller;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -160,8 +158,7 @@ public class JoogeGatewayController {
         Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
         String orderNo = (String)paramMap.get("Id");
         CoolOrder coolOrder = orderService.getCoolOrderDetailByOrderNo(orderNo);
-        if (coolOrder == null || coolOrder.getUpdatetime() == null || coolOrder.getFhfs() == null
-            || coolOrder.getFhfs() != CoolOrder.FHFS_10) {
+        if (coolOrder == null || coolOrder.getUpdatetime() == null || coolOrder.getFhfs() == null) {
             throw new RuntimeException("exception.order.null");
         }
         OrderDetail orderDetail = new OrderDetail();
@@ -174,10 +171,10 @@ public class JoogeGatewayController {
         if (coolOrder.getPayTime() != null) {
             order.setPayTime(DateUtil.dateToStr(DateUtil.yyyy_MM_dd_HH_mm_ss, coolOrder.getPayTime())); // 订单付款时间，未付款订单可以不填
         }
-        if (StringUtils.isEmpty(coolOrder.getPsCode())) {
-            order.setStatus("40"); // 已付款未发货
+        if (coolOrder.getFhfs() != CoolOrder.FHFS_10) {
+            order.setStatus("10"); // 已取消
         } else {
-            order.setStatus("50"); // 已发货
+            order.setStatus("40"); // 已付款未发货
         }
         order.setReceiverName(coolOrder.getLinkman()); // 收货人姓名
         order.setReceiverProvince(coolOrder.getLocationP()); // 收货人所在省
@@ -193,7 +190,7 @@ public class JoogeGatewayController {
         order.setBuyerEmail(coolOrder.getMobile() + "@163.com"); // 买家邮箱地址，跨境订单必填
         order.setBuyerPhone(coolOrder.getMobile()); // 买家手机号，跨境订单必填
         order.setFeeAmount(coolOrder.getPsPrice()); // 向买家收取的运费
-        order.setDiscount(0); // 整单优惠金额
+        order.setDiscount(coolOrder.getDiscountPrice()); // 整单优惠金额
         order.setPayAmount(coolOrder.getTotal()); // 整单付款金额
         order.setDeliveryWay("物流"); // 发货方式（物流，自提）
         order.setPayments(new ArrayList<Payment>(1)); // 订单支付信息，跨境订单必填
@@ -203,19 +200,19 @@ public class JoogeGatewayController {
             for (CoolOrderItem item : coolOrder.getItemList()) {
                 OrderRow row = new OrderRow();
                 row.setOrderRowId(item.getId() + ""); // 订单行Id
-                row.setMerchId(item.getGid() + "");// 商品Id 或 Sku Id
+                row.setMerchId("isell" + item.getGid());// 商品Id 或 Sku Id
                 row.setRowDesc(item.getName());// 行描述
                 row.setQty(item.getCount()); // 行数量
                 row.setPrice(item.getPrice());// 单价
                 row.setAdjustFee(0); // 行调整金额
                 
                 // TODO: 这是订单造假部分
-                if (coolOrder.getTotal().subtract(coolOrder.getPsPrice()).compareTo(new BigDecimal(100)) > 0
-                    && coolOrder.getItemList().size() == 1) { // 订单金额如果大于0，且只有一种产品时，改价格
-                    BigDecimal payAmount = new BigDecimal(99).add(coolOrder.getPsPrice());
-                    order.setPayAmount(payAmount);
-                    row.setPrice(new BigDecimal(99).divide(new BigDecimal(item.getCount()), 2, RoundingMode.HALF_UP));// 单价
-                }
+                /*
+                 * if (coolOrder.getTotal().subtract(coolOrder.getPsPrice()).compareTo(new BigDecimal(100)) > 0 &&
+                 * coolOrder.getItemList().size() == 1) { // 订单金额如果大于0，且只有一种产品时，改价格 BigDecimal payAmount = new
+                 * BigDecimal(99).add(coolOrder.getPsPrice()); order.setPayAmount(payAmount); row.setPrice(new
+                 * BigDecimal(99).divide(new BigDecimal(item.getCount()), 2, RoundingMode.HALF_UP));// 单价 }
+                 */
                 // 行金额，应等于Qty * Price – AdjustFee
                 row.setAmount(new BigDecimal(item.getCount()).multiply((BigDecimal)row.getPrice()));
                 order.getRows().add(row);
@@ -231,6 +228,15 @@ public class JoogeGatewayController {
             case 3:
                 pay.setPaymentMethod("30"); // 微信支付
                 break;
+            case 4:
+                pay.setPaymentMethod("23"); // 易极付支付
+                break;
+            case 5:
+                pay.setPaymentMethod("24"); // 易宝支付
+                break;
+            case 6:
+                pay.setPaymentMethod("90"); // 浙江银商
+                break;    
             default:
                 pay.setPaymentMethod("20"); // 网银支付
                 break;
@@ -309,7 +315,7 @@ public class JoogeGatewayController {
         if (page.getRows() != null) {
             for (CoolProduct coolProduct : page.getRows()) {
                 Merch merch = new Merch();
-                merch.setId(String.valueOf(coolProduct.getId()));
+                merch.setId("isell" + coolProduct.getId());
                 merch.setCode(merch.getId());
                 merch.setName(coolProduct.getNameEn());
                 merch.setPrice(coolProduct.getPrice());
@@ -335,7 +341,8 @@ public class JoogeGatewayController {
     public ProductInfo getProductDetail(JoogeParam param) {
         Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
         CoolProductSelect coolProductSelect = new CoolProductSelect();
-        coolProductSelect.setId(Integer.parseInt((String)paramMap.get("Id")));
+        String id = (String)paramMap.get("Id");
+        coolProductSelect.setId(Integer.parseInt(id.substring("isell".length())));
         coolProductSelect.setSearchDetail(true);
         
         ProductInfo productInfo = new ProductInfo();
@@ -346,7 +353,7 @@ public class JoogeGatewayController {
             throw new RuntimeException("exception.product.null");
         }
         Merch merch = new Merch();
-        merch.setId(String.valueOf(coolProduct.getId()));
+        merch.setId("isell" + coolProduct.getId());
         merch.setCode(merch.getId());
         merch.setName(coolProduct.getNameEn());
         merch.setPrice(coolProduct.getPrice());
@@ -358,7 +365,7 @@ public class JoogeGatewayController {
             merch.setSkus(new ArrayList<SKU>());
             for (CoolProductGg gg : coolProduct.getGgList()) {
                 SKU sku = new SKU();
-                sku.setSkuId(gg.getId() + "");
+                sku.setSkuId("isell" + gg.getId());
                 sku.setCode(sku.getSkuId());
                 sku.setPrice(gg.getCxjg());
                 sku.setProps(new ArrayList<Prop>(1));
@@ -374,17 +381,18 @@ public class JoogeGatewayController {
     
     /**
      * 推送商品库存
+     * 
      * @param param
      */
     @SuppressWarnings("unchecked")
     @RequestMapping("inventory/update")
     @ResponseBody
-    public Stock invenToryUpdate(JoogeParam param){
-    	  Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
-    	  Stock s = new Stock();
-    	  s.setId((String)paramMap.get("Id"));
-    	  s.setQty((Integer)paramMap.get("Qty"));
-    	  s.setWarehouse((String)paramMap.get("Warehouse"));
-    	  return s;
+    public Stock invenToryUpdate(JoogeParam param) {
+        Map<String, Object> paramMap = JsonUtil.readValue(param.getParam(), Map.class);
+        Stock s = new Stock();
+        s.setId((String)paramMap.get("Id"));
+        s.setQty((Integer)paramMap.get("Qty"));
+        s.setWarehouse((String)paramMap.get("Warehouse"));
+        return s;
     }
 }

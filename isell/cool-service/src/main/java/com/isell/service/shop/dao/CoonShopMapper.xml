@@ -31,6 +31,9 @@
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="is_channel_selected" jdbcType="VARCHAR" property="isChannelSelected"/>
         <result column="vip" jdbcType="INTEGER" property="vip"/>
+        <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
+        <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
+        <result column="sms_ed" jdbcType="INTEGER" property="smsEd"/>
     </resultMap>
     <resultMap id="CoonShopPartnerInfoMap" type="com.isell.service.shop.po.CoonShopPartnerInfo">
         <id column="id" jdbcType="VARCHAR" property="id"/>
@@ -63,6 +66,18 @@
         WHERE  is_experience = '1' 
     </select>
     
+     <!-- 根据条件查询体验店列表-->
+    <select id="getCoonShopExperienceList" resultMap="BaseResultMap" parameterType="com.isell.service.shop.vo.CoonShop">
+        SELECT
+            *
+        FROM
+             coon_shop
+        WHERE  is_experience = '1' 
+        <if test="name != null and name!=''">
+        		and name like CONCAT(CONCAT('%', #{name}), '%')
+        	</if>
+    </select>
+    
     <!-- 分页查询酷店信息 -->
     <select id="getCoonShopListPage" resultMap="BaseResultMap" parameterType="com.isell.service.shop.vo.CoonShop">
         SELECT
@@ -71,8 +86,32 @@
              coon_shop
         WHERE  1=1
         	<if test="name != null and name!=''">
-        		and name like #{name,jdbcType=VARCHAR} || '%'
+        		and name like CONCAT(CONCAT('%', #{name}), '%')
         	</if>
+        	<if test="rand == '1'.toString()">
+        		order by rand()
+        	</if>        	
+    </select>
+    
+     <!-- 分页查询有上架商品的酷店信息 -->
+    <select id="getCoonShopPListPage" resultMap="BaseResultMap" parameterType="com.isell.service.shop.vo.CoonShop">
+        SELECT
+            s.*
+        FROM
+             coon_shop s
+        INNER JOIN 
+        	(select distinct s_id  from coon_shop_product where added = 1) p on p.s_id = s.id
+        	<!-- 
+       	inner join 
+       		(select distinct supplier  from cool_order where  state=0 or state=1 or state=2 or state=3 or state=1 or state=11) o on o.supplier = s.id
+      	 -->
+        WHERE  1=1
+        	<if test="name != null and name!=''">
+        		and s.name like #{name,jdbcType=VARCHAR}
+        	</if>
+        	<if test="rand == '1'.toString()">
+        		order by rand()
+        	</if>        	
     </select>
     
     <!-- 获取合伙人奖励明细列表 -->
@@ -258,6 +297,15 @@
             <if test="isChannelSelected != null" >
                 is_channel_selected,
             </if>
+            <if test="longitude != null" >
+                longitude,
+            </if>
+            <if test="latitude != null" >
+                latitude,
+            </if>
+            <if test="smsEd != null" >
+                sms_ed,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -337,6 +385,15 @@
             </if>
             <if test="isChannelSelected != null" >
                 #{isChannelSelected,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null" >
+                #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null" >
+                #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="smsEd != null" >
+                #{sms_ed,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -418,6 +475,15 @@
             </if>
             <if test="isChannelSelected != null" >
                 is_channel_selected = #{isChannelSelected,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null" >
+                longitude = #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null" >
+                latitude = #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="smsEd != null" >
+                sms_ed = #{smsEd,jdbcType=INTEGER},
             </if>
         </set>
         WHERE 

@@ -42,6 +42,16 @@ public class CoolProductSelect extends PageConfig{
      * 结束的修改时间
      */
     private Date endUpdatetime;
+    
+    /**
+     * 该字符串由两位组成 第一位：1:佣金  2：售价 3:销量 默认按佣金；第二位：1：升序  2：降序 默认降序
+     */
+    private String orderBy;
+    
+    /**
+     * 商品分类
+     */
+    private Integer type;
 
     public Integer getId() {
         return id;
@@ -98,6 +108,22 @@ public class CoolProductSelect extends PageConfig{
     public void setEndUpdatetime(Date endUpdatetime) {
         this.endUpdatetime = endUpdatetime;
     }
+
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
     
      
 }

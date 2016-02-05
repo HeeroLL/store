@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopShareExperienceMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShopShareExperience">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="subject" jdbcType="VARCHAR" property="subject"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="s_shop" jdbcType="VARCHAR" property="sShop"/>
+        <result column="m_id" jdbcType="INTEGER" property="mId"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+    </resultMap>
+    <resultMap id="ShareExperienceMap" type="com.isell.service.shop.vo.CoonShopShareExperience">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="subject" jdbcType="VARCHAR" property="subject"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="s_shop" jdbcType="VARCHAR" property="sShop"/>
+        <result column="m_id" jdbcType="INTEGER" property="mId"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="shopName" jdbcType="VARCHAR" property="shopName"/>
+        <result column="shopLogo" jdbcType="VARCHAR" property="shopLogo"/>
+        <result column="shopLevel" jdbcType="VARCHAR" property="shopLevel"/>
+    </resultMap>
+    <select id="getCoonShopShareExperienceById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_share_experience
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 分页查询分享经验心得 -->
+     <select id="getCoonShopShareExperiencePage" resultMap="ShareExperienceMap" parameterType="com.isell.service.shop.po.CoonShopShareParam">
+        SELECT
+            e.*
+        <if test="sShop != null and sShop != ''">
+        	,s.name as shopName,s.logo as shopLogo,s.level as shopLevel 
+        </if>
+        FROM
+             coon_shop_share_experience e
+        <if test="sShop != null and sShop != ''">
+        	Left join
+        		coon_shop s on e.s_shop = s.id
+        </if>        
+        WHERE      1=1              
+        <if test="id != null and id != ''">
+			and e.id = #{id,jdbcType=VARCHAR}
+        </if>   
+        <if test="sShop != null and sShop != ''">
+			and e.s_shop = #{sShop,jdbcType=VARCHAR}
+        </if>  
+        <if test="mId != null">
+			and e.m_id = #{mId,jdbcType=VARCHAR}
+        </if> 
+            
+    </select>
+    
+    <select id="findAllCoonShopShareExperience" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_share_experience 
+    </select>
+    
+    <delete id="deleteCoonShopShareExperience">
+        DELETE
+        FROM
+             coon_shop_share_experience
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShopShareExperience" parameterType="com.isell.service.shop.vo.CoonShopShareExperience" >
+        INSERT INTO coon_shop_share_experience
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="img != null" >
+                img,
+            </if>
+            <if test="subject != null" >
+                subject,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="sShop != null" >
+                s_shop,
+            </if>
+            <if test="mId != null" >
+                m_id,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="img != null" >
+                #{img,jdbcType=VARCHAR},
+            </if> 
+            <if test="subject != null" >
+                #{subject,jdbcType=VARCHAR},
+            </if> 
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if> 
+            <if test="sShop != null" >
+                #{sShop,jdbcType=VARCHAR},
+            </if> 
+            <if test="mId != null" >
+                #{mId,jdbcType=INTEGER},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopShareExperience" parameterType="com.isell.service.shop.vo.CoonShopShareExperience" >
+        UPDATE coon_shop_share_experience
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                img = #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null" >
+                subject = #{subject,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="sShop != null" >
+                s_shop = #{sShop,jdbcType=VARCHAR},
+            </if>
+            <if test="mId != null" >
+                m_id = #{mId,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

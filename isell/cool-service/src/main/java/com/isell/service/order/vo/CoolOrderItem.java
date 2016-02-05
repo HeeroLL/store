@@ -90,6 +90,11 @@ public class CoolOrderItem {
     private Integer gid;
     
     /**
+     * 商品编码
+     */
+    private String code;
+    
+    /**
      * 分佣比例(%)
      */
     private BigDecimal brokerage;
@@ -98,6 +103,11 @@ public class CoolOrderItem {
      * 佣金
      */
     private BigDecimal profit;
+    
+    /**
+     * 批发价格
+     */
+    private BigDecimal pfPrice;
     
     public Integer getId() {
         return id;
@@ -242,4 +252,20 @@ public class CoolOrderItem {
 	public void setProfit(BigDecimal profit) {
 		this.profit = profit;
 	}
+
+	public BigDecimal getPfPrice() {
+		return pfPrice;
+	}
+
+	public void setPfPrice(BigDecimal pfPrice) {
+		this.pfPrice = pfPrice;
+	}
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 }

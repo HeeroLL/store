@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopFavMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShopFav">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="m_id" jdbcType="VARCHAR" property="mId"/>
+        <result column="s_id" jdbcType="VARCHAR" property="sId"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+    </resultMap>
+    <resultMap id="CoonShopFavMap" type="com.isell.service.shop.vo.CoonShopFav">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="m_id" jdbcType="VARCHAR" property="mId"/>
+        <result column="s_id" jdbcType="VARCHAR" property="sId"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="shopname" jdbcType="VARCHAR" property="shopname"/>
+        <result column="shoplogo" jdbcType="VARCHAR" property="shoplogo"/>
+    </resultMap>
+    <select id="getCoonShopFavById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_fav
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根据会员主键以及酷店主键查询 -->
+     <select id="findCoonShopFavByIdAndSId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_fav
+        WHERE            
+            m_id = #{mId,jdbcType=VARCHAR} and s_id = #{sId,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonShopFav" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_fav 
+    </select>
+    
+    <!-- 分页查询酷店收藏列表信息 -->
+     <select id="findCoonShopFavListPage" resultMap="CoonShopFavMap" parameterType="com.isell.service.shop.vo.CoonShopFav" >
+          SELECT f.*,ifnull(m.petname,m.realname) as name,m.logo,n.name as shopname,n.logo as shoplogo
+          FROM coon_shop_fav f 
+          inner join cool_member m on m.user_id = f.m_id
+          inner join coon_shop n on n.id=f.s_id
+          where 1=1
+          <if test="sId != null and sId != ''">
+          	and f.s_id = #{sId,jdbcType=VARCHAR}
+          </if>
+          <if test="mId != null and mId != ''">
+          	and f.m_id = #{mId,jdbcType=VARCHAR}
+          </if>
+    </select>
+    <!-- 查询收藏的数量 -->
+     <select id="getCoonShopFavCount" resultType="java.lang.Integer" parameterType="com.isell.service.shop.vo.CoonShopFav" >
+          SELECT ifnull(count(1),0)
+          FROM coon_shop_fav f 
+          inner join cool_member m on m.user_id = f.m_id
+          inner join coon_shop n on n.id=f.s_id
+          where 1=1
+          <if test="sId != null and sId != ''">
+          	and f.s_id = #{sId,jdbcType=VARCHAR}
+          </if>
+          <if test="mId != null and mId != ''">
+          	and f.m_id = #{mId,jdbcType=VARCHAR}
+          </if>
+    </select>
+    
+    <delete id="deleteCoonShopFav">
+        DELETE
+        FROM
+             coon_shop_fav
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShopFav" parameterType="com.isell.service.shop.vo.CoonShopFav" >
+        INSERT INTO coon_shop_fav
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="mId != null" >
+                m_id,
+            </if>
+            <if test="sId != null" >
+                s_id,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="mId != null" >
+                #{mId,jdbcType=VARCHAR},
+            </if> 
+            <if test="sId != null" >
+                #{sId,jdbcType=VARCHAR},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopFav" parameterType="com.isell.service.shop.vo.CoonShopFav" >
+        UPDATE coon_shop_fav
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="mId != null" >
+                m_id = #{mId,jdbcType=VARCHAR},
+            </if>
+            <if test="sId != null" >
+                s_id = #{sId,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

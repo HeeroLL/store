@@ -43,6 +43,6 @@ public interface CoonFareTempProMapper{
     /**
      * 根据省份获取了、快递费用信息
      */
-    public List<CoonFareTempPro> getCoonFareTempProByPro(@Param("province")String province);
+    public List<CoonFareTempPro> getCoonFareTempProByPro(@Param("province")String province,@Param("expressCode")String expressCode);
 }
 

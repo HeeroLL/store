@@ -158,6 +158,11 @@ public class CoonRunAccount extends PageConfig{
      * 流水状态 1：可提现 2：即将可用
      */
     private String state;
+    
+    /**
+     * 验证码
+     */
+    private String securityCode;
 
     /**
      * 主键ID
@@ -434,5 +439,13 @@ public class CoonRunAccount extends PageConfig{
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getSecurityCode() {
+		return securityCode;
+	}
+
+	public void setSecurityCode(String securityCode) {
+		this.securityCode = securityCode;
 	}    
 }

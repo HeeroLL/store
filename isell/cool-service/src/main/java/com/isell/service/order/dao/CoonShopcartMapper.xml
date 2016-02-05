@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.order.dao.CoonShopcartMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.order.vo.CoonShopcart">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="p_id" jdbcType="VARCHAR" property="pId"/>
+        <result column="g_id" jdbcType="VARCHAR" property="gId"/>
+        <result column="quantity" jdbcType="INTEGER" property="quantity"/>
+        <result column="s_id" jdbcType="VARCHAR" property="sId"/>
+    </resultMap>    
+    <resultMap id="CoonShopCartInfoMap" type="com.isell.service.order.po.CoonShopCartInfo">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="p_id" jdbcType="VARCHAR" property="pId"/>
+        <result column="g_id" jdbcType="VARCHAR" property="gId"/>
+        <result column="quantity" jdbcType="INTEGER" property="quantity"/>
+        <result column="s_id" jdbcType="VARCHAR" property="sId"/> 
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="gg" jdbcType="VARCHAR" property="gg"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+    </resultMap>
+    <select id="getCoonShopcartById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shopcart
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根据条件查询 -->
+    <select id="getCoonShopcart" resultMap="BaseResultMap" parameterType="com.isell.service.order.vo.CoonShopcart" >
+        SELECT
+            *
+        FROM
+             coon_shopcart
+        WHERE    1=1 
+        <if test="userId != null and userId != ''">
+        	 	and user_id = #{userId,jdbcType=VARCHAR}
+       	</if>   
+       	<if test="pId != null and pId != ''">
+        	 	and p_id = #{pId,jdbcType=VARCHAR}
+       	</if>
+       	<if test="gId != null and gId != ''">
+        	 	and g_id = #{gId,jdbcType=VARCHAR}
+       	</if>
+       	<if test="sId != null and sId != ''">
+        	 	and s_id = #{sId,jdbcType=VARCHAR}
+       	</if>
+    </select>
+    
+    <!-- 根据查询条件查询购物车列表信息 -->
+    <select id="findCoonShopCartInfoList" resultMap="CoonShopCartInfoMap" parameterType="com.isell.service.order.vo.CoonShopcart" >
+        SELECT
+            c.*,p.name,p.name_en,p.type,p.logo,ifnull(g.cxjg,g.jg) as price,g.gg,g.stock
+        FROM
+            coon_shopcart c
+        LEFT JOIN 
+        	cool_product p on p.id = c.p_id
+       	LEFT JOIN 
+       		cool_product_gg g on (g.id = c.g_id or g.gg = c.g_id)
+        WHERE   1=1
+        	<if test="userId != null and userId != ''">
+        	 	and c.user_id = #{userId,jdbcType=VARCHAR}
+        	</if>    
+        	<if test="pName != null and pName != ''">
+        	 	and (p.name like #{pName,jdbcType=VARCHAR} or p.name_en like #{pName,jdbcType=VARCHAR} )
+        	</if> 
+    </select>
+    
+    <select id="findAllCoonShopcart" resultMap="BaseResultMap">
+          SELECT * FROM coon_shopcart 
+    </select>
+    
+    <delete id="deleteCoonShopcart">
+        DELETE
+        FROM
+             coon_shopcart
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShopcart" parameterType="com.isell.service.order.vo.CoonShopcart" >
+        INSERT INTO coon_shopcart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="pId != null" >
+                p_id,
+            </if>
+            <if test="gId != null" >
+                g_id,
+            </if>
+            <if test="quantity != null" >
+                quantity,
+            </if>
+            <if test="sId != null" >
+                s_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="userId != null" >
+                #{userId,jdbcType=VARCHAR},
+            </if> 
+            <if test="pId != null" >
+                #{pId,jdbcType=VARCHAR},
+            </if> 
+            <if test="gId != null" >
+                #{gId,jdbcType=VARCHAR},
+            </if> 
+            <if test="quantity != null" >
+                #{quantity,jdbcType=INTEGER},
+            </if> 
+            <if test="sId != null" >
+                #{sId,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopcart" parameterType="com.isell.service.order.vo.CoonShopcart" >
+        UPDATE coon_shopcart
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="pId != null" >
+                p_id = #{pId,jdbcType=VARCHAR},
+            </if>
+            <if test="gId != null" >
+                g_id = #{gId,jdbcType=VARCHAR},
+            </if>
+            <if test="quantity != null" >
+                quantity = #{quantity,jdbcType=INTEGER},
+            </if>
+            <if test="sId != null" >
+                s_id = #{sId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

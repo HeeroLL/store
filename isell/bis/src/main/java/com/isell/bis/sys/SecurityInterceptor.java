@@ -39,6 +39,11 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         if (ignoreValidation) {
             return true;
         }
+        // 如果是forward过来的请求，原始请求已校验过，不需校验后续请求
+        if (request.getAttribute("javax.servlet.forward.request_uri") != null) {
+            return true;
+        }
+        
         // 忽略指定的包的url
         if (CollectionUtils.isNotEmpty(ignorePackageList)) {
             for (String pkg : ignorePackageList) {

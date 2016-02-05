@@ -46,6 +46,6 @@ public class BasicValidator implements BisValidator {
     
     @Override
     public String generateAuthCode(String jsonObj, String privateKey) {
-        return Coder.encryptBASE64(Coder.encryptMD5(jsonObj + privateKey));
+        return Coder.encodeMd5(jsonObj + privateKey);
     }
 }

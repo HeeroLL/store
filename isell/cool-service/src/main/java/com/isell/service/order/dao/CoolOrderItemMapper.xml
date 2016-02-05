@@ -20,6 +20,7 @@
         <result column="gid" jdbcType="INTEGER" property="gid"/>
         <result column="brokerage" jdbcType="DECIMAL" property="brokerage"/>
          <result column="profit" jdbcType="DECIMAL" property="profit"/>
+         <result column="pf_price" jdbcType="DECIMAL" property="pfPrice"/>
     </resultMap>
     <!-- 商品销量Map -->
     <resultMap id="ProductSalesMap" type="com.isell.service.order.po.CoolProductSales">
@@ -145,6 +146,9 @@
             <if test="profit != null" >
                 profit,
             </if>
+            <if test="pfPrice != null" >
+                pf_price,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -201,6 +205,9 @@
             <if test="profit != null" >
                 #{profit,jdbcType=DECIMAL},
             </if> 
+            <if test="pfPrice != null" >
+                #{pfPrice,jdbcType=DECIMAL},
+            </if>
         </trim>
     </insert>
 
@@ -257,6 +264,9 @@
             </if>
             <if test="profit != null" >
                 profit = #{profit,jdbcType=DECIMAL},
+            </if>
+            <if test="pfPrice != null" >
+                pf_price = #{pfPrice,jdbcType=DECIMAL},
             </if>
         </set>
         WHERE 

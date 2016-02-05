@@ -93,9 +93,14 @@ public class CoolOrderSelect extends PageConfig {
     private String orderNo;
     
     /**
-     * 订单客户id
+     * 订单客户id(会员id)
      */
     private Integer mId;
+    
+    /**
+     * 订单客户id(用户id)
+     */
+    private Integer userId;
     
     /**
      * 发货时间
@@ -156,6 +161,11 @@ public class CoolOrderSelect extends PageConfig {
      * 酷店id
      */
     private String supplier;
+    /** 酷店名称 */
+    private String sName;
+    
+    /** 购买商品名称 */
+    private String pName; 
     
     /**
      * 
@@ -256,6 +266,11 @@ public class CoolOrderSelect extends PageConfig {
      * 结束发货时间
      */
     private Date endUpdatetime;
+    
+    /**
+     * app查询参数
+     */
+    private String appSelect;
     
     public Integer getId() {
         return id;
@@ -393,7 +408,15 @@ public class CoolOrderSelect extends PageConfig {
         this.mId = mId;
     }
     
-    public Date getUpdatetime() {
+    public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public Date getUpdatetime() {
         return updatetime;
     }
     
@@ -648,4 +671,28 @@ public class CoolOrderSelect extends PageConfig {
     public void setFhfs(Byte fhfs) {
         this.fhfs = fhfs;
     }
+
+	public String getsName() {
+		return sName;
+	}
+
+	public void setsName(String sName) {
+		this.sName = sName;
+	}
+
+	public String getpName() {
+		return pName;
+	}
+
+	public void setpName(String pName) {
+		this.pName = pName;
+	}
+
+	public String getAppSelect() {
+		return appSelect;
+	}
+
+	public void setAppSelect(String appSelect) {
+		this.appSelect = appSelect;
+	}
 }

@@ -43,6 +43,15 @@ public interface CoonShopMapper{
     List<CoonShop> getCoonShopListPage(RowBounds rowBounds, CoonShop coonShop);
     
     /**
+     * 分页查询有上架商品的酷店信息
+     * 
+     * @param rowBounds 分页信息
+     * @param coonShop 参数
+     * @return 酷店列表
+     */
+    List<CoonShop> getCoonShopPListPage(RowBounds rowBounds, CoonShop coonShop);
+    
+    /**
      * 根据推荐店铺主键获取二级酷店信息
      * 
      * @param recommendId
@@ -64,6 +73,13 @@ public interface CoonShopMapper{
      * @return 酷店列表
      */
     List<CoonShop> findAllCoonShopExperience();
+    
+    /**
+     * 根据条件查询体验店列表
+     * 
+     * @return 酷店列表
+     */
+    List<CoonShop> getCoonShopExperienceList(CoonShop coonShop);
     
     /**
      * 根据酷店主键和分销等级获取合伙人及奖励

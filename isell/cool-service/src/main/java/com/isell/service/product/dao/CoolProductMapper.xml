@@ -54,6 +54,35 @@
         <result column="divide" jdbcType="DECIMAL" property="divide"/>   
         <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
     </resultMap>
+    <!-- 商品对外接口 -->
+     <resultMap id="CoonShopProductExternal" type="com.isell.service.product.po.CoolProductExternal">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="brand" jdbcType="VARCHAR" property="brand"/>
+        <result column="country" jdbcType="VARCHAR" property="country"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="fav_price" jdbcType="DECIMAL" property="favprice"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="tax" jdbcType="DECIMAL" property="tax"/>
+   		<collection property="items" column="id" ofType="com.isell.service.product.po.CoolProductExternalGg">
+   		 	<result column="gg" jdbcType="VARCHAR" property="gg"/>
+	        <result column="jg" jdbcType="DECIMAL" property="jg"/>
+	        <result column="cxjg" jdbcType="DECIMAL" property="cxjg"/>
+	        <result column="stock" jdbcType="REAL" property="stock"/>
+	        <result column="weight" jdbcType="DOUBLE" property="weight"/>
+	        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+	        <result column="spec" jdbcType="VARCHAR" property="spec"/>
+   		</collection>
+   		<collection property="imgs" column="id" ofType="com.isell.service.product.po.CoolProductExternalImg">
+   			<result column="url" jdbcType="VARCHAR" property="url"/>
+   		</collection>
+    </resultMap>
+ 
     <select id="getCoolProductById" resultMap="BaseResultMap">
         SELECT
             *
@@ -76,6 +105,49 @@
           left join cool_product p on p.id = oi.g_id
           left join cool_product_gg g on g.id = oi.gid
           order by g.sales desc  limit 5
+    </select>
+    
+    <!-- 根据条件分页查询商品信息(不包含规格) -->
+    <select id="getCoolProductPageListNoGg" resultMap="BaseResultMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
+    	select * 
+    	from 
+    		cool_product p
+    	<if test="stock != null and stock !=''">
+          	inner join 
+          	(select distinct goods_id from cool_product_gg where 1=1 
+	          	<if test="stock =='1'.toString()" >
+	                 and stock>0 
+	          </if>  ) g on g.goods_id = p.id
+         </if>
+    	where p.shelves = 0
+          <if test="type != null">
+          	and p.type = #{type,jdbcType=INTEGER}
+          </if>
+          <if test="name != null and name != ''">
+          	and (p.name  like #{name,jdbcType=VARCHAR} or p.name_en  like #{name,jdbcType=VARCHAR})
+          </if>
+          <if test="pId != null and pId != ''">
+          	and p.id = #{pId,jdbcType=VARCHAR}
+          </if>
+          <!-- 该字符串由两位组成 第一位：1:佣金  2：售价 3:销量 默认按佣金；第二位：1：升序  2：降序 默认降序 -->
+          <if test="orderBy == '11'.toString()">
+          	order by ifnull(p.fav_price,p.price) * p.divide asc
+          </if>
+          <if test="orderBy == '12'.toString()">
+          	order by ifnull(p.fav_price,p.price) * p.divide desc
+          </if>
+          <if test="orderBy == '21'.toString()">
+          	order by ifnull(p.fav_price,p.price) asc
+          </if>
+          <if test="orderBy == '22'.toString()">
+          	order by ifnull(p.fav_price,p.price) desc
+          </if>
+          <if test="orderBy == '31'.toString()">
+            order by p.sales asc
+          </if>
+          <if test="orderBy == '32'.toString()">
+            order by p.sales desc
+          </if>
     </select>
     
     <select id="getCoolProductPageList" resultMap="BaseResultMap" parameterType="com.isell.service.product.po.CoolProductSelect">
@@ -426,4 +498,33 @@
         WHERE 
             id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="getProductInfo" resultMap="CoonShopProductExternal" parameterType="com.isell.service.product.po.CoolProductExternal">
+    	select cp.id,cp.name,cp.name_en,cp.type,cp.remark,cp.content,cp.code,
+    	cpb.name as brand,cdg.name as country,cp.price,cp.fav_price,cp.logo,cp.tax,
+    	cpg.gg,cpg.jg,cpg.cxjg,cpg.stock,cpg.weight,cpg.unit,cpg.spec,cpi.img as url
+    	from cool_product cp 
+			join cool_product_gg cpg on cp.id=cpg.goods_id
+			join cool_product_img cpi on cpi.goods_id = cp.id
+			left join cool_product_brand cpb on cpb.id = cp.brand_id
+			left join cool_dict_gbdm  cdg on cdg.id = cp.country_code
+			<where>
+				<if test="id!=null and id!=''">
+					cp.id = #{id}
+				</if>
+				<if test="name!=null and name!=''">
+					cp.name LIKE CONCAT(CONCAT('%', #{name}), '%')
+				</if>
+			</where>
+    </select>
+    <resultMap type="com.isell.service.product.po.CoolProductAliUnit" id="resultQueryGoodsAliUnit">
+    	<result property="pid" column="pid"/>
+    	<result property="unitcode" column="unitcode"/>
+    	<result property="unitvalue" column="unitvalue"/>
+    	<result property="unittype" column="unittype"/>
+    </resultMap>
+    <select id="queryGoodsAliUnit" resultMap="resultQueryGoodsAliUnit">
+    	select pid,unitcode,unitvalue,unittype
+    	from cool_product_ali_unit where pid=#{id} and unitcode is not null 
+    </select>
+    
 </mapper>

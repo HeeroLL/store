@@ -25,7 +25,7 @@ public class PayNotifyControllerTest {
         map.put("service", "commonTradePay");
         map.put("success", "true");
         map.put("signType", "MD5");
-        map.put("partnerId", "20140411020055684571");
+        map.put("partnerId", "20160108020009913795");
         map.put("tradeType", "FASTPAYTRADE");
         
         String result = HttpUtils.httpPost("http://localhost:8080/bis/payNotify/yijifu", map);

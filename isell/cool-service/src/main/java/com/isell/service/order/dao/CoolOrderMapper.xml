@@ -53,6 +53,8 @@
         <result column="refund_state" jdbcType="INTEGER" property="refundState"/>
         <result column="refund_amount" jdbcType="DECIMAL" property="refundAmount"/>
         <result column="order_oldno" jdbcType="VARCHAR" property="orderOldno"/>
+        <result column="discount_price" jdbcType="DECIMAL" property="discountPrice"/>
+        <result column="returnUrl" jdbcType="VARCHAR" property="returnUrl"/>
     </resultMap>
     <!-- 导出返回类 -->
     <resultMap id="ExportMap" type="com.isell.service.order.po.CoolOrderExport">
@@ -81,8 +83,55 @@
         <result column="logo" jdbcType="VARCHAR" property="logo"/>
         <result column="gg" jdbcType="VARCHAR" property="gg"/>
         <result column="drp_price" jdbcType="DECIMAL" property="drpPrice"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
     </resultMap>
-    
+     <!-- 商品对外查询 -->
+    <resultMap id="GetOrderExternal" type="com.isell.service.order.po.CoolOrderExternal" >
+   	  <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="location_p" jdbcType="VARCHAR" property="locationP"/>
+        <result column="location_c" jdbcType="VARCHAR" property="locationC"/>
+        <result column="location_a" jdbcType="VARCHAR" property="locationA"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="linkman" jdbcType="VARCHAR" property="linkman"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="psfs" jdbcType="VARCHAR" property="psfs"/>
+        <result column="ps_price" jdbcType="DECIMAL" property="psPrice"/>
+        <result column="zffs" jdbcType="INTEGER" property="zffs"/>
+        <result column="total" jdbcType="DECIMAL" property="total"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="order_oldno" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="ps_code" jdbcType="VARCHAR" property="psCode"/>
+        <result column="pay_time" jdbcType="TIMESTAMP" property="payTime"/>
+        <result column="trade_no" jdbcType="VARCHAR" property="tradeNo"/>
+        <result column="zipcode" jdbcType="VARCHAR" property="zipcode"/>
+        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
+        <result column="pay_state" jdbcType="TINYINT" property="payState"/>
+        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
+        <result column="bigpen" jdbcType="VARCHAR" property="bigpen"/>
+        <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
+        <result column="tax_price" jdbcType="DECIMAL" property="taxPrice"/>
+        <result column="fhfs" jdbcType="TINYINT" property="fhfs"/>
+        <result column="refund_state" jdbcType="INTEGER" property="refundState"/>
+        <result column="o_type" jdbcType="TINYINT" property="oType"/>
+        <collection property="items" column="id" ofType="com.isell.service.order.po.CoolOrderItemExternal">
+	        <result column="name" jdbcType="VARCHAR" property="name"/>
+	        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+	        <result column="gg" jdbcType="VARCHAR" property="gg"/>
+	        <result column="count" jdbcType="INTEGER" property="count"/>
+	        <result column="price" jdbcType="DECIMAL" property="price"/>
+        </collection>
+    </resultMap>
+    <resultMap type="com.isell.service.order.po.CoolOrderWayBillReturn" id="CoolOrderWayBill">
+	      <result column="order_oldno" jdbcType="VARCHAR" property="orderOldNo"/>
+	      <result column="ps_code" jdbcType="VARCHAR" property="wayBillNo"/>
+	      <result column="psfs" jdbcType="VARCHAR" property="sendStyle"/>
+     	  <result column="reason" jdbcType="VARCHAR" property="cause"/>
+     	  <result column="createtime" jdbcType="VARCHAR" property="createtime"/>
+     	  <result column="sendtime" jdbcType="VARCHAR" property="sendtime"/>
+     	   <result column="time" jdbcType="VARCHAR" property="time"/>
+    </resultMap>
     <!-- 获取订单金额 -->
     <select id="getSumAmount" resultType="java.math.BigDecimal">
         SELECT
@@ -96,6 +145,16 @@
             and (o.createtime between #{beginTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR})
             and (a.create_time between #{beginTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR})
             and a.type = 0 and a.is_freeze = 0
+    </select>
+    
+    <!-- 根据会员主键跟状态获取定单数 -->
+    <select id="getOrderCountBymIdAndState" resultType="java.lang.Integer">
+        SELECT
+            ifnull(count(1),0)
+        FROM
+             cool_order
+         WHERE 
+             m_id = #{mId,jdbcType=INTEGER} and state like #{state}             
     </select>
     
     <!-- 获取定单数 -->
@@ -115,7 +174,7 @@
     
     <!-- 获取一件代发购买过的商品列表 -->
     <select id="getCoolProductInfoList" resultMap="CoolProductInfoMap"  parameterType="com.isell.service.order.po.CoolOrderParam">
-        SELECT g.id as  gId, p.id as pId, p.name as name, p.name_en as name_en, p.logo as logo, g.gg as gg, g.drp_price as drp_price
+        SELECT g.id as  gId, p.id as pId, p.name as name, p.name_en as name_en, p.logo as logo, g.gg as gg, g.drp_price as drp_price,if(g.stock>0, g.stock, 0) as stock 
         from
         (SELECT
             i.g_id,i.gid
@@ -123,10 +182,13 @@
              cool_order o
         INNER JOIN 
          	cool_order_item i on i.order_no = o.order_no      	 
-        WHERE 1=1 
+        WHERE o.order_type = 1
         <if test="supplier != null and supplier != ''">
-        	and o.supplier = #{id,jdbcType=VARCHAR} 
+        	and o.supplier = #{supplier,jdbcType=VARCHAR} 
         </if>        
+        <if test="pName != null and pName != ''">
+        	and i.name like CONCAT(CONCAT('%', #{pName}), '%')
+        </if>   
        	) oi 
        	left join 
        		cool_product_gg g on g.id = oi.gid
@@ -161,6 +223,15 @@
             ps_code = #{psCode,jdbcType=VARCHAR}
     </select>
     
+    <select id="getOrderByPsCode" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_order
+        WHERE            
+            ps_code = #{psCode,jdbcType=VARCHAR}
+    </select>
+    
     <!-- 根据外部订单号查询 -->
     <select id="getCoolOrderByOrderOldNoList" resultMap="BaseResultMap">
         SELECT
@@ -169,12 +240,16 @@
              cool_order
         WHERE            
             order_oldno = #{orderOldNo,jdbcType=VARCHAR}
+            <if test="supplier != null and supplier != ''">
+            	and supplier = #{supplier,jdbcType=VARCHAR}
+            </if>
     </select>
     
     <select id="getCoolOrderList" resultMap="BaseResultMap">
         select * from cool_order where 1=1 
         <if test="state != null"> and state=#{state} </if>
         <if test="fhfs != null"> and fhfs=#{fhfs} </if>
+        <if test="arrears != null"> and arrears=#{arrears} </if>
         <if test="createtime != null"> and createtime <![CDATA[<]]> #{createtime} </if>
         <if test="updatetime != null"> and updatetime <![CDATA[<]]> #{updatetime} </if>
         <if test="startTime != null"> and createtime <![CDATA[>]]> #{startTime} </if>
@@ -278,51 +353,61 @@
     <!-- 根据条件分页查询订单列表 -->
     <sql id="where_sql">
     	where 1=1 
-    	<if test="id != null and id != ''">
-    		and id = #{id,jdbcType=INTEGER}
+    	<if test="id != null">
+    		and a.id = #{id,jdbcType=INTEGER}
+    	</if>
+    	<if test="orderNo != null">
+    		and a.order_no = #{orderNo}
     	</if>
     	<if test="psfs != null and psfs != ''">
-    		and psfs = #{psfs,jdbcType=VARCHAR}
+    		and a.psfs = #{psfs,jdbcType=VARCHAR}
     	</if>
-    	<if test="zffs != null and zffs != ''">
-    		and zffs = #{zffs,jdbcType=INTEGER}
+    	<if test="zffs != null">
+    		and a.zffs = #{zffs,jdbcType=INTEGER}
     	</if>
-    	<if test="state != null and state != ''">
-    		and state = #{state,jdbcType=TINYINT}
+    	<if test="state != null">
+    		and a.state = #{state,jdbcType=TINYINT}
     	</if>
-    	<if test="mId != null and mId != ''">
-    		and  m_id = #{mId,jdbcType=INTEGER} and  is_Del_m = 0
+    	<if test="mId != null">
+    		and  a.m_id = #{mId,jdbcType=INTEGER} and  is_Del_m = 0
     	</if>
-    	<if test="oType != null and oType != ''">
-    		and  o_type = #{oType,jdbcType=TINYINT}
+    	<if test="oType != null">
+    		and  a.o_type = #{oType,jdbcType=TINYINT}
     	</if>
     	<if test="supplier != null and supplier != ''">
-    		and  supplier = #{supplier,jdbcType=TINYINT} and is_del = 0
+    		and  a.supplier = #{supplier} and is_del = 0
     	</if>
-    	<if test="payTime != null and payTime != ''">
-    		and  pay_state = #{payTime,jdbcType=TINYINT}
+    	<if test="payTime != null">
+    		and  a.pay_state = #{payTime,jdbcType=TINYINT}
     	</if>
-    	<if test="orderType != null and orderType != ''">
-    		and  order_type = #{orderType,jdbcType=TINYINT}
+    	<if test="orderType != null">
+    		and  a.order_type = #{orderType,jdbcType=TINYINT}
     	</if>
     	<if test="startUpdatetime != null"> 
-    		and updatetime <![CDATA[>=]]> #{startUpdatetime} 
+    		and a.updatetime <![CDATA[>=]]> #{startUpdatetime} 
     	</if>
         <if test="endUpdatetime != null"> 
-        	and updatetime <![CDATA[<=]]> #{endUpdatetime} 
+        	and a.updatetime <![CDATA[<=]]> #{endUpdatetime} 
         </if>
         <if test="fhfs != null"> 
-        	and fhfs = #{fhfs} 
+        	and a.fhfs = #{fhfs} 
         </if>
-        
+        <if test="pName != null and pName != ''"> 
+         	and exists(select 'X' from cool_order_item i where i.order_no = a.order_no and i.name like CONCAT(CONCAT('%', #{pName}), '%'))
+        </if>
+        <if test="appSelect != null and appSelect != ''"> 
+         	and (exists(select 'X' from cool_order_item i where i.order_no = a.order_no and i.name like CONCAT(CONCAT('%', #{appSelect}), '%'))
+         	or a.order_no like CONCAT(CONCAT('%', #{appSelect}), '%'))
+        </if>
     </sql>
     <select id="getCoolOrderPageList" resultMap="BaseResultMap" parameterType="com.isell.service.order.po.CoolOrderSelect">
-    	select * from cool_order
+    	select a.*,b.name as sName from cool_order a 
+    	left join coon_shop b on a.supplier=b.id
     	<include refid="where_sql"></include>
-    	 order by createtime desc
+    	 order by a.createtime desc
     </select>
     <select id="getCoolOrderPageListCount" parameterType="com.isell.service.order.po.CoolOrderSelect" resultType="int">
-    	select count(*) from cool_order
+    	select count(*) from cool_order a
     	<include refid="where_sql"></include>
     </select>
     
@@ -343,7 +428,7 @@
     		and o.order_no = #{orderNo}
     	</if>
     	<if test="supName != null and supName != ''">
-    		and s.name like '%' || #{supName} || '%'
+    		and s.name like CONCAT(CONCAT('%', #{supName}), '%') 
     	</if>
     	<if test="order_type != null">
     		and o.order_type = #{orderType}
@@ -520,12 +605,18 @@
              <if test="refundState != null" >
                 refund_state,
             </if>
-             <if test="refundAmount != null" >
+            <if test="refundAmount != null" >
                 refund_amount,
             </if>
-             <if test="orderOldno != null" > 
-                 order_oldno, 
-             </if> 
+            <if test="orderOldno != null" > 
+                order_oldno, 
+            </if> 
+            <if test="discountPrice != null" > 
+                discount_price, 
+            </if>
+             <if test="returnUrl != null" > 
+                returnUrl, 
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -675,9 +766,15 @@
             <if test="refundAmount != null" >
                 #{refund_amount,jdbcType=DECIMAL},
             </if>
-             <if test="orderOldno != null" > 
-                 #{orderOldno,jdbcType=VARCHAR}, 
-             </if> 
+            <if test="orderOldno != null" > 
+                #{orderOldno,jdbcType=VARCHAR}, 
+            </if> 
+            <if test="discountPrice != null" > 
+                #{discountPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="returnUrl != null" > 
+                #{returnUrl,jdbcType=DECIMAL},
+            </if>
         </trim>
     </insert>
 
@@ -828,9 +925,12 @@
             <if test="refundAmount != null" >
                 refund_amount = #{refundAmount,jdbcType=DECIMAL},
             </if>
-             <if test="orderOldno != null" > 
+            <if test="orderOldno != null" > 
                  order_oldno = #{orderOldno,jdbcType=VARCHAR}, 
-             </if> 
+            </if>
+            <if test="discountPrice != null" > 
+               discount_price =  #{discountPrice,jdbcType=DECIMAL},
+            </if>
         </set>
         WHERE 
         	<if test="id != null" >
@@ -840,4 +940,88 @@
                 order_no = #{orderNo,jdbcType=VARCHAR}
             </if>
     </update>
+        <update id="updateOrderPartByOrderNo" parameterType="com.isell.service.order.vo.CoolOrder" >
+        UPDATE cool_order
+        <set>
+            <if test="locationP != null" >
+                location_p = #{locationP,jdbcType=VARCHAR},
+            </if>
+            <if test="locationC != null" >
+                location_c = #{locationC,jdbcType=VARCHAR},
+            </if>
+            <if test="locationA != null" >
+                location_a = #{locationA,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null" >
+                linkman = #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+             <if test="zipcode != null" >
+                zipcode = #{zipcode,jdbcType=VARCHAR},
+             </if>
+             <if test="idcard != null" >
+                idcard = #{idcard,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+        	supplier = #{supplier}
+            <if test="orderNo !='' and orderNo != null" >
+              and  order_oldno = #{orderNo,jdbcType=VARCHAR}
+            </if>
+    </update>
+    <select id="getOrderExternalByOrderOldNo" parameterType="java.lang.String" resultMap="GetOrderExternal">
+   select co.id,co.location_p,co.location_c,co.location_a,co.address,co.linkman,co.mobile,
+    	co.psfs,co.ps_price,co.zffs,co.total,co.state,co.order_oldno,co.ps_code,co.pay_time,co.trade_no,
+    	co.zipcode,co.finish_time,co.pay_state,co.bigpen,co.idcard,co.tax_price,co.fhfs,co.refund_state,
+    	co.o_type,coi.name,coi.logo,coi.gg,coi.count,coi.price
+    	from cool_order co join cool_order_item coi 
+			on co.order_no = coi.order_no and co.order_oldno = #{orderNo}
+			 and supplier=#{shopId}
+    </select>
+    <select id="getWayBill" resultMap="CoolOrderWayBill">
+    	select order_oldno,ps_code,psfs,
+			<!-- CASE WHEN  fhfs=1 THEN '圆通'
+			WHEN fhfs=10 THEN '宁波艾购保税仓'
+			WHEN fhfs=20 THEN '郑州保税仓'
+			WHEN fhfs=11 THEN '宁波优贝'
+			WHEN fhfs=30 THEN '杭州保税仓'
+			 else fhfs end as fhfs, -->
+			reason,
+			DATE_FORMAT(co.createtime,'%Y%m%d') as createtime,
+			DATE_FORMAT(co.updatetime,'%Y%m%d') as sendtime,
+			DATE_FORMAT(co.updatetime,'%Y-%m-%d %H:%m:%s') as time
+			from cool_order co 
+   		where 1=1
+    	<if test="order.orderOldno!=null"> 
+    		and co.order_oldno in
+    	<foreach collection="orderOldNos" index="index" item="orderOldno" open="(" separator="," close=")">  
+            #{orderOldno}
+    	</foreach>  
+    	</if>
+   		 and co.supplier = #{order.supplier}
+   		<choose>
+   			<when test="order.timeType==1">
+   				<if test="order.beginTime != null"> 
+   				and ps_code is not null
+   				and createtime <![CDATA[>=]]> #{order.beginTime}</if>
+   				<if test="order.endTime != null">and createtime <![CDATA[<=]]> #{order.endTime}</if>
+   			</when>
+   			<otherwise>
+   				and ps_code is not null
+   				<if test="order.beginTime != null"> and updatetime <![CDATA[>=]]> #{order.beginTime}</if>
+   					<if test="order.endTime != null"> and updatetime <![CDATA[<=]]> #{order.endTime}</if>
+   			</otherwise>
+   		</choose>
+   	</select>
+	 <update id="updateStateByOlderOldNo" parameterType="com.isell.service.order.vo.CoolOrder" >
+	 		UPDATE cool_order set state=#{state} where order_oldno=#{orderOldno} and supplier=#{supplier}
+	 </update> 	
 </mapper>

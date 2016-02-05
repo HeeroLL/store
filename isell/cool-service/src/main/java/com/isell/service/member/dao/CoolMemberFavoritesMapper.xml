@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.member.dao.CoolMemberFavoritesMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.member.vo.CoolMemberFavorites">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="m_id" jdbcType="INTEGER" property="mId"/>
+        <result column="p_id" jdbcType="INTEGER" property="pId"/>
+        <result column="s_id" jdbcType="VARCHAR" property="sId"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+         <result column="pName" jdbcType="VARCHAR" property="pName"/>
+         <result property="logo" column="logo"/>
+    </resultMap>
+    <select id="getCoolMemberFavoritesById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_member_favorites
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <!-- 根据会员主键查询 -->
+     <select id="findCoolMemberFavoritesListBymId" resultMap="BaseResultMap">
+        SELECT
+            f.*,p.name_en as pName,p.logo,p.fav_price as favPrice,s.name as sName
+        FROM
+             cool_member_favorites f
+         left join 
+         	coon_shop s on f.s_id=s.id
+         left join 
+         	cool_product p on p.id = f.p_id
+        WHERE            
+           f.m_id = #{mId,jdbcType=INTEGER}
+    </select>
+    
+    <!-- 根据会员主键和商品主键查询 -->
+     <select id="findCoolMemberFavoritesListBymIdAndpId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_member_favorites
+        WHERE            
+            m_id = #{mId,jdbcType=INTEGER} and  p_id = #{pId,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolMemberFavorites" resultMap="BaseResultMap">
+          SELECT * FROM cool_member_favorites 
+    </select>
+    
+    <delete id="deleteCoolMemberFavorites">
+        DELETE
+        FROM
+             cool_member_favorites
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolMemberFavorites" parameterType="com.isell.service.member.vo.CoolMemberFavorites" >
+        INSERT INTO cool_member_favorites
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="mId != null" >
+                m_id,
+            </if>
+            <if test="pId != null" >
+                p_id,
+            </if>
+            <if test="sId != null" >
+                s_id,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="mId != null" >
+                #{mId,jdbcType=INTEGER},
+            </if> 
+            <if test="pId != null" >
+                #{pId,jdbcType=INTEGER},
+            </if>
+            <if test="sId != null" >
+                #{sId},
+            </if>  
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolMemberFavorites" parameterType="com.isell.service.member.vo.CoolMemberFavorites" >
+        UPDATE cool_member_favorites
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="mId != null" >
+                m_id = #{mId,jdbcType=INTEGER},
+            </if>
+            <if test="pId != null" >
+                p_id = #{pId,jdbcType=INTEGER},
+            </if>
+            <if test="sId != null" >
+                s_id = #{sId},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

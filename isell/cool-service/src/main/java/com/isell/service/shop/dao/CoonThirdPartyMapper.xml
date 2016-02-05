@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonThirdPartyMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonThirdParty">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="cool_store_id" jdbcType="VARCHAR" property="coolStoreId"/>
+        <result column="audit_state" jdbcType="TINYINT" property="auditState"/>
+        <result column="audit_user" jdbcType="VARCHAR" property="auditUser"/>
+        <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime"/>
+        <result column="audit_reason" jdbcType="VARCHAR" property="auditReason"/>
+        <result column="third_party" jdbcType="VARCHAR" property="thirdParty"/>
+        <result column="store_name" jdbcType="VARCHAR" property="storeName"/>
+        <result column="alipayname" jdbcType="VARCHAR" property="alipayname"/>
+        <result column="store_url" jdbcType="VARCHAR" property="storeUrl"/>
+        <result column="main_category" jdbcType="VARCHAR" property="mainCategory"/>
+        <result column="open_time" jdbcType="TIMESTAMP" property="openTime"/>
+        <result column="arrears_ed" jdbcType="BIT" property="arrearsEd"/>
+    </resultMap>
+    <select id="getCoonThirdPartyById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_third_party
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根据酷店id查询 -->
+    <select id="getCoonThirdPartyByShopId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_third_party
+        WHERE            
+            cool_store_id = #{shopId,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根据用户id查询 -->
+    <select id="getCoonThirdPartyByUserId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_third_party
+        WHERE            
+            user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonThirdParty" resultMap="BaseResultMap">
+          SELECT * FROM coon_third_party 
+    </select>
+    
+    <delete id="deleteCoonThirdParty">
+        DELETE
+        FROM
+             coon_third_party
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonThirdParty" parameterType="com.isell.service.shop.vo.CoonThirdParty" >
+        INSERT INTO coon_third_party
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="coolStoreId != null" >
+                cool_store_id,
+            </if>
+            <if test="auditState != null" >
+                audit_state,
+            </if>
+            <if test="auditUser != null" >
+                audit_user,
+            </if>
+            <if test="auditTime != null" >
+                audit_time,
+            </if>
+            <if test="auditReason != null" >
+                audit_reason,
+            </if>
+            <if test="thirdParty != null" >
+                third_party,
+            </if>
+            <if test="storeName != null" >
+                store_name,
+            </if>
+            <if test="alipayname != null" >
+                alipayname,
+            </if>
+            <if test="storeUrl != null" >
+                store_url,
+            </if>
+            <if test="mainCategory != null" >
+                main_category,
+            </if>
+            <if test="openTime != null" >
+                open_time,
+            </if>
+            <if test="arrearsEd != null" >
+                arrears_ed,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="userId != null" >
+                #{userId,jdbcType=VARCHAR},
+            </if> 
+            <if test="coolStoreId != null" >
+                #{coolStoreId,jdbcType=VARCHAR},
+            </if> 
+            <if test="auditState != null" >
+                #{auditState,jdbcType=TINYINT},
+            </if> 
+            <if test="auditUser != null" >
+                #{auditUser,jdbcType=VARCHAR},
+            </if> 
+            <if test="auditTime != null" >
+                #{auditTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="auditReason != null" >
+                #{auditReason,jdbcType=VARCHAR},
+            </if> 
+            <if test="thirdParty != null" >
+                #{thirdParty,jdbcType=VARCHAR},
+            </if> 
+            <if test="storeName != null" >
+                #{storeName,jdbcType=VARCHAR},
+            </if> 
+            <if test="alipayname != null" >
+                #{alipayname,jdbcType=VARCHAR},
+            </if> 
+            <if test="storeUrl != null" >
+                #{storeUrl,jdbcType=VARCHAR},
+            </if> 
+            <if test="mainCategory != null" >
+                #{mainCategory,jdbcType=VARCHAR},
+            </if> 
+            <if test="openTime != null" >
+                #{openTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="arrearsEd != null" >
+                #{arrearsEd,jdbcType=BIT},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonThirdParty" parameterType="com.isell.service.shop.vo.CoonThirdParty" >
+        UPDATE coon_third_party
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="coolStoreId != null" >
+                cool_store_id = #{coolStoreId,jdbcType=VARCHAR},
+            </if>
+            <if test="auditState != null" >
+                audit_state = #{auditState,jdbcType=TINYINT},
+            </if>
+            <if test="auditUser != null" >
+                audit_user = #{auditUser,jdbcType=VARCHAR},
+            </if>
+            <if test="auditTime != null" >
+                audit_time = #{auditTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="auditReason != null" >
+                audit_reason = #{auditReason,jdbcType=VARCHAR},
+            </if>
+            <if test="thirdParty != null" >
+                third_party = #{thirdParty,jdbcType=VARCHAR},
+            </if>
+            <if test="storeName != null" >
+                store_name = #{storeName,jdbcType=VARCHAR},
+            </if>
+            <if test="alipayname != null" >
+                alipayname = #{alipayname,jdbcType=VARCHAR},
+            </if>
+            <if test="storeUrl != null" >
+                store_url = #{storeUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="mainCategory != null" >
+                main_category = #{mainCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="openTime != null" >
+                open_time = #{openTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="arrearsEd != null" >
+                arrears_ed = #{arrearsEd,jdbcType=BIT},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

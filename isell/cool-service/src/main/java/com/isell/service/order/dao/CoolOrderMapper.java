@@ -8,8 +8,11 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.isell.core.mybatis.Mapper;
 import com.isell.service.order.po.CoolOrderExport;
+import com.isell.service.order.po.CoolOrderExternal;
 import com.isell.service.order.po.CoolOrderParam;
 import com.isell.service.order.po.CoolOrderSelect;
+import com.isell.service.order.po.CoolOrderWayBill;
+import com.isell.service.order.po.CoolOrderWayBillReturn;
 import com.isell.service.order.vo.CoolOrder;
 import com.isell.service.product.po.CoolProductInfo;
 
@@ -28,6 +31,15 @@ public interface CoolOrderMapper {
      * @return 订单信息
      */
     CoolOrder getCoolOrderById(@Param("id") Integer id);
+    
+    /**
+     * 根据会员主键跟状态获取定单数
+     * 
+     * @param mId  会员主键
+     * @param state  订单状态
+     * @return 订单数
+     */
+    public int getOrderCountBymIdAndState(@Param("mId")Integer mId, @Param("state")String state);
     
     /**
      * 获取定单金额
@@ -53,9 +65,10 @@ public interface CoolOrderMapper {
      * 根据外部订单号查询
      * 
      * @param orderOldNo 外部订单号
+     * @param supplier 店铺主键
      * @return 订单信息
      */
-    List<CoolOrder> getCoolOrderByOrderOldNoList(String orderOldNo);
+    List<CoolOrder> getCoolOrderByOrderOldNoList(@Param("orderOldNo")String orderOldNo, @Param("supplier")String supplier);
     
     /**
      * 获取一件代发购买过的商品列表
@@ -96,6 +109,14 @@ public interface CoolOrderMapper {
      * @return 符合条件的订单列表
      */
     List<CoolOrder> getCoolOrderPageList(RowBounds rowBounds, CoolOrderSelect orderSelect);
+    
+    /**
+     * 根据物流单号查询
+     * 
+     * @param psCode 物流单号
+     * @return
+     */
+    List<CoolOrder> getOrderByPsCode(@Param("psCode") String psCode);
     
     /**
      * 根据条件分页查询订单数量
@@ -149,6 +170,29 @@ public interface CoolOrderMapper {
      * @return
      */
     public int insertBatch(List<CoolOrder>  orderList);
+    
+    /**
+     * 对外修改订单部分字段
+     * @param order
+     * @return
+     */
+	int updateOrderPartByOrderNo(CoolOrder order);
+	/**
+	 * 对外查询订单详情
+	 * @param orderNo
+	 * @param orderNo2 
+	 * @return
+	 */
+	List<CoolOrderExternal> getOrderExternalByOrderOldNo(@Param("shopId")String shopId,@Param("orderNo")String orderNo);
+	/**
+	 * 客户系统调用该接口获取运单相关信息
+	 * @param order
+	 * @param orderOldNos
+	 * @return
+	 */
+	List<CoolOrderWayBillReturn> getWayBill(@Param("order")CoolOrderWayBill order, @Param("orderOldNos")String[] orderOldNos);
+
+	int updateStateByOlderOldNo(CoolOrder order);
     
 //    /**
 //     * 统计订单数

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.member.dao.CoonShopFocusMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.member.vo.CoonShopFocus">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="m_id" jdbcType="INTEGER" property="mId"/>
+        <result column="s_id" jdbcType="VARCHAR" property="sId"/>
+    </resultMap>
+    <select id="getCoonShopFocusById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_focus
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <!-- 根据会员主键查询 -->
+    <select id="getCoonShopFocusBymId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_focus
+        WHERE            
+            m_id = #{mId,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoonShopFocus" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_focus 
+    </select>
+    
+    <delete id="deleteCoonShopFocus">
+        DELETE
+        FROM
+             coon_shop_focus
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoonShopFocus" parameterType="com.isell.service.member.vo.CoonShopFocus" >
+        INSERT INTO coon_shop_focus
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="mId != null" >
+                m_id,
+            </if>
+            <if test="sId != null" >
+                s_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="mId != null" >
+                #{mId,jdbcType=INTEGER},
+            </if> 
+            <if test="sId != null" >
+                #{sId,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopFocus" parameterType="com.isell.service.member.vo.CoonShopFocus" >
+        UPDATE coon_shop_focus
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="mId != null" >
+                m_id = #{mId,jdbcType=INTEGER},
+            </if>
+            <if test="sId != null" >
+                s_id = #{sId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -108,6 +108,8 @@ public class CoolUser{
      * 旧密码
      */
     private String oldPssword;
+    
+    private Integer mId;
 
     /**
      * 
@@ -358,5 +360,13 @@ public class CoolUser{
 
 	public void setOldPssword(String oldPssword) {
 		this.oldPssword = oldPssword;
+	}
+
+	public Integer getmId() {
+		return mId;
+	}
+
+	public void setmId(Integer mId) {
+		this.mId = mId;
 	}
 }

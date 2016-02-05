@@ -49,6 +49,7 @@ public class YijifuController {
      * @param paramMap 参数信息
      * @return 封装后的上传结果
      */
+    @Deprecated
     @RequestMapping("paymentBillV2Order")
     @ResponseBody
     public JsonData paymentBillV2Order(@RequestBody Map<String, String> paramMap) {
@@ -76,6 +77,54 @@ public class YijifuController {
         JsonData jsonData = new JsonData();
         jsonData.setData(resultMap);
         jsonData.setSuccess("pass".equals(resultMap.get("realNameQueryResult")));
+        return jsonData;
+    }
+    
+    /**
+     * 订单合并支付
+     *
+     * @param paramMap 参数信息
+     * @param map 返回值
+     * @return 返回的参数字符串
+     */
+    @RequestMapping("unionCashierWebPay")
+    public String unionCashierWebPay(@RequestBody Map<String, String> paramMap, ModelMap map) {
+        map.putAll(paramMap);
+        map.addAttribute("result", yijifuService.unionCashierWebPay(paramMap));
+        return "result";
+    }
+    
+    /**
+     * 上传支付信息V3.0
+     *
+     * @param paramMap 参数信息
+     * @return 封装后的上传结果
+     */
+    @RequestMapping("singlePaymentUpload")
+    @ResponseBody
+    public JsonData singlePaymentUpload(@RequestBody Map<String, String> paramMap) {
+        Map<String, String> resultMap = yijifuService.singlePaymentUpload(paramMap);
+        
+        JsonData jsonData = new JsonData();
+        jsonData.setData(resultMap);
+        jsonData.setSuccess("SUCCESS".equals(resultMap.get("status")));
+        return jsonData;
+    }
+    
+    /**
+     * 退款
+     *
+     * @param paramMap 参数信息
+     * @return 封装后的结果
+     */
+    @RequestMapping("tradeRefund")
+    @ResponseBody
+    public JsonData tradeRefund(@RequestBody Map<String, String> paramMap) {
+        Map<String, String> resultMap = yijifuService.tradeRefund(paramMap);
+        
+        JsonData jsonData = new JsonData();
+        jsonData.setData(resultMap);
+        jsonData.setSuccess("SUCCESS".equals(resultMap.get("refundStatus")));
         return jsonData;
     }
 }

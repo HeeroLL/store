@@ -77,6 +77,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         CoolOrder param = new CoolOrder();
         param.setState(CoolOrder.ORDER_STATE_0);
         param.setCreatetime(cal.getTime());
+        param.setArrears(0); // 未欠费订单 
         List<CoolOrder> orderList = orderService.getCoolOrderList(param);
         if (orderList != null) {
             Integer[] ids = new Integer[orderList.size()];

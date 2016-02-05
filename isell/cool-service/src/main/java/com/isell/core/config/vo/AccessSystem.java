@@ -45,6 +45,16 @@ public class AccessSystem {
     private boolean frozen;
     
     /**
+     * 用户id
+     */
+    private Integer userId;
+    
+    /**
+     * 酷店id
+     */
+    private String shopId;
+    
+    /**
      * 创建时间
      */
     private Date createTime;
@@ -121,5 +131,21 @@ public class AccessSystem {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
     }
 }

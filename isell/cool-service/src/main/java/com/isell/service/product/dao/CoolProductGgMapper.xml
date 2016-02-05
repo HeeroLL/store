@@ -18,9 +18,15 @@
         <result column="drp_price" jdbcType="DECIMAL" property="drpPrice"/>
         <result column="vipPriceA" jdbcType="DECIMAL" property="vipPriceA"/>
         <result column="vipPriceB" jdbcType="DECIMAL" property="vipPriceB"/>
-        <result column="vipPriceC" jdbcType="DECIMAL" property="vipPriceC"/>
-        
-    </resultMap>    
+        <result column="vipPriceC" jdbcType="DECIMAL" property="vipPriceC"/>        
+    </resultMap>      
+     <!-- 	对外库存查询   -->
+   <resultMap id="CoolProductExternalStockSelect" type="com.isell.service.product.po.CoolProductExternalStockSelect" >
+   		 <id column="gid" jdbcType="INTEGER" property="gid"/>
+   		 <result column="code" jdbcType="VARCHAR" property="code"/>
+   		 <result column="stock" jdbcType="REAL" property="stock"/>
+   </resultMap>  
+   
     <select id="getCoolProductGgById" resultMap="BaseResultMap">
         SELECT
             *
@@ -30,8 +36,25 @@
             id = #{id,jdbcType=INTEGER}
     </select>
     
+    <!-- 根据商品主键获取商品月销量 -->
+    <select id="getProductSalesMonth" resultType="java.lang.Integer">
+          select ifnull(count(1),0) 
+          from cool_order_item i 
+          inner join cool_order o on o.order_no = i.order_no and (o.state=0 or o.state=1 or o.state=2 or o.state=3 or o.state=1 or o.state=11)
+          where i.g_id = #{goodsId}
+    </select>
+    
     <select id="findCoolProductGgList" resultMap="BaseResultMap">
           select * from cool_product_gg where goods_id = #{goodsId}
+    </select>
+    
+    <!-- 获取最低供货价的规格信息 -->
+    <select id="getCoolProductGgMinDrpPrice" resultMap="BaseResultMap">
+          select * from cool_product_gg where goods_id = #{goodsId} 
+          <if test="stock =='1'.toString()" >
+                 and stock>0 
+          </if>          
+          order by ifnull(drp_price,cxjg) asc limit 1
     </select>
     
     <delete id="deleteCoolProductGg">
@@ -183,4 +206,20 @@
         WHERE 
             id = #{id,jdbcType=INTEGER}
     </update>
+     <select id="getProductStock" resultMap="CoolProductExternalStockSelect" parameterType="java.lang.reflect.Array">
+    	select gid,cpm.wid as code,stock from cool_product_map cpm 
+		join cool_product_gg cpg on cpg.id = cpm.gid 
+		<if test="gid!=null">
+			and gid in 
+	       <foreach collection="gid" index="index" item="gid" open="(" separator="," close=")">  
+	            #{gid}   
+	    	</foreach>  
+    	</if>
+    	<if test="code!=null">
+    		and cpm.wid in
+    	 <foreach collection="code" index="index" item="code" open="(" separator="," close=")">  
+            #{code}   
+    	</foreach> 
+    	</if>
+    </select>
 </mapper>

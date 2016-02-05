@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.order.dao.CoolDistributionCarMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.order.vo.CoolDistributionCar">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="p_id" jdbcType="INTEGER" property="pId"/>
+        <result column="g_id" jdbcType="INTEGER" property="gId"/>
+        <result column="quantity" jdbcType="INTEGER" property="quantity"/>
+    </resultMap>
+     <resultMap id="CoolDistributionCarMap" type="com.isell.service.order.po.CoolDistributionCarInfo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="p_id" jdbcType="INTEGER" property="pId"/>
+        <result column="g_id" jdbcType="INTEGER" property="gId"/>
+        <result column="quantity" jdbcType="INTEGER" property="quantity"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="jg" jdbcType="DECIMAL" property="jg"/>
+        <result column="cxjg" jdbcType="DECIMAL" property="cxjg"/>
+        <result column="stock" jdbcType="REAL" property="stock"/>
+        <result column="xsjg" jdbcType="DECIMAL" property="xsjg"/>
+        <result column="gg" jdbcType="VARCHAR" property="gg"/>
+        <result column="drp_price" jdbcType="DECIMAL" property="drpPrice"/>
+    </resultMap>
+    <select id="getCoolDistributionCarById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_distribution_car
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolDistributionCar" resultMap="BaseResultMap">
+          SELECT * FROM cool_distribution_car 
+    </select>
+    
+    <!--  分页查询进货单列表信息 -->
+    <select id="findCoolDistributionCarInfoListPage" resultMap="CoolDistributionCarMap" parameterType="com.isell.service.order.vo.CoolDistributionCar">
+          SELECT c.*,p.name,p.name_en,p.logo,g.gg,g.drp_price,g.jg,g.cxjg,g.stock,g.xsjg
+          FROM cool_distribution_car c
+          left join cool_product p on p.id = c.p_id
+          left join cool_product_gg g on g.id = c.g_id
+          where 1=1 
+          <if test="userId != null">
+          	and c.user_id = #{userId,jdbcType=INTEGER}
+          </if>
+          <if test="name != null">
+          	and (p.name like CONCAT(CONCAT('%', #{name}), '%') or p.name_en like CONCAT(CONCAT('%', #{name}), '%'))
+          </if>
+          order by c.p_id 
+    </select>
+    
+    <!-- 根据查询条件查询 -->
+    <select id="getCoolDistributionCarList" resultMap="BaseResultMap" parameterType="com.isell.service.order.vo.CoolDistributionCar">
+          SELECT * FROM cool_distribution_car 
+          where 1=1
+          <if test="userId != null">
+          	and user_id = #{userId,jdbcType=INTEGER}
+          </if>
+          <if test="pId != null">
+          	and p_id = #{pId,jdbcType=INTEGER}
+          </if>
+          <if test="gId != null">
+          	and g_id = #{gId,jdbcType=INTEGER}
+          </if>
+    </select>
+    
+    <delete id="deleteCoolDistributionCar">
+        DELETE
+        FROM
+             cool_distribution_car
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolDistributionCar" parameterType="com.isell.service.order.vo.CoolDistributionCar" >
+        INSERT INTO cool_distribution_car
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="pId != null" >
+                p_id,
+            </if>
+            <if test="gId != null" >
+                g_id,
+            </if>
+            <if test="quantity != null" >
+                quantity,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="userId != null" >
+                #{userId,jdbcType=INTEGER},
+            </if> 
+            <if test="pId != null" >
+                #{pId,jdbcType=INTEGER},
+            </if> 
+            <if test="gId != null" >
+                #{gId,jdbcType=INTEGER},
+            </if> 
+            <if test="quantity != null" >
+                #{quantity,jdbcType=INTEGER},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolDistributionCar" parameterType="com.isell.service.order.vo.CoolDistributionCar" >
+        UPDATE cool_distribution_car
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="pId != null" >
+                p_id = #{pId,jdbcType=INTEGER},
+            </if>
+            <if test="gId != null" >
+                g_id = #{gId,jdbcType=INTEGER},
+            </if>
+            <if test="quantity != null" >
+                quantity = #{quantity,jdbcType=INTEGER},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

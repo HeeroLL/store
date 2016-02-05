@@ -50,13 +50,16 @@ import com.isell.service.shop.dao.CoonShopExperienceMapper;
 import com.isell.service.shop.dao.CoonShopFavMapper;
 import com.isell.service.shop.dao.CoonShopMapper;
 import com.isell.service.shop.dao.CoonShopProductMapper;
+import com.isell.service.shop.dao.CoonShopShareExperienceMapper;
 import com.isell.service.shop.dao.CoonShopShareMapper;
 import com.isell.service.shop.dao.CoonThirdPartyMapper;
 import com.isell.service.shop.po.CoonShopBusinessInfo;
 import com.isell.service.shop.po.CoonShopBusinessParam;
+import com.isell.service.shop.po.CoonShopFavInfo;
 import com.isell.service.shop.po.CoonShopPartnerInfo;
 import com.isell.service.shop.po.CoonShopProductInfo;
 import com.isell.service.shop.po.CoonShopProductParam;
+import com.isell.service.shop.po.CoonShopShareParam;
 import com.isell.service.shop.service.CoonShopService;
 import com.isell.service.shop.vo.CoonBanner;
 import com.isell.service.shop.vo.CoonShop;
@@ -65,6 +68,7 @@ import com.isell.service.shop.vo.CoonShopBanner;
 import com.isell.service.shop.vo.CoonShopClick;
 import com.isell.service.shop.vo.CoonShopFav;
 import com.isell.service.shop.vo.CoonShopShare;
+import com.isell.service.shop.vo.CoonShopShareExperience;
 import com.isell.service.shop.vo.CoonThirdParty;
 
 /**
@@ -193,6 +197,12 @@ public class CoonShopServiceImpl implements CoonShopService {
     private CoonShopClickMapper coonShopClickMapper;
     
     /**
+     * 酷店分享（经验心得）表mapper
+     */
+    @Resource
+    private CoonShopShareExperienceMapper coonShopShareExperienceMapper;
+    
+    /**
      * coolJdbcTemplate
      */
     @Resource
@@ -262,8 +272,20 @@ public class CoonShopServiceImpl implements CoonShopService {
 						account.setIsFreeze(CoonRunAccount.IS_FREEZE_1);
 					}
 				}
-				List<CoonRunAccount> accountList = coonRunAccountMapper.findCoonRunAccountListPage(account.getRowBounds(), account);
-				if(CollectionUtils.isNotEmpty(accountList)){
+				List<CoonRunAccount> list = coonRunAccountMapper.findCoonRunAccountListPage(account.getRowBounds(), account);
+				if(CollectionUtils.isNotEmpty(list)){
+					List<CoonRunAccount> accountList = new ArrayList<CoonRunAccount>();
+					Calendar cal = Calendar.getInstance();
+					for(CoonRunAccount r : list){
+						Date fTime = r.getFreezeTime();
+						if(fTime != null){
+							cal.setTime(fTime);
+							cal.add(Calendar.DAY_OF_MONTH, 7);
+							r.setFreezeTime(cal.getTime());
+						}						
+						accountList.add(r);
+					}
+					
 					record.set("accountList", accountList);
 				}
 				success = true;
@@ -423,7 +445,7 @@ public class CoonShopServiceImpl implements CoonShopService {
 					CoolUser user = coolUserMapper.getCoolUserById(Integer.valueOf(userId));
 					if(user != null){
 						CoonShop shop = coonShopMapper.getCoonShopByUserId(userId);
-						if(shop == null){							
+						if(shop == null){
 							applay.setId(CommonUtils.uuid());
 							applay.setState(GeneralDef.BYTE_1);
 							applay.setAudit("0");
@@ -433,17 +455,20 @@ public class CoonShopServiceImpl implements CoonShopService {
 								//直接生成酷店信息
 								shop = new CoonShop();
 								String no = "";
+								CoolMember member = coolMemberMapper.getCoolMemberByMobile(mobile);
+								no = member.getNo();
+								/*
 								String maxNo = coolMemberMapper.getMaxCoolMemberNo();
 								if(StringUtils.isNotEmpty(maxNo)){
 									no = (Integer.parseInt(maxNo) + 1) + "";
 								}else{
 									no = "10000000";
-								}
+								*/
 								String uuid = CommonUtils.uuid();
 								shop.setId(uuid);
 								shop.setCode(no);
 								shop.setUserId(userId.toString());
-								shop.setName(realname);								
+								shop.setName(realname + "的店铺");								
 								String dirPath = "/shop/" + uuid + "/";
 								 // 生成酷店二维码和网址
 								String webSite = "http://" + no + ".m." + config.getBaseDomain();
@@ -464,6 +489,7 @@ public class CoonShopServiceImpl implements CoonShopService {
 								shop.setQrCode(qrCode);
 								result = coonShopMapper.saveCoonShop(shop);
 								if(result > 0){
+									record.set("shopId", uuid);
 									success = true;
 								}else{
 									record.set("msg", "酷店注册保存失败");
@@ -508,6 +534,16 @@ public class CoonShopServiceImpl implements CoonShopService {
 				if(member != null){
 					record.set("mobile",member.getMobile());
 					record.set("qq",member.getQq());
+					record.set("weixin",member.getWeixin());
+					record.set("weixinFlag",member.getWeixinFlag());
+					record.set("qqFlag",member.getQqFlag());
+					record.set("mobileFlag",member.getMobileFlag());
+				    
+					//获取粉丝数
+					CoonShopFav coonShopFav = new CoonShopFav();
+					coonShopFav.setsId(coonShop.getId());
+					int count = coonShopFavMapper.getCoonShopFavCount(coonShopFav);
+					record.set("favCount", count);
 				}
 				record.set("coonshop",coonShop);
 				success = true;
@@ -537,6 +573,11 @@ public class CoonShopServiceImpl implements CoonShopService {
 			if(coonShop != null){
 				//通用更新，可扩展
 				boolean flag = false;
+				String logo = shop.getLogo();//店铺LOGO
+				if(StringUtils.isNotEmpty(logo)){
+					coonShop.setLogo(logo);
+					flag = true;
+				}
 				String annInfo = shop.getAnnInfo(); //酷店公告
 				if(StringUtils.isNotEmpty(annInfo)){
 					coonShop.setAnnInfo(annInfo);
@@ -550,6 +591,16 @@ public class CoonShopServiceImpl implements CoonShopService {
 					coonShop.setShowModel(shop.getShowModel());
 					flag = true;
 				}
+				String name = shop.getName();
+				if(StringUtils.isNotEmpty(name)){ //酷店名称
+					coonShop.setName(shop.getName());
+					flag = true;
+				}
+//				String logo = shop.getLogo();
+//				if(StringUtils.isNotEmpty(logo)){ //酷店logo
+//					coonShop.setLogo(shop.getLogo());
+//					flag = true;
+//				}
 				
 				if(flag){
 					int result = coonShopMapper.updateCoonShop(coonShop);
@@ -688,7 +739,7 @@ public class CoonShopServiceImpl implements CoonShopService {
 					if(result > 0){
 						success = true;
 					}else{
-						record.set("msg", "、酷店海报保存失败");
+						record.set("msg", "酷店海报保存失败");
 					}
 				}else{
 					record.set("msg", "图片路径不能为空");
@@ -704,7 +755,36 @@ public class CoonShopServiceImpl implements CoonShopService {
 	}
 
 	/**
-     * 获取海报列表信息
+     * 获取不属于该店铺海报列表信息
+     * 
+     * @param coonShopBanner 海报信息
+     * @return 海报列表信息
+     */
+	@Override
+	public Record getBannerListPage(CoonShopBanner coonShopBanner) {
+		Record record = new Record(); 
+		boolean success = false;
+		String shopId = coonShopBanner.getsId();
+		if(StringUtils.isNotEmpty(shopId)){
+			CoonShop shop = coonShopMapper.getCoonShopById(shopId);
+			if(shop != null){
+				List<CoonBanner> bannerList = coonBannerMapper.findCoonBannerListPage(coonShopBanner.getRowBounds(), shopId);
+				if(CollectionUtils.isNotEmpty(bannerList)){
+					record.set("bannerList", bannerList);
+				}
+				success = true;
+			}else{
+				record.set("msg", "参数错误，不能获取酷店信息");
+			}
+		}else{
+			record.set("msg", "酷店主键不能为空");
+		}
+		record.set("success", success);
+		return record;
+	}
+	
+	/**
+     * 获取该店铺海报列表信息
      * 
      * @param coonShopBanner 海报信息
      * @return 海报列表信息
@@ -717,7 +797,7 @@ public class CoonShopServiceImpl implements CoonShopService {
 		if(StringUtils.isNotEmpty(shopId)){
 			CoonShop shop = coonShopMapper.getCoonShopById(shopId);
 			if(shop != null){
-				List<CoonBanner> bannerList = coonBannerMapper.findCoonBannerListPage(coonShopBanner.getRowBounds(), shopId);
+				List<CoonShopBanner> bannerList = coonShopBannerMapper.findCoonShopBannerBysId(coonShopBanner.getRowBounds(), shopId);
 				if(CollectionUtils.isNotEmpty(bannerList)){
 					record.set("bannerList", bannerList);
 				}
@@ -771,14 +851,17 @@ public class CoonShopServiceImpl implements CoonShopService {
 		Record record = new Record(); 
 		boolean success = false;
 		String sId = coonShopFav.getsId();
-		if(StringUtils.isNotEmpty(sId)){
+		String mId = coonShopFav.getmId();
+		if(StringUtils.isEmpty(sId) && StringUtils.isEmpty(mId) ){
+			record.set("msg", "参数错误酷店主键和会员主键不能同时为空");
+		}else{
 			List<CoonShopFav> favList = coonShopFavMapper.findCoonShopFavListPage(coonShopFav.getRowBounds(),coonShopFav);
+			int count = coonShopFavMapper.getCoonShopFavCount(coonShopFav);
+			record.set("favCount", count);
 			if(CollectionUtils.isNotEmpty(favList)){
 				record.set("favList", favList);
 			}
 			success = true;
-		}else{
-			record.set("msg", "酷店主键不能为空");
 		}
 		record.set("success", success);
 		return record;
@@ -834,19 +917,24 @@ public class CoonShopServiceImpl implements CoonShopService {
 		if(StringUtils.isNotEmpty(shopId)){
 			CoonThirdParty party = coonThirdPartyMapper.getCoonThirdPartyByShopId(shopId);
 			if(party != null){
-				if(CoonThirdParty.AUDIT_STATE_0.toString().equals(party.getAuditState().toString())){ 
+				if(CoonThirdParty.AUDIT_STATE_0.toString().equals(party.getAuditState().toString())){
+					record.set("dist", "0");
 					record.set("msg", "尚未审核");
 				}else if(CoonThirdParty.AUDIT_STATE_1.toString().equals(party.getAuditState().toString())){
+					record.set("dist", "1");
 					record.set("msg", "审核中");
 				}else if(CoonThirdParty.AUDIT_STATE_2.toString().equals(party.getAuditState().toString())){
-					record.set("msg", "审核中");
+					record.set("dist", "2");
+					record.set("msg", "审核通过");		
 					success = true;
 				}else{
+					record.set("dist", "3");
 					record.set("msg", "未通过");
 				}				
 			}else{
+				record.set("dist", "-1");
 				record.set("msg", "该酷店尚未申请一件代发");
-			}
+			}			
 		}else{
 			record.set("msg", "酷店主键不能为空");
 		}
@@ -866,65 +954,82 @@ public class CoonShopServiceImpl implements CoonShopService {
 		boolean success = false;
 		if(CollectionUtils.isNotEmpty(coolDistributionCarList)){
 			int result = 0;
-			for(CoolDistributionCar car : coolDistributionCarList){
-				Integer userId = car.getUserId();
-				if(userId != null){
-					CoolUser user = coolUserMapper.getCoolUserById(userId);
-					if(user != null){
-						Integer pId = car.getpId();
-						if(pId != null){
-							CoolProduct product = coolProductMapper.getCoolProductById(pId);
-							if(product != null){
-								Integer gId = car.getgId();
-								if(gId != null){
-									Integer quantity = car.getQuantity();
-									CoolProductGg productGg = coolProductGgMapper.getCoolProductGgById(gId);
-									if(productGg != null){
-										Float stock = productGg.getStock();
-										if(stock > 0){
-											if(quantity == null){
-												quantity = 1;
-											}
-											List<CoolDistributionCar> cList = coolDistributionCarMapper.getCoolDistributionCarList(car);
-											result = 0;
-											success = false;
-											if(CollectionUtils.isNotEmpty(cList)){
-												CoolDistributionCar c = cList.get(0);
-												car.setId(c.getId());
-												car.setQuantity(quantity + c.getQuantity());
-												result = coolDistributionCarMapper.updateCoolDistributionCar(car);
-											}else{
-												car.setQuantity(quantity);
-												result = coolDistributionCarMapper.saveCoolDistributionCar(car);
-											}
-											if(result > 0){
-												success = true;
-											}else{
-												record.set("msg", "进货单保存失败");
-											}
-										}else{
-											record.set("msg", "商品规格主键为"+gId+"的商品已售罄");
-										}
-									}else{
-										record.set("msg", "参数错误，商品规格主键为"+gId+"的商品规格不存在");
-									}
-									
-								}else{
-									record.set("msg", "商品规格主键不能为空");
-								}
-							}else{
-								record.set("msg", "参数错误，商品主键为"+pId+"的商品不存在");
-							}
-						}else{
-							record.set("msg", "商品主键不能为空");
-						}
-					}else{
-						record.set("msg", "参数错误，用户主键为"+userId+"的用户不存在");
-					}
+			Integer uId = coolDistributionCarList.get(0).getUserId();
+			boolean flag = false;
+			if(uId != null){
+				CoonThirdParty party = coonThirdPartyMapper.getCoonThirdPartyByUserId(uId.toString());
+				if(party == null){
+					record.set("msg", "该用户尚未申请一件代发");
 				}else{
-					record.set("msg", "用户主键不能为空");
+					Byte auditState = party.getAuditState();
+					if(auditState == 2){
+						flag = true;
+					}else{
+						record.set("msg", "该用户尚未拥有一件代发权限");
+					}
 				}
 			}
+			if(flag){
+				for(CoolDistributionCar car : coolDistributionCarList){
+					Integer userId = car.getUserId();
+					if(userId != null){
+						CoolUser user = coolUserMapper.getCoolUserById(userId);
+						if(user != null){
+							Integer pId = car.getpId();
+							if(pId != null){
+								CoolProduct product = coolProductMapper.getCoolProductById(pId);
+								if(product != null){
+									Integer gId = car.getgId();
+									if(gId != null){
+										Integer quantity = car.getQuantity();
+										CoolProductGg productGg = coolProductGgMapper.getCoolProductGgById(gId);
+										if(productGg != null){
+											Float stock = productGg.getStock();
+											if(stock > 0){
+												if(quantity == null){
+													quantity = 1;
+												}
+												List<CoolDistributionCar> cList = coolDistributionCarMapper.getCoolDistributionCarList(car);
+												result = 0;
+												success = false;
+												if(CollectionUtils.isNotEmpty(cList)){
+													CoolDistributionCar c = cList.get(0);
+													car.setId(c.getId());
+													car.setQuantity(quantity + c.getQuantity());
+													result = coolDistributionCarMapper.updateCoolDistributionCar(car);
+												}else{
+													car.setQuantity(quantity);
+													result = coolDistributionCarMapper.saveCoolDistributionCar(car);
+												}
+												if(result > 0){
+													success = true;
+												}else{
+													record.set("msg", "进货单保存失败");
+												}
+											}else{
+												record.set("msg", "商品规格主键为"+gId+"的商品已售罄");
+											}
+										}else{
+											record.set("msg", "参数错误，商品规格主键为"+gId+"的商品规格不存在");
+										}
+										
+									}else{
+										record.set("msg", "商品规格主键不能为空");
+									}
+								}else{
+									record.set("msg", "参数错误，商品主键为"+pId+"的商品不存在");
+								}
+							}else{
+								record.set("msg", "商品主键不能为空");
+							}
+						}else{
+							record.set("msg", "参数错误，用户主键为"+userId+"的用户不存在");
+						}
+					}else{
+						record.set("msg", "用户主键不能为空");
+					}
+				}
+			}			
 		}else{
 			record.set("msg", "参数不正确");
 		}
@@ -1034,7 +1139,7 @@ public class CoonShopServiceImpl implements CoonShopService {
 							member.setMobile(username);
 							member.setRealname(realname);
 							member.setPetname(realname);
-							result = coolMemberMapper.saveCoolMember(member);
+							result = coolMemberMapper.saveCoolMember(member);	
 							if(result > 0){
 								flag = true;
 							}else{
@@ -1279,14 +1384,14 @@ public class CoonShopServiceImpl implements CoonShopService {
 						businessList.add(info);						
 					}
 				}else if(CoonShopBusinessParam.TIME_TYPE_3.equals(param.getTimeType())){ //本月 1-7日 8-14日 15-21日 22-28日 28-周末
-					index = 4;					
+					index = 5;					
 					cal.add(Calendar.MONTH, 0);
 			        cal.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
 			        cal.add(Calendar.DATE, -1);
 					for(int i=0;i<index;i++){	
 						cal.add(Calendar.DATE, 1);
 						beginTime = sdf.format(cal.getTime());
-						if(i != 3){
+						if(i != 4){
 							cal.add(Calendar.DATE, 6);
 							endTime = sdf.format(cal.getTime());
 						}else{
@@ -1380,14 +1485,14 @@ public class CoonShopServiceImpl implements CoonShopService {
 						businessList.add(info);						
 					}
 				}else if(CoonShopBusinessParam.TIME_TYPE_3.equals(param.getTimeType())){ //本月 1-7日 8-14日 15-21日 22-28日 28-周末
-					index = 4;					
+					index = 5;					
 					cal.add(Calendar.MONTH, 0);
 			        cal.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
 			        cal.add(Calendar.DATE, -1);
 					for(int i=0;i<index;i++){	
 						cal.add(Calendar.DATE, 1);
 						beginTime = sdf.format(cal.getTime());
-						if(i != 3){
+						if(i != 4){
 							cal.add(Calendar.DATE, 6);
 							endTime = sdf.format(cal.getTime());
 						}else{
@@ -1481,14 +1586,14 @@ public class CoonShopServiceImpl implements CoonShopService {
 						businessList.add(info);						
 					}
 				}else if(CoonShopBusinessParam.TIME_TYPE_3.equals(param.getTimeType())){ //本月 1-7日 8-14日 15-21日 22-28日 28-周末
-					index = 4;					
+					index = 5;					
 					cal.add(Calendar.MONTH, 0);
 			        cal.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
 			        cal.add(Calendar.DATE, -1);
 					for(int i=0;i<index;i++){	
 						cal.add(Calendar.DATE, 1);
 						beginTime = sdf.format(cal.getTime());
-						if(i != 3){
+						if(i != 4){
 							cal.add(Calendar.DATE, 6);
 							endTime = sdf.format(cal.getTime());
 						}else{
@@ -1583,14 +1688,14 @@ public class CoonShopServiceImpl implements CoonShopService {
 						businessList.add(info);						
 					}
 				}else if(CoonShopBusinessParam.TIME_TYPE_3.equals(param.getTimeType())){ //本月 1-7日 8-14日 15-21日 22-28日 28-周末
-					index = 4;					
+					index = 5;					
 					cal.add(Calendar.MONTH, 0);
 			        cal.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
 			        cal.add(Calendar.DATE, -1);
 					for(int i=0;i<index;i++){	
 						cal.add(Calendar.DATE, 1);
 						beginTime = sdf.format(cal.getTime());
-						if(i != 3){
+						if(i != 4){
 							cal.add(Calendar.DATE, 6);
 							endTime = sdf.format(cal.getTime());
 						}else{
@@ -1685,14 +1790,14 @@ public class CoonShopServiceImpl implements CoonShopService {
 						businessList.add(info);						
 					}
 				}else if(CoonShopBusinessParam.TIME_TYPE_3.equals(param.getTimeType())){ //本月 1-7日 8-14日 15-21日 22-28日 28-周末
-					index = 4;					
+					index = 5;					
 					cal.add(Calendar.MONTH, 0);
 			        cal.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
 			        cal.add(Calendar.DATE, -1);
 					for(int i=0;i<index;i++){	
 						cal.add(Calendar.DATE, 1);
 						beginTime = sdf.format(cal.getTime());
-						if(i != 3){
+						if(i != 4){
 							cal.add(Calendar.DATE, 6);
 							endTime = sdf.format(cal.getTime());
 						}else{
@@ -1807,6 +1912,53 @@ public class CoonShopServiceImpl implements CoonShopService {
 		record.set("success", success);
 		return record;
 	}
+	
+	/**
+     *  取消收藏店铺
+     * 
+     * @param coonShopFavInfo  参数
+     * @return  是否取消成功
+     */
+	@Override
+	public Record deleteShopFav(CoonShopFavInfo coonShopFavInfo) {
+		Record record = new Record(); 
+		boolean success = false;
+		List<CoonShopFav> listFav = coonShopFavInfo.getFavList();
+		if(CollectionUtils.isNotEmpty(listFav)){
+			for(CoonShopFav fav : listFav){
+				success = false;
+				String mId = fav.getmId();		
+				if(StringUtils.isNotEmpty(mId)){
+					String sId = fav.getsId();
+					if(StringUtils.isNotEmpty(sId)){
+						List<CoonShopFav> list = coonShopFavMapper.findCoonShopFavByIdAndSId(mId, sId);
+						if(CollectionUtils.isEmpty(list)){
+							record.set("msg", "参数错误，无法获取收藏店铺信息");
+							break;
+						}else{
+							int result = coonShopFavMapper.deleteCoonShopFav(list.get(0).getId());
+							if(result > 0){
+								success = true;
+							}else{
+								record.set("msg", "取消收藏店铺失败");
+								break;
+							}
+						}
+					}else{
+						record.set("msg", "参数错误，酷店	主键不能为空");
+						break;
+					}
+				}else{
+					record.set("msg", "参数错误，会员主键不能为空");
+					break;
+				}	
+			}
+		}else{
+			record.set("msg", "参数不能为空");
+		}
+		record.set("success", success);
+		return record;
+	}
 
 	/**
      *  获取店铺及推荐商品列表
@@ -1815,10 +1967,15 @@ public class CoonShopServiceImpl implements CoonShopService {
      * @return  coonShop
      */
 	@Override
-	public Record saveShopFav(CoonShop coonShop) {
+	public Record getShopListForUser(CoonShop coonShop) {
 		Record record = new Record(); 
 		boolean success = false;	
-		List<CoonShop> list = coonShopMapper.getCoonShopListPage(coonShop.getRowBounds(), coonShop);
+		//List<CoonShop> list = coonShopMapper.getCoonShopListPage(coonShop.getRowBounds(), coonShop);
+		String name = coonShop.getName();
+		if(StringUtils.isNotEmpty(name)){
+			coonShop.setName("%" + name + "%");
+		}
+		List<CoonShop> list = coonShopMapper.getCoonShopPListPage(coonShop.getRowBounds(), coonShop);
 		if(CollectionUtils.isNotEmpty(list)){
 			List<CoonShop> shopList = new ArrayList<CoonShop>();
 			for(CoonShop shop : list){
@@ -1826,7 +1983,8 @@ public class CoonShopServiceImpl implements CoonShopService {
 				CoonShopProductParam coonShopProductParam = new CoonShopProductParam();
 				coonShopProductParam.setShowCount(5);		
 				coonShopProductParam.setsId(shop.getId());
-				List<CoonShopProductInfo> infoList = coonShopProductMapper.getHotSellProductList(coonShopProductParam);
+				//List<CoonShopProductInfo> infoList = coonShopProductMapper.getHotSellProductList(coonShopProductParam);
+				List<CoonShopProductInfo> infoList = coonShopProductMapper.getShopProductRandList(coonShopProductParam);
 				shop.setProductList(infoList);
 				shopList.add(shop);
 			}
@@ -1895,11 +2053,12 @@ public class CoonShopServiceImpl implements CoonShopService {
      * @return 体验店列表
      */
 	@Override
-	public Record getExperienceShopList() {
+	public Record getExperienceShopList(CoonShop coonShop) {
 		Record record = new Record(); 
 		boolean success = false;	
 		//List<CoonShopExperience> list = coonShopExperienceMapper.findAllCoonShopExperience();
-		List<CoonShop> list = coonShopMapper.findAllCoonShopExperience();
+		//List<CoonShop> list = coonShopMapper.findAllCoonShopExperience();
+		List<CoonShop> list = coonShopMapper.getCoonShopExperienceList(coonShop);
 		if(CollectionUtils.isNotEmpty(list)){
 			record.set("experienceShopList", list);
 			success = true;
@@ -1956,6 +2115,89 @@ public class CoonShopServiceImpl implements CoonShopService {
 		Record record = new Record(); 
 		boolean success = false;	
 		List<CoonShopShare> shareList = coonShopShareMapper.findCoonShopShareList(coonShopProductParam.getRowBounds(), new CoonShopShare());
+		if(CollectionUtils.isNotEmpty(shareList)){
+			record.set("shareList", shareList);
+			success = true;
+		}else{
+			record.set("msg", "无数据");
+		}
+		record.set("success", success);
+		return record;
+	}
+
+	 /**
+     *  保存分享经验心得
+     * 
+     * @param CoonShopShareExperience coonShopShareExperience  参数
+     * @return  是否保存成功
+     */
+	@Override
+	public Record saveShopShareExperience(CoonShopShareExperience share) {
+		Record record = new Record(); 
+		boolean success = false;
+		String shopId = share.getsShop();
+		Integer mId = share.getmId();
+		if(StringUtils.isEmpty(shopId)  && mId == null){
+			record.set("msg", "酷店主键和会员主键不能同时为空");
+		}else{
+			int result = 0;
+			String msg = "";
+			String id = share.getId();
+			if(StringUtils.isEmpty(id)){
+				share.setId(CommonUtils.uuid());
+				share.setCreatetime(new Date());
+				result = coonShopShareExperienceMapper.saveCoonShopShareExperience(share);
+				msg = "保存";
+			}else{
+				result = coonShopShareExperienceMapper.updateCoonShopShareExperience(share);
+				msg = "修改";
+			}
+			if(result  > 0){
+				success = true;
+			}else{
+				record.set("msg",  msg + "酷店信息失败");
+			}
+		}
+		record.set("success", success);
+		return record;
+	}
+
+	/**
+     *  删除分享经验心得
+     * 
+     * @param CoonShopShareExperience share  参数
+     * @return  是否删除成功
+     */
+	@Override
+	public Record deleteShopShareExperience(CoonShopShareExperience share) {
+		Record record = new Record(); 
+		boolean success = false;
+		String id = share.getId();
+		if(StringUtils.isNotEmpty(id)){
+			int result = coonShopShareExperienceMapper.deleteCoonShopShareExperience(id);
+			if(result > 0){
+				success = true;
+			}else{
+				record.set("msg",  "分享删除失败");
+			}
+		}else{
+			record.set("msg",  "参数错误，无法获取分享信息");
+		}
+		record.set("success", success);
+		return record;
+	}
+
+	/**
+     *  获取分享经验心得
+     * 
+     * @param coonShopShareParam  参数
+     * @return  分享经验心得列表
+     */
+	@Override
+	public Record getShopShareExperiencePage(CoonShopShareParam coonShopShareParam) {
+		Record record = new Record(); 
+		boolean success = false;
+		List<CoonShopShareExperience> shareList = coonShopShareExperienceMapper.getCoonShopShareExperiencePage(coonShopShareParam.getRowBounds(), coonShopShareParam);
 		if(CollectionUtils.isNotEmpty(shareList)){
 			record.set("shareList", shareList);
 			success = true;

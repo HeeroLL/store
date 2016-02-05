@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.member.dao.CoolIdentityAuthMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.member.vo.CoolIdentityAuth">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="third_party" jdbcType="VARCHAR" property="thirdParty"/>
+        <result column="back_img_url" jdbcType="VARCHAR" property="backImgUrl"/>
+        <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
+        <result column="auth_time" jdbcType="TIMESTAMP" property="authTime"/>
+        <result column="isPass" jdbcType="VARCHAR" property="ispass"/>
+    </resultMap>
+    <select id="getCoolIdentityAuthById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_identity_auth
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <!-- 根据用户id查询 -->
+     <select id="getCoolIdentityAuthByUserId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_identity_auth
+        WHERE            
+            user_id = #{userId,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolIdentityAuth" resultMap="BaseResultMap">
+          SELECT * FROM cool_identity_auth 
+    </select>
+    
+    <delete id="deleteCoolIdentityAuth">
+        DELETE
+        FROM
+             cool_identity_auth
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolIdentityAuth" parameterType="com.isell.service.member.vo.CoolIdentityAuth" >
+        INSERT INTO cool_identity_auth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="idcard != null" >
+                idcard,
+            </if>
+            <if test="tel != null" >
+                tel,
+            </if>
+            <if test="thirdParty != null" >
+                third_party,
+            </if>
+            <if test="backImgUrl != null" >
+                back_img_url,
+            </if>
+            <if test="imgUrl != null" >
+                img_url,
+            </if>
+            <if test="authTime != null" >
+                auth_time,
+            </if>
+            <if test="ispass != null" >
+                isPass,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="userId != null" >
+                #{userId,jdbcType=INTEGER},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="idcard != null" >
+                #{idcard,jdbcType=VARCHAR},
+            </if> 
+            <if test="tel != null" >
+                #{tel,jdbcType=VARCHAR},
+            </if> 
+            <if test="thirdParty != null" >
+                #{thirdParty,jdbcType=VARCHAR},
+            </if> 
+            <if test="backImgUrl != null" >
+                #{backImgUrl,jdbcType=VARCHAR},
+            </if> 
+            <if test="imgUrl != null" >
+                #{imgUrl,jdbcType=VARCHAR},
+            </if> 
+            <if test="authTime != null" >
+                #{authTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="ispass != null" >
+                #{ispass,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolIdentityAuth" parameterType="com.isell.service.member.vo.CoolIdentityAuth" >
+        UPDATE cool_identity_auth
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="idcard != null" >
+                idcard = #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null" >
+                tel = #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="thirdParty != null" >
+                third_party = #{thirdParty,jdbcType=VARCHAR},
+            </if>
+            <if test="backImgUrl != null" >
+                back_img_url = #{backImgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="imgUrl != null" >
+                img_url = #{imgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="authTime != null" >
+                auth_time = #{authTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ispass != null" >
+                isPass = #{ispass,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -19,6 +19,7 @@
         <result column="name_en" jdbcType="VARCHAR" property="nameEn"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
         <result column="gg" jdbcType="VARCHAR" property="gg"/>
         <result column="jg" jdbcType="DECIMAL" property="jg"/>
         <result column="cxjg" jdbcType="DECIMAL" property="cxjg"/>
@@ -28,6 +29,10 @@
         <result column="drp_price" jdbcType="DECIMAL" property="drpPrice"/>
         <result column="divide" jdbcType="DECIMAL" property="divide"/>   
         <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="order" jdbcType="INTEGER" property="order"/>
+        <result column="is_new" jdbcType="VARCHAR" property="isNew"/>
+        <result column="shelves" jdbcType="BIT" property="shelves"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
     </resultMap>
     <select id="getCoonShopProductById" resultMap="BaseResultMap">
         SELECT
@@ -38,9 +43,27 @@
             id = #{id,jdbcType=VARCHAR}
     </select>
     
+    <!-- 随机获取上架商品 -->
+    <select id="getShopProductRandList" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
+          select a.*
+		  from
+          (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime,s.order,s.is_new,p.shelves
+          FROM coon_shop_product s
+          left join cool_product p on p.id = s.p_id
+          left join cool_product_gg g on g.goods_id = p.id          
+          where g.stock > 0 and s.added = 1 and p.shelves = 0
+          <if test="sId != null and sId != ''">
+          	and s.s_id = #{sId,jdbcType=VARCHAR}
+          </if>
+          <if test="isNew != null and isNew != ''">
+          	and s.is_new = #{isNew,jdbcType=VARCHAR}
+          </if>
+          order by s.order) a order by rand()  limit #{showCount}
+    </select>
+    
     <!-- 查询热销商品列表 -->
     <select id="getHotSellProductList" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
-          select a.*,ifnull(b.salesMonth,0)
+          select a.*,ifnull(b.salesMonth,0) as salesMonth
 		  from
           (select g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime
           from
@@ -61,17 +84,18 @@
     
     <!-- 分页获取商品列表 -->
     <select id="getCoonShopProductInfoListPage" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
-          select a.*,ifnull(b.salesMonth,0)
+          select a.*,ifnull(b.salesMonth,0) as salesMonth
 		  from
-          (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime
+          (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,if(g.drp_price>0,g.drp_price,g.cxjg) as drp_price,p.divide,p.createtime,g.stock,p.content
           FROM cool_product_gg g
           left join cool_product p on g.goods_id = p.id
-          where g.stock > 0 
+          where 1=1 
+				<!--           g.stock > 0  -->
           <if test="type != null">
           	and p.type = #{type,jdbcType=INTEGER}
           </if>
           <if test="name != null and name != ''">
-          	and (p.name  like '%' || #{name,jdbcType=VARCHAR} || '%' or p.name_en  like '%' || #{name,jdbcType=VARCHAR} || '%' )
+          	and (p.name  like CONCAT(CONCAT('%', #{name}), '%')  or p.name_en  like CONCAT(CONCAT('%', #{name}), '%'))
           </if>
           <if test="pId != null and pId != ''">
           	and p.id = #{pId,jdbcType=VARCHAR}
@@ -79,18 +103,29 @@
           <if test="gId != null and gId != ''">
           	and g.id = #{gId,jdbcType=VARCHAR}
           </if>
-          <if test="orderBy == '1'.toString()">
-          	group by ifnull(g.cxjg,g.jg) * p.divide desc
+          <!-- 该字符串由两位组成 第一位：1:佣金  2：售价 3:销量 默认按佣金；第二位：1：升序  2：降序 默认降序 -->
+          <if test="orderBy == '11'.toString()">
+          	order by ifnull(g.cxjg,g.jg) * p.divide asc
           </if>
-          <if test="orderBy == '2'.toString()">
-          	group by ifnull(g.cxjg,g.jg) desc
+          <if test="orderBy == '12'.toString()">
+          	order by ifnull(g.cxjg,g.jg) * p.divide desc
           </if>
-          <if test="orderBy == '3'.toString()">
-            group by g.sales desc
+          <if test="orderBy == '21'.toString()">
+          	order by ifnull(g.cxjg,g.jg) asc
+          </if>
+          <if test="orderBy == '22'.toString()">
+          	order by ifnull(g.cxjg,g.jg) desc
+          </if>
+          <if test="orderBy == '31'.toString()">
+            order by g.sales asc
+          </if>
+          <if test="orderBy == '32'.toString()">
+            order by g.sales desc
           </if>
           ) a
           left join
-			(SELECT i.gid,sum(i.count) as salesMonth  from cool_order_item i
+			(SELECT i.gid,sum(i.count) as salesMonth  
+			from cool_order_item i
 			inner join cool_order o on o.order_no = i.order_no 
 			where left(o.createtime,7) = left(now(),7) and (o.state=0 or o.state=1 or o.state=2 or o.state=3 or o.state=1 or o.state=11)
 			 group by  i.gid) b on b.gid = a.id
@@ -98,22 +133,113 @@
     
     <!-- 分页查询已上架商品信息 -->
     <select id="getCoonShopProductAddedListPage" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
-          select a.*,ifnull(b.salesMonth,0)
+          select a.*,ifnull(b.salesMonth,0) as salesMonth
 		  from
-          (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime
+          (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime,s.order,s.is_new,p.shelves
           FROM coon_shop_product s
           left join cool_product p on p.id = s.p_id
           left join cool_product_gg g on g.goods_id = p.id          
-          where g.stock > 0 
+          where g.stock > 0 and s.added = 1
           <if test="sId != null and sId != ''">
           	and s.s_id = #{sId,jdbcType=VARCHAR}
           </if>
-          ) a
+          <if test="isNew != null and isNew != ''">
+          	and s.is_new = #{isNew,jdbcType=VARCHAR}
+          </if>
+          order by s.order) a
           left join
 			(SELECT i.gid,sum(i.count) as salesMonth  from cool_order_item i
 			inner join cool_order o on o.order_no = i.order_no 
 			where left(o.createtime,7) = left(now(),7) and (o.state=0 or o.state=1 or o.state=2 or o.state=3 or o.state=1 or o.state=11)
 			 group by  i.gid) b on b.gid = a.id
+    </select>
+    
+     <!-- 分页查询已上架商品信息(只查商品，不查询多规格) -->
+    <select id="getCoonShopProductAddedPage" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
+          select a.*
+		  from
+          <!-- (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime,s.order,s.is_new,p.shelves -->
+          (SELECT p.id as goods_id,p.name,p.name_en,p.type,p.logo,p.sales,p.price as jg,p.divide,p.createtime,s.order,s.is_new,p.shelves
+          FROM coon_shop_product s
+          inner join cool_product p on p.id = s.p_id and p.shelves = 0
+          <if test="stock != null and stock !=''">
+          	inner join 
+          	(select distinct goods_id from cool_product_gg where 1=1 
+	          	<if test="stock =='1'.toString()" >
+	                 and stock>0 
+	          </if>  ) g on g.goods_id = p.id
+         </if>
+          left join (select ifnull(count(1),0) as count,g_id from cool_product_review group by g_id) r on r.g_id = s.p_id
+          <!-- left join cool_product_gg g on g.goods_id = p.id  
+          where g.stock > 0 and s.added = 1 --> 
+          where s.added = 1
+          <if test="type != null">
+          	and p.type= #{type}
+          </if>
+          <if test="sId != null and sId != ''">
+          	and s.s_id = #{sId,jdbcType=VARCHAR}
+          </if>
+          <if test="isNew != null and isNew != ''">
+          	and s.is_new = #{isNew,jdbcType=VARCHAR}
+          </if>
+          <if test="name != null and name != ''">
+          	and (p.name  like CONCAT(CONCAT('%', #{name}), '%')  or p.name_en  like CONCAT(CONCAT('%', #{name}), '%'))
+          </if>
+         <!-- 该字符串由两位组成 第一位：1:佣金  2：售价 3:销量 4:评价；第二位：1：升序  2：降序 默认降序 -->
+          <if test="orderBy == '11'.toString()">
+          	order by ifnull(p.fav_price,p.price) * p.divide asc) a
+          </if>
+          <if test="orderBy == '12'.toString()">
+          	order by ifnull(p.fav_price,p.price) * p.divide desc) a
+          </if>
+          <if test="orderBy == '21'.toString()">
+          	order by ifnull(p.fav_price,p.price) asc) a
+          </if>
+          <if test="orderBy == '22'.toString()">
+          	order by ifnull(p.fav_price,p.price) desc) a
+          </if>
+          <if test="orderBy == '31'.toString()">
+            order by p.sales asc) a
+          </if>
+          <if test="orderBy == '32'.toString()">
+            order by p.sales desc) a
+          </if>
+          <if test="orderBy == '41'.toString()">
+            order by r.count asc) a
+          </if>
+          <if test="orderBy == '42'.toString()">
+            order by r.count desc) a
+          </if>
+          <if test="orderBy == '99'.toString()">
+            order by s.order asc) a
+          </if>
+    </select>
+    
+    <!-- 分页查询已上架商品数量(只查商品，不查询多规格) -->
+    <select id="getCoonShopProductAddedPageCount" resultType="java.lang.Integer" parameterType="com.isell.service.shop.po.CoonShopProductParam">
+          select count(*)
+		  from
+          <!-- (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime,s.order,s.is_new,p.shelves -->
+          (SELECT p.id as goods_id,p.name,p.name_en,p.type,p.logo,p.sales,p.price as jg,p.divide,p.createtime,s.order,s.is_new,p.shelves
+          FROM coon_shop_product s
+          inner join cool_product p on p.id = s.p_id and p.shelves = 0
+          <if test="stock != null and stock !=''">
+          	inner join 
+          	(select distinct goods_id from cool_product_gg where 1=1 
+	          	<if test="stock =='1'.toString()" >
+	                 and stock>0 
+	          </if>  ) g on g.goods_id = p.id
+         </if>
+          <!-- left join cool_product_gg g on g.goods_id = p.id  
+          where g.stock > 0 and s.added = 1 --> 
+          where s.added = 1           
+          <if test="sId != null and sId != ''">
+          	and s.s_id = #{sId,jdbcType=VARCHAR}
+          </if>
+          <if test="isNew != null and isNew != ''">
+          	and s.is_new = #{isNew,jdbcType=VARCHAR}
+          </if>
+          order by s.order) a
     </select>
     
     <!-- 分页查询未上架商品信息 -->
@@ -130,6 +256,17 @@
 			inner join cool_order o on o.order_no = i.order_no 
 			where left(o.createtime,7) = left(now(),7) and (o.state=0 or o.state=1 or o.state=2 or o.state=3 or o.state=1 or o.state=11)
 			 group by  i.gid) b on b.gid = a.id
+    </select> 
+    
+    <!-- 分页查询未上架商品信息(只查商品，不查询多规格) -->
+    <select id="getCoonShopProductNoAddedPage" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
+		  SELECT p.id as goods_id,p.name,p.name_en,p.type,p.logo,p.price as jg,p.sales,p.divide,p.createtime
+		  FROM cool_product p 
+          where p.shelves = 0 
+          	<if test="name != null and name!= ''">
+          		and (p.name  like CONCAT(CONCAT('%', #{name}), '%')  or p.name_en  like CONCAT(CONCAT('%', #{name}), '%'))
+          	</if>          	
+          	and not exists(select 'x' from coon_shop_product s where s.s_id = #{sId,jdbcType=VARCHAR} and s.added = 1 and  s.p_id = p.id)	
     </select> 
     
     <!-- 根据酷店主键和商品主键获取上架店铺数 -->
@@ -149,6 +286,15 @@
           select MAX(`order`) from coon_shop_product where s_id =  #{sId,jdbcType=VARCHAR} 
     </select>
     
+    <!-- 根据酷店最大的商品排序号 -->
+    <select id="getCoonShopProductList" resultMap="BaseResultMap">
+          select * from coon_shop_product 
+          where s_id =  #{sId,jdbcType=VARCHAR} 
+          		and `order` <![CDATA[ >= ]]> #{pxh ,jdbcType=INTEGER} 
+          		and p_id  <![CDATA[ != ]]> #{pId,jdbcType=VARCHAR}  
+   		  order by `order` asc
+    </select>
+    
     <select id="findAllCoonShopProduct" resultMap="BaseResultMap">
           SELECT * FROM coon_shop_product 
     </select>
@@ -162,7 +308,7 @@
           </if>
           <if test="sId != null and sId != ''" >
               and s_id = #{sId,jdbcType=VARCHAR}
-          </if>
+          </if>          
     </select>
     
     <delete id="deleteCoonShopProduct">

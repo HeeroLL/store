@@ -37,7 +37,7 @@ public class PsOrderController {
     
     /**
      * 保存订单信息接口
-     *
+     * 
      * @param jsonObj 订单参数
      * @return 订单信息
      */
@@ -55,7 +55,7 @@ public class PsOrderController {
     
     /**
      * 支付页面
-     *
+     * 
      * @param jsonObj 支付参数
      * @return 跳转到支付页面
      */
@@ -69,4 +69,5 @@ public class PsOrderController {
         
         return "redirect:" + config.getDomain() + "/user/payPage/" + order.getId();
     }
+    
 }

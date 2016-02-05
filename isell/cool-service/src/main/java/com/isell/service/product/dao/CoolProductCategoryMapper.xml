@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.product.dao.CoolProductCategoryMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.product.vo.CoolProductCategory">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="orderby" jdbcType="INTEGER" property="orderby"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="parents" jdbcType="VARCHAR" property="parents"/>
+        <result column="del_flag" jdbcType="BIT" property="delFlag"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="tag" jdbcType="VARCHAR" property="tag"/>
+    </resultMap>
+    <select id="getCoolProductCategoryById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_category
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolProductCategory" resultMap="BaseResultMap">
+          SELECT * FROM cool_product_category where del_flag = 0 group by id
+    </select>
+    
+    <delete id="deleteCoolProductCategory">
+        DELETE
+        FROM
+             cool_product_category
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolProductCategory" parameterType="com.isell.service.product.vo.CoolProductCategory" >
+        INSERT INTO cool_product_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+            <if test="orderby != null" >
+                orderby,
+            </if>
+            <if test="parentId != null" >
+                parent_id,
+            </if>
+            <if test="parents != null" >
+                parents,
+            </if>
+            <if test="delFlag != null" >
+                del_flag,
+            </if>
+            <if test="code != null" >
+                code,
+            </if>
+            <if test="tag != null" >
+                tag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="remark != null" >
+                #{remark,jdbcType=VARCHAR},
+            </if> 
+            <if test="orderby != null" >
+                #{orderby,jdbcType=INTEGER},
+            </if> 
+            <if test="parentId != null" >
+                #{parentId,jdbcType=INTEGER},
+            </if> 
+            <if test="parents != null" >
+                #{parents,jdbcType=VARCHAR},
+            </if> 
+            <if test="delFlag != null" >
+                #{delFlag,jdbcType=BIT},
+            </if> 
+            <if test="code != null" >
+                #{code,jdbcType=VARCHAR},
+            </if> 
+            <if test="tag != null" >
+                #{tag,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolProductCategory" parameterType="com.isell.service.product.vo.CoolProductCategory" >
+        UPDATE cool_product_category
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="orderby != null" >
+                orderby = #{orderby,jdbcType=INTEGER},
+            </if>
+            <if test="parentId != null" >
+                parent_id = #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="parents != null" >
+                parents = #{parents,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null" >
+                del_flag = #{delFlag,jdbcType=BIT},
+            </if>
+            <if test="code != null" >
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="tag != null" >
+                tag = #{tag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

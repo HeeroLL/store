@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.code.dao.CoolConfigMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.code.vo.CoolConfig">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="rate_jpy" jdbcType="DECIMAL" property="rateJpy"/>
+        <result column="rate_ker" jdbcType="DECIMAL" property="rateKer"/>
+        <result column="rate_usd" jdbcType="DECIMAL" property="rateUsd"/>
+        <result column="supplier_divided" jdbcType="DECIMAL" property="supplierDivided"/>
+        <result column="store_audit" jdbcType="BIT" property="storeAudit"/>
+        <result column="shop_brand_audit" jdbcType="BIT" property="shopBrandAudit"/>
+    </resultMap>
+    <select id="getCoolConfigById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_config
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolConfig" resultMap="BaseResultMap">
+          SELECT * FROM cool_config 
+    </select>
+    
+    <delete id="deleteCoolConfig">
+        DELETE
+        FROM
+             cool_config
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolConfig" parameterType="com.isell.service.code.vo.CoolConfig" >
+        INSERT INTO cool_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="rateJpy != null" >
+                rate_jpy,
+            </if>
+            <if test="rateKer != null" >
+                rate_ker,
+            </if>
+            <if test="rateUsd != null" >
+                rate_usd,
+            </if>
+            <if test="supplierDivided != null" >
+                supplier_divided,
+            </if>
+            <if test="storeAudit != null" >
+                store_audit,
+            </if>
+            <if test="shopBrandAudit != null" >
+                shop_brand_audit,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="rateJpy != null" >
+                #{rateJpy,jdbcType=DECIMAL},
+            </if> 
+            <if test="rateKer != null" >
+                #{rateKer,jdbcType=DECIMAL},
+            </if> 
+            <if test="rateUsd != null" >
+                #{rateUsd,jdbcType=DECIMAL},
+            </if> 
+            <if test="supplierDivided != null" >
+                #{supplierDivided,jdbcType=DECIMAL},
+            </if> 
+            <if test="storeAudit != null" >
+                #{storeAudit,jdbcType=BIT},
+            </if> 
+            <if test="shopBrandAudit != null" >
+                #{shopBrandAudit,jdbcType=BIT},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolConfig" parameterType="com.isell.service.code.vo.CoolConfig" >
+        UPDATE cool_config
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="rateJpy != null" >
+                rate_jpy = #{rateJpy,jdbcType=DECIMAL},
+            </if>
+            <if test="rateKer != null" >
+                rate_ker = #{rateKer,jdbcType=DECIMAL},
+            </if>
+            <if test="rateUsd != null" >
+                rate_usd = #{rateUsd,jdbcType=DECIMAL},
+            </if>
+            <if test="supplierDivided != null" >
+                supplier_divided = #{supplierDivided,jdbcType=DECIMAL},
+            </if>
+            <if test="storeAudit != null" >
+                store_audit = #{storeAudit,jdbcType=BIT},
+            </if>
+            <if test="shopBrandAudit != null" >
+                shop_brand_audit = #{shopBrandAudit,jdbcType=BIT},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+    
+    <select id="getPercentageByDevide" resultMap="BaseResultMap">
+    	select * from cool_config where supplier_divided = #{devide}
+    </select>
+</mapper>

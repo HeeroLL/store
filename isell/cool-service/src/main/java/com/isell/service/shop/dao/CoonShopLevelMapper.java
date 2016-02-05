@@ -48,5 +48,13 @@ public interface CoonShopLevelMapper{
      * @return p_rate
      */
     public BigDecimal getLevelPrate(@Param("userId")String userId);
+    
+    /**
+     * 查询店铺对应的比例c_rate
+     * 
+     * @param userId
+     * @return p_rate
+     */
+    public BigDecimal getLevelCrate(@Param("sId")String sId);
 }
 

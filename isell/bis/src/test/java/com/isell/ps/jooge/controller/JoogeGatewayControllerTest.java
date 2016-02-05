@@ -67,7 +67,7 @@ public class JoogeGatewayControllerTest {
     @Test
     public void testGetOrderDetail() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("Id", "CO201512301729497213378");
+        paramMap.put("Id", "CO201601290923441373");
         
         String result =
             HttpUtils.httpPost("http://service.i-coolshop.com/jooge/gateway", getParam(paramMap, "order.detail.get"));

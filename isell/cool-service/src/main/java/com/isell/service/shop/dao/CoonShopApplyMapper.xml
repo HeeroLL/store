@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.shop.dao.CoonShopApplyMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.shop.vo.CoonShopApply">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="age" jdbcType="VARCHAR" property="age"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
+        <result column="job_type" jdbcType="TINYINT" property="jobType"/>
+        <result column="job" jdbcType="VARCHAR" property="job"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="audit" jdbcType="VARCHAR" property="audit"/>
+        <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime"/>
+        <result column="audit_reason" jdbcType="VARCHAR" property="auditReason"/>
+    </resultMap>
+    <select id="getCoonShopApplyById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_apply
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根据用户主键查询 -->
+     <select id="getCoonShopApplyByUserId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             coon_shop_apply
+        WHERE            
+            user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findAllCoonShopApply" resultMap="BaseResultMap">
+          SELECT * FROM coon_shop_apply 
+    </select>
+    
+    <delete id="deleteCoonShopApply">
+        DELETE
+        FROM
+             coon_shop_apply
+        WHERE            
+            id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="saveCoonShopApply" parameterType="com.isell.service.shop.vo.CoonShopApply" >
+        INSERT INTO coon_shop_apply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="age != null" >
+                age,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="idcard != null" >
+                idcard,
+            </if>
+            <if test="jobType != null" >
+                job_type,
+            </if>
+            <if test="job != null" >
+                job,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+            <if test="state != null" >
+                state,
+            </if>
+            <if test="audit != null" >
+                audit,
+            </if>
+            <if test="auditTime != null" >
+                audit_time,
+            </if>
+            <if test="auditReason != null" >
+                audit_reason,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if> 
+            <if test="userId != null" >
+                #{userId,jdbcType=VARCHAR},
+            </if> 
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if> 
+            <if test="age != null" >
+                #{age,jdbcType=VARCHAR},
+            </if> 
+            <if test="mobile != null" >
+                #{mobile,jdbcType=VARCHAR},
+            </if> 
+            <if test="idcard != null" >
+                #{idcard,jdbcType=VARCHAR},
+            </if> 
+            <if test="jobType != null" >
+                #{jobType,jdbcType=TINYINT},
+            </if> 
+            <if test="job != null" >
+                #{job,jdbcType=VARCHAR},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="state != null" >
+                #{state,jdbcType=TINYINT},
+            </if> 
+            <if test="audit != null" >
+                #{audit,jdbcType=VARCHAR},
+            </if> 
+            <if test="auditTime != null" >
+                #{auditTime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="auditReason != null" >
+                #{auditReason,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoonShopApply" parameterType="com.isell.service.shop.vo.CoonShopApply" >
+        UPDATE coon_shop_apply
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null" >
+                age = #{age,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="idcard != null" >
+                idcard = #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="jobType != null" >
+                job_type = #{jobType,jdbcType=TINYINT},
+            </if>
+            <if test="job != null" >
+                job = #{job,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=TINYINT},
+            </if>
+            <if test="audit != null" >
+                audit = #{audit,jdbcType=VARCHAR},
+            </if>
+            <if test="auditTime != null" >
+                audit_time = #{auditTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="auditReason != null" >
+                audit_reason = #{auditReason,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>
