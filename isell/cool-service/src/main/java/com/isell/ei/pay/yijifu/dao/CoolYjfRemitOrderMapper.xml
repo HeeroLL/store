@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.ei.pay.yijifu.dao.CoolYjfRemitOrderMapper">
+    <resultMap id="BaseResultMap" type="com.isell.ei.pay.yijifu.bean.CoolYjfRemitOrder">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="remittrance_batchno" jdbcType="VARCHAR" property="remittranceBatchno"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="order_amount" jdbcType="DECIMAL" property="orderAmount"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="message" jdbcType="VARCHAR" property="message"/>
+    </resultMap>
+    <select id="getCoolYjfRemitOrderById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_yjf_remit_order
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findYjfRemitOrderByBatchno" resultMap="BaseResultMap">
+          SELECT * FROM cool_yjf_remit_order where remittrance_batchno = #{remittranceBatchno}
+    </select>
+    
+     <!-- 获取批次金额 -->
+    <select id="getSumAmountByBatchno" resultType="java.math.BigDecimal">
+        SELECT
+            ifnull(sum(order_amount),0)
+        FROM
+             cool_yjf_remit_order
+        WHERE            
+            remittrance_batchno = #{remittranceBatchno} and status='success'
+    </select>
+    
+    <delete id="deleteCoolYjfRemitOrder">
+        DELETE
+        FROM
+             cool_yjf_remit_order
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolYjfRemitOrder" parameterType="com.isell.ei.pay.yijifu.bean.CoolYjfRemitOrder" >
+        INSERT INTO cool_yjf_remit_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="remittranceBatchno != null" >
+                remittrance_batchno,
+            </if>
+            <if test="orderNo != null" >
+                order_no,
+            </if>
+            <if test="orderAmount != null" >
+                order_amount,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="message != null" >
+                message,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="remittranceBatchno != null" >
+                #{remittranceBatchno,jdbcType=VARCHAR},
+            </if> 
+            <if test="orderNo != null" >
+                #{orderNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="orderAmount != null" >
+                #{orderAmount,jdbcType=DECIMAL},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="status != null" >
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="message != null" >
+                #{message,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateCoolYjfRemitOrder" parameterType="com.isell.ei.pay.yijifu.bean.CoolYjfRemitOrder" >
+        UPDATE cool_yjf_remit_order
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="remittranceBatchno != null" >
+                remittrance_batchno = #{remittranceBatchno,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNo != null" >
+                order_no = #{orderNo,jdbcType=CHAR},
+            </if>
+            <if test="orderAmount != null" >
+                order_amount = #{orderAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="message != null" >
+                #{message,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

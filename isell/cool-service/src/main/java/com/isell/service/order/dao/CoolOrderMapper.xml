@@ -148,13 +148,23 @@
     </select>
     
     <!-- 根据会员主键跟状态获取定单数 -->
+    <select id="getBuyCount" resultType="java.lang.Integer">
+        SELECT
+            ifnull(count(1),0)
+        FROM
+             cool_order
+         WHERE 
+             supplier = #{supplier,jdbcType=VARCHAR} and (state = 1 or state = 2 or state = 3 or state = 4)
+    </select>
+    
+    <!-- 根据会员主键跟状态获取定单数 -->
     <select id="getOrderCountBymIdAndState" resultType="java.lang.Integer">
         SELECT
             ifnull(count(1),0)
         FROM
              cool_order
          WHERE 
-             m_id = #{mId,jdbcType=INTEGER} and state like #{state}             
+             m_id = #{mId,jdbcType=INTEGER} and state like #{state}  and order_type =   #{orderType}
     </select>
     
     <!-- 获取定单数 -->
@@ -174,7 +184,7 @@
     
     <!-- 获取一件代发购买过的商品列表 -->
     <select id="getCoolProductInfoList" resultMap="CoolProductInfoMap"  parameterType="com.isell.service.order.po.CoolOrderParam">
-        SELECT g.id as  gId, p.id as pId, p.name as name, p.name_en as name_en, p.logo as logo, g.gg as gg, g.drp_price as drp_price,if(g.stock>0, g.stock, 0) as stock 
+        SELECT g.id as  gId, p.id as pId, p.name as name, p.name_en as name_en, p.logo as logo, g.gg as gg,  if(g.drp_price=0,g.cxjg,g.drp_price) as drp_price,if(g.stock>0, g.stock, 0) as stock 
         from
         (SELECT
             i.g_id,i.gid
@@ -190,10 +200,22 @@
         	and i.name like CONCAT(CONCAT('%', #{pName}), '%')
         </if>   
        	) oi 
-       	left join 
+       	inner join 
        		cool_product_gg g on g.id = oi.gid
-	    left join 
+	    inner join 
 	    	cool_product p on p.id = oi.g_id            
+    </select>
+    
+    <!-- 获取最近购物人次列表 -->
+    <select id="getBuyCountPage" resultMap="StatisticsMap" parameterType="com.isell.service.order.po.CoolOrderParam">
+        SELECT
+            left(createTime, 10) as statistics_k,ifnull(count(1),0) as statistics_v_i
+        FROM
+             cool_order
+        WHERE            
+            supplier = #{supplier,jdbcType=VARCHAR} 
+         group by left(createTime, 10)
+         order by left(createTime, 10) desc
     </select>
     
     <select id="getCoolOrderById" resultMap="BaseResultMap">
@@ -366,7 +388,7 @@
     		and a.zffs = #{zffs,jdbcType=INTEGER}
     	</if>
     	<if test="state != null">
-    		and a.state = #{state,jdbcType=TINYINT}
+    		and a.state like  CONCAT(CONCAT('%', #{state,jdbcType=TINYINT}), '%')
     	</if>
     	<if test="mId != null">
     		and  a.m_id = #{mId,jdbcType=INTEGER} and  is_Del_m = 0
@@ -1010,7 +1032,7 @@
    		<choose>
    			<when test="order.timeType==1">
    				<if test="order.beginTime != null"> 
-   				and ps_code is not null
+   			<!-- 	and ps_code is not null -->
    				and createtime <![CDATA[>=]]> #{order.beginTime}</if>
    				<if test="order.endTime != null">and createtime <![CDATA[<=]]> #{order.endTime}</if>
    			</when>
@@ -1024,4 +1046,17 @@
 	 <update id="updateStateByOlderOldNo" parameterType="com.isell.service.order.vo.CoolOrder" >
 	 		UPDATE cool_order set state=#{state} where order_oldno=#{orderOldno} and supplier=#{supplier}
 	 </update> 	
+	 <select id="checkUnSuccessIsExist" resultType="java.lang.Integer">
+	 	<if test="checkType==1">
+	 		select count(1) from cool_return_post where orderno=#{orderno}
+	 	</if>
+	 	<if test="checkType==2">
+	 	 	select count(1) from cool_return_post where pid=#{pid} and gid=#{gid}
+	 	</if>
+	 </select>
+	 <insert id="saveUnSuccessOrderReturn">
+	 	insert into cool_return_post(createtime,orderno,state,reason,waybillNo,sendStyle,pid,gid,price,
+	 	returnurl)
+	 	values(now(),#{orderno},#{state},#{reason},#{waybillNo},#{sendStyle},#{pid},#{gid},#{price},#{returnurl})
+	 </insert>
 </mapper>

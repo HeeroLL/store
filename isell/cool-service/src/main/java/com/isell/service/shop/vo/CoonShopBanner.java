@@ -30,6 +30,11 @@ public class CoonShopBanner extends PageConfig{
      * 主键（以","分隔）
      */
     private String ids;
+    
+    /**
+     * 酷店编码
+     */
+    private String shopCode;
 
     /**
      * 
@@ -90,5 +95,13 @@ public class CoonShopBanner extends PageConfig{
 
 	public void setIds(String ids) {
 		this.ids = ids;
+	}
+
+	public String getShopCode() {
+		return shopCode;
+	}
+
+	public void setShopCode(String shopCode) {
+		this.shopCode = shopCode;
 	}    
 }

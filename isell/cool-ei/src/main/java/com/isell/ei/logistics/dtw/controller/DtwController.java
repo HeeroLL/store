@@ -39,12 +39,14 @@ public class DtwController {
 		return dtwService.sendGoods(sr);
 	}
 	
+	//综合订单
 	@RequestMapping("multipleOrders")
 	@ResponseBody
 	public MultipleResponse multipleOrders(@RequestBody MultipleRequest multipleRequest)  {
 		return dtwService.multipleOrders(multipleRequest);
 	}
 	
+	//个人订单
 	@RequestMapping("sendPersonalInfo")
 	@ResponseBody
 	public SendPersonalResponse sendPersonalInfo(@RequestBody SendPresonalInfo sendPresonalInfo){

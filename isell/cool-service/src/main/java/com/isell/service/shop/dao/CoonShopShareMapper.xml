@@ -26,8 +26,9 @@
     
     <!-- 根据查询条件查询 -->
     <select id="findCoonShopShareList" resultMap="BaseResultMap" parameterType="com.isell.service.shop.vo.CoonShopShare">
-          SELECT a.*,s.level as shopLevel,s.name as shopName,s.logo as shopLogo FROM coon_shop_share a 
-          left join coon_shop s on a.s_shop=s.id
+          SELECT a.*,s.level as shopLevel,s.name as shopName,s.logo as shopLogo 
+          FROM coon_shop_share a 
+          inner join coon_shop s on a.s_shop=s.id
           where 1=1 
           <if test="sShop != null and sShop != ''">
           	and a.s_shop = #{sShop,jdbcType=VARCHAR}

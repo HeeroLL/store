@@ -127,4 +127,36 @@ public class YijifuController {
         jsonData.setSuccess("SUCCESS".equals(resultMap.get("refundStatus")));
         return jsonData;
     }
+    
+    /**
+     * 跨境订单信息同步
+     *
+     * @param remittranceBatchNo 跨境付款批次号
+     * @param orderNos 订单集合
+     * @return 封装后的结果
+     */
+    @RequestMapping("corderRemittanceSynOrder")
+    @ResponseBody
+    public JsonData corderRemittanceSynOrder(String remittranceBatchNo, String orderNos) {
+        Map<String, String> resultMap = yijifuService.corderRemittanceSynOrder(remittranceBatchNo, orderNos.split(","));
+        
+        JsonData jsonData = new JsonData();
+        jsonData.setData(resultMap);
+        jsonData.setSuccess("EXECUTE_SUCCESS".equals(resultMap.get("resultCode")));
+        return jsonData;
+    }
+    
+    /**
+     * 跨境汇款申请
+     *
+     * @param paramMap 参数信息
+     * @param map 返回值
+     * @return 返回的参数字符串
+     */
+    @RequestMapping("applyRemittranceWithSynOrder")
+    public String applyRemittranceWithSynOrder(@RequestBody Map<String, String> paramMap, ModelMap map) {
+        map.putAll(paramMap);
+        map.addAttribute("result", yijifuService.applyRemittranceWithSynOrder(paramMap));
+        return "result";
+    }
 }

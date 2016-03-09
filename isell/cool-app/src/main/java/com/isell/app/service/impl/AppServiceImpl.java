@@ -16,12 +16,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
- 
-
-
-
-
-
 import com.isell.app.dao.AppUserMapper;
 import com.isell.app.dao.entity.CenterOrder;
 import com.isell.app.dao.entity.CenterOrderParam;
@@ -35,9 +29,12 @@ import com.isell.app.dao.entity.LoginParam;
 import com.isell.app.dao.entity.MemberAddress;
 import com.isell.app.dao.entity.MemberCommunity;
 import com.isell.app.dao.entity.Notice;
+import com.isell.app.dao.entity.OrderCount;
 import com.isell.app.dao.entity.OrderDetail;
 import com.isell.app.dao.entity.OrderParam;
+import com.isell.app.dao.entity.OrderRecv;
 import com.isell.app.dao.entity.Product;
+import com.isell.app.dao.entity.ProductRec;
 import com.isell.app.dao.entity.SearchParam;
 import com.isell.app.dao.entity.SearchProduct;
 import com.isell.app.dao.entity.SearchShop;
@@ -45,7 +42,6 @@ import com.isell.app.dao.entity.SearchType;
 import com.isell.app.dao.entity.Theme;
 import com.isell.app.service.AppService;
 import com.isell.core.config.BisConfig;
-import com.isell.core.util.Coder;
 import com.isell.core.util.CommonUtils;
 import com.isell.core.util.DateUtil;
 import com.isell.core.util.Record;
@@ -64,9 +60,6 @@ import com.isell.service.product.dao.CoolProductGgMapper;
 import com.isell.service.product.dao.CoolProductMapper;
 import com.isell.service.product.vo.CoolProduct;
 import com.isell.service.product.vo.CoolProductGg;
-import com.isell.service.shop.vo.CoonShop;
-import com.isell.service.shop.vo.CoonShopLevel;
-import com.mysql.fabric.xmlrpc.base.Member;
 
 
 
@@ -122,19 +115,21 @@ public class AppServiceImpl implements AppService{
 				checkIsRec=1;
 			}
 		}
-		
+		 
 		List<Theme>records=this.appUserMapper.queryThemelist();
     	for(Theme info:records)
     	{
     		List<Product>goodslist=new ArrayList<Product>();
     		String goodsid=info.getGoodsid();
-    		String shopid=info.getShopid();
+    		//String shopid=info.getShopid();
     		String imgs=info.getImgs();
     		String []goodids=goodsid.split(",");
-    		String [] shopids=shopid.split(",");
+    		//String [] shopids=shopid.split(",");
     		String []img_paths=imgs.split(",");
     		for(int i=0;i<goodids.length;i++)
     		{
+    			if(StringUtils.isNotBlank(goodids[i]))
+    			{
     				Product pro=new Product();
     				Map map=new HashMap();
     				map.put("goodsid", goodids[i]);
@@ -147,13 +142,36 @@ public class AppServiceImpl implements AppService{
     					pro.setImg(config.getImgDomain()+img_paths[i]);
     					if(pro.getIsrec()==3)
     					{
-    						pro.setShopid(Integer.parseInt(shopids[i]));
+    						//pro.setShopid(Integer.parseInt(shopids[i]));
+    						String sale_id=this.appUserMapper.checkProIsSuccessSale(map);
+    						if(sale_id!=null &&!"".equals(sale_id))
+    						{
+    							 pro.setShopcode(Integer.parseInt(appUserMapper.queryShopCodeBySid(sale_id)));
+    							 pro.setShopid(sale_id);
+    							 pro.setMobile(this.appUserMapper.queryMobileByShopid(sale_id));
+    						}else
+    						{
+    							//随机取一家店铺的 id ，code 
+    							 String id=this.appUserMapper.queryShopIdByRandom(map);
+    							 if(id!=null&&!"".equals(id))
+    							 {
+    								 pro.setShopcode(Integer.parseInt(appUserMapper.queryShopCodeBySid(id)));
+        							 pro.setShopid(id);
+        							 pro.setMobile(this.appUserMapper.queryMobileByShopid(id));
+    							 }
+    							
+    						}
     					}
+    					pro.setIshas(this.appUserMapper.checkShopIsHasGoods(pro));
     					goodslist.add(pro);
     				}
+    			}
+    				
     		}
     		info.setProductlist(goodslist);
     	}
+    	
+    	
     	if(CollectionUtils.isNotEmpty(records)){
     		record.set("themelist", records);
 			success = true;
@@ -389,6 +407,19 @@ public class AppServiceImpl implements AppService{
 		return list;
 	}
 	/**
+	 * 取消订单
+	 */
+	public int cancleOrderByOrderno(OrderParam orderParam)
+	{
+		int result=0;
+		int checkresult=this.appUserMapper.queryOrderStateByOrderno(orderParam);
+		if(checkresult>0)
+		{
+			result=this.appUserMapper.cancleOrderByOrderno(orderParam);
+		}
+		return result;
+	}
+	/**
 	 * 查询用户收藏总的数量
 	 */
 	public int queryUserCollectTotalNum(SearchParam searchParam)
@@ -400,6 +431,9 @@ public class AppServiceImpl implements AppService{
 	 */
 	public SearchShop queryShopInfo(SearchShop searchShop)
 	{
+		SearchParam param=new SearchParam();
+		param.setShopcode(searchShop.getShopcode());
+		searchShop.setShopid(this.appUserMapper.queryShopIdByShopCode(param));
 		return this.appUserMapper.queryShopInfo(searchShop);
 	}
 	/**
@@ -552,7 +586,11 @@ public class AppServiceImpl implements AppService{
            
            if(total.compareTo(new BigDecimal(orderParam.getOrder_limit()))>0)
            {
-        	   taxfee=taxfee.add(total.multiply(product.getTax()));
+        	   if(total.multiply(product.getTax()).compareTo(new BigDecimal("50"))>0)
+        	   {
+        		   taxfee=taxfee.add(total.multiply(product.getTax()));
+        		   total.add(taxfee);
+        	   }
            }
            // 添加佣金
            BigDecimal profit =
@@ -601,16 +639,57 @@ public class AppServiceImpl implements AppService{
 			return 1;
 		}else
 		{
+			SearchParam param=new SearchParam();
+			param.setShopcode(collParam.getShopcode());
+			collParam.setIds(this.appUserMapper.queryShopIdByShopCode(param));
 			return this.appUserMapper.saveMemberFavourte(collParam);
 		}
+	}
+	/**
+	 * 保存用户评论订单
+	 */
+	public int saveUserRecOrder(OrderRecv rec)
+	{
+		int result=0;
+		result=this.appUserMapper.checkUserIsSaveedOrderRec(rec);
+		if(result>0)
+		{
+			result=2;
+		}else
+		{
+			result=this.appUserMapper.saveUserRecOrder(rec);
+			this.appUserMapper.updateOrderEndByOrderno(rec);
+			
+		}
+		return result;
+	}
+	/**
+	 * 买家删除订单  已取消、已完成和已退款
+	 */
+	public int mDdelOrderByOrderNo(OrderParam orderParam)
+	{
+		int result=0;
+		result=this.appUserMapper.checkOrderIsCanMDel(orderParam);
+		if(result>0)
+		{
+			result=this.appUserMapper.mDdelOrderByOrderNo(orderParam);
+		}
+		return result;
 	}
 	/**
 	 * 
 	 */
 	public List<SearchProduct>querySearchFavShopGoods(SearchParam searchParam)
 	{
-		List<SearchProduct>list=this.appUserMapper.querySearchFavShopGoods(searchParam);
+		List<SearchProduct>list=this.appUserMapper.querySearchFavShopGoods(searchParam.getRowBounds(),searchParam);
 		return list;
+	}
+	/**
+	 * 
+	 */
+	public String queryShopIdByShopCode(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryShopIdByShopCode(searchParam);
 	}
 	/**
 	 * 查询搜索 已关注 记录数量
@@ -734,6 +813,7 @@ public class AppServiceImpl implements AppService{
 		CollParam collParam=new CollParam();
 		collParam.setmId(searchParam.getmId());
 		collParam.setType(1);
+		searchParam.setSid(this.appUserMapper.queryShopIdByShopCode(searchParam));
 		this.appUserMapper.updateUserOldFavGoodsShopCode(searchParam);
 		//this.appUserMapper.deleteMemberFavGoods(collParam);
 		searchParam.setUncode(CommonUtils.uuid());
@@ -745,6 +825,7 @@ public class AppServiceImpl implements AppService{
 	 */
 	public int checkUserIsFavShop(SearchParam searchParam)
 	{
+		searchParam.setSid(this.appUserMapper.queryShopIdByShopCode(searchParam));
 		return this.appUserMapper.checkUserIsFavShop(searchParam);
 	}
 	
@@ -758,6 +839,7 @@ public class AppServiceImpl implements AppService{
 	 */
 	public int cancelUserFavShop(SearchParam searchParam)
 	{
+		searchParam.setSid(this.appUserMapper.queryShopIdByShopCode(searchParam));
 		this.appUserMapper.cancelUserFavShop(searchParam);
 		//this.appUserMapper.deleteUserFavGoods(searchParam);
 		return 1;
@@ -798,6 +880,39 @@ public class AppServiceImpl implements AppService{
 		return this.appUserMapper.saveNewCommunity(memberCommunity);
 	}
 	/**
+	 * 查询商品详情
+	 */
+	public Product queryProductinfo(Product product)
+	{
+		Product info= this.appUserMapper.queryProductinfo(product);
+		info.setProductGglist(this.appUserMapper.queryProductGgList(product));
+		return  info;
+	}
+	/**
+	 * 查询店铺主页
+	 */
+	public SearchShop queryShopData(SearchShop searchShop)
+	{
+		SearchShop info=this.appUserMapper.queryShopData(searchShop);
+		if(info!=null)
+		{
+			info.setNoticelist(this.appUserMapper.queryShopNoticelist(info));
+			info.setShopimglist(this.appUserMapper.queryShopImagelist(info));
+		}
+		return info;
+	}
+	/**
+	 * 
+	 */
+	public int queryGoodsRecTotalNum(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryGoodsRecTotalNum(searchParam);
+	}
+	public List<ProductRec>queryGoodsRecPage(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryGoodsRecPage(searchParam);
+	}
+	/**
 	 * 修改用户留言
 	 */
 	public int updateUserCommunity(MemberCommunity memberCommunity)
@@ -833,5 +948,151 @@ public class AppServiceImpl implements AppService{
 		this.appUserMapper.updateUserInfo(coolMember);
 		return this.appUserMapper.updateMemberInfo(coolMember);
 	}
+	public List<Product>queryShopNewGoods(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryShopNewGoods(searchParam);
+	}
+	/**
+	 * 查询店铺分类
+	 */
+	public List<HelpType>queryShopCatelog(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryShopCatelog(searchParam);
+	}
 	
+	public List<Product>queryShopGoodsByCatelogId(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryShopGoodsByCatelogId(searchParam);
+	}
+	public List<Product>queryBmsProductList(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryBmsProductList(searchParam);
+	}
+	public int queryBmsProductAllNum(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryBmsProductAllNum(searchParam);
+	}
+	public int queryBMsMyOrderAllNum(OrderParam orderParam)
+	{
+		return this.appUserMapper.queryBMsMyOrderAllNum(orderParam);
+	}
+	/**
+	 * 查询订单详情
+	 */
+	public OrderDetail queryOrderDetailForBms(SearchParam searchParam)
+	{
+		OrderDetail info= this.appUserMapper.queryOrderDetailForBms(searchParam);
+		if(info!=null)
+		{
+			info.setOrderGoods(this.appUserMapper.queryOrderGoodsListForBms(searchParam));
+		}
+		return info;
+	}
+	
+	public List<OrderDetail>queryBmsMyOrder(OrderParam orderParam)
+	{
+		List<OrderDetail>list= this.appUserMapper.queryBmsMyOrder(orderParam);
+		for(OrderDetail orderDetail:list)
+		{
+			OrderParam os=new OrderParam();
+			os.setOrderseq(orderDetail.getOrderno());
+			os.setImgdomain(orderParam.getImgdomain());
+			orderDetail.setOrderGoods(this.appUserMapper.queryOrderGoods(os));
+		}
+		return list;
+	}
+	public List<Product>queryBmsBindGoodsId(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryBmsBindGoodsId(searchParam);
+	}
+	/**
+	 * 根据父分类id查询子分类
+	 */
+	public List<SearchType>queryChildCatelogListByParent(SearchParam param)
+	{
+		return this.appUserMapper.queryChildCatelogListByParent(param);
+	}
+	public int queryBmsBindGoodsAllNum(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryBmsBindGoodsAllNum(searchParam);
+	}
+	
+	public int updateShopname(SearchParam searchParam)
+	{
+		return this.appUserMapper.updateShopname(searchParam);
+	}
+	public int regShopUser(SearchParam searchParam)
+	{
+		searchParam.setUncode(CommonUtils.uuid());
+		return this.appUserMapper.regShopUser(searchParam);
+	}
+	public int updateOrderState(SearchParam searchParam)
+	{
+		int result=0;
+		String sid=searchParam.getSid();
+		String [] sids=sid.split(",");
+		for(int i=0;i<sids.length;i++)
+		{
+			searchParam.setUncode(sids[i]);
+			result=this.appUserMapper.updateOrderState(searchParam);
+		}
+		return result;
+	}
+	public int updateShopProFlag(SearchParam searchParam)
+	{
+		int result=0;
+		String sid=searchParam.getSid();
+		String [] sids=sid.split(",");
+		for(int i=0;i<sids.length;i++)
+		{
+			searchParam.setGoodid(Integer.parseInt(sids[i]));
+			result=this.appUserMapper.updateShopProFlag(searchParam);
+		}
+		
+		return result;
+	}
+	/**
+	 * 查询订单统计
+	 */
+	public OrderCount queryBmsMyOrderCount(SearchParam searchParam)
+	{
+		return this.appUserMapper.queryBmsMyOrderCount(searchParam);
+	}
+	/* (non-Javadoc)
+	 * @see com.isell.app.service.AppService#updateShopProducts(com.isell.app.dao.entity.SearchParam)
+	 */
+	public int updateShopProducts(SearchParam searchParam)
+	{
+		int result=0;
+		String sid=searchParam.getSid();
+		String [] sids=sid.split(",");
+		if(searchParam.getType()==1)//新增
+		{
+			for(int i=0;i<sids.length;i++)
+			{
+				searchParam.setGoodid(Integer.parseInt(sids[i]));
+				searchParam.setTypeid(0);
+				if(this.appUserMapper.checkGoodsIsInTable(searchParam)>0)
+				{
+					//已存在
+					result=this.appUserMapper.updateBmsShopProduct(searchParam);
+				}else
+				{
+					searchParam.setUncode(CommonUtils.uuid());
+					result=this.appUserMapper.saveNewShopProduct(searchParam);
+				}
+			}
+		}else if(searchParam.getType()==2)//解绑
+		{		 
+			for(int i=0;i<sids.length;i++)
+			{
+				searchParam.setGoodid(Integer.parseInt(sids[i]));
+				//searchParam.setTypeid(0);
+				//result=this.appUserMapper.updateBmsShopProduct(searchParam);
+				result=this.appUserMapper.deleteBmsShopProduct(searchParam);
+			}
+			
+		}
+		return result;
+	}
 }

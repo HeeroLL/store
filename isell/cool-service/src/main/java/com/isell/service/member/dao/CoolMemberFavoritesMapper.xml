@@ -9,6 +9,7 @@
         <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
          <result column="pName" jdbcType="VARCHAR" property="pName"/>
          <result property="logo" column="logo"/>
+         <result property="favPrice" jdbcType="DECIMAL" column="favPrice"/>
     </resultMap>
     <select id="getCoolMemberFavoritesById" resultMap="BaseResultMap">
         SELECT
@@ -22,7 +23,7 @@
     <!-- 根据会员主键查询 -->
      <select id="findCoolMemberFavoritesListBymId" resultMap="BaseResultMap">
         SELECT
-            f.*,p.name_en as pName,p.logo,p.fav_price as favPrice,s.name as sName
+            f.*,p.name_en as pName,p.logo,ifnull(p.fav_price,p.price) as favPrice,s.name as sName
         FROM
              cool_member_favorites f
          left join 
@@ -31,6 +32,7 @@
          	cool_product p on p.id = f.p_id
         WHERE            
            f.m_id = #{mId,jdbcType=INTEGER}
+           and (f.s_id <![CDATA[!= ]]> '' or  f.s_id <![CDATA[!= ]]> null)
     </select>
     
     <!-- 根据会员主键和商品主键查询 -->

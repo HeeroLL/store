@@ -36,6 +36,36 @@
         <result column="g_id" jdbcType="INTEGER" property="gId"/>
         
     </resultMap>
+    
+      <resultMap id="HzResultMap" type="com.isell.service.order.vo.HzCoolOrderItem">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="g_id" jdbcType="INTEGER" property="gId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="gg" jdbcType="VARCHAR" property="gg"/>
+        <result column="count" jdbcType="INTEGER" property="count"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="b_id" jdbcType="INTEGER" property="bId"/>
+        <result column="review" jdbcType="BIT" property="review"/>
+        <result column="l_id" jdbcType="INTEGER" property="lId"/>
+        <result column="l_price" jdbcType="DECIMAL" property="lPrice"/>
+        <result column="l_name" jdbcType="VARCHAR" property="lName"/>
+        <result column="l_code" jdbcType="VARCHAR" property="lCode"/>
+        <result column="comments" jdbcType="VARCHAR" property="comments"/>
+        <result column="gid" jdbcType="INTEGER" property="gid"/>
+        <result column="brokerage" jdbcType="DECIMAL" property="brokerage"/>
+         <result column="profit" jdbcType="DECIMAL" property="profit"/>
+         <result column="pf_price" jdbcType="DECIMAL" property="pfPrice"/>
+         <result column="currency" jdbcType="VARCHAR" property="currency"/>
+        <result column="code_ts" jdbcType="VARCHAR" property="codeTs"/>
+        <result column="trade_country" jdbcType="VARCHAR" property="tradeCountry"/>
+        <result column="goods_modal" jdbcType="VARCHAR" property="goodsModal"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+         <result column="spec" jdbcType="VARCHAR" property="spec"/>
+         <result column="weight" jdbcType="DOUBLE" property="weight"/>
+         <result column="hs_code" jdbcType="VARCHAR" property="hsCode"/>
+    </resultMap>
     <select id="getCoolOrderItemById" resultMap="BaseResultMap">
         SELECT
             *
@@ -44,7 +74,15 @@
         WHERE            
             id = #{id,jdbcType=INTEGER}
     </select>
-    
+    <select id="getHzItemByOrderNo" resultMap="HzResultMap">
+        SELECT
+          coi.*,cpch.currency,cpch.code_ts,cpch.trade_country,gg.unit,gg.spec,gg.weight
+        FROM
+             cool_order_item coi join cool_product_customs_hz cpch on coi.gid = cpch.g_id
+			 join cool_product_gg gg on coi.gid = gg.id
+        WHERE            
+            order_no = #{orderNo,jdbcType=INTEGER}
+    </select>
     <select id="findCoolOrderItemByOrderNo" resultMap="BaseResultMap">
           SELECT * FROM cool_order_item where order_no = #{orderNo}
     </select>

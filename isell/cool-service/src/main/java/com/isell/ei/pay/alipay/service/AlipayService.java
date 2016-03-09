@@ -94,4 +94,12 @@ public interface AlipayService {
      * @return 支付宝返回的同步信息
      */
     SendOrderResponse sendOrder(Map<String, String> paramMap);
+    
+    /**
+     * 获取封装后的充值信息map
+     * 
+     * @param paramMap map参数
+     * @return 返回的参数字符串
+     */
+    String webTopUp(Map<String, String> paramMap);
 }

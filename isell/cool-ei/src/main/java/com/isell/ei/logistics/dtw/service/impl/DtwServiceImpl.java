@@ -56,7 +56,8 @@ public class DtwServiceImpl implements DtwService{
 		}
 		
 		String result = HttpUtils.httpPost(
-				"http://logistics.dtw.com.cn:8080/QBT/api/QBRorder",map);
+				"http://qp.dtw.com.cn:88/api/QBRorder",map);
+		System.out.println(result);
 		GainsResponse gr = JsonUtil.readValue(result, GainsResponse.class);
 		return gr;
 		//return JsonUtil.readValue(result, GainsResponse.class);
@@ -164,7 +165,8 @@ public class DtwServiceImpl implements DtwService{
 		String result = HttpUtils.httpPost(
 				"http://logistics.dtw.com.cn:8080/QBT/api/QBIntegratedOrder",map);
 		System.out.println(result);
-		return null;
+		MultipleResponse mr = JsonUtil.readValue(result, MultipleResponse.class);
+		return mr;
 	}
 
 	@Override
@@ -224,8 +226,9 @@ public class DtwServiceImpl implements DtwService{
 		}
 		String result = HttpUtils.httpPost(
 				"http://logistics.dtw.com.cn:8080/QBT/api/QBPresonal",map);
-		System.out.println(result);
-		return null;
+		//System.out.println(result);
+		SendPersonalResponse spr = JsonUtil.readValue(result, SendPersonalResponse.class);
+		return spr;
 	}
 
 

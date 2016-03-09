@@ -100,7 +100,7 @@
         FROM
              coon_shop s
         INNER JOIN 
-        	(select distinct s_id  from coon_shop_product where added = 1) p on p.s_id = s.id
+        	(select * from (select count(s_id) as count,s_id  from coon_shop_product where added = 1  group by s_id) s1 where s1.count > 10) p on p.s_id = s.id
         	<!-- 
        	inner join 
        		(select distinct supplier  from cool_order where  state=0 or state=1 or state=2 or state=3 or state=1 or state=11) o on o.supplier = s.id

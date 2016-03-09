@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import com.isell.core.mybatis.Mapper;
+import com.isell.service.order.vo.Catelog;
 import com.isell.service.product.po.CoolProductAliUnit;
 import com.isell.service.product.po.CoolProductExternal;
 import com.isell.service.product.po.CoolProductSelect;
@@ -86,6 +87,16 @@ public interface CoolProductMapper {
      * @return
      */
     List<CoolProductExternal> getProductInfo(CoolProductExternal product);
+    /**
+     * 
+     * @param productExternal
+     * @return
+     */
+    List<CoolProductExternal>queryGoodsinfoByids(@Param("productExternal")CoolProductExternal productExternal,@Param("goodis")String[] goodis);
+    
+    int queryProductAllNum(CoolProductExternal productExternal);
+    
+    List<Catelog> queryCateloglistByPid(@Param("catelog")Catelog catelog,@Param("patents")String[] patents);
     /**
      * 根据商品id查询阿里商品规格
      * @param coolProductExternal

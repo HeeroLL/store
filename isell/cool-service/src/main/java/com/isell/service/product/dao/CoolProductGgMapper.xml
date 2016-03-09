@@ -36,6 +36,15 @@
             id = #{id,jdbcType=INTEGER}
     </select>
     
+    <select id="getCoolProductGgByPId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_gg
+        WHERE            
+            goods_id = #{id,jdbcType=INTEGER}
+    </select>
+    
     <!-- 根据商品主键获取商品月销量 -->
     <select id="getProductSalesMonth" resultType="java.lang.Integer">
           select ifnull(count(1),0) 

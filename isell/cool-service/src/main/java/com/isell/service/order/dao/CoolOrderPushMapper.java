@@ -55,6 +55,7 @@ public interface CoolOrderPushMapper{
      * 根据订单号删除
      */
     public List<CoolOrder> deleteCoolOrderPushByOrderNo(@Param("orderNo")String id);
+
     
 }
 

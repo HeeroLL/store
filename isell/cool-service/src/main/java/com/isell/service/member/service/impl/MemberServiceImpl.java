@@ -153,11 +153,13 @@ public class MemberServiceImpl implements MemberService {
 					    userInfo.setWeixinFlag(member.getWeixinFlag());
 					    userInfo.setQqFlag(member.getQqFlag());
 					    userInfo.setMobileFlag(member.getMobileFlag());
+					    userInfo.setIdcard(member.getIdcard());
 					    // 店铺信息
 					    CoonShop shop = coonShopMapper.getCoonShopByUserId(user.getId() + "");
 					    if(shop != null){
 					    	record.set("shop", shop);
 					    	userInfo.setShopId(shop.getId());
+					    	userInfo.setShopcode(shop.getCode());
 					    }
 					    record.set("user", userInfo);				    
 						success = true;

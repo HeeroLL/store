@@ -14,6 +14,8 @@
 		<task:scheduled ref="coolshopRankingTask" method="execute" cron="1 0 0 * * ?" />
 		<task:scheduled ref="orderTask" method="execute" cron="0 0 * * * ?" />
 		<task:scheduled ref="biTask" method="execute" cron="0 0 1 * * ?" />
+		<task:scheduled ref="pinduoduoTask" method="execute" cron="0 0 1 * * ?" />
+		<task:scheduled ref="returnTask" method="execute" cron="0 */5 * * * ?" />
 		<!-- <task:scheduled ref="customsStockSyncTask" method="execute" cron="10 0 * * * ?" />-->
 	</task:scheduled-tasks>
 	

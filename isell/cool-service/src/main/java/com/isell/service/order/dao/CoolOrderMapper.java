@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
+import com.isell.core.common.StatisticsPo;
 import com.isell.core.mybatis.Mapper;
 import com.isell.service.order.po.CoolOrderExport;
 import com.isell.service.order.po.CoolOrderExternal;
@@ -14,6 +15,7 @@ import com.isell.service.order.po.CoolOrderSelect;
 import com.isell.service.order.po.CoolOrderWayBill;
 import com.isell.service.order.po.CoolOrderWayBillReturn;
 import com.isell.service.order.vo.CoolOrder;
+import com.isell.service.order.vo.OrderReturn;
 import com.isell.service.product.po.CoolProductInfo;
 
 /**
@@ -39,7 +41,7 @@ public interface CoolOrderMapper {
      * @param state  订单状态
      * @return 订单数
      */
-    public int getOrderCountBymIdAndState(@Param("mId")Integer mId, @Param("state")String state);
+    public int getOrderCountBymIdAndState(@Param("mId")Integer mId, @Param("state")String state, @Param("orderType")Integer orderType);
     
     /**
      * 获取定单金额
@@ -185,14 +187,41 @@ public interface CoolOrderMapper {
 	 */
 	List<CoolOrderExternal> getOrderExternalByOrderOldNo(@Param("shopId")String shopId,@Param("orderNo")String orderNo);
 	/**
+	 * 保存post失败记录
+	 * @param orderReturn
+	 * @return
+	 */
+	int saveUnSuccessOrderReturn(OrderReturn orderReturn);
+	/**
+	 * 
+	 * @param orderReturn
+	 * @return
+	 */
+	int checkUnSuccessIsExist(OrderReturn orderReturn);
+	/**
 	 * 客户系统调用该接口获取运单相关信息
 	 * @param order
 	 * @param orderOldNos
 	 * @return
 	 */
 	List<CoolOrderWayBillReturn> getWayBill(@Param("order")CoolOrderWayBill order, @Param("orderOldNos")String[] orderOldNos);
+	
+	/**
+	 * 根据酷店主键获取今日购物人次
+	 * @param supplier
+	 * @return 今日购物人次
+	 */
+	int getBuyCount(String supplier);
 
 	int updateStateByOlderOldNo(CoolOrder order);
+	
+	/**
+     * 获取最近购物人次列表
+     * 
+     * @param coolOrderParam 参数
+     * @return 最近购物人次
+     */
+    List<StatisticsPo> getBuyCountPage(RowBounds rowBounds, CoolOrderParam coolOrderParam);
     
 //    /**
 //     * 统计订单数

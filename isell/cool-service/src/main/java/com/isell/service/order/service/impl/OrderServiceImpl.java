@@ -21,8 +21,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.isell.core.common.StatisticsPo;
 import com.isell.core.config.BisConfig;
 import com.isell.core.mybatis.page.PageInfo;
+import com.isell.core.pojo.OrderFiling;
+import com.isell.core.pojo.OrderFilingDetail;
+import com.isell.core.util.Coder;
 import com.isell.core.util.CommonUtils;
 import com.isell.core.util.DateUtil;
 import com.isell.core.util.GetBarCode;
@@ -33,6 +37,9 @@ import com.isell.core.util.JsonUtil;
 import com.isell.core.util.MessageUtil;
 import com.isell.core.util.Record;
 import com.isell.core.util.SMSUtil;
+import com.isell.ei.pay.ehking.bean.EhkingCustomsInfo;
+import com.isell.ei.pay.ehking.bean.EhkingCustomsPayer;
+import com.isell.ei.pay.ehking.bean.EhkingCustomsRequest;
 import com.isell.ei.pay.zjys.service.ZjysService;
 import com.isell.ei.pay.zjys.vo.ZjysBuyTradeNoRes;
 import com.isell.ei.pay.zjys.vo.ZjysOrderInfo;
@@ -45,6 +52,8 @@ import com.isell.service.code.vo.CoolConfig;
 import com.isell.service.common.GeneralDef;
 import com.isell.service.common.po.AddressInfo;
 import com.isell.service.common.po.ItemInfo;
+import com.isell.service.common.po.MultipleItems;
+import com.isell.service.common.po.MultipleRequest;
 import com.isell.service.common.po.OrderRequest;
 import com.isell.service.custorms.po.CoolProductCustomsNbyb;
 import com.isell.service.custorms.po.CoolProductCustomsZz;
@@ -62,6 +71,9 @@ import com.isell.service.message.vo.CoolMessage;
 import com.isell.service.order.dao.CoolDistributionCarMapper;
 import com.isell.service.order.dao.CoolOrderItemMapper;
 import com.isell.service.order.dao.CoolOrderMapper;
+import com.isell.service.order.dao.CoolShopPushMapper;
+import com.isell.service.order.dao.CoolStockDepotMapper;
+import com.isell.service.order.dao.CoonFareTempProByGetFareMapper;
 import com.isell.service.order.dao.CoonShopcartMapper;
 import com.isell.service.order.po.CoolDistributionCarInfo;
 import com.isell.service.order.po.CoolOrderExternal;
@@ -72,12 +84,21 @@ import com.isell.service.order.po.CoolOrderWayBillReturn;
 import com.isell.service.order.po.CoolProductSales;
 import com.isell.service.order.po.CoonShopCartInfo;
 import com.isell.service.order.po.CoonShopCartParam;
+import com.isell.service.order.po.MultipleResponse;
+import com.isell.service.order.po.SendPersonalResponse;
+import com.isell.service.order.po.SendPresonalInfo;
+import com.isell.service.order.po.SendPresonalItems;
 import com.isell.service.order.service.OrderService;
 import com.isell.service.order.util.OrderUtil;
 import com.isell.service.order.vo.CoolDistributionCar;
 import com.isell.service.order.vo.CoolOrder;
 import com.isell.service.order.vo.CoolOrderItem;
+import com.isell.service.order.vo.CoolShopPush;
+import com.isell.service.order.vo.CoolStockDepot;
+import com.isell.service.order.vo.CoonFareTempProByGetFare;
 import com.isell.service.order.vo.CoonShopcart;
+import com.isell.service.order.vo.HzCoolOrderItem;
+import com.isell.service.order.vo.OrderReturn;
 import com.isell.service.payinfo.dao.CoolSendPayinfoMapper;
 import com.isell.service.payinfo.vo.CoolSendPayinfo;
 import com.isell.service.product.dao.CoolProductGgMapper;
@@ -100,6 +121,7 @@ import com.isell.service.shop.vo.CoonShopLevel;
 import com.isell.service.shop.vo.CoonShopPartner;
 import com.isell.service.shop.vo.CoonShopProduct;
 import com.isell.ws.WebServiceClient;
+import com.isell.ws.hangzhou.service.impl.CrossBorderServiceImpl;
 import com.isell.ws.ningbo.bean.Detail;
 import com.isell.ws.ningbo.bean.Order;
 import com.isell.ws.ningbo.bean.OrderMsg;
@@ -260,6 +282,11 @@ public class OrderServiceImpl implements OrderService {
      */
     @Resource
     private CoolSendPayinfoMapper coolSendPayinfoMapper;
+    /**
+     * 订单推送
+     */
+    @Resource 
+    private CoolShopPushMapper coolShopPushMapper;
     
     /**
      * 浙江银商支付服务层接口
@@ -278,6 +305,18 @@ public class OrderServiceImpl implements OrderService {
      */
     @Resource
     private JdbcTemplate jdbcTemplate;
+    
+    /**
+     * 获取运费模板
+     */
+    @Resource
+    private CoonFareTempProByGetFareMapper coonFareTempProByGetFareMapper;
+    
+    /**
+     * 获取仓库信息
+     */
+    @Resource
+    private CoolStockDepotMapper coolStockDepotMapper;
     
     @Override
     public CoolOrder getCoolOrderById(Integer id) {
@@ -458,7 +497,11 @@ public class OrderServiceImpl implements OrderService {
     public Double countPsPrice(String province, Double sw, String expressCode) {
         Double sumPrice = 0.0;
         // 获取物流信息
-        
+        /**
+        if ("北京".equals(province)) {
+            province = "北京市";
+        }
+        */
         List<CoonFareTempPro> proList = coonFareTempProMapper.getCoonFareTempProByPro(province, expressCode);
         if (CollectionUtils.isNotEmpty(proList)) {
             CoonFareTempPro pro = proList.get(0);
@@ -562,6 +605,8 @@ public class OrderServiceImpl implements OrderService {
                     String orderNo = OrderUtil.generateOrderNo(items.get(0).getGid());
                     order.setOrderNo(orderNo);
                     
+                    Double psPrice = 0.0; // 邮费
+                    Double totalWeight = 0.0; // 订单总重量，单位克
                     for (CoolOrderItem item : items) {
                         flag = false;
                         Integer pId = item.getgId();
@@ -588,6 +633,8 @@ public class OrderServiceImpl implements OrderService {
                                 item.setOrderNo(orderNo);
                                 item.setbId(product.getbId());
                                 item.setGid(productGg.getId());
+                                totalWeight +=
+                                    item.getCount() * (productGg.getWeight() == null ? 0 : productGg.getWeight());
                                 
                                 Byte orderType = param.getOrderType();
                                 if (0 == orderType) { // 普通订单
@@ -603,12 +650,18 @@ public class OrderServiceImpl implements OrderService {
                                         item.getPrice().multiply(new BigDecimal(item.getCount())).multiply(divide);
                                     item.setProfit(profit);
                                 } else if (1 == orderType) { // 一件代发
-                                    BigDecimal rate = coonShopLevelMapper.getLevelPrate(userId.toString());
-                                    total =
-                                        total.add(productGg.getDrpPrice()
-                                            .multiply(rate)
-                                            .multiply(new BigDecimal(count)));
-                                    item.setPrice(productGg.getDrpPrice().multiply(rate));
+                                    /**
+                                     * BigDecimal rate = coonShopLevelMapper.getLevelPrate(userId.toString()); total =
+                                     * total.add(productGg.getDrpPrice() .multiply(rate) .multiply(new
+                                     * BigDecimal(count))); item.setPrice(productGg.getDrpPrice().multiply(rate));
+                                     */
+                                    if (productGg.getDrpPrice().compareTo(new BigDecimal(0)) == 0) {
+                                        total = total.add(productGg.getCxjg().multiply(new BigDecimal(count)));
+                                        item.setPrice(productGg.getCxjg());
+                                    } else {
+                                        total = total.add(productGg.getDrpPrice().multiply(new BigDecimal(count)));
+                                        item.setPrice(productGg.getDrpPrice());
+                                    }
                                 }
                                 
                                 // 旗舰店分佣
@@ -662,8 +715,17 @@ public class OrderServiceImpl implements OrderService {
                         if (param.getPsPrice() != null) {
                             order.setPsPrice(param.getPsPrice());
                             total.add(param.getPsPrice());
+                        } else {
+                            // 根据参数是否包邮处理
+                            // 不包邮的情况下才计算邮费
+                            if (param.getFreePost() != null && !param.getFreePost()
+                                && StringUtils.isNotEmpty(param.getLocationP())) {
+                                String expressCode = param.getExpressCode();
+                                psPrice = countPsPrice(param.getLocationP(), totalWeight / 1000, expressCode);
+                            }
                         }
-                        order.setTotal(total);
+                        order.setPsPrice(new BigDecimal(psPrice));
+                        order.setTotal(total.add(new BigDecimal(psPrice)));
                         order.setSupplier(param.getSupplier());
                         order.setoType(param.getoType());
                         
@@ -689,7 +751,7 @@ public class OrderServiceImpl implements OrderService {
                             // 我的消息内部发送消息(发送给客户)
                             CoolMessage m1 = new CoolMessage();
                             m1.setUserId(member.getUserId());
-                            m1.setType("2");
+                            m1.setType("3");
                             m1.setClick(2);
                             m1.setContent("【小酷儿】订单" + order.getOrderNo() + "已生成了，"
                                 + "了解更多请关注公众号艾售国际。客服电话4009693356，感谢您的使用！");
@@ -700,7 +762,7 @@ public class OrderServiceImpl implements OrderService {
                             // 发送给酷店
                             CoolMessage m2 = new CoolMessage();
                             m2.setUserId(userId);
-                            m2.setType("2");
+                            m2.setType("3");
                             m2.setClick(2);
                             m2.setContent("【小酷儿】订单" + order.getOrderNo() + "已生成了，"
                                 + "了解更多请关注公众号艾售国际。客服电话4009693356，感谢您的使用！");
@@ -784,19 +846,7 @@ public class OrderServiceImpl implements OrderService {
     public Record updateCoolOrderDelivery(Map<String, Object> param) {
         Record record = new Record();
         CoolOrder orderR = getCoolOrderDetailById(Integer.valueOf(param.get("id").toString()));
-        // 发送物流消息给客户
-        CoolMessage coolMessage = new CoolMessage();
-        coolMessage.setContent("【小酷儿】订单" + orderR.getOrderNo() + "已发货了，" + "物流消息请点击:"
-            + "<a href='http://m.i-coolshop.com/common/searchWapExpress/" + orderR.getId() + "'>"
-            + "http://m.i-coolshop.com/common/searchWapExpress/" + orderR.getId() + "</a>" + "。客服电话4009693356，感谢您的使用！");
         
-        coolMessage.setClick(0);
-        coolMessage.setType("1");
-        coolMessage.setBelongId(orderR.getOrderNo());
-        coolMessage.setUserId(orderR.getmId());
-        coolMessage.setSendtime(new Date());
-        coolMessage.setOperatorId(Integer.valueOf(param.get("operatorId").toString()));
-        messageMapper.saveCoolMessage(coolMessage);
         String send_sms_url = param.get("send_sms_url").toString();
         
         String fhfs = param.get("fhfs").toString();
@@ -817,6 +867,17 @@ public class OrderServiceImpl implements OrderService {
             record.set("success", resultUpdate > 0 ? true : false);
             return record;
         } else if ("1".equals(fhfs)) {
+            /**
+             * // 发送物流消息给客户 CoolMessage coolMessage = new CoolMessage(); coolMessage.setContent("【小酷儿】订单" +
+             * orderR.getOrderNo() + "已发货了，" + "物流消息请点击:" + "<a href='http://m.i-coolshop.com/common/searchWapExpress/"
+             * + orderR.getId() + "'>" + "http://m.i-coolshop.com/common/searchWapExpress/" + orderR.getId() + "</a>" +
+             * "。客服电话4009693356，感谢您的使用！");
+             * 
+             * coolMessage.setClick(0); coolMessage.setType("2"); coolMessage.setBelongId(orderR.getOrderNo());
+             * coolMessage.setUserId(orderR.getmId()); coolMessage.setSendtime(new Date());
+             * coolMessage.setOperatorId(Integer.valueOf(param.get("operatorId").toString()));
+             * messageMapper.saveCoolMessage(coolMessage);
+             */
             orderR.setFhfs(Byte.parseByte(fhfs));
             String yuantong_surface_url = param.get("yuantong_surface_url").toString();
             CoolOrder order = new CoolOrder();
@@ -956,6 +1017,22 @@ public class OrderServiceImpl implements OrderService {
                 // sendMessage(orderR, send_sms_url);
             }
             
+            // 内部消息
+            if (!"0".equals(fhfs)) {
+                CoolMessage coolMessage = new CoolMessage();
+                coolMessage.setContent("【小酷儿】订单" + orderR.getOrderNo() + "已发货了，" + "物流消息请点击:"
+                    + "<a href='http://m.i-coolshop.com/common/searchWapExpress/" + orderR.getId() + "'>"
+                    + "http://m.i-coolshop.com/common/searchWapExpress/" + orderR.getId() + "</a>"
+                    + "。客服电话4009693356，感谢您的使用！");
+                coolMessage.setClick(0);
+                coolMessage.setType("2");
+                coolMessage.setBelongId(orderR.getOrderNo());
+                coolMessage.setUserId(orderR.getmId());
+                coolMessage.setSendtime(new Date());
+                coolMessage.setOperatorId(Integer.valueOf(param.get("operatorId").toString()));
+                messageMapper.saveCoolMessage(coolMessage);
+            }
+            
             // 发送消息给物流
             record.set("success", resultUpdate > 0 ? true : false);
             record.set("msg", result);
@@ -1051,7 +1128,7 @@ public class OrderServiceImpl implements OrderService {
             map.put("outOrderNo", orderDB.getOrderNo()); // 订单号
             map.put("eshopEntCode", mchCustomsNo); // 商户海关备案号
             map.put("eshopEntName", eshopEntName); // 商户海关备案名称
-            map.put("customsCode", customsCode); // 易极付发送海关编码 ZZ_4600:郑州关区 NB_3100:宁波关区
+            map.put("customsCode", customsCode); // 易极付发送海关编码 ZZ_4604:郑州关区 NB_3100:宁波关区
             map.put("payerId", orderDB.getIdcard().toUpperCase()); // 支付人证件号码
             map.put("payerName", orderDB.getLinkman()); // 支付人姓名
             map.put("goodsAmount", orderDB.getTotal()); // 支付金额
@@ -1099,6 +1176,9 @@ public class OrderServiceImpl implements OrderService {
         order.setTid(orderDb.getOrderNo());
         order.setCreated(orderDb.getCreatetime());
         order.setPayTime(orderDb.getPayTime());
+        if (order.getCreated().compareTo(order.getPayTime()) >= 0) { // 创建日期必须小于支付时间
+            order.setCreated(new Date(order.getPayTime().getTime() - 60000));
+        }
         order.setBuyerNick(orderDb.getLinkman());
         order.setPostFee(orderDb.getPsPrice());
         order.setPayment(orderDb.getTotal());
@@ -1285,8 +1365,9 @@ public class OrderServiceImpl implements OrderService {
                     
                     CoolMessage message1 = new CoolMessage();
                     message1.setUserId(Integer.valueOf(shop.getUserId()));
-                    message1.setType("4");
-                    message1.setContent("【小酷儿】订单" + order.getOrderNo() + "佣金【" + order.getSupplierProfit()
+                    message1.setType("5");
+                    message1.setContent("【小酷儿】订单" + order.getOrderNo() + "佣金【"
+                        + order.getSupplierProfit().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()
                         + "元】即将在七天之后打入您的账户。" + "了解更多请关注公众号艾售国际。客服电话4009693356，感谢你的使用！");
                     message1.setSendtime(new Date());
                     message1.setClick(0);
@@ -1325,6 +1406,8 @@ public class OrderServiceImpl implements OrderService {
                         bill2.setOrderNo(order.getOrderNo());
                         bill2.setDevide("2");
                         bill2.setIsFreeze((byte)1);
+                        bill2.setShopId(shop2.getId());
+                        bill2.setShopName(shop2.getName());
                         coonRunAccountMapper.saveCoonRunAccount(bill2);
                         jdbcTemplate.update("update coon_shop set jj_amount=jj_amount+? where id=?",
                             order.getSupplierProfit(),
@@ -1332,10 +1415,14 @@ public class OrderServiceImpl implements OrderService {
                         
                         CoolMessage message2 = new CoolMessage();
                         message2.setUserId(Integer.valueOf(shop2.getUserId()));
-                        message2.setType("4");
-                        message2.setContent("【小酷儿】订单" + order.getOrderNo() + "佣金【"
-                            + order.getSupplierProfit().multiply(cc.getRateJpy()) + "元】即将在七天之后打入您的账户。"
-                            + "了解更多请关注公众号艾售国际。客服电话4009693356，感谢你的使用！");
+                        message2.setType("5");
+                        message2.setContent("【小酷儿】订单"
+                            + order.getOrderNo()
+                            + "佣金【"
+                            + order.getSupplierProfit()
+                                .multiply(cc.getRateJpy())
+                                .setScale(2, BigDecimal.ROUND_HALF_UP)
+                                .doubleValue() + "元】即将在七天之后打入您的账户。" + "了解更多请关注公众号艾售国际。客服电话4009693356，感谢你的使用！");
                         message2.setSendtime(new Date());
                         message2.setClick(0);
                         message2.setRole("b");
@@ -1350,9 +1437,9 @@ public class OrderServiceImpl implements OrderService {
                          * order.getSupplierProfit().multiply(shop2.getsPercentage()), recommendId);
                          */
                         
-                        String recommendId2 = shop.getRecommendId();
+                        String recommendId2 = shop2.getRecommendId();
                         if (StringUtils.isNotEmpty(recommendId2)) {
-                            CoonShop shop3 = coonShopMapper.getCoonShopById(recommendId);
+                            CoonShop shop3 = coonShopMapper.getCoonShopById(recommendId2);
                             CoolConfig cc2 = coolConfigMapper.getPercentageByDevide("3");
                             CoonShopPartner partner2 = new CoonShopPartner();
                             partner2.setId(CommonUtils.uuid());
@@ -1380,6 +1467,8 @@ public class OrderServiceImpl implements OrderService {
                             bill3.setOrderNo(order.getOrderNo());
                             bill3.setDevide("3");
                             bill3.setIsFreeze((byte)1);
+                            bill3.setShopId(shop3.getId());
+                            bill3.setShopName(shop3.getName());
                             coonRunAccountMapper.saveCoonRunAccount(bill3);
                             jdbcTemplate.update("update coon_shop set jj_amount=jj_amount+? where id=?",
                                 order.getSupplierProfit(),
@@ -1387,10 +1476,14 @@ public class OrderServiceImpl implements OrderService {
                             
                             CoolMessage message3 = new CoolMessage();
                             message3.setUserId(Integer.valueOf(shop3.getUserId()));
-                            message3.setType("4");
-                            message3.setContent("【小酷儿】订单" + order.getOrderNo() + "佣金【"
-                                + order.getSupplierProfit().multiply(cc2.getRateJpy()) + "元】即将在七天之后打入您的账户。"
-                                + "了解更多请关注公众号艾售国际。客服电话4009693356，感谢你的使用！");
+                            message3.setType("5");
+                            message3.setContent("【小酷儿】订单"
+                                + order.getOrderNo()
+                                + "佣金【"
+                                + order.getSupplierProfit()
+                                    .multiply(cc2.getRateJpy())
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP)
+                                    .doubleValue() + "元】即将在七天之后打入您的账户。" + "了解更多请关注公众号艾售国际。客服电话4009693356，感谢你的使用！");
                             message3.setSendtime(new Date());
                             message3.setClick(0);
                             message3.setRole("b");
@@ -1427,9 +1520,25 @@ public class OrderServiceImpl implements OrderService {
                 record.set("msg", "订单更新失败");
             }
         }
+        // 沃朴 同步收货
+        wplwSynOrder(order);
         
+        record.set("receiptTime", order.getFinishTime());
         record.set("success", success);
         return record;
+    }
+    
+    public void wplwSynOrder(CoolOrder order) {
+        Map<String, String> tmp = new HashMap<String, String>();
+        tmp.put("orderNo", order.getOrderNo());
+        
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("service", "order_receiveOrder");
+        map.put("accessCode", "ays");// 沃朴 给的 艾售账号
+        map.put("jsonObj", JsonUtil.writeValueAsString(tmp));
+        map.put("authCode", Coder.encodeMd5(JsonUtil.writeValueAsString(tmp) + "ce0bad8cc59b2044fefc9a2dbec240df"));// private
+                                                                                                                    // key
+        HttpUtils.httpsPost("http://test.wpwl.org/external/access/do", map);
     }
     
     /**
@@ -1740,7 +1849,7 @@ public class OrderServiceImpl implements OrderService {
                 record.set("order", coolOrder);
                 success = true;
             } else {
-                record.set("msg", "参数错误，无法获取订单信息");	
+                record.set("msg", "参数错误，无法获取订单信息");
             }
         } else {
             record.set("msg", "订单主键不能为空");
@@ -1978,21 +2087,39 @@ public class OrderServiceImpl implements OrderService {
                         if (StringUtils.isNotEmpty(gId)) {
                             Integer quantity = cart.getQuantity();
                             if (quantity != null) {
-                                // 根据用户、商品、规格获取购物车信息
-                                CoonShopcart sCart = coonShopcartMapper.getCoonShopcart(cart);
-                                if (sCart != null) { // 增加数量
-                                    sCart.setQuantity(quantity + sCart.getQuantity());
-                                    result = coonShopcartMapper.updateCoonShopcart(sCart);
-                                } else { // 新增购物车
-                                    cart.setId(CommonUtils.uuid());
-                                    result = coonShopcartMapper.saveCoonShopcart(cart);
-                                }
-                                if (result > 0) {
-                                    success = true;
+                                String id = cart.getId();
+                                // 有主键时直接修改数量
+                                if (StringUtils.isNotEmpty(id)) {
+                                    result = coonShopcartMapper.updateCoonShopcart(cart);
+                                    if (result > 0) {
+                                        success = true;
+                                    } else {
+                                        record.set("msg", "修改购物车失败");
+                                        break;
+                                    }
                                 } else {
-                                    record.set("msg", "商品主键为" + pId + "，规格主键为" + gId + "的商品添加购物车失败");
-                                    break;
+                                    String sId = cart.getsId();
+                                    if (StringUtils.isNotEmpty(sId)) {
+                                        // 根据用户、商品、规格获取购物车信息
+                                        CoonShopcart sCart = coonShopcartMapper.getCoonShopcart(cart);
+                                        if (sCart != null) { // 增加数量
+                                            sCart.setQuantity(quantity + sCart.getQuantity());
+                                            result = coonShopcartMapper.updateCoonShopcart(sCart);
+                                        } else { // 新增购物车
+                                            cart.setId(CommonUtils.uuid());
+                                            result = coonShopcartMapper.saveCoonShopcart(cart);
+                                        }
+                                        if (result > 0) {
+                                            success = true;
+                                        } else {
+                                            record.set("msg", "商品主键为" + pId + "，规格主键为" + gId + "的商品添加购物车失败");
+                                            break;
+                                        }
+                                    } else {
+                                        record.set("msg", "参数错误， 酷店主键不能为空");
+                                    }
                                 }
+                                
                                 /**
                                  * if (StringUtils.isEmpty(id)) { cart.setId(CommonUtils.uuid()); result =
                                  * coonShopcartMapper.saveCoonShopcart(cart); if (result > 0) { success = true; } else {
@@ -2015,7 +2142,7 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         } else {
-            record.set("msg", "参数错误，评价参数错误");
+            record.set("msg", "参数错误");
         }
         record.set("success", success);
         return record;
@@ -2143,20 +2270,32 @@ public class OrderServiceImpl implements OrderService {
         boolean success = false;
         String mId = param.getmId();
         if (StringUtils.isNotEmpty(mId)) {
-            int dfkCount =
-                coolOrderMapper.getOrderCountBymIdAndState(Integer.valueOf(mId), Byte.toString(CoolOrder.ORDER_STATE_0)); // 待付款
-            int dfhCount =
-                coolOrderMapper.getOrderCountBymIdAndState(Integer.valueOf(mId), Byte.toString(CoolOrder.ORDER_STATE_1)
-                    + "%"); // 待发货
-            int dshCount =
-                coolOrderMapper.getOrderCountBymIdAndState(Integer.valueOf(mId), Byte.toString(CoolOrder.ORDER_STATE_2)); // 待收货
-            int tkCount =
-                coolOrderMapper.getOrderCountBymIdAndState(Integer.valueOf(mId), Byte.toString(CoolOrder.ORDER_STATE_5)); // 退款维权
-            record.set("dfkCount", dfkCount);
-            record.set("dfhCount", dfhCount);
-            record.set("dshCount", dshCount);
-            record.set("tkCount", tkCount);
-            success = true;
+            Byte orderType = param.getOrderType();
+            if (orderType != null) {
+                int dfkCount =
+                    coolOrderMapper.getOrderCountBymIdAndState(Integer.valueOf(mId),
+                        Byte.toString(CoolOrder.ORDER_STATE_0),
+                        orderType.intValue()); // 待付款
+                int dfhCount =
+                    coolOrderMapper.getOrderCountBymIdAndState(Integer.valueOf(mId),
+                        Byte.toString(CoolOrder.ORDER_STATE_1) + "%",
+                        orderType.intValue()); // 待发货
+                int dshCount =
+                    coolOrderMapper.getOrderCountBymIdAndState(Integer.valueOf(mId),
+                        Byte.toString(CoolOrder.ORDER_STATE_2),
+                        orderType.intValue()); // 待收货
+                int tkCount =
+                    coolOrderMapper.getOrderCountBymIdAndState(Integer.valueOf(mId),
+                        Byte.toString(CoolOrder.ORDER_STATE_5),
+                        orderType.intValue()); // 退款维权
+                record.set("dfkCount", dfkCount);
+                record.set("dfhCount", dfhCount);
+                record.set("dshCount", dshCount);
+                record.set("tkCount", tkCount);
+                success = true;
+            } else {
+                record.set("msg", "参数错误，订单类型不能为空");
+            }
         } else {
             record.set("msg", "参数错误，会员主键不能为空");
         }
@@ -2174,10 +2313,7 @@ public class OrderServiceImpl implements OrderService {
                 totalPrice = totalPrice.subtract(order.getPsPrice()); // 减去运费
             }
             
-            // 保存订单
-            state = coolOrderMapper.saveCoolOrder(order);
             for (CoolOrderItem item : order.getItems()) {
-                
                 BigDecimal price = totalPrice.divide(new BigDecimal(order.getItems().size()), 2, RoundingMode.HALF_UP);
                 // 映射在第三方平台做
                 if (item.getGid() != null) {
@@ -2195,14 +2331,23 @@ public class OrderServiceImpl implements OrderService {
                         if (CollectionUtils.isEmpty(groupList)) {
                             throw new RuntimeException("exception.product.null");
                         }
+                        int index = 0;
+                        BigDecimal sumPrice = BigDecimal.ZERO;
                         order.setOrderNo(OrderUtil.generateOrderNo(groupList.get(0).getgId()));
                         for (CoolProductGroup group : groupList) {
+                            index++;
+                            BigDecimal singleprice;
+                            if (index == groupList.size()) {
+                                singleprice = price.subtract(sumPrice);
+                            } else {
+                                singleprice = price.divide(new BigDecimal(groupList.size()), 0, RoundingMode.DOWN);
+                                sumPrice = sumPrice.add(singleprice);
+                            }
                             CoolOrderItem groupItem = new CoolOrderItem();
                             groupItem.setOrderNo(order.getOrderNo());
                             groupItem.setCount(group.getCount());
                             groupItem.setGid(group.getgId());
-                            saveOrderItem(groupItem,
-                                price.divide(new BigDecimal(groupList.size()), 2, RoundingMode.HALF_UP));
+                            saveOrderItem(groupItem, singleprice);
                         }
                     } else { // 非组合商品
                         item.setGid(productMap.getGid());
@@ -2212,6 +2357,13 @@ public class OrderServiceImpl implements OrderService {
                     }
                 }
             }
+            CoolShopPush csp = new CoolShopPush();
+            csp.setCeatetime(new Date());
+            csp.setShopId(order.getSupplier());
+            csp.setOrderNo(order.getOrderOldno());
+            coolShopPushMapper.saveCoolShopPush(csp);
+            // 保存订单
+            state = coolOrderMapper.saveCoolOrder(order);
         }
         record.set("success", state > 0);
         return record;
@@ -2317,7 +2469,23 @@ public class OrderServiceImpl implements OrderService {
     public List<CoolOrderExternal> getOrderExternalByOrderOldNo(String shopId, String orderNo) {
         return coolOrderMapper.getOrderExternalByOrderOldNo(shopId, orderNo);
     }
-    
+    /**
+     * 保存post失败记录
+     */
+    @Override
+    public int saveUnSuccessOrderReturn(OrderReturn orderReturn)
+    {
+        /*int result=0;
+    	result=this.coolOrderMapper.checkUnSuccessIsExist(orderReturn);
+    	if(result>0)
+    	{
+    		return 1;
+    	}else
+    	{
+    		
+    	}*/
+    	return coolOrderMapper.saveUnSuccessOrderReturn(orderReturn);
+    }
     @Override
     public boolean confirmOrder(CoolOrder order) {
         List<CoolOrderExternal> orders =
@@ -2375,42 +2543,387 @@ public class OrderServiceImpl implements OrderService {
         data.setSuccess(result.getResult());
         data.setMsg(result.getErrorMsg());
         data.setData(result);
-        for (ZjysOrderInfo zjysOrderInfo : result.getContent()) {
-            if ("Success".equals(zjysOrderInfo.getResult())) {
-                CoolOrder order = new CoolOrder();
-                order.setState(CoolOrder.ORDER_STATE_1);
-                order.setZffs(CoolOrder.ZFFS_6);
-                order.setArrears(0); // 不欠费订单
-                order.setPayState((byte)1); // 已报关订单
-                order.setTradeNo(zjysOrderInfo.getWaterNumber()); // 支付流水号
-                order.setOrderNo(zjysOrderInfo.getOutTrandNo()); // 订单号
-                
-                coolOrderMapper.updateCoolOrder(order);
+        if (result.getContent() != null) {
+            for (ZjysOrderInfo zjysOrderInfo : result.getContent()) {
+                if ("Success".equals(zjysOrderInfo.getResult())) {
+                    CoolOrder order = new CoolOrder();
+                    order.setState(CoolOrder.ORDER_STATE_1);
+                    order.setZffs(CoolOrder.ZFFS_6);
+                    order.setArrears(0); // 不欠费订单
+                    order.setPayState((byte)1); // 已报关订单
+                    order.setTradeNo(zjysOrderInfo.getWaterNumber()); // 支付流水号
+                    order.setOrderNo(zjysOrderInfo.getOutTrandNo()); // 订单号
+                    order.setPayTime(new Date()); // 更新支付时间
+                    
+                    coolOrderMapper.updateCoolOrder(order);
+                } else if (result.getContent().size() == 1) {
+                    data.setSuccess(false);
+                    data.setMsg(zjysOrderInfo.getResult());
+                }
             }
         }
-        
         return data;
     }
-
+    
     /**
      * 根据物流单号查询订单编号
      * 
      * @param psCode 物流单号
      * @return 订单编号
      */
+    @Override
+    public Record getOrderNoByPsCode(String psCode) {
+        Record record = new Record();
+        boolean success = false;
+        List<CoolOrder> list = coolOrderMapper.getOrderByPsCode(psCode);
+        if (CollectionUtils.isNotEmpty(list)) {
+            CoolOrder order = list.get(0);
+            record.set("orderNo", order.getOrderNo());
+            success = true;
+        } else {
+            throw new RuntimeException("exception.order.null");
+        }
+        record.set("success", success);
+        return record;
+    }
+    
+    /**
+     * 修改订单（订单发货）0 自提，30杭州海关
+     */
+    @Override
+    public Record updateZrCoolOrderDelivery(Map<String, Object> param) {
+        Record record = new Record();
+        CoolOrder orderR = getZrCoolOrderDetailById(Integer.valueOf(param.get("id").toString()));
+        
+        String fhfs = param.get("fhfs").toString();
+        int resultUpdate = 0;
+        
+        if ("0".equals(fhfs)) {
+            orderR.setFhfs(Byte.parseByte(fhfs));
+            CoolOrder order = new CoolOrder();
+            order.setState(CoolOrder.ORDER_STATE_2);
+            order.setPsfs("自提");
+            order.setFhfs((byte)0);
+            order.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            
+            order.setId(orderR.getId());
+            resultUpdate = coolOrderMapper.updateCoolOrder(order);
+            record.set("success", resultUpdate > 0 ? true : false);
+            return record;
+        } else if ("30".equals(fhfs)) { // 杭州海关
+            if("000".equals(sendToDtw(orderR))) {// 通知大田物流，综合订单
+             if("000".equals(sendPersonalToDtw(orderR))) {//给大田物流发送个人申报
+                if(sendToYhg(orderR)) {// 易慧金报关
+                	 sendToHzhg(orderR);// 发送给海关
+                	  CoolOrder order = new CoolOrder();
+                      order.setState(CoolOrder.ORDER_STATE_11);
+                      order.setPsfs("杭州海关");
+                      order.setFhfs((byte)11);
+                      order.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+                      order.setId(orderR.getId());
+                      resultUpdate = coolOrderMapper.updateCoolOrder(order);
+                      record.set("success", resultUpdate > 0 ? true : false);
+                	}
+                } else {
+                	record.set("success",false);
+                }
+            }
+          
+            return record;
+        }
+        
+        return record;
+    }
+    
+    private CoolOrder getZrCoolOrderDetailById(Integer id) {
+    	CoolOrder coolOrder = coolOrderMapper.getCoolOrderById(id);
+    	if(coolOrder!=null) {
+    		coolOrder.setHzItem(coolOrderItemMapper.getHzItemByOrderNo(coolOrder.getOrderNo()));
+    	}
+		return coolOrder;
+	}
+
+	private String  sendPersonalToDtw(CoolOrder orderR) {
+    	SendPresonalInfo s = new SendPresonalInfo();
+		s.setPassKey("6442305C-5A31-43BB-B36D-C73FB1EE14EC");
+		s.setMsgid(orderR.getOrderNo());
+		s.setConsignee(orderR.getLinkman());
+		s.setCurrCode("142");/**成交币值 1**/
+		s.seteCommerceCode("093791963");
+		s.seteCommerceName("上海琨铭文化传播有限公司");
+		//s.setGrossWeight("1.1");
+		s.setImportType("1");	/**进口类型（0一般进口，1保税进口）**/
+		s.setMainGName(orderR.getOrderNo());
+		s.setOrderNo(orderR.getOrderNo());
+		s.setPackNo("1");
+		s.setPaperNumber(orderR.getIdcard());/**zhengjian**/
+		s.setPaperType("1");/**默认是1，身份证**/
+		s.setSenderCountry("502");/**发件人国别（三字代码）**/
+		s.setTradeCountry("601");/*贸易国别（起运地三字代码）*/
+		s.setWorth(orderR.getTotal().subtract(orderR.getPsPrice()).subtract(orderR.getTaxPrice()).toString());/*价值*/
+		s.setSenderName("震荣优品");
+		SendPresonalItems si = new SendPresonalItems();
+		List<HzCoolOrderItem> itemList = orderR.getHzItem();
+		HzCoolOrderItem item = null;
+		for(int i=0,len=itemList.size();i<len;i++) {
+			item = itemList.get(i);
+			si.setCodeTs(item.getCodeTs());
+			si.setDeclareCount(item.getCount().toString());
+			si.setFirstCount(item.getCount().toString());
+			si.setDeclPrice(item.getPrice().toString());
+			si.setDeclTotalPrice((item.getPrice().multiply(new BigDecimal(item.getCount()))).toString());
+			si.setFirstUnit(item.getUnit());
+			si.setGoodsItemNo(item.getgId().toString());
+			si.setGoodsModel(item.getGg());//规格型号
+			si.setGoodsName(item.getName());
+			si.setGoodsOrder(String.valueOf(i));
+			si.setGoodsUnit(item.getUnit());
+			si.setOriginCountry("142");/**产销国代码(三字代码)**/
+			si.setTradeCurr("142");
+			si.setTradeTotal((item.getPrice().multiply(new BigDecimal(item.getCount()))).toString());/*成交总价（包裹实际成交的金额）*/
+			si.setUseTo("11");
+		}
+		List<SendPresonalItems> sis = new ArrayList<SendPresonalItems>();
+		sis.add(si);
+		s.setItems(sis);
+		String jsonObj = JsonUtil.writeValueAsString(s);
+		System.out.println(jsonObj);
+		String result = HttpUtils.httpPost(
+				config.getServiceDomain()+"/logistics/dtw/sendPersonalInfo",jsonObj);
+		SendPersonalResponse spr = JsonUtil.readValue(result, SendPersonalResponse.class);
+		return spr.getErrCode();	
+	}
+
+	// 将订单发送给大田物流
+    private String sendToDtw(CoolOrder orderR) {
+        MultipleRequest qo = new MultipleRequest();
+        // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        qo.setLogisCompanyCode("WL15041401");
+        qo.setLogisCompanyName("百世物流科技（中国）有限公司");
+        qo.setConsignee(orderR.getLinkman());
+        qo.setConsigneeAdd(orderR.getAddress());
+        qo.setConsigneeCity(orderR.getLocationC());
+        qo.setConsigneeCountry("中国");
+        qo.setConsigneeDistrict(orderR.getLocationA());
+        qo.setConsigneeMobile(orderR.getMobile());
+        qo.setConsigneePro(orderR.getLocationP());
+        qo.setConsigneeTel(orderR.getMobile());
+        qo.setConsigneeZip(orderR.getZipcode());
+        qo.seteCommerceCode("093791963");
+        qo.seteCommerceName("上海琨铭文化传播有限公司");
+        qo.setOrderNo(orderR.getOrderNo());
+        qo.setMsgid(orderR.getOrderNo());
+        qo.setPayCompanyCode("PTE51001409230000001");
+        qo.setPayNumber(orderR.getTradeNo());
+        qo.setPayType("03");
+        qo.setPurchaserId(orderR.getmId().toString());
+        qo.setShipper("震荣优品");
+        qo.setShipperAddress("江干区下沙经济技术开发区杭州出口加工区，泰山路23号2-005");
+        qo.setShipperCountry("中国");
+        qo.setShipperAddress("浙江");
+        qo.setShipperCity("杭州市");
+        qo.setShipperZip("310000");
+        qo.setOrderGoodsAmount(orderR.getTotal().subtract(orderR.getPsPrice()).subtract(orderR.getTaxPrice()).toString());
+        qo.setOrderTotalAmount(orderR.getTotal().toString());
+        qo.setTotalAmount(orderR.getTotal().subtract(orderR.getPsPrice()).subtract(orderR.getTaxPrice()).toString());
+        qo.setTotalCount("1");
+        List<MultipleItems> qs = new ArrayList<MultipleItems>();
+        for (HzCoolOrderItem orderItem : orderR.getHzItem()) {
+            MultipleItems qi = new MultipleItems();
+            qi.setAmount(orderItem.getPrice().toString());
+            qi.setCurrency("142");
+            qi.setQty(orderItem.getCount().toString());
+            qi.setUnit(orderItem.getGg());
+            qi.setSupplier("C3823699");
+            qi.setSpec(orderItem.getGg());
+            qi.setPartName(orderItem.getName());
+            qi.setPartno(orderItem.getgId().toString());
+            qs.add(qi);
+        }
+        qo.setItems(qs);
+        // String result =config.getServiceDomain()
+        String jsonObj = JsonUtil.writeValueAsString(qo);
+        System.out.println(jsonObj);
+        String result = HttpUtils.httpPost(config.getServiceDomain()+"/logistics/dtw/multipleOrders",jsonObj );
+        MultipleResponse mr = JsonUtil.readValue(result, MultipleResponse.class);
+        return mr.getErrCode();
+    }
+    
+    // 易慧金报关
+    private boolean sendToYhg(CoolOrder orderR) {
+        EhkingCustomsRequest request = new EhkingCustomsRequest();
+        request.setPaySerialNumber(orderR.getTradeNo());
+        request.setCustomsInfos(new ArrayList<EhkingCustomsInfo>());
+        EhkingCustomsInfo info = new EhkingCustomsInfo();
+        info.setAmount(orderR.getTotal().longValue());
+        info.setFreight(orderR.getPsPrice().multiply(new BigDecimal(100)).longValue());
+        info.setGoodsAmount(orderR.getTotal().multiply(new BigDecimal(100)).longValue());
+        request.getCustomsInfos().add(info);
+        request.setPayer(new EhkingCustomsPayer());
+        request.getPayer().setPayerName(orderR.getLinkman());
+        request.getPayer().setIdNum(orderR.getIdcard());
+        request.getPayer().setPhoneNum(orderR.getMobile());
+        String result = HttpUtils.httpPost(config.getServiceDomain()+"/pay/ehking/sendOrder", JsonUtil.writeValueAsString(request));
+        JsonData jsonObj = JsonUtil.readValue(result, JsonData.class);
+        return jsonObj.getSuccess();
+    }
+    
+    // 杭州海关报关
+    private void sendToHzhg(CoolOrder orderR) {
+        CrossBorderServiceImpl impl = new CrossBorderServiceImpl();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        OrderFiling orderFiling = new OrderFiling();
+        orderFiling.setBusinessNo(orderR.getOrderNo());
+        orderFiling.setIeFlag("I");
+        orderFiling.setPayType("03");
+        orderFiling.setPayNumber(orderR.getTradeNo());
+        orderFiling.setOrderTotalAmount(orderR.getTotal());
+        orderFiling.setTotalAmount(orderR.getTotal().subtract(orderR.getTaxPrice()).subtract(orderR.getPsPrice()));
+        orderFiling.setOrderGoodsAmount(orderR.getTotal().subtract(orderR.getTaxPrice()).subtract(orderR.getPsPrice()));
+        orderFiling.setOrderNo(orderR.getOrderNo());
+        orderFiling.setOrderTaxAmount(orderR.getTaxPrice());
+        orderFiling.setFeeAmount(orderR.getPsPrice());
+        orderFiling.setTradeTime(sdf.format(orderR.getCreatetime()));
+        orderFiling.setCurrCode("142");
+        orderFiling.setConsigneeTel(orderR.getMobile());
+        orderFiling.setConsignee(orderR.getLinkman());
+        orderFiling.setConsigneeAddress(orderR.getLocationP() + orderR.getLocationC() + orderR.getLocationA()
+            + orderR.getAddress());
+        // 发货人
+        orderFiling.setSenderCountry("142");
+        orderFiling.setSenderName("震荣优品");
+        orderFiling.setPurchaserId(orderR.getmId().toString());
+        orderFiling.setLogisCompanyCode("WL15041401");
+        orderFiling.setLogisCompanyName("百世物流科技（中国）有限公司");
+        orderFiling.setTotalCount(1);
+        orderFiling.setUserProcotol("正式运营");
+        
+        // 商品详情
+        List<OrderFilingDetail> details = new ArrayList<OrderFilingDetail>();
+        for (HzCoolOrderItem orderItem : orderR.getHzItem()) {
+            OrderFilingDetail detail = new OrderFilingDetail();
+            detail.setGoodsName(orderItem.getName());
+            detail.setCodeTs(orderItem.getCodeTs());
+            detail.setGoodsModel(orderItem.getGg());
+            detail.setOriginCountry(orderItem.getTradeCountry());
+            detail.setUnitPrice(orderItem.getPrice());
+            detail.setGoodsCount(new BigDecimal(orderItem.getCount()));
+             detail.setGoodsUnit(orderItem.getUnit());
+            details.add(detail);
+        }
+        orderFiling.setDetails(details);
+        orderFiling.setPurchaserName(orderR.getLinkman());
+        orderFiling.setPurchaserTelNumber(orderR.getMobile());
+        orderFiling.setPurchaserPaperType("01");
+        orderFiling.setPurchaserPaperNumber(orderR.getIdcard());
+        orderFiling.setPurchaserAddress(orderR.getLocationP() + orderR.getLocationC() + orderR.getLocationA()
+            + orderR.getAddress());
+        impl.orderRecord(orderFiling);
+    }
+    
+    public void sendMsg(CoolOrder orderR, Map<String, Object> param) {
+        // 发送物流消息给客户
+        CoolMessage coolMessage = new CoolMessage();
+        coolMessage.setContent("【小酷儿】订单" + orderR.getOrderNo() + "已发货了，" + "物流消息请点击:"
+            + "<a href='http://m.i-coolshop.com/common/searchWapExpress/" + orderR.getId() + "'>"
+            + "http://m.i-coolshop.com/common/searchWapExpress/" + orderR.getId() + "</a>" + "。客服电话4009693356，感谢您的使用！");
+        coolMessage.setClick(0);
+        coolMessage.setType("2");
+        coolMessage.setBelongId(orderR.getOrderNo());
+        coolMessage.setUserId(orderR.getmId());
+        coolMessage.setSendtime(new Date());
+        coolMessage.setOperatorId(Integer.valueOf(param.get("operatorId").toString()));
+        messageMapper.saveCoolMessage(coolMessage);
+    }
+    
+    @Override
+    public Record getCoolOrderFare(Map<String, Object> param) {
+        // TODO Auto-generated method stub
+        Record record = new Record();
+        String pId = param.get("pId").toString();
+        String targetAddress = param.get("targetAddress").toString();// 收货地
+        CoolStockDepot coolStockDepot = coolStockDepotMapper.getCoolStockDepotProvinceById(Integer.valueOf(pId));
+        Double sumPrice = 0.0;
+        String startAddress = "";// 发货地所在省份
+        StringBuffer msg = new StringBuffer();
+        boolean result = true;
+        if (coolStockDepot != null) {
+            startAddress = coolStockDepot.getProvince();
+            CoonFareTempProByGetFare coonFareTempProByGetFare =
+                coonFareTempProByGetFareMapper.getCoonFareTempProByGetFare(startAddress, targetAddress);
+            if (coonFareTempProByGetFare != null) {
+                CoolProductGg productGg;
+                Double totalWeight = 0.0; // 订单总重量，单位克
+                productGg = coolProductGgMapper.getCoolProductGgByPId(Integer.valueOf(pId));
+                totalWeight += (productGg.getWeight() == null ? 0 : productGg.getWeight());
+                sumPrice = countPsPriceGetFare(coonFareTempProByGetFare, totalWeight / 1000);
+            } else {
+                result = false;
+                msg.append("没有合适的物流");
+            }
+        } else {
+            result = false;
+            msg.append("商品未绑定");
+        }
+        record.set("msg", msg.toString());
+        record.set("sumPrice", sumPrice);
+        record.set("startAddress", startAddress);
+        record.set("result", result);
+        return record;
+    }
+    
+    public Double countPsPriceGetFare(CoonFareTempProByGetFare coonFareTempProByGetFare, Double sw) {
+        Double sumPrice = 0.0;
+        // 获取物流信息
+        if (coonFareTempProByGetFare != null) {
+            
+            if (sw <= coonFareTempProByGetFare.getFirstWei().doubleValue()) {
+                sumPrice = coonFareTempProByGetFare.getFirstPri().doubleValue();
+            } else {
+                if (sw - coonFareTempProByGetFare.getFirstWei().doubleValue() <= coonFareTempProByGetFare.getExtentWei()
+                    .doubleValue()) {
+                    sumPrice =
+                        coonFareTempProByGetFare.getFirstPri().doubleValue()
+                            + coonFareTempProByGetFare.getExtentPri().doubleValue();
+                } else {
+                    sumPrice =
+                        coonFareTempProByGetFare.getFirstPri().doubleValue()
+                            + Math.ceil(sw - coonFareTempProByGetFare.getFirstWei().doubleValue())
+                            / coonFareTempProByGetFare.getExtentWei().doubleValue()
+                            * coonFareTempProByGetFare.getExtentPri().doubleValue();
+                }
+                
+            }
+        }
+        
+        return sumPrice;
+    }
+
+    /**
+     * 获取最近购物人次列表
+     * 
+     * @param coonShop 购物车参数
+     * @return 最近购物人次列表
+     */
 	@Override
-	public Record getOrderNoByPsCode(String psCode) { 
-		Record record = new Record();
+	public Record getBuyCountPage(CoonShop coonShop) {
+		Record record = new Record(); 
 		boolean success = false;
-		List<CoolOrder> list = coolOrderMapper.getOrderByPsCode(psCode);
-		if(CollectionUtils.isNotEmpty(list)){
-			CoolOrder order = list.get(0);
-			record.set("orderNo",order.getOrderNo());
-			success = true;
+		String shopCode = coonShop.getCode();
+		if(StringUtils.isNotEmpty(shopCode)){
+			CoonShop shop = coonShopMapper.getCoonShopByCode(shopCode);
+			if(shop != null){
+				CoolOrderParam coolOrderParam = new CoolOrderParam();
+				coolOrderParam.setSupplier(shop.getId());
+				List<StatisticsPo> po = coolOrderMapper.getBuyCountPage(coonShop.getRowBounds(), coolOrderParam);
+				record.set("countList", po);
+			}else{
+				record.set("msg", "无法获取店铺信息");
+			}
 		}else{
-			throw new RuntimeException("exception.order.null");
+			record.set("msg", "店铺编码不能为空");
 		}		
-		record.set("success",success);
+		record.set("success", success);
 		return record;
 	}
 }

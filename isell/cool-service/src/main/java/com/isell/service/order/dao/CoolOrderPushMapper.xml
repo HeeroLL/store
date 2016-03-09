@@ -79,9 +79,9 @@
         inner join 
         	 cool_order o on p.order_no = o.order_no
         WHERE  o.supplier = '7b54557199554ee8bc392c514b8377ec'             
-            and o.ps_Code is not null 
+            and o.ps_code is not null 
             and o.psfs is not null
-            and o.state = '2'
+            and o.state = 2
     </select>
     
     <select id="findAllCoolOrderPush" resultMap="BaseResultMap">

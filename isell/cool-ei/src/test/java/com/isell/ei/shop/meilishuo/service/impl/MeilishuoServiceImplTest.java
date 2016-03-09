@@ -22,7 +22,7 @@ public class MeilishuoServiceImplTest {
 	}
 	*/
 	
-	 /**
+	 
 	@Test
 	public void testGetMeilishuoOrder() {
 		Map<String, String> paramMap = new HashMap<String, String>();
@@ -32,8 +32,9 @@ public class MeilishuoServiceImplTest {
 		
 		System.out.println(result);
 	}
-	*/
 	
+	
+	 /**
 	@Test
 	public void testGetMeilishuoLogisticsCompany() {
 		Map<String, String> paramMap = new HashMap<String, String>();
@@ -42,5 +43,6 @@ public class MeilishuoServiceImplTest {
 		
 		System.out.println(result);
 	}
+	*/
 
 }

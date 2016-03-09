@@ -9,7 +9,7 @@ import com.isell.core.util.HttpUtils;
 
 public class KuaidiControllerTest {
     
-    private static final String host = "http://localhost:18080/bis";
+    private static final String host = "http://localhost:8080/bis";
     
     private static final String API_URL = host + "/logistics/kuaidi/jsonService";
     

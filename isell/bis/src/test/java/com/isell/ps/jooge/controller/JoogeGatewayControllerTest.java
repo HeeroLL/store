@@ -104,10 +104,10 @@ public class JoogeGatewayControllerTest {
     @Test
     public void testGetProductDetail() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("Id", "407");
+        paramMap.put("Id", "isell4041");
         
         String result =
-            HttpUtils.httpPost("http://service.i-coolshop.com/jooge/gateway", getParam(paramMap, "merch.detail.get"));
+            HttpUtils.httpPost("http://localhost:8080/bis/jooge/gateway", getParam(paramMap, "merch.detail.get"));
         
         System.out.println(result);
     }

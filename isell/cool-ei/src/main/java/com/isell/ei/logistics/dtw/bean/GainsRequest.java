@@ -13,7 +13,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class GainsRequest {
 	
 	@JsonProperty("PassKey")
-	private String key = "6442305C-5A31-43BB-B36D-C73FB1EE14EC";
+	private String key = "58FBC5BB-A8C4-47ED-9FDC-151F4E279B92";
 	/*电商企业收货订单号\采购订单号*/
 	
 	/*电商企业收货订单号\采购订单号*/

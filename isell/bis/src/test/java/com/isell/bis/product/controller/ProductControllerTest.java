@@ -34,8 +34,8 @@ public class ProductControllerTest {
 	        paramMap.put("jsonObj", "{\"code\":\"23,22\"}");
 	        paramMap.put("accessCode", "gykj");
 	        paramMap.put("authCode", Coder.encodeMd5(paramMap.get("jsonObj") + "f415c035ad73444283c2576ac6d6b43e").toString());
-	        String result = HttpUtils.httpPost("http://127.0.0.1:8080/bis/gateway", paramMap);
-	      //  String result = HttpUtils.httpPost("http://service.i-cooltest.com/gateway", paramMap);
+	       // String result = HttpUtils.httpPost("http://127.0.0.1:8080/bis/gateway", paramMap);
+	        String result = HttpUtils.httpPost("http://service.i-cooltest.com/gateway", paramMap);
 	        System.out.println(result);	
 	}
 }

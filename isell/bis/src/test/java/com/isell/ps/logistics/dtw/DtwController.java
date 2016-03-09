@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import com.isell.core.util.HttpUtils;
 import com.isell.core.util.JsonUtil;
+import com.isell.ps.logistics.dtw.bean.OrderFollow;
+import com.isell.ps.logistics.dtw.bean.OrderFollowItems;
 import com.isell.ps.logistics.dtw.bean.Receipt;
 import com.isell.ps.logistics.dtw.bean.ReceiptItems;
 
@@ -35,6 +37,21 @@ public class DtwController {
 	
 	@Test
 	public  void testOrderFollow(){
-		
-	}
+		OrderFollow of = new OrderFollow();
+		of.setMsgid("CO2016022504191600154950");
+		of.setWayBill("0000");
+		OrderFollowItems ofi = new OrderFollowItems();
+		ofi.setAcceptAddress("上海");
+		ofi.setAcceptTime("2016-03-02 10:50:23");
+		ofi.setScanPhone("15881290134");
+		ofi.setScanPrincipal("02121");
+		List<OrderFollowItems> list = new ArrayList<OrderFollowItems>();
+		list.add(ofi);
+		of.setItem(list);
+		String jsonObj = JsonUtil.writeValueAsString(of);
+		String result = HttpUtils.httpPost(
+				"http://localhost:8080/bis/dtwBackController/orderFollow",
+				jsonObj);
+		System.out.println(result);
+}
 }

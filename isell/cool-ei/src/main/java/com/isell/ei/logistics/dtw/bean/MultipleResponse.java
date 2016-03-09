@@ -4,9 +4,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class MultipleResponse {
 	
-	@JsonProperty("errCode")
+	@JsonProperty("ErrCode")
 	private String errCode;
-	@JsonProperty("errMsg")
+	@JsonProperty("ErrMsg")
 	private String errMsg;
 	public String getErrCode() {
 		return errCode;

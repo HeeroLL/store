@@ -4,33 +4,61 @@ import java.util.List;
 
 public class SendPresonalInfo {
 	private String passKey;
+	/**电商企业发货单号**/
 	private String msgid;
+	/**账册编号**/
 	private String accountBookNo;
+	/**进口类型（0一般进口，1保税进口）**/
 	private String importType;
+	/**进出口日期**/
 	private String inOutDateStr;
+	/**运输工具名称**/
 	private String trafName;
+	/**运输工具航次(班)号**/
 	private String voyageNo;
+	/**电商企业编码(电商企业在跨境平台备案编码)**/
 	private String eCommerceCode;
+	/**电商企业名称**/
 	private String eCommerceName;
+	/**订单编号**/
 	private String orderNo;
+	/**分运单号**/
 	private String wayBill;
+	/**件数**/
 	private String packNo;
+	/**毛重（公斤）**/
 	private String grossWeight;
+	/**净重**/
 	private String netWeight;
+	/**备注**/
 	private String remark;
+	/**报关员代码**/
 	private String declarantNo;
+	/**发件人**/
 	private String senderName;
+	/**收件人姓名**/
 	private String consignee;
+	/**发件人城市**/
 	private String senderCity;
+	/**支付人证件类型**/
 	private String paperType;
+	/**支付人证件号**/
 	private String paperNumber;
+	/**价值**/
 	private String worth;
+	/**成交币制（三字代码）**/
 	private String currCode;
+	/**主要货物名称**/
 	private String mainGName;
+	/**区内企业编码**/
 	private String internalAreaCompanyNo;
+	/**区内企业名称**/
 	private String internalAreaCompanyName;
+	/**申请单编号**/
 	private String applicationFormNo;
+	/**发件人国别（三字代码）**/
 	private String tradeCountry;
+	/**贸易国别（起运地三字代码）**/
 	private String senderCountry;
 	private List<SendPresonalItems> items;
 	

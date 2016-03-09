@@ -114,7 +114,7 @@ public class Bodymaster {
      * 备注
      */
     @XmlElement(name = "REMARK")
-    private String remark;
+    private String remark = "备注";
     
     /**
      * 发货人所在国

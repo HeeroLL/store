@@ -46,7 +46,34 @@ public class WpwlOrderInfo {
      */
     private List<WpwlOrderItem> items;
     
-    public String getId() {
+    private Boolean receiptStatus;//签收状态
+    
+    private String receiptTime;//未签收
+    
+    
+    public Boolean getReceiptStatus() {
+		return receiptStatus;
+	}
+
+	public void setReceiptStatus(Boolean receiptStatus) {
+		this.receiptStatus = receiptStatus;
+	}
+
+	 
+
+	public String getReceiptTime() {
+		if(receiptTime==null)
+		{
+			receiptTime="";
+		}
+		return receiptTime;
+	}
+
+	public void setReceiptTime(String receiptTime) {
+		this.receiptTime = receiptTime;
+	}
+
+	public String getId() {
         return id;
     }
     

@@ -18,7 +18,7 @@ public final class OrderUtil {
      * @return 订单号
      */
     public static String generateOrderNo(Integer gid) {
-        String date = DateUtil.dateToStr(DateUtil.yyyyMMddHHmmss, new Date());
+        String date = DateUtil.dateToStr(DateUtil.yyyyMMddHHmmssSSS, new Date());
         
         StringBuilder builder = new StringBuilder();
         builder.append("CO"); // CO开头

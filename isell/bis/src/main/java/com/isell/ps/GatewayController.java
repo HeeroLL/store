@@ -18,7 +18,7 @@ import com.isell.core.auth.bean.RequestParameter;
  */
 @Controller
 public class GatewayController {
-    /**
+	/**
      * 验证器
      */
     @Qualifier(value = "basicValidator")

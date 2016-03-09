@@ -59,7 +59,38 @@ public class AccessSystem {
      */
     private Date createTime;
     
-    public AccessSystem() {
+    private int isgooddetail;
+    private String sycstockurl;//推送库存url
+    private String sycpriceurl;//推送价格url
+    private String sycunaddurl;
+    
+    
+    
+    public String getSycunaddurl() {
+		return sycunaddurl;
+	}
+
+	public void setSycunaddurl(String sycunaddurl) {
+		this.sycunaddurl = sycunaddurl;
+	}
+
+	public String getSycstockurl() {
+		return sycstockurl;
+	}
+
+	public void setSycstockurl(String sycstockurl) {
+		this.sycstockurl = sycstockurl;
+	}
+
+	public String getSycpriceurl() {
+		return sycpriceurl;
+	}
+
+	public void setSycpriceurl(String sycpriceurl) {
+		this.sycpriceurl = sycpriceurl;
+	}
+
+	public AccessSystem() {
         
     }
     
@@ -69,7 +100,15 @@ public class AccessSystem {
         this.frozen = frozen;
     }
     
-    public int getId() {
+    public int getIsgooddetail() {
+		return isgooddetail;
+	}
+
+	public void setIsgooddetail(int isgooddetail) {
+		this.isgooddetail = isgooddetail;
+	}
+
+	public int getId() {
         return id;
     }
     

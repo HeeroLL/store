@@ -33,6 +33,7 @@
         <result column="is_new" jdbcType="VARCHAR" property="isNew"/>
         <result column="shelves" jdbcType="BIT" property="shelves"/>
         <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="reviews" jdbcType="INTEGER" property="reviews"/>
     </resultMap>
     <select id="getCoonShopProductById" resultMap="BaseResultMap">
         SELECT
@@ -84,9 +85,10 @@
     
     <!-- 分页获取商品列表 -->
     <select id="getCoonShopProductInfoListPage" resultMap="CoonShopProductInfoMap" parameterType="com.isell.service.shop.po.CoonShopProductParam">
-          select a.*,ifnull(b.salesMonth,0) as salesMonth
+          select a.*
+				<!-- ,ifnull(b.salesMonth,0) as salesMonth -->
 		  from
-          (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,if(g.drp_price>0,g.drp_price,g.cxjg) as drp_price,p.divide,p.createtime,g.stock,p.content
+          (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,if(g.drp_price>0,g.drp_price,g.cxjg) as drp_price,p.divide,p.createtime,g.stock,p.content,p.sales as salesMonth 
           FROM cool_product_gg g
           left join cool_product p on g.goods_id = p.id
           where 1=1 
@@ -159,7 +161,7 @@
           select a.*
 		  from
           <!-- (SELECT g.id,g.goods_id,p.name,p.name_en,p.type,p.logo,g.gg,g.jg,g.cxjg,g.xsjg,g.sales,g.drp_price,p.divide,p.createtime,s.order,s.is_new,p.shelves -->
-          (SELECT p.id as goods_id,p.name,p.name_en,p.type,p.logo,p.sales,p.price as jg,p.divide,p.createtime,s.order,s.is_new,p.shelves
+          (SELECT p.id as goods_id,p.name,p.name_en,p.type,p.logo,p.sales,p.price as jg,p.divide,p.createtime,s.order,s.is_new,p.shelves,ifnull(r.count,0) as reviews
           FROM coon_shop_product s
           inner join cool_product p on p.id = s.p_id and p.shelves = 0
           <if test="stock != null and stock !=''">
@@ -169,7 +171,7 @@
 	                 and stock>0 
 	          </if>  ) g on g.goods_id = p.id
          </if>
-          left join (select ifnull(count(1),0) as count,g_id from cool_product_review group by g_id) r on r.g_id = s.p_id
+          left join (select ifnull(count(1),0) as count,re.g_id from cool_product_review re INNER JOIN cool_member m on m.id = re.m_id group by g_id) r on r.g_id = s.p_id
           <!-- left join cool_product_gg g on g.goods_id = p.id  
           where g.stock > 0 and s.added = 1 --> 
           where s.added = 1

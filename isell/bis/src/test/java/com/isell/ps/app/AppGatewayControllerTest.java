@@ -20,16 +20,18 @@ public class AppGatewayControllerTest {
 		//token:1b94d6e17d4747aaa81a6e8d253f62d2
 		Map<String, String> param = new HashMap<String, String>();
 		//param.put("accessCode", "123");
-		param.put("service", "order_getOrderList");		
+		param.put("service", "order_getShopCartList");
 		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("supplier", "8661960c5021445b9b293e40d2bead21");	
-//		paramMap.put("pName", "九朵云");	
-//		paramMap.put("page",  1);
-		paramMap.put("rows",  1000);
-		paramMap.put("orderNo",  "222");
+		//param.put("jsonObj", "{\"reviewList\":[{\"content\":\"哈哈哈哈\",\"gId\":\"329\",\"imgs\":\"/member/7560/1455851246632.jpg,/member/7560/1455851249865.jpg\",\"mId\":\"7571\",\"oId\":\"29157\",\"scoreB\":\"5\",\"scoreD\":\"4\",\"scoreL\":\"4\",\"scoreP\":\"4\"}]}");
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>(); 
+//		paramMap.put("mId", "7560");	
+//		paramMap.put("page", 1);	
+//		paramMap.put("rows",  20);
+		paramMap.put("userId",  "7552");
+//		paramMap.put("selectType",  "5");
 //		paramMap.put("stock", "1");
-//		paramMap.put("name", "無條件de猪的海外店safsfb");
+//		paramMap.put("pName", "面膜");
 //		paramMap.put("page", 1);
 //		paramMap.put("rows", 10);
 //		paramMap.put("address", "太湖东路");
@@ -38,6 +40,7 @@ public class AppGatewayControllerTest {
 //		paramMap.put("def", true);
 //		paramMap.put("idcard", "121323");
 //		paramMap.put("oldPssword", "4297f44b13955235245b2497399d7a93");
+		
 		param.put("jsonObj", JsonUtil.writeValueAsString(paramMap));
 		
 		//param.put("authCode", Coder.encodeMd5(param.get("jsonObj")+"1fca277c400d41afbef990a8c1da1163"));

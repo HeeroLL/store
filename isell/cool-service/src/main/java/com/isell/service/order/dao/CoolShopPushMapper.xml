@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.order.dao.CoolShopPushMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.order.vo.CoolShopPush">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="shop_id" jdbcType="VARCHAR" property="shopId"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="ceatetime" jdbcType="TIMESTAMP" property="ceatetime"/>
+        <result column="is_del" jdbcType="BIT" property="isDel"/>
+    </resultMap>
+    <!-- 订单信息 -->
+    <resultMap id="CoolOrderMap" type="com.isell.service.order.vo.CoolOrder">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="location_p" jdbcType="VARCHAR" property="locationP"/>
+        <result column="location_c" jdbcType="VARCHAR" property="locationC"/>
+        <result column="location_a" jdbcType="VARCHAR" property="locationA"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="linkman" jdbcType="VARCHAR" property="linkman"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="psfs" jdbcType="VARCHAR" property="psfs"/>
+        <result column="ps_price" jdbcType="DECIMAL" property="psPrice"/>
+        <result column="zffs" jdbcType="INTEGER" property="zffs"/>
+        <result column="comments" jdbcType="VARCHAR" property="comments"/>
+        <result column="total" jdbcType="DECIMAL" property="total"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="m_id" jdbcType="INTEGER" property="mId"/>
+        <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="score" jdbcType="INTEGER" property="score"/>
+        <result column="o_type" jdbcType="TINYINT" property="oType"/>
+        <result column="b_id" jdbcType="INTEGER" property="bId"/>
+        <result column="reason" jdbcType="VARCHAR" property="reason"/>
+        <result column="ps_code" jdbcType="VARCHAR" property="psCode"/>
+        <result column="oid_billno" jdbcType="VARCHAR" property="oidBillno"/>
+        <result column="pay_time" jdbcType="TIMESTAMP" property="payTime"/>
+        <result column="trade_no" jdbcType="VARCHAR" property="tradeNo"/>
+        <result column="distributors" jdbcType="INTEGER" property="distributors"/>
+        <result column="supplier" jdbcType="VARCHAR" property="supplier"/>
+        <result column="supplier_settle" jdbcType="BIT" property="supplierSettle"/>
+        <result column="zipcode" jdbcType="VARCHAR" property="zipcode"/>
+        <result column="supplier_profit" jdbcType="DECIMAL" property="supplierProfit"/>
+        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
+        <result column="pay_state" jdbcType="TINYINT" property="payState"/>
+        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="share_user" jdbcType="VARCHAR" property="shareUser"/>
+        <result column="share_added" jdbcType="BIT" property="shareAdded"/>
+        <result column="bigpen" jdbcType="VARCHAR" property="bigpen"/>
+        <result column="barcode" jdbcType="VARCHAR" property="barcode"/>
+        <result column="is_del_m" jdbcType="TINYINT" property="isDelM"/>
+        <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
+        <result column="sup_Name" jdbcType="VARCHAR" property="supName"/>
+        <result column="fhfs" jdbcType="TINYINT" property="fhfs"/>
+        <result column="is_batch" jdbcType="TINYINT" property="isBatch"/>
+        <result column="source" jdbcType="VARCHAR" property="source"/>
+        <result column="tax_price" jdbcType="DECIMAL" property="taxPrice"/>
+        <result column="arrears" jdbcType="INTEGER" property="arrears"/>
+        <result column="refund_state" jdbcType="INTEGER" property="refundState"/>
+        <result column="refund_amount" jdbcType="DECIMAL" property="refundAmount"/>
+        <result column="order_oldno" jdbcType="VARCHAR" property="orderOldno"/>
+    </resultMap>
+    <select id="getCoolShopPushById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_shop_push
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolShopPush" resultMap="BaseResultMap">
+          SELECT * FROM cool_shop_push 
+    </select>
+    
+    <delete id="deleteCoolShopPush">
+        DELETE
+        FROM
+             cool_shop_push
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolShopPush" parameterType="com.isell.service.order.vo.CoolShopPush" >
+        INSERT INTO cool_shop_push
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="shopId != null" >
+                shop_id,
+            </if>
+            <if test="orderNo != null" >
+                order_no,
+            </if>
+            <if test="ceatetime != null" >
+                ceatetime,
+            </if>
+            <if test="isDel != null" >
+                is_del,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="shopId != null" >
+                #{shopId,jdbcType=VARCHAR},
+            </if> 
+            <if test="orderNo != null" >
+                #{orderNo,jdbcType=VARCHAR},
+            </if> 
+            <if test="ceatetime != null" >
+                #{ceatetime,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="isDel != null" >
+                #{isDel,jdbcType=BIT},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolShopPush" parameterType="com.isell.service.order.vo.CoolShopPush" >
+        UPDATE cool_shop_push
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="shopId != null" >
+                shop_id = #{shopId,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNo != null" >
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="ceatetime != null" >
+                ceatetime = #{ceatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null" >
+                is_del = #{isDel,jdbcType=BIT},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+     <!-- 查询拼多多待推送订单 -->
+    <select id="getShopPushOrder" resultMap="CoolOrderMap">
+        SELECT
+            o.*
+        FROM
+             cool_shop_push p
+        inner join 
+        	 cool_order o on p.order_no = o.order_oldno
+        WHERE           
+             o.ps_code is not null 
+            and o.psfs is not null
+            and o.state = 2
+            and p.is_del = 0
+    </select>
+     <update id="deleteByOrderNo" parameterType="com.isell.service.order.vo.CoolShopPush" >
+        UPDATE cool_shop_push
+        		set is_del = 1
+        <where>
+	        <foreach collection="orderNo" item="orderNo" open="(" index="index" separator="or" close=")">
+	        	order_no = #{orderNo}
+	        </foreach>
+        </where>
+      </update>
+</mapper>

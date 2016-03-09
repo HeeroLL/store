@@ -22,6 +22,13 @@ public interface CoolProductGgMapper {
     CoolProductGg getCoolProductGgById(@Param("id") Integer id);
     
     /**
+     * 根据商品id查询<一句话功能简述><功能详细描述>
+     *
+     * @param id
+     * @return
+     */
+    CoolProductGg getCoolProductGgByPId(@Param("id") Integer id);
+    /**
      * 获取最低供货价的规格信息
      * @param goodsId
      * @param stock

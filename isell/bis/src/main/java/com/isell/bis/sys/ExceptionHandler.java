@@ -56,6 +56,10 @@ public class ExceptionHandler implements HandlerExceptionResolver {
             message = MessageUtil.getMessage(ex.getCause().getClass().getName());
         }
         
+        if (StringUtils.isEmpty(message)) {
+            message = ex.getMessage();
+        }
+        
         // if (StringUtils.isEmpty(message)) {
         // message = MessageUtil.getMessage("exception.defaultException");
         // }

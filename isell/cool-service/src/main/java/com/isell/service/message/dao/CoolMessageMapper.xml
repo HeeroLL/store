@@ -40,6 +40,7 @@
     <select id="findCoolMessageListPage" resultMap="BaseResultMap" parameterType="com.isell.service.message.vo.CoolMessage">
           SELECT * FROM cool_message 
           <include refid="where_sql"></include>
+          order by sendtime desc
     </select>
     
     <delete id="deleteCoolMessage">

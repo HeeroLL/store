@@ -3,6 +3,7 @@ package com.isell.app;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -41,8 +42,10 @@ import com.isell.app.dao.entity.MemberCommunity;
 import com.isell.app.dao.entity.Notice;
 import com.isell.app.dao.entity.OrderDetail;
 import com.isell.app.dao.entity.OrderParam;
+import com.isell.app.dao.entity.OrderRecv;
 import com.isell.app.dao.entity.OrderReturn;
 import com.isell.app.dao.entity.Product;
+import com.isell.app.dao.entity.ProductImg;
 import com.isell.app.dao.entity.SearchData;
 import com.isell.app.dao.entity.SearchParam;
 import com.isell.app.dao.entity.SearchProduct;
@@ -54,9 +57,12 @@ import com.isell.core.config.BisConfig;
 import com.isell.core.util.FileUploadUtil;
 import com.isell.core.util.JsonData;
 import com.isell.core.util.JsonUtil;
+import com.isell.core.util.Record;
+import com.isell.ei.logistics.kuaidi100.service.KuaidiService;
 import com.isell.service.member.vo.CoolMemberFavorites;
 import com.isell.service.member.vo.CoolUser;
 import com.isell.service.member.vo.UserInfo;
+import com.isell.service.order.service.OrderService;
 import com.isell.service.order.vo.CoolOrder;
 /**
  * 
@@ -69,6 +75,18 @@ public class AppServiceController {
 	
     @Resource
     private AppService appService;
+    
+    /**
+     * 订单接口
+     */
+    @Resource
+    private OrderService orderService;
+    /**
+     * 快递100查询接口
+     */
+    @Resource
+    private KuaidiService KuaidiService;
+    
     /**
      * 配置信息
      */
@@ -229,6 +247,7 @@ public class AppServiceController {
     {
     	JsonData jsonData = new JsonData();
     	CoolMember coolMember=JsonUtil.readValue(jsonObj, CoolMember.class);
+    	
     	Map<String,Object>resultMap=appService.queryThemelist(coolMember).getColumns();
     	jsonData.setSuccess(resultMap.get("success") == null ? false : (Boolean)resultMap.get("success"));
     	resultMap.remove("success");
@@ -305,6 +324,78 @@ public class AppServiceController {
     	return jsonData;
     }
     /**
+     * 买家删除订单  已取消、已完成和已退款
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("mDdelOrderByOrderNo")
+    @ResponseBody
+    public JsonData mDdelOrderByOrderNo(String jsonObj)
+    {
+    	JsonData vo = new JsonData();
+    	OrderParam orderParam=JsonUtil.readValue(jsonObj, OrderParam.class);
+    	int result=this.appService.mDdelOrderByOrderNo(orderParam);
+    	if(result>0)
+    	{
+    		vo.setSuccess(true);
+    	}else
+    	{
+    		vo.setSuccess(false);
+    		vo.setMsg("该订单不可被删除");
+    	}
+    	return vo;
+    }
+    /**
+     * 
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("receiveOrderForApp")
+    @ResponseBody
+    public JsonData receiveOrderForApp(String jsonObj)
+    {
+    	JsonData vo=new JsonData();
+    	CoolOrder order=JsonUtil.readValue(jsonObj, CoolOrder.class);
+    	order = orderService.getCoolOrderDetailByOrderNo(order.getOrderNo());
+    	 Map<String, Object> paramMap = new HashMap<String, Object>();
+         paramMap.put("id", order.getId());
+         Record record = orderService.updateCoolOrderRec(paramMap);
+         vo.setSuccess(record.getBoolean("success"));
+         Map map=new HashMap();
+         map.put("receiptTime", record.get("receiptTime"));
+         vo.setData(map);
+         vo.setMsg(record.getStr("msg"));
+    	return vo;
+    }
+    /**
+     * 保存用户发布的评价
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("saveUserRecOrder")
+    @ResponseBody
+    public JsonData saveUserRecOrder(String jsonObj)
+    {
+    	JsonData vo=new JsonData();
+    	OrderRecv rec=JsonUtil.readValue(jsonObj, OrderRecv.class);
+    	 
+    	int result=this.appService.saveUserRecOrder(rec);
+    	if(result==1)
+    	{
+    		vo.setSuccess(true);
+    	}
+    	else if(result==2)
+    	{
+    		vo.setSuccess(false);
+    		vo.setMsg("该订单已评价");
+    	}else 
+    	{
+    		vo.setSuccess(false);
+    		vo.setMsg("保存失败");
+    	}
+    	return vo;
+    }
+    /**
      * 商品关键字搜索
      * @param jsobObj
      * @return
@@ -317,55 +408,79 @@ public class AppServiceController {
     	SearchParam searchParam=JsonUtil.readValue(jsonObj, SearchParam.class);
     	searchParam.setImg_domain(config.getImgDomain());
     	//验证用户是否有关注店铺
-    	String  s_id=this.appService.checkUserIsRecShop(searchParam);
-    	if(s_id!=null &&!"".equals(s_id))
+    	if(StringUtils.isNotBlank(searchParam.getShopcode()))
     	{
-    		searchParam.setSid(s_id);
-    		List<SearchProduct>list=this.appService.querySearchFavShopGoods(searchParam);
-    		SearchData data=new SearchData();
-    		if(list.size()>0)
+    		String s_id=this.appService.queryShopIdByShopCode(searchParam);
+    		if(StringUtils.isNotBlank(s_id))
     		{
-    			jsonData.setSuccess(true);
-    			jsonData.setTotal(this.appService.querySearchFavShopGoodsNum(searchParam));
-    			data.setRecords(list);
-    			jsonData.setData(data);
-    		}else
-    		{
-    			jsonData.setSuccess(false);
-        		jsonData.setMsg("无数据");
-    		}
-    	}else
-    	{
-    		
-    		List<SearchProduct>goodslist=this.appService.querySearchGoods(searchParam);
-        	SearchData data=new SearchData();
-        	if(goodslist.size()>0)
-        	{
-        		//jsonData.setTotal(this.appService.querySearchGoodsAllNum(searchParam));
-        		data.setTotal(this.appService.querySearchGoodsAllNum(searchParam));
-        		data.setRecords(goodslist);
-        		jsonData.setSuccess(true);
-        		jsonData.setData(data);
-        	}else
-        	{
-        		//查询非订单数据
-        		int result=this.appService.querySearchUnorderNum(searchParam);
-        		if(result>0)
+    			searchParam.setSid(s_id);
+        		List<SearchProduct>list=this.appService.querySearchFavShopGoods(searchParam);
+        		SearchData data=new SearchData();
+        		if(list.size()>0)
         		{
-        			//jsonData.setTotal(result);
-        			data.setTotal(result);
         			jsonData.setSuccess(true);
-        			//jsonData.setRows(this.appService.querySearchGoodsUnOrder(searchParam));
-        			data.setRecords(this.appService.querySearchGoodsUnOrder(searchParam));
+        			jsonData.setTotal(this.appService.querySearchFavShopGoodsNum(searchParam));
+        			data.setRecords(list);
         			jsonData.setData(data);
         		}else
         		{
         			jsonData.setSuccess(false);
             		jsonData.setMsg("无数据");
         		}
+    		}
+    	}else
+    	{
+    		String  s_id=this.appService.checkUserIsRecShop(searchParam);
+        	if(s_id!=null &&!"".equals(s_id))
+        	{
+        		searchParam.setSid(s_id);
+        		List<SearchProduct>list=this.appService.querySearchFavShopGoods(searchParam);
+        		SearchData data=new SearchData();
+        		if(list.size()>0)
+        		{
+        			jsonData.setSuccess(true);
+        			jsonData.setTotal(this.appService.querySearchFavShopGoodsNum(searchParam));
+        			data.setRecords(list);
+        			jsonData.setData(data);
+        		}else
+        		{
+        			jsonData.setSuccess(false);
+            		jsonData.setMsg("无数据");
+        		}
+        	}else
+        	{
         		
+        		List<SearchProduct>goodslist=this.appService.querySearchGoods(searchParam);
+            	SearchData data=new SearchData();
+            	if(goodslist.size()>0)
+            	{
+            		//jsonData.setTotal(this.appService.querySearchGoodsAllNum(searchParam));
+            		data.setTotal(this.appService.querySearchGoodsAllNum(searchParam));
+            		data.setRecords(goodslist);
+            		jsonData.setSuccess(true);
+            		jsonData.setData(data);
+            	}else
+            	{
+            		//查询非订单数据
+            		int result=this.appService.querySearchUnorderNum(searchParam);
+            		if(result>0)
+            		{
+            			//jsonData.setTotal(result);
+            			data.setTotal(result);
+            			jsonData.setSuccess(true);
+            			//jsonData.setRows(this.appService.querySearchGoodsUnOrder(searchParam));
+            			data.setRecords(this.appService.querySearchGoodsUnOrder(searchParam));
+            			jsonData.setData(data);
+            		}else
+            		{
+            			jsonData.setSuccess(false);
+                		jsonData.setMsg("无数据");
+            		}
+            		
+            	}
         	}
     	}
+    	
     	return jsonData;
     }
     /**
@@ -446,6 +561,55 @@ public class AppServiceController {
     	}
     	return jsonData;
     }
+    /**
+     * 取消订单
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("cancleOrderByOrderno")
+    @ResponseBody
+    public JsonData cancleOrderByOrderno(String jsonObj)
+    {
+    	JsonData vo=new JsonData();
+    	OrderParam orderParam=JsonUtil.readValue(jsonObj, OrderParam.class);
+    	int result=this.appService.cancleOrderByOrderno(orderParam);
+    	if(result>0)
+    	{
+    		vo.setSuccess(true);
+    	}else
+    	{
+    		vo.setSuccess(false);
+    		vo.setMsg("该订单不可被取消");
+    	}
+    	return vo;
+    }
+    
+    /**
+     * 
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("getposturl")
+    @ResponseBody
+    public JsonData getposturl(String jsonObj)
+    {
+    	 JsonData jsonData = new JsonData();
+    	 jsonData.setSuccess(false);
+    	 CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
+    	 
+    	 order = orderService.getCoolOrderDetailByOrderNo(order.getOrderNo());
+         if (order == null) {
+             throw new RuntimeException("exception.order.null");
+         }
+         if(order.getPsfs().length()>0)
+         {
+        	 jsonData.setSuccess(true);
+        	 String url=KuaidiService.WAP_URL+"?type="+KuaidiService.queryPostTypeByName(order.getPsfs())+"&postid="+order.getPsCode();
+        	 jsonData.setData(url);
+         }
+    	 return jsonData;
+    }
+    
     /**
      * 查询订单详情
      * @param jsonObj
@@ -560,17 +724,26 @@ public class AppServiceController {
     {
     	JsonData jsonData = new JsonData();
     	LoginParam loginParam=JsonUtil.readValue(jsonObj, LoginParam.class);
-    	loginParam.setImagedomain(config.getImgDomain());
-    	UserInfo user=this.appService.queryLoginCoolUser(loginParam);
-    	if(user!=null)
+    	String result = jvmCacheService.get("sms_" + accessCode+"_"+loginParam.getVacode());
+    	if(result!=null)
     	{
-    		jsonData.setSuccess(true);
-    		jsonData.setData(user);
-    		jvmCacheService.set("user_" + accessCode, JsonUtil.writeValueAsString(user));
+    		loginParam.setImagedomain(config.getImgDomain());
+        	UserInfo user=this.appService.queryLoginCoolUser(loginParam);
+        	if(user!=null)
+        	{
+        		jsonData.setSuccess(true);
+        		jsonData.setData(user);
+        		jvmCacheService.set("user_" + accessCode, JsonUtil.writeValueAsString(user));
+        	}else
+        	{
+        		jsonData.setSuccess(false);
+        		jsonData.setMsg("无数据");
+        	}
+        	
     	}else
     	{
     		jsonData.setSuccess(false);
-    		jsonData.setMsg("无数据");
+    		jsonData.setMsg("验证码错误");
     	}
     	return jsonData;
     }
@@ -876,7 +1049,7 @@ public class AppServiceController {
     	{
     		jsonData.setSuccess(true);
     	}else
-    	{
+    	{ 
     		jsonData.setSuccess(false);
     	}
     	
@@ -928,6 +1101,185 @@ public class AppServiceController {
     	}
     	return jsonData;
     }
+    
+    /**********************************原生接口部分***************************************************************/
+    /**
+     * 
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("queryShopData")
+    @ResponseBody
+    public JsonData queryShopData(String jsonObj)
+    {
+    	JsonData vo=new JsonData();
+    	SearchShop searchShop=JsonUtil.readValue(jsonObj, SearchShop.class);
+    	searchShop.setImage_domain(config.getImgDomain());
+    	SearchShop shopinfo=this.appService.queryShopData(searchShop);
+    	if(shopinfo!=null)
+    	{
+    		vo.setSuccess(true);
+    		vo.setData(shopinfo);
+    	}
+    	return vo;
+    }
+    /**
+     * 店铺新品
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("queryShopNewGoods")
+    @ResponseBody
+    public JsonData queryShopNewGoods(String jsonObj)
+    {
+    	JsonData vo=new JsonData();
+    	SearchParam searchShop=JsonUtil.readValue(jsonObj, SearchParam.class);
+    	//SearchParam searchShop=new SearchParam();
+    	//searchShop.setUncode("33013249");searchShop.setStart(0);searchShop.setLimit(10);
+    	searchShop.setImg_domain(config.getImgDomain());
+    	List<Product>list=this.appService.queryShopNewGoods(searchShop);
+    	if(list.size()>0)
+    	{
+    		vo.setSuccess(true);
+    		vo.setData(list);
+    	}else
+    	{
+    		vo.setSuccess(false);
+    		vo.setMsg("无数据");
+    	}
+    	return vo;
+    }
+    
+  
+	
+	
+	
+    /**
+     * 查询店铺分类
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("queryShopCatelog")
+    @ResponseBody
+    public JsonData queryShopCatelog(String jsonObj)
+    {
+    	JsonData vo=new JsonData();
+    	SearchParam searchShop=JsonUtil.readValue(jsonObj, SearchParam.class);
+    	List<HelpType>list=this.appService.queryShopCatelog(searchShop);
+    	if(list.size()>0)
+    	{
+    		vo.setSuccess(true);
+    		vo.setData(list);
+    	}else
+    	{
+    		vo.setSuccess(false);
+    		vo.setMsg("无数据");
+    	}
+    	return vo;
+    }
+    /**
+     * 查询店铺分类商品
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("queryShopGoodsByCatelogId")
+    @ResponseBody
+    public JsonData queryShopGoodsByCatelogId(String jsonObj)
+    {
+    	JsonData vo=new JsonData();
+    	SearchParam searchParam=JsonUtil.readValue(jsonObj, SearchParam.class);
+    	  
+    	List<Product>list=this.appService.queryShopGoodsByCatelogId(searchParam);
+    	if(list.size()>0)
+    	{
+    		vo.setSuccess(true);
+    		vo.setData(list);
+    	}
+    	return vo;
+    }
+    
+    
+    /**
+     * 
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("queryProductEvalist")
+    @ResponseBody
+    public JsonData queryProductEvalist(String jsonObj)
+    {
+    	JsonData vo=new JsonData();
+    	SearchParam searchParam=JsonUtil.readValue(jsonObj, SearchParam.class);
+    	searchParam.setImg_domain(config.getImgDomain());
+    	int totalnum=this.appService.queryGoodsRecTotalNum(searchParam);
+    	if(totalnum>0)
+    	{
+    		vo.setSuccess(true);
+    		SearchData sd=new SearchData();
+    		sd.setTotal(totalnum);
+    		sd.setRecords(this.appService.queryGoodsRecPage(searchParam));
+    		vo.setData(sd);
+    	}else
+    	{
+    		vo.setSuccess(false);
+    		vo.setMsg("无数据");
+    	}
+    	return vo;
+    }
+    
+    
+    /**
+     * 查询商品详情信息
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("queryProductinfo")
+    @ResponseBody
+    public JsonData queryProductinfo(String jsonObj)
+    {
+    	JsonData vo=new JsonData();
+    	Product productParam=JsonUtil.readValue(jsonObj, Product.class); 
+    	Product info=this.appService.queryProductinfo(productParam);
+    	if(info!=null)
+    	{
+    		if(info.getProductImglist().size()>0)
+    		{
+    			for(ProductImg img:info.getProductImglist())
+    			{
+    				if(img.getImg().length()>0)
+    				{
+    					img.setImg(config.getImgDomain()+img.getImg());
+    				}
+    			}
+    		}
+    		List<ProductImg>contimgs=new ArrayList<ProductImg>();
+    		//解析content img
+    		String content=info.getContent();
+    		String [] con_img=content.split("<img");
+    		for(int i=0;i<con_img.length;i++)
+    		{
+    			if(con_img[i].indexOf("src=")>0)
+    			{
+    				ProductImg o=new ProductImg();
+    				String fir=con_img[i].substring(con_img[i].indexOf("\"")+1);
+    				o.setImg(fir.substring(0, fir.indexOf("\"")));
+    				contimgs.add(o);
+    			}
+    		}
+    		info.setContentimgs(contimgs);
+    		vo.setSuccess(true);
+    		vo.setData(info);
+    	}else
+    	{
+    		vo.setSuccess(false);
+    		vo.setMsg("无数据");
+    	}
+    	return vo;
+    }
+    
+    
+    
+    
     /*******************************图文上传 ***************************************************************/
     /**
      * 

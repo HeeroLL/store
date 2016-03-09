@@ -30,8 +30,8 @@ public class CoolshopRankingTask {
      * 定时任务到达执行的方法
      */
     public void execute() {
-        log.debug("in CoolshopRankingTask");
+        log.info("in CoolshopRankingTask");
         shopRankingService.batchSave();
-        log.debug("out CoolshopRankingTask");
+        log.info("out CoolshopRankingTask");
     }
 }

@@ -137,7 +137,7 @@ public class PinduoduoServiceImpl implements PinduoduoService {
         
         order.setOrderOldno(paramMap.get("OrderNO")); // 外部订单号
         
-        if (CollectionUtils.isNotEmpty(orderResult.getItemList())
+        if (CollectionUtils.isEmpty(orderResult.getItemList())
             || orderResult.getItemList().get(0).getGoodsID() == null) {
             jsonData.setSuccess(false);
             jsonData.setMsg("订单数据不正确");
@@ -157,7 +157,7 @@ public class PinduoduoServiceImpl implements PinduoduoService {
         String orderNo = OrderUtil.generateOrderNo(Integer.parseInt(gid));
         order.setOrderNo(orderNo);
         
-        order.setLinkman(orderResult.getBuyerName()); // 买家/收货人姓名
+        // order.setLinkman(orderResult.getBuyerName()); // 买家/收货人姓名
         order.setLocationP(orderResult.getProvince()); // 省
         order.setLocationC(orderResult.getCity()); // 市
         order.setLocationA(orderResult.getTown()); // 区
@@ -168,6 +168,7 @@ public class PinduoduoServiceImpl implements PinduoduoService {
         order.setPsPrice(orderResult.getPostage()); // 运费
         order.setComments(orderResult.getCustomerRemark()); // 客户备注
         order.setIdcard(orderResult.getRemark()); // 身份证号
+        order.setLinkman(orderResult.getInvoiceTitle()); // 身份证姓名
         order.setCreatetime(new Date()); // 订单创建时间
         order.setPayTime(new Date(order.getCreatetime().getTime() + 60000)); // 订单支付时间
         order.setTradeNo(orderResult.getPayID()); // 支付编号

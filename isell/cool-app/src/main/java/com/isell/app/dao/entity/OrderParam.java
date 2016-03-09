@@ -32,6 +32,7 @@ public class OrderParam implements Serializable{
 	private String remark;
 	private int quality;
 	private String orderseq;
+	private BigDecimal tax_price;
 	
 	//
 	private int isFreePost;
@@ -40,9 +41,57 @@ public class OrderParam implements Serializable{
 	private String comment;
 	private String imgdomain;
 	private String order_limit;
+	private int start;
+	private int limit;
+	private String linkman;
+	private String begintime;
+	private String endtime;
+    private int state;
+    
 	
 	
-	
+	public String getLinkman() {
+		return linkman;
+	}
+	public void setLinkman(String linkman) {
+		this.linkman = linkman;
+	}
+	public String getBegintime() {
+		return begintime;
+	}
+	public void setBegintime(String begintime) {
+		this.begintime = begintime;
+	}
+	public String getEndtime() {
+		return endtime;
+	}
+	public void setEndtime(String endtime) {
+		this.endtime = endtime;
+	}
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
+	}
+	public BigDecimal getTax_price() {
+		return tax_price;
+	}
+	public void setTax_price(BigDecimal tax_price) {
+		this.tax_price = tax_price;
+	}
+	public int getStart() {
+		return start;
+	}
+	public void setStart(int start) {
+		this.start = start;
+	}
+	public int getLimit() {
+		return limit;
+	}
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
 	public String getOrder_limit() {
 		return order_limit;
 	}

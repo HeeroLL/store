@@ -31,4 +31,14 @@ public interface TaskOrderService {
 	 * 拼多多订单推送
 	 */
 	void pushPinduoduoOrder();
+	
+	/**
+	 * 拼多多订单下载
+	 */
+	void downloadPinduoduoOrder();
+	
+	/**
+	 * 卡乐猫订单推送
+	 */
+	void upKalemaoWayBillNo();
 }

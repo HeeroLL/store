@@ -104,7 +104,7 @@ public class AppGatewayController {
      * @return
      */
     @RequestMapping("iservice")
-    public String iservice(HttpServletRequest request, String service, RequestParameter param)
+    public String iservice(HttpServletRequest request, String service, RequestParameter param,String jsonObj)
     {
     	 if (service == null) {
              throw new RuntimeException("exception.access.service.null");
@@ -118,7 +118,7 @@ public class AppGatewayController {
          if (!authCode.equals(param.getAuthCode())) {
              throw new RuntimeException("exception.access.authcode-wrong");
          } */       
-         
+         System.out.println("jsonObj:"+jsonObj+"&service:"+service);
          return "forward:../" + service.replace("_", "/");//默认为forward模式 
     }
     

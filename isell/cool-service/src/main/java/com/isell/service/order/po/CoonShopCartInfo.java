@@ -48,6 +48,14 @@ public class CoonShopCartInfo  extends CoonShopcart{
      */
     private BigDecimal psPrice;
     
+    /**
+     * 酷店名称
+     */
+    private String shopName;
+    
+    /**
+     * 库存
+     */
     private Integer stock;
 
 	public String getName() {
@@ -104,6 +112,14 @@ public class CoonShopCartInfo  extends CoonShopcart{
 
 	public void setPsPrice(BigDecimal psPrice) {
 		this.psPrice = psPrice;
+	}
+
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
 	}
 
 	public Integer getStock() {

@@ -144,4 +144,19 @@ public class AlipayController {
         }
         return jsonData;
     }
+    
+    /**
+     * PC端支付宝充值
+     * 
+     * @param paramMap 参数信息
+     * @param map 返回值
+     * @return 返回的参数字符串
+     */
+    @RequestMapping("webTopUp")
+    public String webTopUp(@RequestBody Map<String, String> paramMap, ModelMap map) {
+        paramMap.put("service", "create_direct_pay_by_user"); // PC支付接口名
+        map.putAll(paramMap);
+        map.addAttribute("result", alipayService.webTopUp(paramMap));
+        return "result";
+    }
 }

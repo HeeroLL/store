@@ -81,10 +81,20 @@ public class CoolProductGg{
      * vip1的价格
      */
     private BigDecimal vipPriceC;
+    /**
+     * 国别代码
+     */
+    private String countryCode;
     
-    
-    
-    public BigDecimal getVipPriceA() {
+    public String getCountryCode() {
+		return countryCode;
+	}
+
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
+	}
+
+	public BigDecimal getVipPriceA() {
         return vipPriceA;
     }
 

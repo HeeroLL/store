@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.isell.core.mybatis.page.PageInfo;
 import com.isell.core.util.Record;
+import com.isell.service.order.vo.Catelog;
 import com.isell.service.product.po.CoolProductExternal;
 import com.isell.service.product.po.CoolProductExternalStock;
 import com.isell.service.product.po.CoolProductExternalStockSelect;
@@ -34,6 +35,14 @@ public interface ProductService {
      * @return 商品详情
      */
     CoolProduct getCoolProductById(CoolProductSelect param);
+    
+    /**
+     * 根据规格编号查询商品
+     *
+     * @param gid 商品规格id
+     * @return 商品详情
+     */
+    CoolProduct getCoolProductByGid(Integer gid);
     
     /**
      * 分页获取商品列表
@@ -118,6 +127,20 @@ public interface ProductService {
      * @return
      */
     List<CoolProductExternal> getProductInfo(CoolProductExternal product);
+    /**
+     * 根据多个商品id查询商品详细信息
+     * @param product
+     * @return
+     */
+    List<CoolProductExternal> queryGoodsinfoByids(CoolProductExternal product);
+    /**
+     * 查询商品总的记录数
+     * @param product
+     * @return
+     */
+    int queryProductAllNum(CoolProductExternal product);
+    
+    List<Catelog>queryCateloglistByPid(Catelog catelog);
     /**
      * 对外查询库存
      * @param product

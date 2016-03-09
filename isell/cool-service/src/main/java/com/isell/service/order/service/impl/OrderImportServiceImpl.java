@@ -126,7 +126,7 @@ public class OrderImportServiceImpl implements OrderImportService {
         String arrears = param.get("arrears").toString();
         String state = param.get("state").toString();
         filePath = config.getImgLocal() + filePath;
-        // filePath = "z:/"+filePath;
+        //filePath = "z:/"+filePath;
         
         /*
          * if ("1".equals(importType)) { // 拼多多 record = savePdd(filePath, arrears); record.set("success", true); } else
@@ -152,6 +152,15 @@ public class OrderImportServiceImpl implements OrderImportService {
             mId = 7380;
             shopName = "";
             record = saveGtw(filePath, arrears, state, shopId, mId, shopName);
+            record.set("success", true);
+        } else if ("12".equals(importType)) {
+            shopId = "cb42274a64064882b6a8b2c1c03fe162";
+            mId = 1142;
+            shopName = "南京汇银";
+            record = saveNjhy(filePath, arrears, state, shopId, mId, shopName);
+            record.set("success", true);
+        }  else if ("13".equals(importType)) { // 美丽说（新版）
+            record = saveMlsNew(filePath, arrears, state);
             record.set("success", true);
         } else {
             // 拼多多
@@ -183,10 +192,50 @@ public class OrderImportServiceImpl implements OrderImportService {
                 shopId = "42d167e22c1d4df4975bdd79b3cc0923";
                 mId = 7411;
                 shopName = "小小怪";
-            } else if ("12".equals(importType)) {
-                shopId = "cb42274a64064882b6a8b2c1c03fe162";
-                mId = 1142;
-                shopName = "南京汇银";
+            }else if ("14".equals(importType)) {
+                shopId = "44f24e45d9584b1698bf654e83b2c77d";
+                mId = 7841;
+                shopName = "连链生活";
+            }else if ("15".equals(importType)) {
+                shopId = "4b6ef6abe1d54a418fbc268062f19684";
+                mId = 7865;
+                shopName = "海狐平台";
+            }else if ("16".equals(importType)) {
+                shopId = "cc0a668ca4204f1186fbfcf38881a21f";
+                mId = 7922;
+                shopName = "蓝豚跨境购";
+            }else if ("17".equals(importType)) {
+                shopId = "ec1c4255e86547d294fb084945467596";
+                mId = 31;
+                shopName = "小酷海外旗舰店";
+            }else if ("18".equals(importType)) {
+                shopId = "08ffb1cd8f4a472695f345c8bac6efb8";
+                mId = 8086;
+                shopName = "帮5买";
+            }else if ("19".equals(importType)) {
+                shopId = "bb62309b05ce4caba2433071e4ff6b79";
+                mId = 8139;
+                shopName = "宝宝树";
+            }else if ("20".equals(importType)) {
+                shopId = "f3a08faaf4154b56809a17b90db07942";
+                mId = 8279;
+                shopName = "银科金典";
+            }else if ("21".equals(importType)) {
+                shopId = "de45b761c4fa4557b783944461159af6";
+                mId = 8193;
+                shopName = "B区";
+            }else if ("22".equals(importType)) {
+                shopId = "315a3acec59843d7be5da8e660435dda";
+                mId = 7721;
+                shopName = "赵小露";
+            }else if ("23".equals(importType)) {
+                shopId = "8689ef88812641a0befee749a8436044";
+                mId = 5554;
+                shopName = "百捷盛科技";
+            }else if ("24".equals(importType)) {
+                shopId = "6c6eb593b1a649f18238119f54476992";
+                mId = 6839;
+                shopName = "海淘乐";
             }
             record = savePdd(filePath, arrears, shopId, mId, shopName, state);
             record.set("success", true);
@@ -326,8 +375,7 @@ public class OrderImportServiceImpl implements OrderImportService {
                     if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
                         order.setTotal(new BigDecimal(cell.getStringCellValue().trim().toString()));
                         item.setPrice(new BigDecimal(cell.getStringCellValue().trim().toString()).divide(new BigDecimal(
-                            item.getCount()),
-                            2));
+                            item.getCount())).setScale(2,  BigDecimal.ROUND_HALF_UP));
                     } else {
                         flag = flag + 1;
                     }
@@ -1199,6 +1247,373 @@ public class OrderImportServiceImpl implements OrderImportService {
     }
     
     /**
+     * 美丽说订单导入(新版)
+     * 
+     * @param filePath
+     * @return
+     */
+    private Record saveMlsNew(String filePath, String arrears, String state) {
+        Record record = new Record();
+        File file = new File(filePath);
+        //File file = new File("G:/2.xls");
+        InputStream is = null;
+        boolean success = false;
+        String msg = "";
+        try {
+            is = new FileInputStream(file);
+            BufferedInputStream binput = new BufferedInputStream(is);
+            Workbook hwb;
+            hwb = WorkbookFactory.create(binput);
+            
+            Sheet sheet = hwb.getSheetAt(0);
+            Row row = null;
+            Cell cell = null;
+            
+            int rowNum = sheet.getLastRowNum();
+            List<CoolMember> memberList = new ArrayList<CoolMember>();
+            for (int i = 1; i <= rowNum; i++) {
+                CoolMember member = new CoolMember();
+                success = false;
+                // 获取到的行数可能会存在问题，所以添加判断标志，都为空时结束循环
+                int flag = 0;
+                CoolOrder order = new CoolOrder();
+                if ("0".equals(arrears)) { // 正常订单
+                    order.setArrears(0);
+                } else {
+                    order.setArrears(1); // 欠费订单
+                }
+                order.setoType(new Byte("1")); // pc 订单
+                order.setOrderType(new Byte("1")); // 一件代发
+                if ("0".equals(state)) { // 待支付
+                    order.setState(CoolOrder.ORDER_STATE_0);
+                } else {
+                    order.setState(CoolOrder.ORDER_STATE_1); // 待发货
+                }
+                // order.setState(CoolOrder.ORDER_STATE_1); // 待发货
+                String shopId = "9d2346b10b5e49289c6c8ac7dba93d5e";
+                order.setSupplier(shopId);
+                order.setmId(5274);
+                order.setSupName("美丽说");
+                CoolOrderItem item = new CoolOrderItem();
+                
+                row = sheet.getRow(i);
+                if (row != null) {
+                    cell = row.getCell(1); // 订单号
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            String orderOldNo = cell.getStringCellValue().trim();
+                            List<CoolOrder> oList = coolOrderMapper.getCoolOrderByOrderOldNoList(orderOldNo, shopId);
+                            if (CollectionUtils.isNotEmpty(oList)) { // 重复不导入
+                                log.info("时间：" + DateUtil.dateToStr(DateUtil.yyyy_MM_dd_HH_mm_ss, new Date())
+                                    + "美丽说订单号为" + orderOldNo + "的订单因为存在相同的订单号而终止导入");
+                                continue;
+                            } else {
+                                order.setOrderOldno(orderOldNo);
+                            }
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(0); // 商品id
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            int gId = Integer.valueOf(cell.getStringCellValue().trim().toString());
+                            CoolProduct product = coolProductMapper.getCoolProductById(gId);
+                            if (product == null) {
+                                msg += "外部订单号为" + order.getOrderOldno() + "的订单因为无法根据商品主键" + gId + "获取商品信息而终止导入;";
+                                continue;
+                            }
+                            // 生成订单号
+                            String orderNo = OrderUtil.generateOrderNo(gId);
+                            order.setOrderNo(orderNo);
+                            item.setOrderNo(orderNo);
+                            
+                            List<CoolProductGg> ggList = coolProductGgMapper.findCoolProductGgList(gId);
+                            CoolProductGg gg = new CoolProductGg();
+                            if (CollectionUtils.isEmpty(ggList)) {
+                                msg += "外部订单号为" + order.getOrderOldno() + "的订单因为无法根据商品主键" + gId + "获取商品规格信息而终止导入;";
+                                continue;
+                            } else {
+                                gg = ggList.get(0);
+                            }
+                            
+                            item.setgId(product.getId());
+                            item.setName(product.getNameEn());
+                            if (StringUtils.isNotEmpty(gg.getLogo())) {
+                                item.setLogo(gg.getLogo());
+                            } else {
+                                item.setLogo(product.getLogo());
+                            }
+                            item.setGg(gg.getGg());
+                            item.setbId(product.getbId());
+                            item.setGid(gg.getId());
+                            
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(2); // 支付单号
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            order.setTradeNo(cell.getStringCellValue());
+                            // order.setZffs(2); // 支付宝
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(3); // 支付方式
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            if ("支付宝支付".equals(cell.getStringCellValue())) {
+                                order.setZffs(2); // 支付宝
+                            } else if ("微信支付".equals(cell.getStringCellValue())) {
+                                order.setZffs(3); // 微信
+                            }
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(7); // 运费
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            order.setPsPrice(new BigDecimal(cell.getStringCellValue().trim().toString()));                           
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(11); // 数量
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            item.setCount(Integer.valueOf(cell.getStringCellValue().trim().toString()));
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(12); //单价
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            //item.setPrice(new BigDecimal(cell.getStringCellValue().trim().toString()));
+                            item.setPrice(new BigDecimal(cell.getStringCellValue().trim().toString()).divide(new BigDecimal(
+                                item.getCount()),
+                                2,
+                                BigDecimal.ROUND_HALF_UP));
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(20); // 收货人
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            order.setLinkman(cell.getStringCellValue().trim().toString());
+                            member.setRealname(cell.getStringCellValue().trim());
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(21); // 手机
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            order.setMobile(cell.getStringCellValue().trim());
+                            member.setMobile(cell.getStringCellValue().trim());
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(22); // 地址
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            String[] dz = cell.getStringCellValue().trim().split(",");
+                            // if(dz.length < 4){
+                            // record.set("msg", "订单号为" + order.getOrderOldno() + "的记录地址格式错误");
+                            // break;
+                            // }
+                            order.setLocationP(dz[0]);
+                            member.setLocationP(dz[0]);
+                            if ("市辖区".equals(dz[1])) {
+                                dz[1] = dz[0];
+                            }
+                            order.setLocationC(dz[1]);
+                            member.setLocationC(dz[1]);
+                            order.setLocationA(dz[2]);
+                            member.setLocationA(dz[2]);
+                            int length = dz.length;
+                            String address = dz[3];
+                            if (length > 4) {
+                                for (int k = 4; k < length; k++) {
+                                    address += dz[k];
+                                }
+                            }
+                            order.setAddress(address);
+                            member.setAddress(address);
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(31); // 确认时间
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            order.setCreatetime(DateUtil.parseDate(cell.getStringCellValue().toString(),
+                                DateUtil.yyyy_MM_dd_HH_mm));
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(33); // 支付时间
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            order.setPayTime(DateUtil.parseDate(cell.getStringCellValue().toString(),
+                                DateUtil.yyyy_MM_dd_HH_mm));
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(34); // 身份证号码
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            order.setIdcard(cell.getStringCellValue().trim().toString());
+                            member.setIdcard(cell.getStringCellValue().trim());
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(39); // 总价
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            order.setTotal(new BigDecimal(cell.getStringCellValue().trim().toString()));
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(40); // 支付交易号
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            order.setTradeNo(cell.getStringCellValue());
+                        } else {
+                            flag = flag + 1;
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                    cell = row.getCell(41); // 批发价格
+                    if (cell != null) {
+                        // 将单元格格式设为string，方便判断是否为空
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                            item.setPfPrice(new BigDecimal(cell.getStringCellValue().trim().toString()));
+                        } else {
+                            item.setPfPrice(item.getPrice());
+                            flag = flag + 1;
+                        }
+                    } else {
+                        item.setPfPrice(item.getPrice());
+                        flag = flag + 1;
+                    }
+                    
+                    if (flag == 16) {
+                        break;
+                    } else {
+                        // orderList.add(order);
+                        // orderItemList.add(item);
+                        
+                        memberList.add(member);
+                        coolOrderMapper.saveCoolOrder(order);
+                        coolOrderItemMapper.saveCoolOrderItem(item);
+                        
+                        // 处理商品库存和销量
+                        jdbcTemplate.update("update cool_product_gg set stock=stock-" + item.getCount()
+                            + ",sales=sales+" + item.getCount() + " where id=?", item.getGid());
+                        jdbcTemplate.update("update cool_product set sales=sales+" + item.getCount() + " where id=?",
+                            item.getgId());
+                        
+                        success = true;
+                    }
+                }
+            }
+            // 注册会员
+            // saveUserAfterImportOrder(memberList);
+        } catch (FileNotFoundException e) {
+            msg += "未找到指定文件";
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+        } finally {
+            if (file.isFile() && file.exists()) {
+                file.delete();
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        record.set("msg", msg);
+        record.set("success", success);
+        return record;
+    }
+    
+    /**
      * 判断是否存在中文
      * 
      * @param str
@@ -1634,4 +2049,328 @@ public class OrderImportServiceImpl implements OrderImportService {
         return record;
     }
     
+    /**
+     * <一句话功能简述><功能详细描述>
+     * 
+     * @param filePath 文件路径
+     * @param arrears 正常或者欠费订单
+     * @param state 订单状态
+     * @param shopId 酷店主键
+     * @param mId 会员主键（配合新后台查询，需要用userId）
+     * @param shopName 酷店名称
+     * @return
+     */
+    private Record saveNjhy(String filePath, String arrears, String state, String shopId, Integer mId, String shopName) {
+        
+        Record record = new Record();
+        File file = new File(filePath);
+        String msg = "";
+        // File file = new File("G:/2.xls");
+        InputStream is = null;
+        boolean success = false;
+        try {
+            is = new FileInputStream(file);
+            BufferedInputStream binput = new BufferedInputStream(is);
+            Workbook hwb;
+            hwb = WorkbookFactory.create(binput);
+            
+            Sheet sheet = hwb.getSheetAt(0);
+            Row row = null;
+            Cell cell = null;
+            
+            // List<CoolOrder> orderList = new ArrayList<CoolOrder>();
+            // List<CoolOrderItem> orderItemList = new ArrayList<CoolOrderItem>();
+            int rowNum = sheet.getLastRowNum();
+            List<CoolMember> memberList = new ArrayList<CoolMember>();
+            for (int i = 1; i <= rowNum; i++) {
+                CoolMember member = new CoolMember();
+                success = false;
+                // 获取到的行数可能会存在问题，所以添加判断标志，都为空时结束循环
+                int flag = 0;
+                CoolOrder order = new CoolOrder();
+                if ("0".equals(arrears)) { // 正常订单
+                    order.setArrears(0);
+                } else {
+                    order.setArrears(1); // 欠费订单
+                }
+                order.setoType(new Byte("1")); // pc 订单
+                order.setOrderType(new Byte("1")); // 一件代发
+                if ("0".equals(state)) { // 待支付
+                    order.setState(CoolOrder.ORDER_STATE_0);
+                } else {
+                    order.setState(CoolOrder.ORDER_STATE_1); // 待发货
+                    order.setZffs(3); // 微信支付
+                }
+                
+                // order.setState(CoolOrder.ORDER_STATE_1); // 待发货
+                // order.setState(CoolOrder.ORDER_STATE_0); // 待支付
+                order.setSupplier(shopId);
+                order.setmId(mId);
+                order.setSupName(shopName);
+                CoolOrderItem item = new CoolOrderItem();
+                
+                row = sheet.getRow(i);
+                cell = row.getCell(1);
+                cell = row.getCell(3); // 订单号
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        String orderOldNo = cell.getStringCellValue().trim();
+                        List<CoolOrder> oList = coolOrderMapper.getCoolOrderByOrderOldNoList(orderOldNo, shopId);
+                        if (CollectionUtils.isNotEmpty(oList)) { // 重复不导入
+                            log.info("时间：" + DateUtil.dateToStr(DateUtil.yyyy_MM_dd_HH_mm_ss, new Date()) + shopName
+                                + "订单号为" + orderOldNo + "的订单因为存在相同的订单号而终止导入");
+                            continue;
+                        } else {
+                            // System.out.println("====================="+ i + "===" + orderOldNo);
+                            order.setOrderOldno(orderOldNo);
+                            order.setCreatetime(new Date());
+                        }
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                
+                cell = row.getCell(0); // 商品id
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        int gId = Integer.valueOf(cell.getStringCellValue().trim().toString());
+                        CoolProduct product = coolProductMapper.getCoolProductById(gId);
+                        if (product == null) {
+                            log.info("时间：" + DateUtil.dateToStr(DateUtil.yyyy_MM_dd_HH_mm_ss, new Date()) + shopName
+                                + "订单号为" + order.getOrderOldno() + "的订单因为无法根据商品主键" + gId + "获取商品信息而终止导入");
+                            continue;
+                        }
+                        // 生成订单号
+                        String orderNo = OrderUtil.generateOrderNo(gId);
+                        order.setOrderNo(orderNo);
+                        item.setOrderNo(orderNo);
+                        
+                        CoolProductGg gg = coolProductGgMapper.findCoolProductGgList(gId).get(0);
+                        item.setgId(product.getId());
+                        item.setName(product.getNameEn());
+                        if (StringUtils.isNotEmpty(gg.getLogo())) {
+                            item.setLogo(gg.getLogo());
+                        } else {
+                            item.setLogo(product.getLogo());
+                        }
+                        item.setGg(gg.getGg());
+                        item.setbId(product.getbId());
+                        item.setGid(gg.getId());
+                        
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                cell = row.getCell(1); // 数量
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        item.setCount(Integer.valueOf(cell.getStringCellValue().trim().toString()));
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                
+                cell = row.getCell(6); // 商品单价
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        item.setPrice(new BigDecimal(cell.getStringCellValue().trim().toString()).divide(new BigDecimal(
+                            item.getCount()),
+                            2));
+                    }
+                } 
+                
+                
+                cell = row.getCell(7); // 运费
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        order.setPsPrice(new BigDecimal(cell.getStringCellValue().trim()));
+                    }
+                } 
+                
+                cell = row.getCell(8); // 订单金额
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        order.setTotal(new BigDecimal(cell.getStringCellValue().trim().toString()));
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                cell = row.getCell(9); // 身份证姓名
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        order.setLinkman(cell.getStringCellValue().trim().toString());
+                        member.setRealname(cell.getStringCellValue().trim());
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                cell = row.getCell(10); // 身份证号码
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        order.setIdcard(cell.getStringCellValue().trim().toString());
+                        member.setIdcard(cell.getStringCellValue().trim());
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                cell = row.getCell(11); // 收货人
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        // order.setLinkman(cell.getStringCellValue().trim().toString());
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                cell = row.getCell(12); // 手机
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        order.setMobile(cell.getStringCellValue().trim());
+                        member.setMobile(cell.getStringCellValue().trim());
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                cell = row.getCell(13); // 省
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        order.setLocationP(cell.getStringCellValue().trim());
+                        member.setLocationP(cell.getStringCellValue().trim());
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                cell = row.getCell(14); // 市
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        order.setLocationC(cell.getStringCellValue().trim());
+                        member.setLocationC(cell.getStringCellValue().trim());
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                cell = row.getCell(15); // 区
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        order.setLocationA(cell.getStringCellValue().trim());
+                        member.setLocationA(cell.getStringCellValue().trim());
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                       
+                   
+                cell = row.getCell(17); // 街道
+                if (cell != null) {
+                    // 将单元格格式设为string，方便判断是否为空
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    if (StringUtils.isNotEmpty(cell.getStringCellValue().trim())) {
+                        order.setAddress(cell.getStringCellValue());
+                        member.setAddress(cell.getStringCellValue().trim());
+                    } else {
+                        flag = flag + 1;
+                    }
+                } else {
+                    flag = flag + 1;
+                }
+                
+                
+                
+                
+                
+                if (flag == 14) {
+                    break;
+                } else {
+                    // orderList.add(order);
+                    // orderItemList.add(item);
+                    
+                    memberList.add(member);
+                    coolOrderMapper.saveCoolOrder(order);
+                    coolOrderItemMapper.saveCoolOrderItem(item);
+                    
+                    // 处理商品库存和销量
+                    jdbcTemplate.update("update cool_product_gg set stock=stock-" + item.getCount() + ",sales=sales+"
+                        + item.getCount() + " where id=?", item.getGid());
+                    jdbcTemplate.update("update cool_product set sales=sales+" + item.getCount() + " where id=?",
+                        item.getgId());
+                    
+                    success = true;
+                }
+                // coolOrderMapper.insertBatch(orderList);
+                
+            }
+            // 注册会员
+            // saveUserAfterImportOrder(memberList);
+            
+        } catch (FileNotFoundException e) {
+            msg += "无法找到指定文件"; 
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+        } finally {
+            if (file.isFile() && file.exists()) {
+                file.delete();
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        record.set("msg", msg);
+        record.set("success", success);
+        return record;
+        
+    }
 }

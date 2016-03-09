@@ -193,7 +193,7 @@ public class YitongRequestRow {
     /**
      * 总单号
      */
-    private String totalLogisticsNo = "ISELL201601180001";//"HDFC15W4125120";
+    private String totalLogisticsNo = "ISELL201603090001";//"HDFC15W4125120";
     
     /**
      * 货物品名

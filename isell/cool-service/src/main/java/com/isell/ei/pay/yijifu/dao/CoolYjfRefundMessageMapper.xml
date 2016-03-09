@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.ei.pay.yijifu.dao.CoolYjfRefundMessageMapper">
+    <resultMap id="BaseResultMap" type="com.isell.ei.pay.yijifu.bean.CoolYjfRefundMessage">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="notifyTime" jdbcType="VARCHAR" property="notifytime"/>
+        <result column="resultCode" jdbcType="VARCHAR" property="resultcode"/>
+        <result column="resultMessage" jdbcType="VARCHAR" property="resultmessage"/>
+        <result column="tradeNo" jdbcType="VARCHAR" property="tradeno"/>
+        <result column="orderNo" jdbcType="VARCHAR" property="orderno"/>
+        <result column="refundNo" jdbcType="VARCHAR" property="refundno"/>
+        <result column="refundAmount" jdbcType="DECIMAL" property="refundamount"/>
+        <result column="refundFinishTime" jdbcType="VARCHAR" property="refundfinishtime"/>
+        <result column="currency" jdbcType="VARCHAR" property="currency"/>
+        <result column="executeStatus" jdbcType="VARCHAR" property="executestatus"/>
+        <result column="message" jdbcType="VARCHAR" property="message"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+    </resultMap>
+    <select id="getCoolYjfRefundMessageById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_yjf_refund_message
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolYjfRefundMessage" resultMap="BaseResultMap">
+          SELECT * FROM cool_yjf_refund_message 
+    </select>
+    
+    <delete id="deleteCoolYjfRefundMessage">
+        DELETE
+        FROM
+             cool_yjf_refund_message
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolYjfRefundMessage" parameterType="com.isell.ei.pay.yijifu.bean.CoolYjfRefundMessage" >
+        INSERT INTO cool_yjf_refund_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="notifytime != null" >
+                notifyTime,
+            </if>
+            <if test="resultcode != null" >
+                resultCode,
+            </if>
+            <if test="resultmessage != null" >
+                resultMessage,
+            </if>
+            <if test="tradeno != null" >
+                tradeNo,
+            </if>
+            <if test="orderno != null" >
+                orderNo,
+            </if>
+            <if test="refundno != null" >
+                refundNo,
+            </if>
+            <if test="refundamount != null" >
+                refundAmount,
+            </if>
+            <if test="refundfinishtime != null" >
+                refundFinishTime,
+            </if>
+            <if test="currency != null" >
+                currency,
+            </if>
+            <if test="executestatus != null" >
+                executeStatus,
+            </if>
+            <if test="message != null" >
+                message,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="notifytime != null" >
+                #{notifytime,jdbcType=VARCHAR},
+            </if> 
+            <if test="resultcode != null" >
+                #{resultcode,jdbcType=VARCHAR},
+            </if> 
+            <if test="resultmessage != null" >
+                #{resultmessage,jdbcType=VARCHAR},
+            </if> 
+            <if test="tradeno != null" >
+                #{tradeno,jdbcType=VARCHAR},
+            </if> 
+            <if test="orderno != null" >
+                #{orderno,jdbcType=VARCHAR},
+            </if> 
+            <if test="refundno != null" >
+                #{refundno,jdbcType=VARCHAR},
+            </if> 
+            <if test="refundamount != null" >
+                #{refundamount,jdbcType=DECIMAL},
+            </if> 
+            <if test="refundfinishtime != null" >
+                #{refundfinishtime,jdbcType=VARCHAR},
+            </if> 
+            <if test="currency != null" >
+                #{currency,jdbcType=VARCHAR},
+            </if> 
+            <if test="executestatus != null" >
+                #{executestatus,jdbcType=VARCHAR},
+            </if> 
+            <if test="message != null" >
+                #{message,jdbcType=VARCHAR},
+            </if> 
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolYjfRefundMessage" parameterType="com.isell.ei.pay.yijifu.bean.CoolYjfRefundMessage" >
+        UPDATE cool_yjf_refund_message
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="notifytime != null" >
+                notifyTime = #{notifytime,jdbcType=VARCHAR},
+            </if>
+            <if test="resultcode != null" >
+                resultCode = #{resultcode,jdbcType=VARCHAR},
+            </if>
+            <if test="resultmessage != null" >
+                resultMessage = #{resultmessage,jdbcType=VARCHAR},
+            </if>
+            <if test="tradeno != null" >
+                tradeNo = #{tradeno,jdbcType=VARCHAR},
+            </if>
+            <if test="orderno != null" >
+                orderNo = #{orderno,jdbcType=VARCHAR},
+            </if>
+            <if test="refundno != null" >
+                refundNo = #{refundno,jdbcType=VARCHAR},
+            </if>
+            <if test="refundamount != null" >
+                refundAmount = #{refundamount,jdbcType=DECIMAL},
+            </if>
+            <if test="refundfinishtime != null" >
+                refundFinishTime = #{refundfinishtime,jdbcType=VARCHAR},
+            </if>
+            <if test="currency != null" >
+                currency = #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="executestatus != null" >
+                executeStatus = #{executestatus,jdbcType=VARCHAR},
+            </if>
+            <if test="message != null" >
+                message = #{message,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

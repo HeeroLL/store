@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -12,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.isell.bis.product.po.CoonShopProductPo;
+import com.isell.core.config.BisConfig;
+import com.isell.core.config.vo.AccessSystem;
 import com.isell.core.util.JsonData;
 import com.isell.core.util.JsonUtil;
+import com.isell.service.order.vo.Catelog;
 import com.isell.service.product.po.CoolProductExternal;
 import com.isell.service.product.po.CoolProductExternalStock;
 import com.isell.service.product.po.CoolProductExternalStockSelect;
@@ -39,7 +43,11 @@ public class ProductController {
 	 */
 	@Resource
 	private ProductService productService;
-
+	/**
+     * 配置信息
+     */
+    @Resource
+    private BisConfig config;
 	/**
 	 * 获取商品列表接口
 	 * 
@@ -162,7 +170,9 @@ public class ProductController {
 		jsonData.setSuccess(resultMap.get("success") == null ? false : (Boolean) resultMap.get("success"));
 		resultMap.remove("success");
 		if (resultMap.get("msg") != null) {
-			jsonData.setMsg((String) resultMap.get("msg"));
+			if(!jsonData.getSuccess()){
+				jsonData.setMsg((String) resultMap.get("msg"));
+			}			
 			resultMap.remove("msg");
 		}
 		jsonData.setData(resultMap);
@@ -296,6 +306,45 @@ public class ProductController {
 		jsonData.setData(resultMap);
 		return jsonData;
 	}	
+	/**
+	 * 光云--根据商品id数组 查询多个商品信息
+	 * @param jsonObj
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("queryGoodsinfoByids")
+	@ResponseBody
+	public JsonData  queryGoodsinfoByids(String jsonObj,HttpServletRequest request)
+	{
+		log.info("get queryGoodsinfoByids ok!jsonObj:"+jsonObj);
+	     JsonData vo = new JsonData();
+	     try {	    	  
+	    	 CoolProductExternal product = JsonUtil.readValue(jsonObj, CoolProductExternal.class);
+	    	// CoolProductExternal product=new CoolProductExternal();product.setQueryids("212,213");
+	    	 product.setImage_domain(config.getImgDomain());
+	    	 List<CoolProductExternal>record=productService.queryGoodsinfoByids(product);
+	    	 if(!"".equals(request.getParameter("accessCode")))
+		        {
+		        	 AccessSystem sys = config.getAccessSysMap().get(request.getParameter("accessCode"));
+		        	 if (sys != null) {
+		        		 if(sys.getIsgooddetail()==0)
+		        		 {
+		        			 for(CoolProductExternal info:record)
+		        			 {
+		        				 info.setContent("");
+		        			 }
+		        		 }
+		        	 }
+		        }
+	    	 vo.setSuccess(true);
+	    	 vo.setRows(record);
+	     } catch(Exception e){
+	    	 vo.setSuccess(false);
+				vo.setMsg(e.getMessage());
+				e.printStackTrace();
+	     }
+	     return vo;
+	}
 	
 	/**
 	 * 外部商品信息推送接口
@@ -304,17 +353,39 @@ public class ProductController {
 	 */
 	@RequestMapping("getInfo")
 	@ResponseBody
-	public JsonData getInfo(String jsonObj) {
+	public JsonData getInfo(String jsonObj,HttpServletRequest request) {
 		log.info("get getStock ok!jsonObj:"+jsonObj);
 	     JsonData jsonData = new JsonData();
-	      try {
-	    	  CoolProductExternal product = JsonUtil.readValue(jsonObj, CoolProductExternal.class);
-	        if(product==null||(null==product.getId()&&StringUtils.isBlank(product.getName()))) {
+	      try {	    	  
+	    	 CoolProductExternal product = JsonUtil.readValue(jsonObj, CoolProductExternal.class);
+	        /*if(product==null||(null==product.getId()&&StringUtils.isBlank(product.getName()))) {
 	   			 jsonData.setSuccess(false);
 	   			 jsonData.setMsg("id  and  name are null");
 	        	throw new RuntimeException("parameters[id,name] are null!");
-	        }
+	        }*/
+	    	 if(product.getPage()>0)
+	    	 {
+	    		 product.setStart((product.getPage()-1)*product.getLimit());
+	    	 }
+	        product.setImage_domain(config.getImgDomain());
 	        List<CoolProductExternal> record =  productService.getProductInfo(product);
+	        if(record.size()>0)
+	        {
+	        	jsonData.setTotal(this.productService.queryProductAllNum(product));
+	        }
+	        if(!"".equals(request.getParameter("accessCode")))
+	        {
+	        	 AccessSystem sys = config.getAccessSysMap().get(request.getParameter("accessCode"));
+	        	 if (sys != null) {
+	        		 if(sys.getIsgooddetail()==0)
+	        		 {
+	        			 for(CoolProductExternal info:record)
+	        			 {
+	        				 info.setContent("");
+	        			 }
+	        		 }
+	        	 }
+	        }
 	       jsonData.setSuccess(true);
 	       jsonData.setRows(record);
 		} catch(Exception e){
@@ -324,7 +395,30 @@ public class ProductController {
 		}
         return jsonData;
 	} 
-	
+	/**
+	 * 根据父类id查询所有的子分类信息
+	 * @param jsonObj
+	 * @return
+	 */
+	@RequestMapping("queryCateloglistByPid")
+	@ResponseBody
+	public JsonData queryCateloglistByPid(String jsonObj)
+	{
+		log.info("get queryCateloglistByPid ok!jsonObj:"+jsonObj);
+		JsonData vo=new JsonData();
+		Catelog info=JsonUtil.readValue(jsonObj, Catelog.class);
+		List<Catelog>list=this.productService.queryCateloglistByPid(info);
+		if(list.size()>0)
+		{
+			vo.setSuccess(true);
+			vo.setData(list);
+		}else
+		{
+			vo.setSuccess(false);
+			vo.setMsg("无数据");
+		}
+		return vo;
+	}
 	/**
 	 * 外部获取库存记录
 	 * @param jsonObj
@@ -344,7 +438,7 @@ public class ProductController {
 	        }
 	        List<CoolProductExternalStockSelect> products =  productService.getProductStock(product);
 	       jsonData.setSuccess(true);
-	       jsonData.setData(products);
+	       jsonData.setRows(products);
 		} catch(Exception e){
 			jsonData.setSuccess(false);
 			jsonData.setMsg(e.getMessage());

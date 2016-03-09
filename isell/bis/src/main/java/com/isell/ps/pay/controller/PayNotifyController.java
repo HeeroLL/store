@@ -3,6 +3,7 @@ package com.isell.ps.pay.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -15,10 +16,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.isell.core.util.JaxbUtil;
+import com.isell.core.util.JsonUtil;
 import com.isell.ei.pay.ehking.bean.EhkingCustomsAsync;
 import com.isell.ei.pay.ehking.bean.EhkingPayNotify;
+import com.isell.ei.pay.fuiou.bean.FuiouNotify;
 import com.isell.ei.pay.weixin.bean.WeixinPayResultInfo;
+import com.isell.ei.pay.yijifu.bean.CoolYjfRefundMessage;
+import com.isell.ei.pay.yijifu.bean.CoolYjfRemit;
+import com.isell.ei.pay.yijifu.bean.CoolYjfRemitOrder;
 import com.isell.ei.pay.yijifu.bean.YijifuPayResponse;
+import com.isell.ei.pay.yijifu.bean.YijifuRefundResponse;
+import com.isell.ei.pay.yijifu.bean.YijifuRemitResponse;
+import com.isell.ei.pay.yijifu.bean.YijifuSynOrderResponse;
+import com.isell.ei.pay.yijifu.service.CoolYjfRefundService;
+import com.isell.ei.pay.yijifu.service.CoolYjfRemitService;
 import com.isell.ei.pay.yijifu.service.YijifuService;
 import com.isell.ei.pay.yijifu.util.YijifuUtil;
 import com.isell.ei.sms.service.SmsService;
@@ -26,7 +37,7 @@ import com.isell.ei.sms.vo.TemplateSMS;
 import com.isell.ps.pay.vo.AlipayNotifyInfo;
 import com.isell.service.order.service.OrderService;
 import com.isell.service.order.vo.CoolOrder;
-import com.isell.service.shop.dao.CoonShopMapper;
+import com.isell.service.shop.service.CoonShopService;
 import com.isell.service.shop.vo.CoonShop;
 
 /**
@@ -51,11 +62,22 @@ public class PayNotifyController {
     private SmsService smsService;
     
     /**
-     * 店铺信息
+     * 店铺接口
      */
-    
     @Resource
-    private CoonShopMapper coonShopMapper;
+    private CoonShopService coonShopService;
+    
+    /**
+     *  易极付跨境汇款申请接口
+     */
+    @Resource
+    private CoolYjfRemitService coolYjfRemitService;
+    
+    /**
+     *  易极付跨境退款接口
+     */
+    @Resource
+    private CoolYjfRefundService coolYjfRefundService;
     
     /**
      * 支付宝支付异步通知
@@ -121,14 +143,14 @@ public class PayNotifyController {
             order.setPayTime(new Date());
             orderService.updateOrder(order);
             
-            sendMessage(order);
+            // sendMessage(order);
         }
         map.put("result", "success");
         return "result";
     }
     
     /**
-     * 易汇金支付异步通知
+     * 富友支付异步通知
      * 
      * @param ehkingPayNotify 易汇金异步参数
      * @param map 返回参数
@@ -159,6 +181,37 @@ public class PayNotifyController {
     }
     
     /**
+     * 易汇金支付异步通知
+     * 
+     * @param ehkingPayNotify 易汇金异步参数
+     * @param map 返回参数
+     * @param response response
+     * @return String
+     */
+    @RequestMapping("/fuiou")
+    public String fuiouNotify(@RequestBody FuiouNotify fuiouNotify, ModelMap map, HttpServletResponse response) {
+        response.setContentType("text/plain; charset=UTF-8");
+      /*  CoolOrder order = orderService.getCoolOrderByOrderNo(ehkingPayNotify.getRequestId());
+        
+        if (order == null) {
+            throw new RuntimeException("exception.order.null");
+        }
+        if ("SUCCESS".equals(ehkingPayNotify.getStatus()) && (order.getState() == 0 || order.getState() == 99)) {
+            order.setTradeNo(ehkingPayNotify.getSerialNumber());
+            order.setArrears(0); // 不欠费
+            order.setZffs(CoolOrder.ZFFS_5);
+            order.setState(CoolOrder.ORDER_STATE_1);
+            order.setPayState((byte)0); // 未报关
+            order.setPayTime(new Date());
+            orderService.updateOrder(order);
+            
+            sendMessage(order);
+        }*/
+        map.put("result", "success");
+        return "result";
+    }
+    
+    /**
      * 易汇金报关异步通知
      * 
      * @param ehkingCustomsAsync 易汇金异步报关响应参数
@@ -175,7 +228,7 @@ public class PayNotifyController {
     }
     
     private void sendMessage(CoolOrder orderR) {
-        CoonShop coonShop = coonShopMapper.getCoonShopById(orderR.getSupplier());
+        CoonShop coonShop = coonShopService.getCoonShopById(orderR.getSupplier());
         
         if (coonShop.getSmsEd() == 0) {
             TemplateSMS templateSMS = new TemplateSMS();
@@ -196,7 +249,6 @@ public class PayNotifyController {
     /**
      * 易极付支付报关异步通知
      * 
-     * @param payInfo 易极付异步参数
      * @param map 返回参数
      * @param response response
      * @return String
@@ -207,6 +259,71 @@ public class PayNotifyController {
         map.put("result", "success");
         return "result";
     }
+    
+    /**
+     * 易极付汇款申请异步通知
+     * 
+     * @param remit 异步申请通知参数
+     * @param map 返回参数
+     * @param response response
+     * @return String
+     */
+    @RequestMapping("/yijifuRemit")
+    public String yijifuRemit(YijifuRemitResponse remit, ModelMap map, HttpServletResponse response) {
+        if ("EXECUTE_SUCCESS".equals(remit.getResultCode())) {
+            CoolYjfRemit coolYjfRemit = coolYjfRemitService.getCoolYjfRemitByBatchno(remit.getRemittranceBatchNo());
+            if (coolYjfRemit != null) {
+                coolYjfRemit.setMessage(remit.getMessage());
+                if ("processing".equals(remit.getStatus())) {
+                    coolYjfRemit.setStatus("1");    
+                } else if ("success".equals(remit.getStatus())) {
+                    coolYjfRemit.setStatus("2");
+                }
+                
+                coolYjfRemitService.updateCoolYjfRemit(coolYjfRemit);                
+            }
+        }
+        
+        response.setContentType("text/plain; charset=UTF-8");
+        map.put("result", "success");
+        return "result";
+    }
+    
+    /**
+     * 易极付汇款申请异步通知
+     * 
+     * @param synOrder 订单同步参数
+     * @param map 返回参数
+     * @param response response
+     * @return String
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/yijifuSynOrder")
+    public String yijifuSynOrder(YijifuSynOrderResponse synOrder, ModelMap map, HttpServletResponse response) {
+        if ("EXECUTE_SUCCESS".equals(synOrder.getResultCode())) {
+            String resultInfos = synOrder.getResultInfos();
+            List<Map<String, String>> orderList = JsonUtil.readValue(resultInfos, List.class);
+            // 新增跨境订单信息
+            for (Map<String, String> orderInfo : orderList) {
+                CoolYjfRemitOrder coolYjfRemitOrder = new CoolYjfRemitOrder();
+                coolYjfRemitOrder.setRemittranceBatchno(synOrder.getRemittranceBatchNo());
+                coolYjfRemitOrder.setOrderNo(orderInfo.get("detailOrderSerialNo"));
+                CoolOrder coolOrder = orderService.getCoolOrderByOrderNo(orderInfo.get("detailOrderSerialNo"));
+                coolYjfRemitOrder.setOrderAmount(coolOrder.getTotal());
+                coolYjfRemitOrder.setStatus(orderInfo.get("status"));
+                coolYjfRemitOrder.setMessage(orderInfo.get("message"));
+                
+                coolYjfRemitService.saveCoolYjfRemitOrder(coolYjfRemitOrder);
+            }
+            
+            // 更新批次金额总价
+            coolYjfRemitService.updatePayAmountByBatchno(synOrder.getRemittranceBatchNo());
+        }
+        
+        response.setContentType("text/plain; charset=UTF-8");
+        map.put("result", "success");
+        return "result";
+    } 
     
     @RequestMapping("/wxpayNotify")
     @ResponseBody
@@ -244,5 +361,35 @@ public class PayNotifyController {
         
         return result;
         
+    }
+    
+    /**
+     * 易极付退款申请异步通知
+     * 
+     * @param map 返回参数
+     * @param response response
+     * @return String
+     */
+    @RequestMapping("/yijifuRefund")
+    public String yijifuRefund(YijifuRefundResponse refund, ModelMap map, HttpServletResponse response) {
+    	CoolYjfRefundMessage message = new CoolYjfRefundMessage();
+    	message.setNotifytime(refund.getNotifyTime());
+    	message.setResultcode(refund.getResultCode());
+    	message.setResultmessage(refund.getResultMessage());
+    	message.setTradeno(refund.getTradeNo());
+    	message.setOrderno(refund.getOrderNo());
+    	message.setRefundno(refund.getRefundNo());
+    	message.setRefundamount(refund.getRefundAmount());
+    	message.setRefundfinishtime(refund.getRefundFinishTime());
+    	message.setCurrency(refund.getCurrency());
+    	message.setExecutestatus(refund.getExecuteStatus());
+    	message.setMessage(refund.getMessage());
+    	message.setCreatetime(new Date());
+    	
+    	coolYjfRefundService.saveCoolYjfRefundMessage(message);
+        
+        response.setContentType("text/plain; charset=UTF-8");
+        map.put("result", "success");
+        return "result";
     }
 }

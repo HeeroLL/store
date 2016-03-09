@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.service.order.dao.CoolProductCustomsHzMapper">
+    <resultMap id="BaseResultMap" type="com.isell.service.order.vo.CoolProductCustomsHz">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="p_id" jdbcType="INTEGER" property="pId"/>
+        <result column="g_id" jdbcType="INTEGER" property="gId"/>
+        <result column="currency" jdbcType="VARCHAR" property="currency"/>
+        <result column="code_ts" jdbcType="VARCHAR" property="codeTs"/>
+        <result column="trade_country" jdbcType="VARCHAR" property="tradeCountry"/>
+    </resultMap>
+    <select id="getCoolProductCustomsHzById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_product_customs_hz
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="findAllCoolProductCustomsHz" resultMap="BaseResultMap">
+          SELECT * FROM cool_product_customs_hz 
+    </select>
+    
+    <delete id="deleteCoolProductCustomsHz">
+        DELETE
+        FROM
+             cool_product_customs_hz
+        WHERE            
+            id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="saveCoolProductCustomsHz" parameterType="com.isell.service.order.vo.CoolProductCustomsHz" >
+        INSERT INTO cool_product_customs_hz
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="pId != null" >
+                p_id,
+            </if>
+            <if test="gId != null" >
+                g_id,
+            </if>
+            <if test="currency != null" >
+                currency,
+            </if>
+            <if test="codeTs != null" >
+                code_ts,
+            </if>
+            <if test="tradeCountry != null" >
+                trade_country,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if> 
+            <if test="pId != null" >
+                #{pId,jdbcType=INTEGER},
+            </if> 
+            <if test="gId != null" >
+                #{gId,jdbcType=INTEGER},
+            </if> 
+            <if test="currency != null" >
+                #{currency,jdbcType=VARCHAR},
+            </if> 
+            <if test="codeTs != null" >
+                #{codeTs,jdbcType=VARCHAR},
+            </if> 
+            <if test="tradeCountry != null" >
+                #{tradeCountry,jdbcType=VARCHAR},
+            </if> 
+        </trim>
+    </insert>
+
+    <update id="updateCoolProductCustomsHz" parameterType="com.isell.service.order.vo.CoolProductCustomsHz" >
+        UPDATE cool_product_customs_hz
+        <set>
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="pId != null" >
+                p_id = #{pId,jdbcType=INTEGER},
+            </if>
+            <if test="gId != null" >
+                g_id = #{gId,jdbcType=INTEGER},
+            </if>
+            <if test="currency != null" >
+                currency = #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="codeTs != null" >
+                code_ts = #{codeTs,jdbcType=VARCHAR},
+            </if>
+            <if test="tradeCountry != null" >
+                trade_country = #{tradeCountry,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE 
+            id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

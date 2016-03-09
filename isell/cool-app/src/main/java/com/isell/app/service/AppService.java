@@ -13,8 +13,12 @@ import com.isell.app.dao.entity.LoginParam;
 import com.isell.app.dao.entity.MemberAddress;
 import com.isell.app.dao.entity.MemberCommunity;
 import com.isell.app.dao.entity.Notice;
+import com.isell.app.dao.entity.OrderCount;
 import com.isell.app.dao.entity.OrderDetail;
 import com.isell.app.dao.entity.OrderParam;
+import com.isell.app.dao.entity.OrderRecv;
+import com.isell.app.dao.entity.Product;
+import com.isell.app.dao.entity.ProductRec;
 import com.isell.app.dao.entity.SearchParam;
 import com.isell.app.dao.entity.SearchProduct;
 import com.isell.app.dao.entity.SearchShop;
@@ -55,6 +59,18 @@ public interface AppService {
 	  * @return
 	  */
 	 List<Hotword>queryHotwordlist(); 
+	 /**
+	  * 买家删除订单  已取消、已完成和已退款
+	  * @param orderParam
+	  * @return
+	  */
+	 int mDdelOrderByOrderNo(OrderParam orderParam);
+	 /**
+	  * 保存订单评价
+	  * @param orderrec
+	  * @return
+	  */
+	 int saveUserRecOrder(OrderRecv orderrec);
 	 /**
 	  * 搜索宝贝 -关键字搜索
 	  * @param searchParam
@@ -160,6 +176,12 @@ public interface AppService {
 	  */
 	 List<CollectInfo>queryUserCollect(SearchParam searchParam);
 	 /**
+	  * 取消订单
+	  * @param orderParam
+	  * @return
+	  */
+	 int cancleOrderByOrderno(OrderParam orderParam);
+	 /**
 	  * 查询 用户收藏总数
 	  * @param searchParam
 	  * @return
@@ -203,6 +225,12 @@ public interface AppService {
 	  */
 	 String checkUserIsRecShop(SearchParam searchParam);
 	 /**
+	  * 根据店铺code查询店铺id
+	  * @param searchParam
+	  * @return
+	  */
+	 String queryShopIdByShopCode(SearchParam searchParam);
+	 /**
 	  * app用户注册 +推荐店铺code
 	  * @param coolUser
 	  * @return
@@ -245,6 +273,30 @@ public interface AppService {
 	  */
 	 int updateMemberAddress(MemberAddress memberAddress);
 	 /**
+	  * 查询商品详情
+	  * @param product
+	  * @return
+	  */
+	 Product queryProductinfo(Product product);
+	 /**
+	  * 查询
+	  * @param searchParam
+	  * @return
+	  */
+	 int queryGoodsRecTotalNum(SearchParam searchParam);
+	 /**
+	  * 查询店铺主页信息
+	  * @param searchShop
+	  * @return
+	  */
+	 SearchShop queryShopData(SearchShop searchShop);
+	 /**
+	  * 商品评论
+	  * @param searchParam
+	  * @return
+	  */
+	 List<ProductRec>queryGoodsRecPage(SearchParam searchParam);
+	 /**
 	  * 保存用户新建社区留言
 	  * @param memberCommunity
 	  * @return
@@ -274,4 +326,96 @@ public interface AppService {
 	  * @return
 	  */
 	 int updateMemberInfo(CoolMember coolMember);
+	 /**
+	  * 
+	  * @param searchParam
+	  * @return
+	  */
+	 List<Product>queryShopNewGoods(SearchParam searchParam);
+	 /**
+	  * 查询店铺分类
+	  * @param searchParam
+	  * @return
+	  */
+	 List<HelpType>queryShopCatelog(SearchParam searchParam);
+	 /**
+	  * 查询分类下面的商品
+	  * @param searchParam
+	  * @return
+	  */
+	 List<Product>queryShopGoodsByCatelogId(SearchParam searchParam);
+	 /**
+	  * 查询bms系统产品数据
+	  * @return
+	  */
+	 List<Product>queryBmsProductList(SearchParam searchParam);
+	 
+	 
+	 int regShopUser(SearchParam searchParam);
+	 
+	 int updateShopname(SearchParam  searchParam);
+	 /**
+	  * 
+	  * @param searchParam
+	  * @return
+	  */
+	 int queryBmsProductAllNum(SearchParam searchParam);
+	 /**
+	  * 查询订单
+	  * @param orderParam
+	  * @return
+	  */
+	 List<OrderDetail>queryBmsMyOrder(OrderParam orderParam);
+	 /**
+	  * 
+	  * @param orderParam
+	  * @return
+	  */
+	 int queryBMsMyOrderAllNum(OrderParam orderParam);
+	 /**
+	  * 
+	  * @param searchParam
+	  * @return
+	  */
+	 OrderDetail queryOrderDetailForBms(SearchParam searchParam);
+	 /**
+	  * 
+	  * @param searchParam
+	  * @return
+	  */
+	 int updateShopProducts(SearchParam searchParam);
+	 /**
+	  * 
+	  * @param searchParam
+	  * @return
+	  */
+	 List<Product>queryBmsBindGoodsId(SearchParam searchParam);
+	 /**
+	  * 
+	  * @param searchParam
+	  * @return
+	  */
+	 int queryBmsBindGoodsAllNum(SearchParam searchParam);
+	 /**
+	  * 根据父类查询子类列表
+	  * @param searchParam
+	  * @return
+	  */
+	 List<SearchType>queryChildCatelogListByParent(SearchParam searchParam);
+	 
+	 int updateOrderState(SearchParam searchParam);
+	 /**
+	  * 
+	  * @param searchParam
+	  * @return
+	  */
+	 int updateShopProFlag(SearchParam searchParam);
+	 /**
+	  * 
+	  * @param searchParam
+	  * @return
+	  */
+	 OrderCount queryBmsMyOrderCount(SearchParam searchParam);
+	 
+	 
 }

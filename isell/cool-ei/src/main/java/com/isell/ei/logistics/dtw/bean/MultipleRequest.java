@@ -4,7 +4,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
-
+/**
+ * 
+ * @author maoweijie
+ * @version 
+ */
 public class MultipleRequest {
 	@JsonProperty("PassKey")
 	private String PassKey = "6442305C-5A31-43BB-B36D-C73FB1EE14EC";

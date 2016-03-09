@@ -61,7 +61,18 @@ public class CoolOrder {
      * 内贸-圆通
      */
     public static final byte FHFS_1 = 1;
-    
+    /**
+     * 汇通
+     */
+    public static final byte FHFS_2 = 2;
+    /**
+     * 顺丰
+     */
+    public static final byte FHFS_3 = 3;
+    /**
+     * 大田物流
+     */
+    public static final byte FHFS_4 = 4;
     /**
      * 宁波艾购保税仓
      */
@@ -105,6 +116,11 @@ public class CoolOrder {
      * 支付方式：6-浙江银商支付
      */
     public static final int ZFFS_6 = 6;
+    
+    /**
+     * 支付方式：7-富友支付
+     */
+    public static final int ZFFS_7 = 7;
     
     /**
      * 主键id
@@ -393,6 +409,8 @@ public class CoolOrder {
      */
     private List<CoolOrderItem> itemList;
     
+    private List<HzCoolOrderItem> hzItem;
+    
     private List<CoolOrderItem> items;
     public List<CoolOrderItem> getItems() {
 		return items;
@@ -506,7 +524,8 @@ public class CoolOrder {
         this.total = total;
     }
     
-    public Byte getState() {
+
+	public Byte getState() {
         return state;
     }
     
@@ -880,6 +899,14 @@ public class CoolOrder {
 
 	public void setsName(String sName) {
 		this.sName = sName;
+	}
+
+	public List<HzCoolOrderItem> getHzItem() {
+		return hzItem;
+	}
+
+	public void setHzItem(List<HzCoolOrderItem> hzItem) {
+		this.hzItem = hzItem;
 	}
     
 }

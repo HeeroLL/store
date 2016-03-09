@@ -56,7 +56,7 @@
         <if test="mId != null">
 			and e.m_id = #{mId,jdbcType=VARCHAR}
         </if> 
-            
+            order by e.createtime desc
     </select>
     
     <select id="findAllCoonShopShareExperience" resultMap="BaseResultMap">

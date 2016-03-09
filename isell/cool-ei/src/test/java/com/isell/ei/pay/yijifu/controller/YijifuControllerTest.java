@@ -10,15 +10,19 @@ import com.isell.core.util.JsonUtil;
 
 public class YijifuControllerTest {
     
-    private static final String host = "http://localhost:8080";
+    private static final String host = "http://localhost:8080/bis";
     
-    private static final String PAY_URL = host + "/bis/pay/yijifu/webPay";
+    private static final String PAY_URL = host + "/pay/yijifu/webPay";
     
-    private static final String ORDER_URL = host + "/bis/pay/yijifu/singlePaymentUpload";
+    private static final String ORDER_URL = host + "/pay/yijifu/singlePaymentUpload";
     
-    private static final String QUERY_URL = host + "/bis/pay/yijifu/realNameQuery";
+    private static final String QUERY_URL = host + "/pay/yijifu/realNameQuery";
     
-    private static final String TRADEREFUND_URL = host + "/bis/pay/yijifu/tradeRefund";
+    private static final String TRADEREFUND_URL = host + "/pay/yijifu/tradeRefund";
+    
+    private static final String SYNORDER_URL = host + "/pay/yijifu/corderRemittanceSynOrder";
+    
+    private static final String APPLYREMIT_URL = host + "/pay/yijifu/applyRemittranceWithSynOrder";
     
     @Test
     public void testWebPay() {
@@ -36,8 +40,8 @@ public class YijifuControllerTest {
     @Test
     public void testTradeRefund() {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("outOrderNo", "CO201601251345512366772");
-        map.put("tradeNo", "20160125000046411661");
+        map.put("outOrderNo", "CO2016021902991417106734");
+        map.put("tradeNo", "20160219000067331969");
         map.put("refundReason", "退款");
         
         String result = HttpUtils.httpPost(TRADEREFUND_URL, JsonUtil.writeValueAsString(map));
@@ -75,17 +79,35 @@ public class YijifuControllerTest {
     @Test
     public void testSinglePaymentUpload() {
         Map<String, String> map = new HashMap<String, String>();
-        map.put("tradeNo", "[\"20160119000041549024\"]"); // 易极付支付交易号
-        map.put("outOrderNo", "CO201601191021276252416"); // 订单号
+        map.put("tradeNo", "[\"20160302000076303013\"]"); // 易极付支付交易号
+        map.put("outOrderNo", "CO2016030140571406543885068"); // 订单号
         map.put("eshopEntCode", "3117964017"); // 商户海关备案号
         map.put("eshopEntName", "上海艾售电子商务有限公司"); // 商户海关备案名称
         map.put("customsCode", "ZZ_4604"); // 易极付发送海关编码 ZZ_4604:郑州关区 NB_3100:宁波关区
-        map.put("payerId", "320402198408273738"); // 支付人证件号码
-        map.put("payerName", "李霖"); // 支付人姓名
-        map.put("goodsAmount", "68.00"); // 支付金额
+        map.put("payerId", "410823198907170421"); // 支付人证件号码
+        map.put("payerName", "刘宏恩"); // 支付人姓名
+        map.put("goodsAmount", "58.80"); // 支付金额
         map.put("ieType", "IMPORT"); // 进出口标示
         
         String result = HttpUtils.httpPost(ORDER_URL, JsonUtil.writeValueAsString(map));
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testCorderRemittanceSynOrder() {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("orderNos", "CO201602011651174994");
+        
+        String result = HttpUtils.httpPost(SYNORDER_URL, map);
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testApplyRemittranceWithSynOrder() {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("remittranceBatchNo", "isell1456387804441");
+        
+        String result = HttpUtils.httpPost(APPLYREMIT_URL, JsonUtil.writeValueAsString(map));
         System.out.println(result);
     }
 }

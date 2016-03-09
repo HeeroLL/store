@@ -1,6 +1,7 @@
 package com.isell.app.dao.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class SearchShop implements Serializable{
 
@@ -18,7 +19,64 @@ public class SearchShop implements Serializable{
 	private String lat;
 	private String shopid;
 	private String shopuserid;
+	private String image_domain;
+	private String qr_code;
+	private int level;
+	private int favnum;
+	private List<Notice>noticelist;
+	private List<ProductImg>shopimglist;
+	private String mobile;
+	private String shopcode;
 	
+	
+	public String getShopcode() {
+		return shopcode;
+	}
+	public void setShopcode(String shopcode) {
+		this.shopcode = shopcode;
+	}
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	public List<Notice> getNoticelist() {
+		return noticelist;
+	}
+	public void setNoticelist(List<Notice> noticelist) {
+		this.noticelist = noticelist;
+	}
+	public List<ProductImg> getShopimglist() {
+		return shopimglist;
+	}
+	public void setShopimglist(List<ProductImg> shopimglist) {
+		this.shopimglist = shopimglist;
+	}
+	public String getQr_code() {
+		return qr_code;
+	}
+	public void setQr_code(String qr_code) {
+		this.qr_code = qr_code;
+	}
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	public int getFavnum() {
+		return favnum;
+	}
+	public void setFavnum(int favnum) {
+		this.favnum = favnum;
+	}
+	public String getImage_domain() {
+		return image_domain;
+	}
+	public void setImage_domain(String image_domain) {
+		this.image_domain = image_domain;
+	}
 	public String getShopuserid() {
 		if(shopuserid==null)
 		{

@@ -1,24 +1,41 @@
 package com.isell.ei.logistics.dtw.bean;
 
 public class SendPresonalItems {
-	
+	/**商品序号**/
 	private String goodsOrder;
+	/**行邮税号**/
 	private String codeTs;
+	/**商品货号 （货号即指料号，与仓储企业备案的电子账册中料号数据一致）(不超过50字符)**/
 	private String goodsItemNo;
+	/**物品名称**/
 	private String goodsName;
+	/**商品规格，型号**/
 	private String goodsModel;
+	/**成交币制（三字代码）**/
 	private String tradeCurr;
+	/**成交总价（包裹实际成交的金额）**/
 	private String tradeTotal;
+	/**申报单价(是物品申报的价值不是账单多的是当前行的金额)**/
 	private String declPrice;
+	/**申报总价**/
 	private String declTotalPrice;
+	/**用途**/
 	private String useTo;
+	/**申报数量**/
 	private String declareCount;
+	/**申报计量单位(三字代码)**/
 	private String goodsUnit;
+	/**商品毛重**/
 	private String goodsGrossWeight;
+	/**第一单位**/
 	private String firstUnit;
+	/**第一数量**/
 	private String firstCount;
+	/**第二单位**/
 	private String secondUnit;
+	/**第二数量**/
 	private String secondCount;
+	/**产销国代码(三字代码)**/
 	private String originCountry;
 	public String getGoodsOrder() {
 		return goodsOrder;

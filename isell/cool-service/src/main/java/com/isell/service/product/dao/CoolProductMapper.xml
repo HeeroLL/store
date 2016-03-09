@@ -60,6 +60,7 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="name_en" jdbcType="VARCHAR" property="nameEn"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="allstock" jdbcType="INTEGER" property="allstock"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="content" jdbcType="LONGVARCHAR" property="content"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
@@ -69,7 +70,9 @@
         <result column="fav_price" jdbcType="DECIMAL" property="favprice"/>
         <result column="logo" jdbcType="VARCHAR" property="logo"/>
         <result column="tax" jdbcType="DECIMAL" property="tax"/>
+        <result column="catelogId" jdbcType="VARCHAR" property="catelogId"/>
    		<collection property="items" column="id" ofType="com.isell.service.product.po.CoolProductExternalGg">
+   			<result column="gid" jdbcType="INTEGER" property="gid"/>
    		 	<result column="gg" jdbcType="VARCHAR" property="gg"/>
 	        <result column="jg" jdbcType="DECIMAL" property="jg"/>
 	        <result column="cxjg" jdbcType="DECIMAL" property="cxjg"/>
@@ -498,23 +501,103 @@
         WHERE 
             id = #{id,jdbcType=INTEGER}
     </update>
-    <select id="getProductInfo" resultMap="CoonShopProductExternal" parameterType="com.isell.service.product.po.CoolProductExternal">
-    	select cp.id,cp.name,cp.name_en,cp.type,cp.remark,cp.content,cp.code,
-    	cpb.name as brand,cdg.name as country,cp.price,cp.fav_price,cp.logo,cp.tax,
-    	cpg.gg,cpg.jg,cpg.cxjg,cpg.stock,cpg.weight,cpg.unit,cpg.spec,cpi.img as url
+    
+    <select id="queryProductAllNum" resultType="java.lang.Integer">
+    	select count(1) 
+    	from cool_product cp
+    	where 1=1
+				<if test="id!=null and id!=''">
+					and cp.id = #{id}
+				</if>
+				<if test="name!=null and name!=''">
+					and cp.name LIKE CONCAT(CONCAT('%', #{name}), '%')
+				</if>
+		 
+    </select>
+    <resultMap type="com.isell.service.order.vo.Catelog" id="resultqueryCateloglistByPid">
+    	<result property="id" column="id"/>
+    	<result property="name" column="name"/>
+    	<result property="parentid" column="parent_id"/> 
+    </resultMap>
+    <select id="queryCateloglistByPid" resultMap="resultqueryCateloglistByPid">
+    	select id,name,parent_id 
+    	from cool_product_category a
+    	where 1=1 
+    	<if test="catelog.parentid!=null"> 
+    		and a.parent_id in
+    		<foreach collection="patents" index="index" item="parent_id" open="(" separator="," close=")"> 
+    			#{parent_id}
+    		</foreach>
+    	</if>
+    	
+    </select>
+    
+    <select id="queryGoodsinfoByids" resultMap="CoonShopProductExternal" parameterType="com.isell.service.product.po.CoolProductExternal">
+    	SELECT y.*,
+    	cpb.name AS brand,cdg.name AS country,
+    	cpg.gg,cpg.jg,cpg.cxjg,cpg.stock,cpg.weight,cpg.unit,cpg.spec,CONCAT(#{productExternal.image_domain},cpi.img)  AS url,x.catelogId,cpg.id AS gid
+    	FROM 
+    	(
+    	SELECT cp.id,cp.name,cp.name_en,cp.type,cp.remark,cp.content,cp.code,
+		cp.price,cp.fav_price,CONCAT(#{productExternal.image_domain},cp.logo)AS logo,cp.tax,cp.brand_id,cp.country_code,
+		(select sum(stock) from cool_product_gg m where cp.id=m.goods_id )as allstock
+    	FROM cool_product cp    
+    	where 1=1
+				 <if test="productExternal.queryids!=null"> 
+				 		and cp.id in
+				 		<foreach collection="goodis" index="index" item="goodid" open="(" separator="," close=")">
+				 			#{goodid}
+				 		</foreach>
+				 </if>
+	)Y		 
+			JOIN cool_product_gg cpg ON y.id=cpg.goods_id
+			JOIN cool_product_img cpi ON cpi.goods_id = y.id
+			LEFT JOIN cool_product_brand cpb ON cpb.id = y.brand_id
+			LEFT JOIN cool_dict_gbdm  cdg ON cdg.id = y.country_code
+			LEFT JOIN cool_product_category X ON x.id=y.type
+			
+			
+    </select>
+    
+    <select id="getProductInfo" resultMap="CoonShopProductExternal" parameterType="com.isell.service.product.po.CoolProductExternal">    
+   SELECT y.*,
+    	cpb.name AS brand,cdg.name AS country,
+    	cpg.gg,cpg.jg,cpg.cxjg,cpg.stock,cpg.weight,cpg.unit,cpg.spec,CONCAT(#{image_domain},cpi.img)  AS url,x.catelogId,cpg.id AS gid
+    	FROM 
+    	(
+    	SELECT cp.id,cp.name,cp.name_en,cp.type,cp.remark,cp.content,cp.code,
+		cp.price,cp.fav_price,CONCAT(#{image_domain},cp.logo)AS logo,cp.tax,cp.brand_id,cp.country_code,
+		(select sum(stock) from cool_product_gg m where cp.id=m.goods_id )as allstock
+    	FROM cool_product cp    
+    	where 1=1
+				<if test="id!=null and id!=''">
+					and cp.id = #{id}
+				</if>
+				<if test="name!=null and name!=''">
+					and cp.name LIKE CONCAT(CONCAT('%', #{name}), '%')
+				</if>
+			 
+			<if test="limit>0">
+				LIMIT #{start},#{limit}
+			</if>
+	)Y		 
+			JOIN cool_product_gg cpg ON y.id=cpg.goods_id
+			JOIN cool_product_img cpi ON cpi.goods_id = y.id
+			LEFT JOIN cool_product_brand cpb ON cpb.id = y.brand_id
+			LEFT JOIN cool_dict_gbdm  cdg ON cdg.id = y.country_code
+			LEFT JOIN cool_product_category X ON x.id=y.type
+    	<!-- select cp.id,cp.name,cp.name_en,cp.type,cp.remark,cp.content,cp.code,
+    	cpb.name as brand,cdg.name as country,cp.price,cp.fav_price,CONCAT(#{image_domain},cp.logo)as logo,cp.tax,
+    	cpg.gg,cpg.jg,cpg.cxjg,cpg.stock,cpg.weight,cpg.unit,cpg.spec,CONCAT(#{image_domain},cpi.img)  as url,x.catelogId,cpg.id as gid
     	from cool_product cp 
 			join cool_product_gg cpg on cp.id=cpg.goods_id
 			join cool_product_img cpi on cpi.goods_id = cp.id
 			left join cool_product_brand cpb on cpb.id = cp.brand_id
 			left join cool_dict_gbdm  cdg on cdg.id = cp.country_code
-			<where>
-				<if test="id!=null and id!=''">
-					cp.id = #{id}
-				</if>
-				<if test="name!=null and name!=''">
-					cp.name LIKE CONCAT(CONCAT('%', #{name}), '%')
-				</if>
-			</where>
+			left join cool_product_category x on x.id=cp.type -->
+			
+			
+			
     </select>
     <resultMap type="com.isell.service.product.po.CoolProductAliUnit" id="resultQueryGoodsAliUnit">
     	<result property="pid" column="pid"/>

@@ -3,9 +3,9 @@ package com.isell.ei.logistics.dtw.bean;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class SendPersonalResponse {
-	@JsonProperty("errCode")
+	@JsonProperty("ErrCode")
 	private String errCode;
-	@JsonProperty("errMsg")
+	@JsonProperty("ErrMsg")
 	private String errMsg;
 	public String getErrCode() {
 		return errCode;

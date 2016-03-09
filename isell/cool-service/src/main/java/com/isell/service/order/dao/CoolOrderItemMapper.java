@@ -9,6 +9,7 @@ import com.isell.core.mybatis.Mapper;
 import com.isell.service.order.po.CoolOrderSelect;
 import com.isell.service.order.po.CoolProductSales;
 import com.isell.service.order.vo.CoolOrderItem;
+import com.isell.service.order.vo.HzCoolOrderItem;
 
 /**
  * 订单详情Mapper
@@ -80,5 +81,12 @@ public interface CoolOrderItemMapper {
 	 * @param param
 	 */
     List<CoolProductSales> getSumCoolProductSales(CoolOrderSelect orderSelect);
+    /**
+     * 根据订单编号查询杭州用的数据
+     * @param orderNo
+     * @return
+     */
+	List<HzCoolOrderItem> getHzItemByOrderNo(@Param("orderNo") String orderNo);
+
 
 }

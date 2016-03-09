@@ -49,6 +49,24 @@ public interface CoonRunAccountMapper{
     public BigDecimal getSumAmount(@Param("beginTime")String beginTime, @Param("endTime")String endTime, @Param("shopId")String shopId);
     
     /**
+     * 获取昨日收益
+     * 
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
+     * @param shopId 酷店主键
+     * @return 昨日收益
+     */
+    public BigDecimal getYesterdayAmount(@Param("beginTime")String beginTime, @Param("endTime")String endTime, @Param("shopId")String shopId);
+    
+    /**
+     * 获取已退款金额
+	 *
+     * @param shopId 酷店主键
+     * @return 昨日收益
+     */
+    public BigDecimal getTkAmount(@Param("shopId")String shopId);
+    
+    /**
      * 保存
      */
     public int saveCoonRunAccount(CoonRunAccount coonRunAccount);

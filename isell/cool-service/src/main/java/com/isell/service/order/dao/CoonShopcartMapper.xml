@@ -23,6 +23,7 @@
         <result column="price" jdbcType="DECIMAL" property="price"/>
         <result column="gg" jdbcType="VARCHAR" property="gg"/>
         <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="shopName" jdbcType="VARCHAR" property="shopName"/>
     </resultMap>
     <select id="getCoonShopcartById" resultMap="BaseResultMap">
         SELECT
@@ -57,14 +58,16 @@
     <!-- 根据查询条件查询购物车列表信息 -->
     <select id="findCoonShopCartInfoList" resultMap="CoonShopCartInfoMap" parameterType="com.isell.service.order.vo.CoonShopcart" >
         SELECT
-            c.*,p.name,p.name_en,p.type,p.logo,ifnull(g.cxjg,g.jg) as price,g.gg,g.stock
+            c.*,p.name,p.name_en,p.type,p.logo,ifnull(g.cxjg,g.jg) as price,g.gg,g.stock,s.name as shopName
         FROM
             coon_shopcart c
-        LEFT JOIN 
+        INNER JOIN 
         	cool_product p on p.id = c.p_id
-       	LEFT JOIN 
+       	INNER JOIN 
        		cool_product_gg g on (g.id = c.g_id or g.gg = c.g_id)
-        WHERE   1=1
+      	INNER JOIN 
+      		coon_shop s on s.id = c.s_id	
+        WHERE   (c.s_id <![CDATA[!= ]]> '' or  c.s_id <![CDATA[!= ]]> null)
         	<if test="userId != null and userId != ''">
         	 	and c.user_id = #{userId,jdbcType=VARCHAR}
         	</if>    

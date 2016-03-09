@@ -26,9 +26,9 @@ public class PinduoduoControllerTest {
     public void testmOrderSearch2() {
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("mType", "mGetOrder");
-        paramMap.put("OrderNO", "151231-22964254854"); // 外部订单号
+        paramMap.put("OrderNO", "160304-15586694964"); // 外部订单号
         
-        String result = HttpUtils.httpPost("http://localhost:8080/bis/pinduoduo/orderGoodsInfo", JsonUtil.writeValueAsString(paramMap));
+        String result = HttpUtils.httpPost("http://service.i-cooltest.com/pinduoduo/orderGoodsInfo", JsonUtil.writeValueAsString(paramMap));
         System.out.println(result);
     }
     
@@ -36,9 +36,9 @@ public class PinduoduoControllerTest {
     public void testmGetOrder() {
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("mType", "mGetOrder");
-        paramMap.put("OrderNO", "151227-31140872778"); // 外部订单号151231-22964254854 
+        paramMap.put("OrderNO", "160304-33946906673"); // 外部订单号151231-22964254854 
         
-        String result = HttpUtils.httpPost("http://localhost:8080/bis/pinduoduo/getOrder", JsonUtil.writeValueAsString(paramMap));
+        String result = HttpUtils.httpPost("http://service.i-cooltest.com/pinduoduo/getOrder", JsonUtil.writeValueAsString(paramMap));
         System.out.println(result);
     }
     

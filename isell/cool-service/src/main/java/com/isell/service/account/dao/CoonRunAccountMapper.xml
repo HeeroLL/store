@@ -45,6 +45,29 @@
             and type = 0 and is_freeze = 0
     </select>
     
+    <!-- 获取昨日收益 -->
+    <select id="getYesterdayAmount" resultType="java.math.BigDecimal">
+        SELECT
+            ifnull(sum(amount),0)
+        FROM
+             coon_run_account
+        WHERE            
+            shop_id = #{shopId,jdbcType=VARCHAR}
+            and (create_time between #{beginTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR})
+            and type = 0
+    </select>
+    
+    <!-- 获取已退款金额 -->
+    <select id="getTkAmount" resultType="java.math.BigDecimal">
+        SELECT
+            ifnull(sum(amount),0)
+        FROM
+             coon_run_account
+        WHERE            
+            shop_id = #{shopId,jdbcType=VARCHAR}
+            and type = 1 and withdraw_state = 5
+    </select>
+    
     <!-- 根据条件查询 -->
     <select id="findCoonRunAccountList" resultMap="BaseResultMap" parameterType="com.isell.service.account.vo.CoonRunAccount">
           SELECT * FROM coon_run_account 
@@ -67,12 +90,16 @@
           <if test="type != null">
           	and type = #{type,jdbcType=INTEGER}
           </if>
+          <if test="withdrawState != null">
+          	and withdraw_state = #{withdrawState,jdbcType=INTEGER}
+          </if>
           <if test="isFreeze == 0">
           	and (is_freeze = #{isFreeze,jdbcType=TINYINT} or is_freeze is null)
           </if>
           <if test="isFreeze == 1">
           	and is_freeze = #{isFreeze,jdbcType=TINYINT}
           </if>
+          order by create_time desc
     </select>
     
     <select id="findAllCoonRunAccount" resultMap="BaseResultMap">

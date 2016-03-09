@@ -15,6 +15,15 @@ public class CoolProductExternalGg {
     private double weight;
     private String unit;
     private String spec;
+    private int gid;
+    
+    
+	public int getGid() {
+		return gid;
+	}
+	public void setGid(int gid) {
+		this.gid = gid;
+	}
 	public String getGg() {
 		return gg;
 	}

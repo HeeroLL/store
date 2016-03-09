@@ -30,8 +30,9 @@ public class OrderTask {
      * 定时任务到达执行的方法
      */
     public void execute() {
-        log.debug("in OrderTask");
+        log.info("in OrderTask");
         try {
+        	taskOrderService.upKalemaoWayBillNo();
             taskOrderService.cancelOrder();
             taskOrderService.signOrder();
             taskOrderService.backCommission();
@@ -41,6 +42,7 @@ public class OrderTask {
        
         taskOrderService.getKJB2CLogisticsInfo();
         taskOrderService.pushPinduoduoOrder();
-        log.debug("out OrderTask");
+        
+        log.info("out OrderTask");
     }
 }

@@ -86,6 +86,11 @@ public class CoonThirdParty{
      * 0.正常权限 1.拥有欠费权限
      */
     private Boolean arrearsEd;
+    
+    /**
+     * 酷店编码
+     */
+    private String shopCode;
 
     /**
      * ID主键
@@ -268,5 +273,13 @@ public class CoonThirdParty{
      */
     public void setArrearsEd(Boolean arrearsEd){
         this.arrearsEd = arrearsEd;
-    }    
+    }
+
+	public String getShopCode() {
+		return shopCode;
+	}
+
+	public void setShopCode(String shopCode) {
+		this.shopCode = shopCode;
+	}    
 }

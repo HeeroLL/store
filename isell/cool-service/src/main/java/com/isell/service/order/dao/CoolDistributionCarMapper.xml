@@ -39,7 +39,7 @@
     
     <!--  分页查询进货单列表信息 -->
     <select id="findCoolDistributionCarInfoListPage" resultMap="CoolDistributionCarMap" parameterType="com.isell.service.order.vo.CoolDistributionCar">
-          SELECT c.*,p.name,p.name_en,p.logo,g.gg,g.drp_price,g.jg,g.cxjg,g.stock,g.xsjg
+          SELECT c.*,p.name,p.name_en,p.logo,g.gg,if(g.drp_price>0,g.drp_price,g.cxjg) as drp_price,g.jg,g.cxjg,g.stock,g.xsjg
           FROM cool_distribution_car c
           left join cool_product p on p.id = c.p_id
           left join cool_product_gg g on g.id = c.g_id

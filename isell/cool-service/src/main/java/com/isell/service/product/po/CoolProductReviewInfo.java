@@ -68,7 +68,21 @@ public class CoolProductReviewInfo {
      */
     private Integer ggId;
     
-    /**
+    private String imgs;
+    
+    
+    public String getImgs() {
+    	if(imgs==null){
+    		imgs="";
+    	}
+		return imgs;
+	}
+
+	public void setImgs(String imgs) {
+		this.imgs = imgs;
+	}
+
+	/**
      * 会员图片路径
      */
     private String logo;

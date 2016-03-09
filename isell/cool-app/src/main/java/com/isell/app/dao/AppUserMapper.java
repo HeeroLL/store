@@ -3,6 +3,8 @@ package com.isell.app.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
+
 import com.isell.app.dao.entity.CenterOrder;
 import com.isell.app.dao.entity.CenterOrderItem;
 import com.isell.app.dao.entity.CenterOrderParam;
@@ -17,10 +19,15 @@ import com.isell.app.dao.entity.LoginParam;
 import com.isell.app.dao.entity.MemberAddress;
 import com.isell.app.dao.entity.MemberCommunity;
 import com.isell.app.dao.entity.Notice;
+import com.isell.app.dao.entity.OrderCount;
 import com.isell.app.dao.entity.OrderDetail;
 import com.isell.app.dao.entity.OrderGoods;
 import com.isell.app.dao.entity.OrderParam;
+import com.isell.app.dao.entity.OrderRecv;
 import com.isell.app.dao.entity.Product;
+import com.isell.app.dao.entity.ProductGg;
+import com.isell.app.dao.entity.ProductImg;
+import com.isell.app.dao.entity.ProductRec;
 import com.isell.app.dao.entity.SearchParam;
 import com.isell.app.dao.entity.SearchProduct;
 import com.isell.app.dao.entity.SearchShop;
@@ -70,6 +77,25 @@ public interface AppUserMapper {
 	 * @return
 	 */
 	Product queryProductinfoById(Map map);
+	
+	String checkProIsSuccessSale(Map map);
+	/**
+	 * 查询店铺id，code 
+	 * @param sid
+	 * @return
+	 */
+	String queryShopCodeBySid(String sid);
+	
+	String queryMobileByShopid(String sid);
+	
+	int checkShopIsHasGoods(Product product);
+	
+	/**
+	 * 
+	 * @param map
+	 * @return
+	 */
+	String queryShopIdByRandom(Map map);
 	/**
 	 * 验证用户是否已经收藏该商品
 	 * @param coolMemberFavorites
@@ -117,7 +143,14 @@ public interface AppUserMapper {
 	  * @param searchParam
 	  * @return
 	  */
-	 List<SearchProduct>querySearchFavShopGoods(SearchParam searchParam);
+	 List<SearchProduct>querySearchFavShopGoods(RowBounds rowBounds,SearchParam searchParam);
+	 
+	 /**
+	  * 根据店铺code查询店铺id
+	  * @param searchParam
+	  * @return
+	  */
+	 String queryShopIdByShopCode(SearchParam searchParam);
 	 /**
 	  * 
 	  * @param searchParam
@@ -223,11 +256,60 @@ public interface AppUserMapper {
 	 */
 	List<OrderGoods>queryOrderGoods(OrderParam orderParam);
 	/**
+	 * 
+	 * @param searchParam
+	 * @return
+	 */
+	List<Product>queryBmsBindGoodsId(SearchParam searchParam);
+	/**
+	 * 根据父分类id查询子分类
+	 * @param searchParam
+	 * @return
+	 */
+	List<SearchType>queryChildCatelogListByParent(SearchParam searchParam);
+	
+	int queryBmsBindGoodsAllNum(SearchParam searchParam);
+	
+	int updateShopname(SearchParam searchParam);
+	
+	int regShopUser(SearchParam searchParam);
+	
+	int updateOrderState(SearchParam searchParam);
+	
+	int updateShopProFlag(SearchParam searchParam);
+	
+	OrderCount queryBmsMyOrderCount(SearchParam searchParam);
+	/**
+	 * 
+	 * @param searchParam
+	 * @return
+	 */
+	int checkGoodsIsInTable(SearchParam searchParam);
+	
+	int saveNewShopProduct(SearchParam searchParam);
+	
+	int deleteBmsShopProduct(SearchParam searchParam);
+	
+	int updateBmsShopProduct(SearchParam searchParam);
+ 
+	/**
 	 * 查询用户收藏数据
 	 * @param searchParam
 	 * @return
 	 */
 	List<CollectInfo>queryUserCollect(SearchParam searchParam);
+	/**
+	 * 查询订单状态
+	 * @param orderParam
+	 * @return
+	 */
+	int queryOrderStateByOrderno(OrderParam orderParam);
+	/**
+	 * 取消订单
+	 * @param orderParam
+	 * @return
+	 */
+	int cancleOrderByOrderno(OrderParam orderParam);
 	/**
 	 * 查询用户收藏 总的数量
 	 * @param searchParam
@@ -253,11 +335,33 @@ public interface AppUserMapper {
 	 */
 	int checkMemberIsFaved(CollParam collParam);
 	/**
+	 * 
+	 * @param orderParam
+	 * @return
+	 */
+	int checkOrderIsCanMDel(OrderParam orderParam);
+	
+	int mDdelOrderByOrderNo(OrderParam orderParam);
+	/**
 	 * 保存用户收藏商品
 	 * @param collParam
 	 * @return
 	 */
 	int saveMemberFavourte(CollParam collParam);
+	/**
+	 * 验证用户有没有评价过这个订单
+	 * @param rec
+	 * @return
+	 */
+	int checkUserIsSaveedOrderRec(OrderRecv rec);
+	/**
+	 * 保存用户订单评论
+	 * @param rec
+	 * @return
+	 */
+	int saveUserRecOrder(OrderRecv rec);
+	
+	int updateOrderEndByOrderno(OrderRecv rec);
 	/**
 	 * 删除用户收藏信息
 	 * @param collParam
@@ -376,6 +480,44 @@ public interface AppUserMapper {
 	 */
 	int updateUserCommunity(MemberCommunity memberCommunity);
 	/**
+	 * 查询商品详情
+	 * @param product
+	 * @return
+	 */
+	Product queryProductinfo(Product product);
+	
+	List<ProductGg>queryProductGgList(Product product);
+	/**
+	 * 查询店铺主页
+	 * @param searchShop
+	 * @return
+	 */
+	SearchShop queryShopData(SearchShop searchShop);
+	/**
+	 * 查询店铺公共列表
+	 * @param searchShop
+	 * @return
+	 */
+	List<Notice>queryShopNoticelist(SearchShop searchShop);
+	/**
+	 * 
+	 * @param searchShop
+	 * @return
+	 */
+	List<ProductImg>queryShopImagelist(SearchShop searchShop);
+	/**
+	 * 
+	 * @param searchParam
+	 * @return
+	 */
+	int queryGoodsRecTotalNum(SearchParam searchParam);
+	/**
+	 * 
+	 * @param searchParam
+	 * @return
+	 */
+	List<ProductRec>queryGoodsRecPage(SearchParam searchParam);
+	/**
 	 * 
 	 * @param coolMember
 	 * @return
@@ -411,4 +553,49 @@ public interface AppUserMapper {
 	 * @return
 	 */
 	int updateMemberInfo(CoolMember coolMember);
+	/**
+	 * 
+	 * @param searchParam
+	 * @return
+	 */
+	List<Product>queryShopNewGoods(SearchParam searchParam);
+	/**
+	 * 查询店铺分类
+	 * @param searchParam
+	 * @return
+	 */
+	List<HelpType>queryShopCatelog(SearchParam searchParam);
+	/**
+	 * 查询分类下面的商品
+	 * @param searchParam
+	 * @return
+	 */
+	List<Product>queryShopGoodsByCatelogId(SearchParam searchParam);
+	/**
+	 * 查询bms
+	 * @return
+	 */
+	List<Product>queryBmsProductList(SearchParam searchParam);
+	
+	int queryBmsProductAllNum(SearchParam searchParam);
+	
+	int queryBMsMyOrderAllNum(OrderParam orderParam);
+	/**
+	 * Bms查询订单详情
+	 * @param searchParam
+	 * @return
+	 */
+	OrderDetail queryOrderDetailForBms(SearchParam searchParam);
+	/**
+	 * 查询订单商品详情
+	 * @param searchParam
+	 * @return
+	 */
+	List<OrderGoods>queryOrderGoodsListForBms(SearchParam searchParam);
+	/**
+	 * 
+	 * @param orderParam
+	 * @return
+	 */
+	List<OrderDetail>queryBmsMyOrder(OrderParam orderParam);
 }

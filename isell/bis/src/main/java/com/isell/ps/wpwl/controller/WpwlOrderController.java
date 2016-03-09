@@ -1,5 +1,6 @@
 package com.isell.ps.wpwl.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import com.isell.core.config.BisConfig;
 import com.isell.core.util.JsonData;
 import com.isell.core.util.JsonUtil;
 import com.isell.core.util.Record;
+import com.isell.ei.logistics.kuaidi100.service.KuaidiService;
 import com.isell.ps.wpwl.vo.WpwlOrderInfo;
 import com.isell.ps.wpwl.vo.WpwlOrderItem;
 import com.isell.service.order.service.OrderService;
@@ -38,6 +40,12 @@ public class WpwlOrderController {
     private OrderService orderService;
     
     /**
+     * 快递100查询接口
+     */
+    @Resource
+    private KuaidiService kuaidiService;
+    
+    /**
      * 酷店接口
      */
     @Resource
@@ -59,7 +67,7 @@ public class WpwlOrderController {
     @ResponseBody
     public JsonData getOrderByOrderNo(String jsonObj) {
         CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
-        order = orderService.getCoolOrderDetailByPsCode(order.getOrderNo());
+        order = orderService.getCoolOrderDetailByOrderNo(order.getOrderNo());
         if (order == null) {
             throw new RuntimeException("exception.order.null");
         }
@@ -80,7 +88,7 @@ public class WpwlOrderController {
     @ResponseBody
     public JsonData getOrderBaseInfo(String jsonObj) {
         CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
-        order = orderService.getCoolOrderDetailByPsCode(order.getOrderNo());
+        order = orderService.getCoolOrderDetailByOrderNo(order.getOrderNo());
         if (order == null) {
             throw new RuntimeException("exception.order.null");
         }
@@ -92,6 +100,14 @@ public class WpwlOrderController {
         wpwlOrderInfo.setCreatetime(order.getCreatetime());
         wpwlOrderInfo.setCustomerName(order.getLinkman());
         wpwlOrderInfo.setTotal(order.getTotal());
+        if (order.getState() == 3 || order.getState() == 4) {
+            wpwlOrderInfo.setReceiptStatus(true);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            wpwlOrderInfo.setReceiptTime(sdf.format(order.getUpdatetime()));
+        } else {
+            wpwlOrderInfo.setReceiptStatus(false);
+        }
+        jsonData.setData(wpwlOrderInfo);
         
         return jsonData;
     }
@@ -107,7 +123,7 @@ public class WpwlOrderController {
     public JsonData validateOrder(String jsonObj) {
         CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
         String mobile = order.getMobile();
-        order = orderService.getCoolOrderDetailByPsCode(order.getOrderNo());
+        order = orderService.getCoolOrderDetailByOrderNo(order.getOrderNo());
         if (order == null || !order.getMobile().equals(mobile)) {
             throw new RuntimeException("exception.order.null");
         }
@@ -115,6 +131,32 @@ public class WpwlOrderController {
         JsonData jsonData = new JsonData();
         jsonData.setData(getWpwlOrderInfoDetail(order));
         
+        return jsonData;
+    }
+    
+    /**
+     * 
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("getposturl")
+    @ResponseBody
+    public JsonData getposturl(String jsonObj) {
+        JsonData jsonData = new JsonData();
+        jsonData.setSuccess(false);
+        CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
+        
+        order = orderService.getCoolOrderDetailByOrderNo(order.getOrderNo());
+        if (order == null) {
+            throw new RuntimeException("exception.order.null");
+        }
+        if (order.getPsfs().length() > 0) {
+            jsonData.setSuccess(true);
+            String url =
+                KuaidiService.WAP_URL + "?type=" + kuaidiService.queryPostTypeByName(order.getPsfs()) + "&postid="
+                    + order.getPsCode();
+            jsonData.setData(url);
+        }
         return jsonData;
     }
     
@@ -129,7 +171,7 @@ public class WpwlOrderController {
     public JsonData receiveOrder(String jsonObj) {
         CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
         String mobile = order.getMobile();
-        order = orderService.getCoolOrderDetailByPsCode(order.getOrderNo());
+        order = orderService.getCoolOrderDetailByOrderNo(order.getOrderNo());
         if (order == null || !order.getMobile().equals(mobile)) {
             throw new RuntimeException("exception.order.null");
         }
@@ -139,6 +181,9 @@ public class WpwlOrderController {
         paramMap.put("id", order.getId());
         Record record = orderService.updateCoolOrderRec(paramMap);
         jsonData.setSuccess(record.getBoolean("success"));
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("receiptTime", record.get("receiptTime"));
+        jsonData.setData(map);
         jsonData.setMsg(record.getStr("msg"));
         
         return jsonData;
@@ -152,6 +197,13 @@ public class WpwlOrderController {
         wpwlOrderInfo.setCreatetime(order.getCreatetime());
         wpwlOrderInfo.setCustomerName(order.getLinkman());
         wpwlOrderInfo.setTotal(order.getTotal());
+        if (order.getState() == 3 || order.getState() == 4) {
+            wpwlOrderInfo.setReceiptStatus(true);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            wpwlOrderInfo.setReceiptTime(sdf.format(order.getUpdatetime()));
+        } else {
+            wpwlOrderInfo.setReceiptStatus(false);
+        }
         
         String baseurl = "http://";
         String code = null;
@@ -188,20 +240,20 @@ public class WpwlOrderController {
     
     /**
      * 获取订单编号信息接口
-     *
+     * 
      * @param jsonObj 订单参数
      * @return 订单编号
      */
     @RequestMapping("getOrderNoByPsCode")
     @ResponseBody
     public JsonData getOrderNoByPsCode(String jsonObj) {
-    	CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
-    	Map<String, Object> resultMap = orderService.getOrderNoByPsCode(order.getPsCode()).getColumns();
-    	// 组装封装结果
-        JsonData jsonData = new JsonData();        
-        jsonData.setSuccess(resultMap.get("success") == null ? false : (Boolean) resultMap.get("success"));
-		resultMap.remove("success");
-		jsonData.setData(resultMap);
+        CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
+        Map<String, Object> resultMap = orderService.getOrderNoByPsCode(order.getPsCode()).getColumns();
+        // 组装封装结果
+        JsonData jsonData = new JsonData();
+        jsonData.setSuccess(resultMap.get("success") == null ? false : (Boolean)resultMap.get("success"));
+        resultMap.remove("success");
+        jsonData.setData(resultMap);
         return jsonData;
     }
 }

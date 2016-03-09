@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.app.dao.AppSellMapper">
+	<resultMap type="com.isell.app.dao.entity.CenterOrder" id="resultQuerySellMyOrderPage">
+	<result property="orderid" column="id"/>
+	<result property="order_no" column="order_no"/>
+	<result property="total" column="total"/>
+	<result property="shopid" column="shopid"/>
+	<result property="shopcode" column="code"/>
+	<result property="shopname" column="shopname"/>
+	<result property="shopimg" column="shopimg"/>
+	<result property="state" column="state"/>
+	<result property="paytime" column="paytime"/>
+	<result property="postfee" column="ps_price"/>
+	<result property="taxfee" column="tax_price"/>
+	<result property="refundState" column="refund_state"/>
+	<result property="createtime" column="createtime"/>
+</resultMap>
+<select id="querySellMyOrderPage" resultMap="resultQuerySellMyOrderPage">
+	SELECT a.id,a.order_no,ps_price,tax_price,refund_state,
+	a.total,c.id AS shopid,c.code,c.name AS shopname,CONCAT(#{imgdomain},c.logo)AS shopimg,
+	a.state,DATE_FORMAT(a.pay_time,'%Y-%m-%d %H:%i')AS paytime,
+	DATE_FORMAT(a.createtime,'%Y-%m-%d %H:%i')AS createtime
+FROM cool_order a,coon_shop c
+WHERE c.user_id=#{mId}     AND a.supplier=c.id  and is_del_m=0
+	<if test="state>-1">
+		and a.state=#{state}
+	</if>
+	<if test="keywords!=null and keywords!=''">
+		and c.name like CONCAT(CONCAT('%', #{keywords}),'%')
+	</if>
+	order by a.id desc
+	limit #{start},#{limit}
+</select>
+
+<update id="batchUpdateGoodsIsNew">
+	update coon_shop_product a
+		set 
+		<if test="param.type==1">
+			is_new=1
+		</if>
+		<if test="param.type==2">
+			is_new=0
+		</if>
+	where a.s_id=(select id from coon_shop where code=#{param.shopcode} limit 0,1)
+	<if test="param.keywords!=null"> 
+		and a.p_id in
+		<foreach collection="goods" index="index" item="p_id" open="(" separator="," close=")"> 
+			#{p_id}
+		</foreach>
+	</if>
+</update>
+<insert id="batchUpdateGoodsIsAdd">
+	insert into coon_shop_product(id,p_id,added,s_id)values(#{uncode},#{cId},1,(select  id from coon_shop where code=#{shopcode} limit 0,1))
+</insert>
+<delete id="deleteShopGoodsForSell">
+	delete from coon_shop_product where p_id=#{cId} and s_id=(select id from coon_shop where code=#{shopcode} limit 0,1)
+</delete>
+</mapper>

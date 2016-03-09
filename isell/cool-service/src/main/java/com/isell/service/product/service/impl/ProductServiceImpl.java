@@ -21,6 +21,7 @@ import com.isell.core.util.CommonUtils;
 import com.isell.core.util.GenerateQRCode;
 import com.isell.core.util.Record;
 import com.isell.service.code.dao.CoolConfigMapper;
+import com.isell.service.order.vo.Catelog;
 import com.isell.service.product.dao.CoolProductCategoryMapper;
 import com.isell.service.product.dao.CoolProductGgMapper;
 import com.isell.service.product.dao.CoolProductImgMapper;
@@ -147,6 +148,21 @@ public class ProductServiceImpl implements ProductService {
         }
         return product;
     }
+    
+    @Override
+    public CoolProduct getCoolProductByGid(Integer gid) {
+        CoolProductGg coolProductGg = coolProductGgMapper.getCoolProductGgById(gid);
+        CoolProduct product = null;
+        if (coolProductGg != null) {
+            product = coolProductMapper.getCoolProductById(coolProductGg.getGoodsId());
+            if (product != null) {
+                List<CoolProductGg> ggList = new ArrayList<CoolProductGg>();
+                ggList.add(coolProductGg);
+                product.setGgList(ggList);
+            }
+        }
+        return product;
+    }
 
     /**
      * 获取商品分类列表
@@ -179,32 +195,6 @@ public class ProductServiceImpl implements ProductService {
 		if(StringUtils.isEmpty(coonShopProductParam.getOrderBy())){
 			coonShopProductParam.setOrderBy("12");
 		}
-		/**
-		List<CoonShopProductInfo> list = coonShopProductMapper.getCoonShopProductInfoListPage(coonShopProductParam.getRowBounds(), coonShopProductParam);
-		if(CollectionUtils.isNotEmpty(list)){
-			List<CoonShopProductInfo> productList = new ArrayList<CoonShopProductInfo>();
-			for(CoonShopProductInfo info : list){
-				//处理价格、上架酷店数、是否在该店铺上架、评价数
-				if(new BigDecimal(0).compareTo(info.getCxjg()) == 0){
-					info.setPrice(info.getJg());
-				}else{
-					info.setPrice(info.getCxjg());
-				}
-				int count = coonShopProductMapper.getCoonShopProductAddedCountByGoodsId(info.getGoodsId().toString());
-				info.setPutSalesNum(count);				
-				CoolProductReview coolProductReview = new CoolProductReview();
-				coolProductReview.setgId(info.getGoodsId());
-				coolProductReview.setGgId(info.getId());
-				int countReview = coolProductReviewMapper.getCountReview(coolProductReview);
-				info.setReviews(countReview);
-				productList.add(info);
-			}
-			record.set("productList", productList);
-			success = true;
-		}else{
-			record.set("msg", "无数据");
-		}
-		*/
 		if(StringUtils.isNotEmpty(coonShopProductParam.getName())){
 			String name = coonShopProductParam.getName();
 			coonShopProductParam.setName("%" + name + "%");
@@ -214,7 +204,6 @@ public class ProductServiceImpl implements ProductService {
 			stock = "0";
 			coonShopProductParam.setSort(stock);
 		}
-		
 		List<CoolProduct> list = coolProductMapper.getCoolProductPageListNoGg(coonShopProductParam.getRowBounds(), coonShopProductParam);
 		if(CollectionUtils.isNotEmpty(list)){
 			String sId = coonShopProductParam.getsId();
@@ -253,38 +242,7 @@ public class ProductServiceImpl implements ProductService {
 				}else{
 					continue;
 				}
-				
-				/**
-				if(StringUtils.isNotEmpty(dist) && "1".equals(dist)){ //一件代发需要供货价
-					//获取最低供货价格的规格信息					
-					if(gg == null){
-						info.setDrpPrice(info.getJg());
-						//info.setGg("");
-						//info.setId(0);
-					}else{
-						info.setDrpPrice(new BigDecimal(0).compareTo(gg.getDrpPrice()) == 0 ? gg.getDrpPrice() : gg.getCxjg());
-						//info.setGg(gg.getGg());
-						//info.setId(gg.getId());
-					}
-				}else{
-					if(gg == null){
-						//info.setGg("");
-						//info.setId(0);
-					}else{
-						//info.setGg(gg.getGg());
-						//info.setId(gg.getId());
-					}
-				}			
-				*/	
-				
 				//处理价格、上架酷店数、是否在该店铺上架、评价数
-				/**
-				if(new BigDecimal(0).compareTo(info.getCxjg()) == 0){
-					info.setPrice(info.getJg());
-				}else{
-					info.setPrice(info.getCxjg());
-				}
-				*/
 				int count = coonShopProductMapper.getCoonShopProductAddedCountByGoodsId(info.getGoodsId().toString());
 				info.setPutSalesNum(count);				
 				CoolProductReview coolProductReview = new CoolProductReview();
@@ -292,8 +250,8 @@ public class ProductServiceImpl implements ProductService {
 				int countReview = coolProductReviewMapper.getCountReview(coolProductReview);
 				info.setReviews(countReview);
 				
-				int salesMonth = coolProductGgMapper.getProductSalesMonth(info.getGoodsId());
-				info.setSalesMonth(salesMonth);
+				//int salesMonth = coolProductGgMapper.getProductSalesMonth(info.getGoodsId());
+				info.setSalesMonth(p.getSales());
 				
 				productList.add(info);
 			}
@@ -470,18 +428,20 @@ public class ProductServiceImpl implements ProductService {
 										success = true;
 									}else{
 										//record.set("msg", "保存商品上架信息失败");
-										msg += " 保存商品上架信息失败";
+										msg = " 保存商品上架信息失败";
 										break;
 									}
 								}else{
 									//record.set("msg", "参数错误，无法根据酷店主键获取酷店信息");
-									msg += " 参数错误，无法根据酷店主键获取酷店信息";
+									msg = " 参数错误，无法根据酷店主键获取酷店信息";
 									break;
 								}							
 							}else{
 								if(size == 1){
 									msg = "商品编号为" + pId + "的商品已经上过架"; 
-								}								
+								}else{
+									success = true;
+								}
 								continue;							
 								/**
 								product.setAdded(sProduct.getAdded());
@@ -497,31 +457,31 @@ public class ProductServiceImpl implements ProductService {
 							}
 						}else{//下架
 							if(product == null){
-								msg += " 参数错误，不存在该上架商品";
+								msg = " 参数错误，不存在该上架商品";
 							}else{
 								result = coonShopProductMapper.deleteCoonShopProduct(product.getId());
 								if(result > 0){
 									success = true;
 								}else{
-									msg += " 商品下架失败";
+									msg = " 商品下架失败";
 								}
 							}							
 						}
 						
 					}else{
 						//record.set("msg", "参数错误，商品主键不能为空");
-						msg += " 参数错误，商品主键不能为空";
+						msg = " 参数错误，商品主键不能为空";
 						break;
 					}
 				}else{
 					//record.set("msg", "");
-					msg += " 参数错误，店铺主键不能为空";
+					msg = " 参数错误，店铺主键不能为空";
 					break;
 				}
 			}
 		}else{
 			//record.set("msg", "参数错误");
-			msg += " 参数错误";
+			msg = " 参数错误";
 		}
 		record.set("msg", msg);
 		record.set("success", success);
@@ -692,6 +652,9 @@ public class ProductServiceImpl implements ProductService {
 		boolean success = false;
 		String sId = coonShopProductParam.getsId();
 		if(StringUtils.isNotEmpty(sId)){
+			BigDecimal cRate = new BigDecimal(1);
+			cRate = coonShopLevelMapper.getLevelCrate(sId);				
+
 			String orderBy = coonShopProductParam.getOrderBy();
 			if(StringUtils.isEmpty(orderBy)){
 				coonShopProductParam.setOrderBy("99");
@@ -745,14 +708,16 @@ public class ProductServiceImpl implements ProductService {
 					}else{
 						info.setAdded(false);
 					}
-					int salesMonth = coolProductGgMapper.getProductSalesMonth(info.getGoodsId());
-					info.setSalesMonth(salesMonth);
+					//int salesMonth = coolProductGgMapper.getProductSalesMonth(info.getGoodsId());
+					info.setSalesMonth(info.getSales());
 					CoolProductReview coolProductReview = new CoolProductReview();
 					coolProductReview.setgId(info.getGoodsId());
-					int countReview = coolProductReviewMapper.getCountReview(coolProductReview);
-					info.setReviews(countReview);
+					//int countReview = coolProductReviewMapper.getCountReview(coolProductReview);
+					//info.setReviews(countReview);
+					info.setcRate(cRate);
 					productList.add(info);
 				}
+				
 				record.set("productList", productList);		
 				record.set("total", coonShopProductMapper.getCoonShopProductAddedPageCount(coonShopProductParam));
 				success = true;
@@ -778,6 +743,8 @@ public class ProductServiceImpl implements ProductService {
 		boolean success = false;
 		String sId = coonShopProductParam.getsId();
 		if(StringUtils.isNotEmpty(sId)){
+			BigDecimal cRate = new BigDecimal(1);
+			cRate = coonShopLevelMapper.getLevelCrate(sId);	
 			//List<CoonShopProductInfo> list = coonShopProductMapper.getCoonShopProductNoAddedListPage(coonShopProductParam.getRowBounds(), coonShopProductParam);
 			List<CoonShopProductInfo> list = coonShopProductMapper.getCoonShopProductNoAddedPage(coonShopProductParam.getRowBounds(), coonShopProductParam);
 			if(CollectionUtils.isNotEmpty(list)){
@@ -798,6 +765,7 @@ public class ProductServiceImpl implements ProductService {
 					}
 					//处理价格、上架酷店数、是否在该店铺上架
 					info.setPrice(info.getJg());
+					info.setcRate(cRate);
 					/**
 					if(new BigDecimal(0).compareTo(info.getCxjg()) == 0){
 						info.setPrice(info.getJg());
@@ -813,8 +781,8 @@ public class ProductServiceImpl implements ProductService {
 					}else{
 						info.setAdded(false);
 					}
-					int salesMonth = coolProductGgMapper.getProductSalesMonth(info.getGoodsId());
-					info.setSalesMonth(salesMonth);
+					//int salesMonth = coolProductGgMapper.getProductSalesMonth(info.getGoodsId());
+					info.setSalesMonth(info.getSales());
 					productList.add(info);
 				}
 				record.set("productList", productList);
@@ -848,13 +816,37 @@ public class ProductServiceImpl implements ProductService {
 		record.set("success", success);
 		return record;
 	}
-	
+	public int queryProductAllNum(CoolProductExternal productExternal)
+	{
+		return this.coolProductMapper.queryProductAllNum(productExternal);
+	}
+	/**
+	 * 
+	 */
+	public List<Catelog>queryCateloglistByPid(Catelog catelog)
+	{
+		String patents[]=catelog.getParentid().split(",");
+		return this.coolProductMapper.queryCateloglistByPid(catelog,patents);
+	}
+	@Override
+	public List<CoolProductExternal>queryGoodsinfoByids(CoolProductExternal productExternal)
+	{
+		String [] goodis=productExternal.getQueryids().split(",");
+		
+		List<CoolProductExternal>list=this.coolProductMapper.queryGoodsinfoByids(productExternal,goodis); 
+		for(CoolProductExternal info:list)
+		{
+			info.setUnits(this.coolProductMapper.queryGoodsAliUnit(info));
+		}
+		return list;
+	}
 	
 	/**
 	 * 获取商品信息
 	 */
 	@Override
 	public List<CoolProductExternal> getProductInfo(CoolProductExternal product) {
+		 
 		List<CoolProductExternal>list=this.coolProductMapper.getProductInfo(product);
 		for(CoolProductExternal info:list)
 		{
@@ -875,6 +867,5 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return coolProductGgMapper.getProductStock(gid,code);
 	}
-
 
 }

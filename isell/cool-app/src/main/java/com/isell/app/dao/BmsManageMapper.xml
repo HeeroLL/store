@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isell.app.dao.BmsManageMapper">
+	<resultMap type="com.isell.app.dao.entity.OrderDetail" id="resultqueryOrderDetail">
+		<result property="trade_no" column="trade_no"/>
+		<result property="paytime" column="paytime"/>
+		<result property="order_no" column="order_no"/>
+		<result property="source" column="source"/>
+		<result property="total" column="total"/>
+		<result property="arrears" column="arrears"/>
+	</resultMap>
+	<!-- 请求账单的的列表 -->
+	<select id="queryBmsMyOrder" resultMap="resultqueryOrderDetail">
+		select 
+		 	co.order_no,
+		 	cs.name source,
+			date_format(co.pay_time,'%Y-%m-%d %H:%i') as paytime,
+			co.total,
+			co.trade_no,
+			co.arrears
+		from 
+			cool_order co,
+			coon_shop cs
+		where co.supplier = cs.id 
+		and cs.shoptype = 2 
+		and cs.compid = #{userid}
+		and co.state = 4
+		<if test="tradeNo!=null and tradeNo!=''">
+			and co.trade_no=#{tradeNo}
+		</if>
+		<if test="totalMin!=null and totalMin!=''">
+			and co.total>=#{totalMin} 
+		</if>
+		<if test="totalMax!=null and totalMax!=''">
+			<![CDATA[		and co.total<=#{totalMax}  ]]>
+		</if>
+		<if test="begintime!=null and begintime!=''">
+			and date_format(co.pay_time,'%Y-%m-%d')>=#{begintime} 
+		</if>
+		<if test="endtime!=null and endtime!=''">
+			<![CDATA[		and date_format(co.pay_time,'%Y-%m-%d')<=#{endtime} ]]>
+		</if>
+		limit #{start},#{limit}
+	</select>
+	<select id="queryBillCount" resultType="java.lang.Integer">
+		select count(1)
+		from 
+			cool_order co,
+			coon_shop cs
+		where
+			co.supplier = cs.id 
+		and cs.shoptype = 2 
+		and cs.compid = #{userid}
+		and co.state = 4
+		<if test="tradeNo!=null and tradeNo!=''">
+			and co.trade_no=#{tradeNo}
+		</if>
+		<if test="totalMin!=null and totalMin!=''">
+			and co.total>=#{totalMin} 
+		</if>
+		<if test="totalMax!=null and totalMax!=''">
+			<![CDATA[		and co.total<=#{totalMax}  ]]>
+		</if>
+		<if test="begintime!=null and begintime!=''">
+			and date_format(co.pay_time,'%Y-%m-%d')>=#{begintime} 
+		</if>
+		<if test="endtime!=null and endtime!=''">
+			<![CDATA[		and date_format(co.pay_time,'%Y-%m-%d')<=#{endtime} ]]>
+		</if>
+	</select>
+	<resultMap type="com.isell.app.dao.entity.SumGoodsRecord" id="sumGoodsInfoListResultMap">
+		<result property="totalMoney" column="totalMoney"/>
+		<result property="totalAmount" column="totalAmount"/>
+		<result property="goodsName" column="name"/>
+		<result property="goodsId" column="g_id"/>
+		<result property="imgUrl" column="logo"/>
+	</resultMap>
+	<select id="sumGoodsInfoList" resultMap="sumGoodsInfoListResultMap">
+		select 
+			sum(coi.price * count) totalMoney,
+			sum(coi.count) totalAmount,
+			coi.name,
+			coi.g_id,
+			case when length(coi.logo)>0 then concat(#{imgDomain},coi.logo) else '' end as logo
+		from cool_order co,
+			 coon_shop cs,
+			 cool_order_item coi
+		where
+				cs.shoptype = 2 
+			and cs.compid = #{userid}
+			and co.state = 4
+			and co.order_no = coi.order_no
+		<if test="goodsName!=null and goodsName!=''">
+			and coi.name like CONCAT('%', #{goodsName},'%')
+		</if>
+		<if test="begintime!=null and begintime!=''">
+			and date_format(co.pay_time,'%Y-%m-%d')>=#{begintime} 
+		</if>
+		<if test="endtime!=null and endtime!=''">
+			<![CDATA[		and date_format(co.pay_time,'%Y-%m-%d')<=#{endtime} ]]>
+		</if>
+		group by coi.g_id
+		<if test="orderByColumnType==0">
+			order by totalMoney	
+		</if>
+		<if test="orderByColumnType==1">
+			order by totalAmount
+		</if>
+		<if test="orderByType==0">
+			asc
+		</if>
+		<if test="orderByType==1">
+			desc
+		</if>
+		limit #{start},#{limit}
+	</select>
+	<select id="sumAllGoodsInfo" resultMap="sumGoodsInfoListResultMap">
+		select 
+			sum(coi.price * count) totalMoney,
+			sum(coi.count) totalAmount
+		from cool_order co,
+			 coon_shop cs,
+			 cool_order_item coi
+		where
+				cs.shoptype = 2 
+			and cs.compid = #{userid}
+			and co.state = 4
+			and co.order_no = coi.order_no
+		<if test="goodsName!=null and goodsName!='' and filterGoodsName">
+			and coi.name like CONCAT('%', #{goodsName},'%')
+		</if>
+		<if test="begintime!=null and begintime!='' and filterPayTime">
+			and date_format(co.pay_time,'%Y-%m-%d')>=#{begintime} 
+		</if>
+		<if test="endtime!=null and endtime!='' and filterPayTime">
+			<![CDATA[		and date_format(co.pay_time,'%Y-%m-%d')<=#{endtime} ]]>
+		</if>
+	</select>
+	<resultMap type="com.isell.app.dao.entity.OrderSumInfo" id="sumOrderInfoResultMap">
+		<result property="totalMoney" column="totalMoney"/>
+		<result property="totalAmount" column="totalAmount"/>
+		<result property="goodsName" column="name"/>
+		<result property="goodsId" column="g_id"/>
+		<result property="imgUrl" column="logo"/>
+	</resultMap>
+	<select id="sumAllOrderInfo" resultMap="sumOrderInfoResultMap">
+		select 
+			case when sum(co.total) is not null then sum(co.total) else 0.00 end as totalMoney,
+			count(1) totalAmount
+		from cool_order co,
+			 coon_shop cs
+		where
+				cs.shoptype = 2 
+			and cs.compid = #{userid}
+			and co.state != 99
+		<if test="begintime!=null and begintime!=''">
+			and date_format(co.createtime,'%Y-%m-%d')>=#{begintime} 
+		</if>
+		<if test="endtime!=null and endtime!=''">
+			<![CDATA[		and date_format(co.createtime,'%Y-%m-%d')<=#{endtime} ]]>
+		</if>
+	</select>
+	<!-- 获取酷店里面的新品的数量-->
+	<select id="getCountOfShopNewGoods" resultType="java.lang.Integer">
+		select 
+			count(1) newGoodsCount
+		from 
+			coon_shop cs,
+			coon_shop_product csp 
+		where cs.compid = #{userid}
+		and cs.shoptype = 2 
+		and cs.id = csp.s_id 
+		and csp.is_new = 1
+	</select>
+	<!-- 获取未结算金额-->
+	<select id="getUnsettleAmount" resultType="java.math.BigDecimal">
+		select 
+			case when 
+				co.total is not null 
+			then sum(co.total) 
+			else 0.00 end as total
+		from 
+			cool_order co,
+			coon_shop cs
+		where co.supplier = cs.id 
+		and cs.shoptype = 2 
+		and cs.compid = #{userid}
+		and co.arrears = 1
+	</select>
+	<resultMap type="com.isell.app.dao.entity.PulldownEntity" id="pullDownResult">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+	</resultMap>
+	<select id="getBrandAsPullDown" resultMap="pullDownResult">
+		select 
+			cpb.id id, 
+			cpb.name name
+		from 
+			cool_product_brand cpb  
+	</select>
+</mapper>

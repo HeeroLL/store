@@ -12,6 +12,7 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="shop_id" jdbcType="VARCHAR" property="shopId"/>
+        <result column="isgooddetail" jdbcType="INTEGER" property="isgooddetail"/>
     </resultMap>
     <select id="getAccessSystemById" resultMap="BaseResultMap">
         SELECT

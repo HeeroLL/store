@@ -268,4 +268,6 @@ public class CoolOrderItem {
     public void setCode(String code) {
         this.code = code;
     }
+
+    
 }

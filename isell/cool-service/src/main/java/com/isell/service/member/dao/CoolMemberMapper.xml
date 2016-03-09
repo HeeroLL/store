@@ -63,6 +63,15 @@
             user_id = #{userId,jdbcType=INTEGER}
     </select>
     
+    <select id="getCoolMemberByNo" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+             cool_member
+        WHERE            
+            no = #{no,jdbcType=INTEGER}
+    </select>
+    
     <!-- 根据用户名查询用户 -->
      <select id="getCoolMemberByMobile" resultMap="BaseResultMap">
         SELECT

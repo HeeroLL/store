@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.isell.core.config.BisConfig;
 import com.isell.core.config.vo.AccessSystem;
+import com.isell.core.util.HttpUtils;
 import com.isell.core.util.JsonData;
 import com.isell.core.util.JsonUtil;
 import com.isell.core.util.MessageUtil;
@@ -33,6 +34,7 @@ import com.isell.service.order.service.OrderService;
 import com.isell.service.order.vo.CoolDistributionCar;
 import com.isell.service.order.vo.CoolOrder;
 import com.isell.service.order.vo.CoonShopcart;
+import com.isell.service.order.vo.OrderReturn;
 import com.isell.service.product.po.CoolProductInfo;
 
 /**
@@ -603,12 +605,19 @@ public class OrderController {
      * @param jsonObj 订单信息
      * @return 订单入库是否成功
      */
+    /**
+     * @param accessCode
+     * @param jsonObj
+     * @return
+     */
     @RequestMapping("pushOrder")
     @ResponseBody
     public JsonData pushOrder(String accessCode, String jsonObj) {
         log.info("get pushOrder ok!accessCode:" + accessCode + ",jsonObj:" + jsonObj);
+        
         JsonData jsonData = new JsonData();
         CoolOrder order = JsonUtil.readValue(jsonObj, CoolOrder.class);
+        
         // 校验参数
         orderService.validateOrder(order);
         
@@ -616,6 +625,9 @@ public class OrderController {
         order.setoType(new Byte("1")); // pc 订单
         order.setOrderType(new Byte("1")); // 一件代发
         order.setState(CoolOrder.ORDER_STATE_0); // 待付款
+        if("kalemao".equals(accessCode)){
+        	  order.setState(CoolOrder.ORDER_STATE_1); // 待发货
+        }
         AccessSystem sys = config.getAccessSysMap().get(accessCode);
         if (sys != null) {
             order.setSupplier(sys.getShopId()); // 酷店id
@@ -627,6 +639,9 @@ public class OrderController {
         }
         if (order.getPayTime() == null) {
             order.setPayTime(new Date(order.getCreatetime().getTime() + 60000)); // 订单支付时间
+        }
+        if ("市辖区".equals(order.getLocationC()) || "直辖区县".equals(order.getLocationC())) {
+            order.setLocationC(order.getLocationP());
         }
         Record record = orderService.saveCoolOrder(order);
         jsonData.setSuccess(record.getBoolean("success"));
@@ -658,6 +673,246 @@ public class OrderController {
             jsonData.setMsg("要修改的订单不存在！");
         jsonData.setSuccess(flag);
         return jsonData;
+    }
+    
+    /**
+     * 
+     * @param jsonObj
+     * @param accessCode
+     * @return
+     */
+    @RequestMapping("queryPostFeeByGoodid")
+    @ResponseBody
+    public JsonData queryPostFeeByGoodid(String jsonObj, String accessCode) {
+        log.info("get queryPostFeeByGoodid ok!accessCode:" + accessCode + ",jsonObj:" + jsonObj);
+        JsonData vo = new JsonData();
+        // PostFee goods = JsonUtil.readValue(jsonObj, PostFee.class);
+        PostFee goods = new PostFee();
+        goods.setPostAdd("广东");
+        goods.setGoodsid(407);
+        
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("pId", goods.getGoodsid());
+        param.put("targetAddress", goods.getPostAdd());
+        String result =
+            HttpUtils.httpPost(config.getServiceDomain() + "order/getCoolOrderFare", JsonUtil.writeValueAsString(param));
+        JsonData jsonData = JsonUtil.readValue(result, JsonData.class);
+        if (jsonData.getSuccess()) {
+            System.out.println(":" + jsonData.getData().toString());
+            PostFeeRet postFeeRet = new PostFeeRet();
+            String data = jsonData.getData().toString().replaceAll("\\{", "").replaceAll("\\}", "");
+            
+            String[] datas = data.split(",");
+            postFeeRet.setStartAddress(datas[0].split("=")[1]);
+            postFeeRet.setSumPrice(datas[3].split("=")[1]);
+            PostFee info = new PostFee();
+            info.setGoodsid(goods.getGoodsid());
+            info.setSendAdd(postFeeRet.getStartAddress());
+            info.setPostAdd(goods.getPostAdd());
+            info.setPostfee(postFeeRet.getSumPrice());
+            vo.setSuccess(true);
+            vo.setData(info);
+        } else {
+            vo.setSuccess(false);
+            vo.setMsg(jsonData.getMsg());
+        }
+        return vo;
+    }
+    
+    /**//**
+     * 订单状态变更通知接口（回调）
+     * 
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("sendChangePrice")
+    @ResponseBody
+    public JsonData sendChangePrice(@RequestBody Map<String, Object> param) {
+        log.info("welcome sendChangePrice:");
+        JsonData vo = new JsonData();
+        Map<String, AccessSystem> accessSysMap = config.getAccessSysMap();
+        for (String key : accessSysMap.keySet()) {
+            AccessSystem sys = accessSysMap.get(key);
+            if (!StringUtils.isBlank(sys.getSycstockurl())) {
+                OrderReturn orderReturn = new OrderReturn();
+                orderReturn.setReturnurl(sys.getSycstockurl());
+                orderReturn.setGid(Integer.parseInt(param.get("gid").toString()));
+                orderReturn.setPid(Integer.parseInt(param.get("pid").toString()));
+                orderReturn.setPrice(param.get("price").toString());
+                if (!StringUtils.isBlank(orderReturn.getReturnurl())) {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("gid", String.valueOf(orderReturn.getGid()));
+                    map.put("pid", String.valueOf(orderReturn.getPid()));
+                    map.put("price", orderReturn.getPrice());
+                    orderReturn.setCheckType(2);
+                    String result = "";
+                    result = HttpUtils.httpPost(orderReturn.getReturnurl(), map);
+                    if (!"".equals(result)) {
+                        JsonData returnData = JsonUtil.readValue(result, JsonData.class);
+                        if (returnData.getSuccess()) {
+                            vo.setSuccess(true);
+                            this.orderService.saveUnSuccessOrderReturn(orderReturn);
+                        } else {
+                            vo.setMsg(returnData.getMsg());
+                            vo.setSuccess(false);
+                            // 调用失败
+                            this.orderService.saveUnSuccessOrderReturn(orderReturn);
+                        }
+                    } else {
+                        // 调用失败
+                        this.orderService.saveUnSuccessOrderReturn(orderReturn);
+                    }
+                    
+                }
+                
+            }
+        }
+        return vo;
+    }
+    
+    /**
+     * 商品下架主动通知
+     * @param param
+     * @return
+     */
+    @RequestMapping("sendUnAddProduct")
+    @ResponseBody
+    public JsonData sendUnAddProduct()
+    {
+    	 log.info("welcome sendUnAddProduct:");
+    	 JsonData vo = new JsonData();
+    	 Map<String, AccessSystem> accessSysMap = config.getAccessSysMap();
+    	 for (String key : accessSysMap.keySet()) {
+    		 AccessSystem sys = accessSysMap.get(key);
+    		 if (!StringUtils.isBlank(sys.getSycunaddurl())) {
+    			 OrderReturn orderReturn = new OrderReturn();
+    			 orderReturn.setReturnurl(sys.getSycstockurl());
+    			 orderReturn.setPid(212);
+    			/* orderReturn.setPid(Integer.parseInt(param.get("pid").toString()));*/
+    			 if (!StringUtils.isBlank(orderReturn.getReturnurl())) {
+    				 Map<String, String> map = new HashMap<String, String>();
+    				 map.put("pid", String.valueOf(orderReturn.getPid()));
+    				 orderReturn.setCheckType(2);
+    				 String result = "";
+                     result = HttpUtils.httpPost(orderReturn.getReturnurl(), map);
+                     if (!"".equals(result)) {
+                         JsonData returnData = JsonUtil.readValue(result, JsonData.class);
+                         if (returnData.getSuccess()) {
+                             vo.setSuccess(true);
+                         } else {
+                             vo.setMsg(returnData.getMsg());
+                             vo.setSuccess(false);
+                             // 调用失败
+                             this.orderService.saveUnSuccessOrderReturn(orderReturn);
+                         }
+                     } else {
+                         // 调用失败
+                         this.orderService.saveUnSuccessOrderReturn(orderReturn);
+                     }
+    			 }
+    		 }
+    	 }
+    	 return vo;
+    }
+    
+    
+    /**//**
+     * 订单状态变更通知接口（回调）
+     * 
+     * @param jsonObj
+     * @return
+     */
+    @RequestMapping("sendUnstock")
+    @ResponseBody
+    public JsonData sendUnstock(@RequestBody Map<String, Object> param) {
+        log.info("welcome sendUnstock:");
+        JsonData vo = new JsonData();
+        Map<String, AccessSystem> accessSysMap = config.getAccessSysMap();
+        
+        for (String key : accessSysMap.keySet()) {
+            AccessSystem sys = accessSysMap.get(key);
+            if (!StringUtils.isBlank(sys.getSycstockurl())) {
+                OrderReturn orderReturn = new OrderReturn();
+                orderReturn.setReturnurl(sys.getSycstockurl());
+                orderReturn.setGid(Integer.parseInt(param.get("gid").toString()));
+                orderReturn.setPid(Integer.parseInt(param.get("pid").toString()));
+                if (!StringUtils.isBlank(orderReturn.getReturnurl())) {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("gid", String.valueOf(orderReturn.getGid()));
+                    map.put("pid", String.valueOf(orderReturn.getPid()));
+                    orderReturn.setCheckType(2);
+                    String result = "";
+                    result = HttpUtils.httpPost(orderReturn.getReturnurl(), map);
+                    if (!"".equals(result)) {
+                        JsonData returnData = JsonUtil.readValue(result, JsonData.class);
+                        if (returnData.getSuccess()) {
+                            vo.setSuccess(true);
+                        } else {
+                            vo.setMsg(returnData.getMsg());
+                            vo.setSuccess(false);
+                            // 调用失败
+                            this.orderService.saveUnSuccessOrderReturn(orderReturn);
+                        }
+                    } else {
+                        // 调用失败
+                        this.orderService.saveUnSuccessOrderReturn(orderReturn);
+                    }
+                }
+                
+            }
+            
+        }
+        return vo;
+    }
+    
+    /**
+     * 
+     * @param param
+     * @return
+     */
+    @RequestMapping("sendNtChange")
+    @ResponseBody
+    public JsonData sendNtChange(@RequestBody Map<String, Object> param) {
+        JsonData vo = new JsonData();
+        // OrderReturn orderReturn=JsonUtil.readValue(jsonObj, OrderReturn.class);
+        log.info("welcome sendNtChange:");
+        OrderReturn orderReturn = new OrderReturn();
+        orderReturn.setReturnurl((String)param.get("returnurl"));
+        orderReturn.setOrderno((String)param.get("orderno"));
+        orderReturn.setReason((String)param.get("reason"));
+        orderReturn.setSendStyle((String)param.get("sendStyle"));
+        orderReturn.setState((String)param.get("state"));
+        orderReturn.setWaybillNo((String)param.get("waybillNo"));
+        if (!StringUtils.isBlank(orderReturn.getReturnurl())) {
+            
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("orderNo", orderReturn.getOrderno());
+            map.put("state", orderReturn.getState());
+            map.put("reason", orderReturn.getReason());
+            map.put("waybillNo", orderReturn.getWaybillNo());
+            map.put("sendStyle", orderReturn.getSendStyle());
+            String result = "";
+            orderReturn.setCheckType(1);
+            result = HttpUtils.httpPost(orderReturn.getReturnurl(), map);
+            System.out.println(result);
+            
+            if (!"".equals(result)) {
+                JsonData returnData = JsonUtil.readValue(result, JsonData.class);
+                if (returnData.getSuccess()) {
+                    vo.setSuccess(true);
+                } else {
+                    vo.setMsg(returnData.getMsg());
+                    vo.setSuccess(false);
+                    // 调用失败
+                    this.orderService.saveUnSuccessOrderReturn(orderReturn);
+                }
+            } else {
+                // 调用失败
+                this.orderService.saveUnSuccessOrderReturn(orderReturn);
+            }
+            
+        }
+        return vo;
     }
     
     /**
@@ -702,6 +957,7 @@ public class OrderController {
         log.info("get getWaybill ok!accessCode:" + accessCode + ",jsonObj:" + jsonObj);
         JsonData jsonData = new JsonData();
         CoolOrderWayBill order = JsonUtil.readValue(jsonObj, CoolOrderWayBill.class);
+        
         AccessSystem sys = config.getAccessSysMap().get(accessCode);
         if (sys != null) {
             order.setSupplier(sys.getShopId()); // 酷店id
@@ -714,13 +970,15 @@ public class OrderController {
         List<CoolOrderWayBillReturn> records = orderService.getWayBill(order);
         for (CoolOrderWayBillReturn r : records) {
             if (StringUtils.isBlank(r.getSendStyle()))
-                r.setSendStyle("还未发货");
+                r.setSendStyle("");
             if (StringUtils.isBlank(r.getSendtime()))
                 r.setSendtime("");
             if (StringUtils.isBlank(r.getWayBillNo()))
-                r.setWayBillNo("没有运单号");
+                r.setWayBillNo("");
             if (StringUtils.isBlank(r.getCause()))
                 r.setCause("");
+            if (StringUtils.isBlank(r.getTime()))
+                r.setTime("");
         }
         jsonData.setSuccess(true);
         jsonData.setRows(records);
@@ -795,5 +1053,33 @@ public class OrderController {
     @ResponseBody
     public JsonData buyTradeNo(String orderNo) {
         return orderService.buyTradeNo(orderNo.split(","));
+    }
+    
+    /**
+     * 震荣修改订单（订单发货）
+     * 
+     * @param param
+     * @return
+     */
+    @RequestMapping("updateZrCoolOrderDelivery")
+    @ResponseBody
+    public JsonData updateZrCoolOrderDelivery(@RequestBody Map<String, Object> param) {
+        JsonData jsonData = new JsonData();
+        jsonData.setData(orderService.updateZrCoolOrderDelivery(param).getColumns());
+        return jsonData;
+    }
+    
+    /**
+     * 获取运费
+     * 
+     * @param param
+     * @return
+     */
+    @RequestMapping("getCoolOrderFare")
+    @ResponseBody
+    public JsonData getCoolOrderFare(@RequestBody Map<String, Object> param) {
+        JsonData jsonData = new JsonData();
+        jsonData.setData(orderService.getCoolOrderFare(param).getColumns());
+        return jsonData;
     }
 }

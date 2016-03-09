@@ -16,6 +16,8 @@ import com.isell.service.order.po.CoonShopCartParam;
 import com.isell.service.order.vo.CoolDistributionCar;
 import com.isell.service.order.vo.CoolOrder;
 import com.isell.service.order.vo.CoonShopcart;
+import com.isell.service.order.vo.OrderReturn;
+import com.isell.service.shop.vo.CoonShop;
 
 /**
  * 订单服务接口
@@ -324,6 +326,12 @@ public interface OrderService {
      * @return
      */
     List<CoolOrderExternal> getOrderExternalByOrderOldNo(String shopId, String orderNo);
+    /**
+     * 保存post失败记录
+     * @param orderReturn
+     * @return
+     */
+    int saveUnSuccessOrderReturn(OrderReturn orderReturn);
     
     /**
      * 客户系统调用该接口获取运单相关信息
@@ -355,6 +363,8 @@ public interface OrderService {
      */
     JsonData buyTradeNo(String... orderNos);
     
+   
+    
     /**
      * 根据物流单号查询订单编号
      * 
@@ -362,4 +372,20 @@ public interface OrderService {
      * @return 订单编号
      */
     Record getOrderNoByPsCode(String psCode);
+    /**
+     * 震荣修改发货状态
+     * @param param
+     * @return
+     */
+	Record updateZrCoolOrderDelivery(Map<String, Object> param);
+	
+	Record getCoolOrderFare(Map<String, Object> param);
+	
+	/**
+     * 获取最近购物人次列表
+     * 
+     * @param coonShop 购物车参数
+     * @return 最近购物人次列表
+     */
+    Record getBuyCountPage(CoonShop coonShop);
 }

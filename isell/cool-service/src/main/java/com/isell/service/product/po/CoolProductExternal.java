@@ -23,11 +23,64 @@ public class CoolProductExternal {
     private BigDecimal favprice;
     private String logo;
     private BigDecimal tax;
+    private String catelogId;
     private List<CoolProductExternalGg> items;
     private List<CoolProductExternalImg> imgs;
     private List<CoolProductAliUnit>units;
-    
-    
+    private String image_domain;//图片域名
+    private int page;
+    private int limit;
+    private int start;
+	private int allstock;//商品总库存
+	private String queryids;
+	
+     
+	public String getQueryids() {
+		return queryids;
+	}
+	public void setQueryids(String queryids) {
+		this.queryids = queryids;
+	}
+	public int getAllstock() {
+		return allstock;
+	}
+	public void setAllstock(int allstock) {
+		this.allstock = allstock;
+	}
+	public int getStart() {
+		return start;
+	}
+	public void setStart(int start) {
+		this.start = start;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public int getLimit() {
+		return limit;
+	}
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+	public String getImage_domain() {
+		return image_domain;
+	}
+	public void setImage_domain(String image_domain) {
+		this.image_domain = image_domain;
+	}
+	public String getCatelogId() {
+		if(catelogId==null)
+		{
+			catelogId="";
+		}
+		return catelogId;
+	}
+	public void setCatelogId(String catelogId) {
+		this.catelogId = catelogId;
+	}
 	public List<CoolProductAliUnit> getUnits() {
 		return units;
 	}

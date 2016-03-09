@@ -204,7 +204,15 @@ public class CoonShop extends PageConfig {
      */
     private String rand;
     
+    /**
+     * qq
+     */
+    private String qq;
     
+    /**
+     * 微信
+     */
+    private String weixin;
     
     public Integer getSmsEd() {
         return smsEd;
@@ -508,5 +516,21 @@ public class CoonShop extends PageConfig {
 
 	public void setRand(String rand) {
 		this.rand = rand;
+	}
+
+	public String getQq() {
+		return qq;
+	}
+
+	public void setQq(String qq) {
+		this.qq = qq;
+	}
+
+	public String getWeixin() {
+		return weixin;
+	}
+
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
 	}
 }

@@ -27,8 +27,7 @@
 	<select id="getCoonFareTempProByPro" resultMap="BaseResultMap">
 		select cftp.*
 		from coon_fare_temp cft
-		join coon_fare_temp_pro cftp on cft.id = cftp.temp_id and province =
-		#{province,jdbcType=VARCHAR} and acquiesce = 1
+		join coon_fare_temp_pro cftp on cft.id = cftp.temp_id and province like  CONCAT(CONCAT('%', #{province,jdbcType=VARCHAR}),'%')   and acquiesce = 1
 		<if test="expressCode != null">
 			and  express_code = #{expressCode,jdbcType=VARCHAR}
 		</if>

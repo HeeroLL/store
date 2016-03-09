@@ -30,6 +30,21 @@ public interface YijifuService {
     String PAY_KEY = "cf285160020d889a3871588e8de835ff";
     
     /**
+     * 测试环境KEY
+     */
+    String TEST_KEY = "2af0376a5dc1695aa1ab889384a8ade9";
+    
+    /**
+     * 测试环境的合作者ID
+     */
+    String TEST_PARTNERID = "20140926020000058373";
+    
+    /**
+     * 测试网关地址
+     */
+    String TEST_GATEWAY = "https://openapi.yijifu.net/gateway.html";
+    
+    /**
      * 支付网关地址
      */
     String YIJIFU_GATEWAY = "https://openapi.yiji.com/gateway.html";
@@ -97,4 +112,21 @@ public interface YijifuService {
      * @return 易极付返回的结果
      */
     Map<String, String> tradeRefund(Map<String, String> paramMap);
+    
+    /**
+     * 跨境订单信息同步
+     *
+     * @param remittranceBatchNo 跨境付款批次号
+     * @param orderNos 订单号集合
+     * @return 易极付返回的结果
+     */
+    Map<String, String> corderRemittanceSynOrder(String remittranceBatchNo, String... orderNos);
+    
+    /**
+     * 跨境汇款申请
+     *
+     * @param paramMap map参数
+     * @return 返回参数字符串
+     */
+    String applyRemittranceWithSynOrder(Map<String, String> paramMap);
 }

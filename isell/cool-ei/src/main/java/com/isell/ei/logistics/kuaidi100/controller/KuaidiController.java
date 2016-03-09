@@ -32,6 +32,7 @@ public class KuaidiController {
      * @param nu 快递单号
      * @return 查询结果
      */
+    @SuppressWarnings("deprecation")
     @ResponseBody
     @RequestMapping("jsonService")
     public JsonData jsonService(String com, String nu) {
@@ -62,7 +63,6 @@ public class KuaidiController {
      * @param map 返回值
      * @return 页面
      */
-    @Deprecated
     @RequestMapping("wapService")
     public String wapService(String com, String nu, String callbackurl, ModelMap map) {
         map.addAttribute("result", KuaidiService.wapService(com, nu, callbackurl));

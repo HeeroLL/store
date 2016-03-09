@@ -3,6 +3,7 @@ package com.isell.service.shop.service;
 import java.util.List;
 
 import com.isell.core.util.Record;
+import com.isell.service.account.po.CoonRunAccountParam;
 import com.isell.service.account.vo.CoonRunAccount;
 import com.isell.service.order.po.CoolOrderParam;
 import com.isell.service.order.vo.CoolDistributionCar;
@@ -10,11 +11,13 @@ import com.isell.service.shop.po.CoonShopBusinessParam;
 import com.isell.service.shop.po.CoonShopFavInfo;
 import com.isell.service.shop.po.CoonShopProductParam;
 import com.isell.service.shop.po.CoonShopShareParam;
+import com.isell.service.shop.vo.CoonBanner;
 import com.isell.service.shop.vo.CoonShop;
 import com.isell.service.shop.vo.CoonShopApply;
 import com.isell.service.shop.vo.CoonShopBanner;
 import com.isell.service.shop.vo.CoonShopClick;
 import com.isell.service.shop.vo.CoonShopFav;
+import com.isell.service.shop.vo.CoonShopNotice;
 import com.isell.service.shop.vo.CoonShopShare;
 import com.isell.service.shop.vo.CoonShopShareExperience;
 import com.isell.service.shop.vo.CoonThirdParty;
@@ -305,4 +308,60 @@ public interface CoonShopService {
      * @return  分享经验心得列表
      */
     Record getShopShareExperiencePage(CoonShopShareParam coonShopShareParam);
+    
+    /**
+     * 获取卖家版首页店铺信息
+     *
+     * @param coonShop  参数
+     * @return 店铺信息
+     */
+    Record getHomepageShopInfo(CoonShop coonShop);
+    
+    /**
+     * 获取酷店各类金额列表
+     * 
+     * @param account 账单信息
+     * @return 酷店账单列表
+     */
+    Record getIncomePage(CoonRunAccountParam coonRunAccountParam);
+    
+    /**
+     * 修改酷店信息
+     * 
+     * @param coonShop 酷店信息
+     * @return 是否修改成功
+     */
+    Record updateShopInfo(CoonShop coonShop);
+    
+    /**
+     * 获取酷店公告列表
+     * 
+     * @param coonShop 酷店信息
+     * @return 酷店公告列表
+     */
+    Record getShopNoticePage(CoonShop coonShop);
+    
+    /**
+     * 保存/修改酷店公告
+     * 
+     * @param coonShopNotice 酷店公告信息
+     * @return 是否保存成功
+     */
+    Record saveShopNotice(CoonShopNotice coonShopNotice);
+    
+    /**
+     * 保存酷店海报
+     * 
+     * @param bannerList 海报列表
+     * @return 是否保存成功
+     */
+    Record saveShopBannerBatch(List<CoonBanner> bannerList);
+    
+    /**
+     * 删除酷店海报
+     * 
+     * @param coonShopBanner 酷店海报信息
+     * @return 是否删除成功
+     */
+    Record delShopBanner(CoonShopBanner coonShopBanner);
 }

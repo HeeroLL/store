@@ -12,9 +12,23 @@ public class CollectInfo {
 	private int recid;
 	private int shelves;
 	private int is_down;
+	private int g_id;
+	private String ggname;
 	
 	
 	
+	public int getG_id() {
+		return g_id;
+	}
+	public void setG_id(int g_id) {
+		this.g_id = g_id;
+	}
+	public String getGgname() {
+		return ggname;
+	}
+	public void setGgname(String ggname) {
+		this.ggname = ggname;
+	}
 	public int getIs_down() {
 		return is_down;
 	}
@@ -34,6 +48,10 @@ public class CollectInfo {
 		this.recid = recid;
 	}
 	public String getShopcode() {
+		if(shopcode==null)
+		{
+			shopcode="";
+		}
 		return shopcode;
 	}
 	public void setShopcode(String shopcode) {

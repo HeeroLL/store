@@ -350,7 +350,10 @@ public class JoogeGatewayController {
         productInfo.setDesc("");
         CoolProduct coolProduct = productService.getCoolProductById(coolProductSelect);
         if (coolProduct == null) {
-            throw new RuntimeException("exception.product.null");
+            coolProduct = productService.getCoolProductByGid(coolProductSelect.getId());
+            if (coolProduct == null) {
+                throw new RuntimeException("exception.product.null");
+            }
         }
         Merch merch = new Merch();
         merch.setId("isell" + coolProduct.getId());

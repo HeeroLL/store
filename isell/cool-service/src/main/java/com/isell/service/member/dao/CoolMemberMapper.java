@@ -24,6 +24,11 @@ public interface CoolMemberMapper{
      * 根据用户id查询
      */
     public CoolMember getCoolMemberByUserId(@Param("userId")Integer userId); 
+    
+    /**
+     * 根据用户编码查询
+     */
+    public CoolMember getCoolMemberByNo(@Param("no")String no); 
 
     /**
      * 查询出所有记录

@@ -22,6 +22,11 @@ public class CoonBanner{
      * 商品主键
      */
     private String pId;
+    
+    /**
+     * 酷店编码
+     */
+    private String shopCode;
 
     /**
      * 
@@ -74,5 +79,13 @@ public class CoonBanner{
      */
     public void setpId(String pId){
         this.pId = pId;
-    }    
+    }
+
+	public String getShopCode() {
+		return shopCode;
+	}
+
+	public void setShopCode(String shopCode) {
+		this.shopCode = shopCode;
+	}    
 }

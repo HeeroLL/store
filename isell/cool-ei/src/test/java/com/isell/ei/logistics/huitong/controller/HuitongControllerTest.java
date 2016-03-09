@@ -28,7 +28,7 @@ public class HuitongControllerTest {
 		d.setOrderDetail(list);
 		Order o = new Order();
 		o.setCurrency("人民币");
-		o.setENo("6674849a332");
+		o.setENo("6674849a333");
 		o.setFreight(new BigDecimal(2));
 		o.setInsuranceValue(new BigDecimal(2));
 		o.setLogisticsEnt("YTO");
@@ -45,6 +45,7 @@ public class HuitongControllerTest {
 		o.setTax(new BigDecimal(0));
 		o.setTransportType("监管仓库");
 		o.setDetail(d);
+		o.setWayBillNo("099877");
 		String jsonObj = JsonUtil.writeValueAsString(o);
 		System.out.println(jsonObj);
         String result = HttpUtils.httpPost("http://localhost:8080/bis/logistics/huitong/createBondOrMail", jsonObj);

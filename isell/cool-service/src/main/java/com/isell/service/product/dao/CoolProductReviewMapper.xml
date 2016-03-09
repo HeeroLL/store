@@ -16,6 +16,7 @@
         <result column="o_id" jdbcType="INTEGER" property="oId"/>
         <result column="m_name" jdbcType="VARCHAR" property="mName"/>
         <result column="gg_id" jdbcType="INTEGER" property="ggId"/>
+        <result column="imgs" jdbcType="VARCHAR" property="imgs"/>
     </resultMap>
     <resultMap id="CoolProductReviewInfoMap" type="com.isell.service.product.po.CoolProductReviewInfo">
         <id column="id" jdbcType="INTEGER" property="id"/>
@@ -33,6 +34,7 @@
         <result column="m_name" jdbcType="VARCHAR" property="mName"/>
         <result column="gg_id" jdbcType="INTEGER" property="ggId"/>
         <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="imgs" jdbcType="VARCHAR" property="imgs"/>
     </resultMap>
     <select id="getCoolProductReviewById" resultMap="BaseResultMap">
         SELECT
@@ -48,13 +50,14 @@
         SELECT
             ifnull(count(1),0)
         FROM
-             cool_product_review
+             cool_product_review r
+        INNER JOIN cool_member m on m.id = r.m_id
         WHERE 1=1
         	<if test="gId != null">
-        		and g_id = #{gId,jdbcType=INTEGER}
+        		and r.g_id = #{gId,jdbcType=INTEGER}
         	</if>
         	<if test="ggId != null">
-        		and (gg_id = #{ggId,jdbcType=INTEGER} or gg_id is null)
+        		and (r.gg_id = #{ggId,jdbcType=INTEGER} or r.gg_id is null)
         	</if>
     </select>
     
@@ -62,7 +65,7 @@
     <select id="getCoolProductReviewInfoListPage" resultMap="CoolProductReviewInfoMap" parameterType="com.isell.service.product.vo.CoolProductReview">
           SELECT r.*,m.logo
           FROM cool_product_review r 
-          left join cool_member m on m.id = r.m_id
+          inner join cool_member m on m.id = r.m_id
           where 1=1
           <if test="gId != null">
           	and r.g_id = #{gId,jdbcType=INTEGER}
@@ -70,6 +73,7 @@
           <if test="ggId != null">
           	and (r.gg_id = #{ggId,jdbcType=INTEGER} or r.gg_id is null)
           </if>
+          order by r.createtime desc
     </select>
     
     <select id="findAllCoolProductReview" resultMap="BaseResultMap">
@@ -129,6 +133,9 @@
             <if test="ggId != null" >
                 gg_id,
             </if>
+            <if test="imgs != null" >
+                imgs,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -172,6 +179,9 @@
             </if> 
             <if test="ggId != null" >
                 #{ggId,jdbcType=INTEGER},
+            </if> 
+            <if test="imgs != null" >
+                #{imgs,jdbcType=VARCHAR},
             </if> 
         </trim>
     </insert>
@@ -220,6 +230,9 @@
             </if>
             <if test="ggId != null" >
                 gg_id = #{ggId,jdbcType=INTEGER},
+            </if>
+            <if test="imgs != null" >
+                imgs = #{imgs,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE 

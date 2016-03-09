@@ -21,6 +21,27 @@ public class CenterOrder implements Serializable{
 	private String postfee;
 	private int state;
 	private String imgdomain;
+	private Integer refundState;
+	private String createtime;
+	
+	
+	
+	public String getCreatetime() {
+		if(createtime==null)
+		{
+			createtime="";
+		}
+		return createtime;
+	}
+	public void setCreatetime(String createtime) {
+		this.createtime = createtime;
+	}
+	public Integer getRefundState() {
+		return refundState;
+	}
+	public void setRefundState(Integer refundState) {
+		this.refundState = refundState;
+	}
 	private List<CenterOrderItem>orderItemlist;
 	private String taxfee;
 	
@@ -48,6 +69,10 @@ public class CenterOrder implements Serializable{
 		this.orderItemlist = orderItemlist;
 	}
 	public String getPaytime() {
+		if(paytime==null)
+		{
+			paytime="";
+		}
 		return paytime;
 	}
 	public void setPaytime(String paytime) {

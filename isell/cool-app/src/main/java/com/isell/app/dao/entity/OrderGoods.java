@@ -7,9 +7,15 @@ public class OrderGoods {
 	private String goodname;
 	private String gname;
 	private BigDecimal price;
+	private int count;
 	
 	
-	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	public BigDecimal getPrice() {
 		return price;
 	}

@@ -66,6 +66,8 @@ public class UserInfo {
     
     private String shopId;
     
+    private String shopcode;
+    
     private String password;
     
     private int sex;
@@ -312,6 +314,14 @@ public class UserInfo {
 
 	public void setMobileFlag(String mobileFlag) {
 		this.mobileFlag = mobileFlag;
+	}
+
+	public String getShopcode() {
+		return shopcode;
+	}
+
+	public void setShopcode(String shopcode) {
+		this.shopcode = shopcode;
 	}
     
 }

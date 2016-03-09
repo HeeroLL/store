@@ -66,7 +66,8 @@ public class EhkingServiceImpl implements EhkingService {
                 .append(StringUtils.defaultString(ehkingPayInfo.getPaymentModeCode(), ""));
             if (ehkingPayInfo.getProductDetails() != null) {
                 EhkingProductDetail productDetail;
-                for (Iterator<EhkingProductDetail> i$ = ehkingPayInfo.getProductDetails().iterator(); i$.hasNext(); hmacSource.append(StringUtils.defaultString(productDetail.getName()))
+                for (Iterator<EhkingProductDetail> i$ = ehkingPayInfo.getProductDetails().iterator(); i$.hasNext(); 
+            		hmacSource.append(StringUtils.defaultString(productDetail.getName()))
                     .append(ObjectUtils.defaultIfNull(productDetail.getQuantity(), ""))
                     .append(ObjectUtils.defaultIfNull(productDetail.getAmount(), ""))
                     .append(StringUtils.defaultString(productDetail.getReceiver()))
@@ -77,9 +78,10 @@ public class EhkingServiceImpl implements EhkingService {
             if (ehkingPayInfo.getPayer() != null)
                 hmacSource.append(StringUtils.defaultString(ehkingPayInfo.getPayer().getName()))
                     .append(StringUtils.defaultString(ehkingPayInfo.getPayer().getPhoneNum()))
+                    .append(StringUtils.defaultString(ehkingPayInfo.getPayer().getEmail()))
+                    .append(StringUtils.defaultString(ehkingPayInfo.getPayer().getIdType()))
                     .append(StringUtils.defaultString(ehkingPayInfo.getPayer().getIdNum()))
-                    .append(StringUtils.defaultString(ehkingPayInfo.getPayer().getBankCardNum()))
-                    .append(StringUtils.defaultString(ehkingPayInfo.getPayer().getEmail()));
+                    .append(StringUtils.defaultString(ehkingPayInfo.getPayer().getBankCardNum()));
             if (ehkingPayInfo.getBankCard() != null)
                 hmacSource.append(StringUtils.defaultString(ehkingPayInfo.getBankCard().getName()))
                     .append(StringUtils.defaultString(ehkingPayInfo.getBankCard().getCardNo()))
@@ -91,6 +93,8 @@ public class EhkingServiceImpl implements EhkingService {
             hmacSource.append(StringUtils.defaultString(ehkingPayInfo.getForUse(), ""));
             hmacSource.append(StringUtils.defaultString(ehkingPayInfo.getMerchantUserId(), ""));
             hmacSource.append(StringUtils.defaultString(ehkingPayInfo.getBindCardId(), ""));
+            hmacSource.append(StringUtils.defaultString(ehkingPayInfo.getClientIp(), ""));
+            hmacSource.append(StringUtils.defaultString(ehkingPayInfo.getTimeout(), ""));
             
             // 签名
             ehkingPayInfo.setHmac(EhkingSignUtils.signMd5(hmacSource.toString(), KEY));
