@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.isell.app.dao.entity.CenterOrder;
 import com.isell.app.dao.entity.CenterOrderParam;
- 
-import com.isell.app.dao.entity.Product;
- 
 import com.isell.app.dao.entity.CoonBannerInfo;
- 
+import com.isell.app.dao.entity.Product;
 import com.isell.app.dao.entity.SearchParam;
 import com.isell.app.service.AppSellService;
 import com.isell.cache.service.JVMCacheService;
@@ -30,7 +27,6 @@ import com.isell.service.shop.service.CoonShopService;
 import com.isell.service.shop.vo.CoonShop;
 import com.isell.service.shop.vo.CoonShopBanner;
 import com.isell.service.shop.vo.CoonShopNotice;
-import com.isell.service.shop.vo.CoonThirdParty;
 
 /**
  * APP卖家版控制层

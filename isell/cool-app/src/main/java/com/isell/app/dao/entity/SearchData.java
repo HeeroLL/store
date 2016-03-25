@@ -2,8 +2,6 @@ package com.isell.app.dao.entity;
 
 import java.util.List;
 
-import org.apache.poi.ss.formula.functions.T;
-
 public class SearchData {
 	private List<?>records;
 	private int total;

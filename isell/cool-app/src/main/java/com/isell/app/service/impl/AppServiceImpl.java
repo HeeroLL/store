@@ -131,9 +131,9 @@ public class AppServiceImpl implements AppService{
     			if(StringUtils.isNotBlank(goodids[i]))
     			{
     				Product pro=new Product();
-    				Map map=new HashMap();
+    				Map<String, String> map=new HashMap<String, String>();
     				map.put("goodsid", goodids[i]);
-    				map.put("checkIsRec", checkIsRec);
+    				map.put("checkIsRec", checkIsRec + "");
     				map.put("s_id", s_id);
     				pro=this.appUserMapper.queryProductinfoById(map);
     				if(pro!=null)

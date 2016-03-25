@@ -76,9 +76,9 @@ public interface AppUserMapper {
 	 * @param goodsid
 	 * @return
 	 */
-	Product queryProductinfoById(Map map);
+	Product queryProductinfoById(Map<String, String> map);
 	
-	String checkProIsSuccessSale(Map map);
+	String checkProIsSuccessSale(Map<String, String> map);
 	/**
 	 * 查询店铺id，code 
 	 * @param sid
@@ -95,7 +95,7 @@ public interface AppUserMapper {
 	 * @param map
 	 * @return
 	 */
-	String queryShopIdByRandom(Map map);
+	String queryShopIdByRandom(Map<String, String> map);
 	/**
 	 * 验证用户是否已经收藏该商品
 	 * @param coolMemberFavorites

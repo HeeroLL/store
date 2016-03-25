@@ -1,7 +1,6 @@
 package com.isell.app.dao.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 public class CenterOrder implements Serializable{

@@ -1,7 +1,5 @@
 package com.isell.app.dao.entity;
 
-import java.io.Serializable;
-
 import com.isell.core.mybatis.page.PageConfig;
 
 public class SearchParam    extends PageConfig{
