@@ -66,6 +66,39 @@ public class JedisTemplate<T> {
     }
     
     /**
+     * 设置一个会失效的k-v数据
+     * 
+     * @param key key
+     * @param value value
+     * @param seconds 多少秒后失效
+     * @return 结果
+     */
+    public String setex(final String key, final String value, final int seconds) {
+        return (String)execute(new JedisCallback() {
+            @Override
+            public Object doInRedis(ShardedJedis jedis) {
+                return jedis.setex(key, seconds, value);
+            }
+        });
+    }
+    
+    /**
+     * 为key设置生存时间
+     *
+     * @param key key
+     * @param seconds 多少秒后失效
+     * @return 结果
+     */
+    public String expire(final String key, final int seconds) {
+        return (String)execute(new JedisCallback() {
+            @Override
+            public Object doInRedis(ShardedJedis jedis) {
+                return jedis.expire(key, seconds);
+            }
+        });
+    }
+    
+    /**
      * 根据key获取String类型value
      * 
      * @param key key
@@ -293,7 +326,7 @@ public class JedisTemplate<T> {
     
     /**
      * 从队列左边的start位置取到end位置的数据列表
-     *
+     * 
      * @param key key
      * @param start 起始索引
      * @param end 结束索引（闭区间）
@@ -315,7 +348,7 @@ public class JedisTemplate<T> {
     
     /**
      * 从队列左边的start位置取到end位置的数据列表
-     *
+     * 
      * @param key key
      * @param start 起始索引
      * @param end 结束索引（闭区间）
@@ -341,8 +374,7 @@ public class JedisTemplate<T> {
         try {
             jedis = pool.getResource();
             return callback.doInRedis(jedis);
-        }
-        finally {
+        } finally {
             pool.returnResource(jedis);
         }
     }
@@ -354,8 +386,7 @@ public class JedisTemplate<T> {
      * @author lilin
      * @version [版本号, 2015年4月27日]
      */
-    public interface JedisCallback
-    {
+    public interface JedisCallback {
         /**
          * 回调函数，做实际处理
          * 
