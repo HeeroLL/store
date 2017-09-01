@@ -9,7 +9,14 @@ export {v_contextPath};
 	
 export const v_cdnUrl = "https://app-cdn.starcharge.com/"
 
-//export const v_userId = "$!{userId}";
+let v_userId;
+if (localStorage.userId) {
+	v_userId = localStorage.userId;
+} else {
+	localStorage.userId = "283717f7-9346-4015-9f90-36b9fdb3f984";
+	v_userId = localStorage.userId;
+}
+export {v_userId};
 //export const v_userName = "$!{userName}";
 
 //export const v_verify = "$!verify";

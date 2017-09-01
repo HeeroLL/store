@@ -31,15 +31,13 @@ var Carbonbox = React.createClass({
 						<p>快来加入我们吧</p>
 					</div>
 				</div>
-				<div className="carbon_btn">
-					<DownloadApp domain={this.props.domain} />
-				</div>
+				<DownloadApp domain={this.props.domain} />
 			</div>
 		);
 	},
 	componentDidMount: function() {		
 		AE.api("webApi/mobile/getUserBaseInfo", {
-			userId : "283717f7-9346-4015-9f90-36b9fdb3f984"
+			userId : v_userId
 		}, function(v_data) {
 			if(v_data){
 				this.setState({

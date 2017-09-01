@@ -49,8 +49,8 @@ module.exports = merge(config, {
 			}
 		}),
 		new ExtractTextPlugin({
-            filename: "[name].css"
-			// filename: "styles.css"
+            //filename: "[name].css"
+			filename: "styles.css"
         }),		
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'vendor'

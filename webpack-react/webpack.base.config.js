@@ -5,10 +5,11 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {		
 	entry: {
+		// vendor: ['react','react-dom','fastclick'],
+		vendor: ['fastclick'],
 		core: __dirname + '/src/component/core.js',
 		carbonShare : __dirname + '/src/carbonShare.js',
-		// vendor: ['react','react-dom','fastclick']
-		vendor: ['fastclick']
+		carbonRanking : __dirname + '/src/carbonRanking.js'
 	},
 	output: {
 		path: __dirname + "/dist",
@@ -29,6 +30,13 @@ module.exports = {
 			template: 'src/template/wap.html',
 			title: '碳积分分享',
 			chunks: ['vendor','core','carbonShare'],
+			chunksSortMode: 'manual' // 导出的js按chunks的数组顺序排序
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'carbonRanking.html',
+			template: 'src/template/wap.html',
+			title: '碳积分排名',
+			chunks: ['vendor','core','carbonRanking'],
 			chunksSortMode: 'manual' // 导出的js按chunks的数组顺序排序
 		}),
         new webpack.optimize.OccurrenceOrderPlugin()		
