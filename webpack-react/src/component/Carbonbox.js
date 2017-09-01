@@ -2,6 +2,7 @@
 import DownloadApp from './DownloadApp';
 import AE from './core.js';
 import './css/styles.css';
+import {v_userId} from '../config'
 
 var Carbonbox = React.createClass({
 	getInitialState: function(){
