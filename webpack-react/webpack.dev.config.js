@@ -10,7 +10,7 @@ module.exports = merge(config, {
 		inline: true,//实时刷新
 		hot: true
 	},
-	devtool: 'none',
+	devtool: 'cheap-eval-source-map',
 	module: {
 		rules:[
 			{

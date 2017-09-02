@@ -35,7 +35,7 @@ module.exports = {
 					options: {
                         presets: [
                             "es2015", "stage-0", "react"
-                        ],
+                        ]/*,
 						"env": {
 							"development": {
 								"plugins": [
@@ -48,7 +48,7 @@ module.exports = {
 									}]
 								]
 							}
-						}
+						}*/
                     }
                 },
 				include: path.resolve(__dirname, 'src'),
@@ -95,7 +95,7 @@ module.exports = {
         }),
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'vendor'
-		}),
-		new webpack.HotModuleReplacementPlugin()
+		})/*,
+		new webpack.HotModuleReplacementPlugin()*/
     ],
 };

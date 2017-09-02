@@ -1,6 +1,6 @@
 let v_contextPath;
 if (process.env.NODE_ENV === 'development') {
-	v_contextPath = "http://10.9.35.53:8005/";
+	v_contextPath = "http://app4.test.ccchong.com:8081/";
 } else {
 	v_contextPath = "http://app4.test.ccchong.com:8081/"
 }
