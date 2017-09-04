@@ -223,32 +223,7 @@ function loadRankingList(callback) {
             v_page += 1;
 			if (callback) {
 				callback(v_data);
-				return;
-			}
-            for (var i = 0; i < v_data.length; i++) {
-            	var v_ranking = '<div class="ranking_list bb">';
-            	if (v_currentRanking < 4) {
-            		v_ranking += '<img src="./images/rank_0' + v_currentRanking + '.png" class="rank_img f_l">';
-            	} else {
-            		v_ranking += '<p class="rank_img3 f_l">' + v_currentRanking + '</p>';
-            	}
-            	var headImg = v_data[i].headImg;
-            	if (headImg == null || headImg == "") {
-            		headImg = "./images/headImg.jpg";
-            	}
-            	v_ranking += '<img src="' + headImg 
-            		+ '" onerror="javascript:this.src=\'./images/headImg.jpg\'" class="rank_img2 f_l">';
-            	var nickName = v_data[i].nickName;
-            	if (nickName == null || nickName == "") {
-            		nickName = "无名氏";
-            	}
-            	var returnArr = formatCarbonEmissionReduction(v_data[i].carbonEmissionReduction);
-            	v_ranking += '<p class="rank_name f_l">' + nickName + '</p>';
-            	v_ranking += '<p class="rank_number f_r"><span>' + returnArr[0] + '</span>' + returnArr[1] + '</p>';
-            	v_ranking += '</div>';
-            	$(".ranking").append(v_ranking);
-            	v_currentRanking++; // 排名+1
-            }
+			}            
         } else {
         	v_isMax = true;
         }
