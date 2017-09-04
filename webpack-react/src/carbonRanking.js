@@ -131,7 +131,6 @@ class RankingDiv extends React.Component {
 let v_city = "";// 城市
 let v_page = 1;// 当前页码
 let v_isMax = false;// 是否全部加载
-let v_currentRanking = 1; // 当前加载到的排名
 
 class RankingBox extends React.Component {
 
