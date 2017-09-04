@@ -1,7 +1,10 @@
 import AE from './component/core';
 import {v_userId} from './config';
 import './component/css/styles.css';
-import head from './component/images/headImg.jpg'
+import head from './component/images/headImg.jpg';
+import rank1 from './component/images/rank_01.png';
+import rank2 from './component/images/rank_02.png';
+import rank3 from './component/images/rank_03.png'
 
 class CarbonUserInfo extends React.Component {
 	constructor() {
@@ -73,19 +76,110 @@ class CarbonUserInfo extends React.Component {
 						// $("#myRanking").html(v_data);
 					}
 				}.bind(this));// 不绑定外层的this会导致内部this(Jquery对象)获取不到setState方法
-				// 加载排行榜
-				loadRankingList();
 			}
 		}.bind(this));// 不绑定外层的this会导致内部this(Jquery对象)获取不到setState方法
 	}
 }
 
+class RankingDiv extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			myHeadImg: head
+		}
+	}
+	
+	static defaultProps = {
+		nickName: '无名氏',
+		carbonEmissionReduction:0,
+		ranking: '-'
+	}
+	
+	handleImageErrored() {
+		this.setState({
+            myHeadImg: head
+        });
+	}
+	
+	componentDidMount() {
+		this.setState({
+			myHeadImg: this.props.headImg
+		});
+	}
+	
+	render() {
+		let returnArr = formatCarbonEmissionReduction(this.props.carbonEmissionReduction);
+		let rank;
+		if (this.props.ranking === 1) {
+			rank = rank1;
+		} else if (this.props.ranking === 2) {
+			rank = rank2;
+		} else if (this.props.ranking === 3) {
+			rank = rank3;
+		} 
+		return (
+			<div className="ranking_list bb">				
+				{this.props.ranking < 4 ? <img src={rank} className="rank_img f_l" /> : <p className="rank_img3 f_l">{this.props.ranking}</p>}
+				<img src={this.state.myHeadImg}	onError={this.handleImageErrored.bind(this)} className="rank_img2 f_l"/>
+				<p className="rank_name f_l">{this.props.nickName}</p>
+				<p className="rank_number f_r"><span>{returnArr[0]}</span>{returnArr[1]}</p>
+			</div>
+		);
+	}
+}
+
+let v_city = "";// 城市
+let v_page = 1;// 当前页码
+let v_isMax = false;// 是否全部加载
+let v_currentRanking = 1; // 当前加载到的排名
+
 class RankingBox extends React.Component {
+
+	constructor() {
+		super();
+		this.state = {
+			rankingList: []
+		}
+	}
+	
+	componentDidMount() {
+		loadRankingList(function(data) {
+			this.setState({
+				rankingList: data
+			});
+		}.bind(this));// 不绑定外层的this会导致内部this(Jquery对象)获取不到setState方法		
+		window.addEventListener('scroll', this.handleScroll.bind(this));
+	}
+	
+	componentWillUnmount() {
+		window.removeEventListener('scroll', this.handleScroll.bind(this));
+	}
+	
+	handleScroll(e) {
+		var scrollTop = $(window).scrollTop();
+		var scrollHeight = $(document).height();
+		var windowHeight = $(window).height();
+		if(scrollTop + windowHeight >= scrollHeight){
+			let list = this.state.rankingList;
+			loadRankingList(function(data) {
+				this.setState({
+					rankingList: this.state.rankingList.concat(data)
+				});
+			}.bind(this));// 不绑定外层的this会导致内部this(Jquery对象)获取不到setState方法		
+		}
+	}
+	
 	render() {
 		return (
 			<div className="ranking_box">
 				<CarbonUserInfo />
-				<div className="ranking">
+				<div className="ranking">			
+				{
+					this.state.rankingList.map(function(item, i) {
+						item.ranking = i + 1;
+						return <RankingDiv {...item} key={item.id} />
+					})
+				}
 				</div>
 			</div>
 		);
@@ -93,11 +187,6 @@ class RankingBox extends React.Component {
 }
 
 ReactDOM.render(<RankingBox />,	document.getElementsByTagName('body')[0]);
-
-var v_city = "";// 城市
-var v_page = 1;// 当前页码
-var v_isMax = false;// 是否全部加载
-var v_currentRanking = 1; // 当前加载到的排名
 
 // 格式化碳减排数据
 function formatCarbonEmissionReduction(val) {
@@ -118,7 +207,7 @@ function formatCarbonEmissionReduction(val) {
 }
 
 //加载排行榜
-function loadRankingList() {
+function loadRankingList(callback) {
 	if (v_isMax) {
         return;
     }
@@ -132,6 +221,10 @@ function loadRankingList() {
                 v_isMax = true;
             }
             v_page += 1;
+			if (callback) {
+				callback(v_data);
+				return;
+			}
             for (var i = 0; i < v_data.length; i++) {
             	var v_ranking = '<div class="ranking_list bb">';
             	if (v_currentRanking < 4) {
@@ -163,6 +256,7 @@ function loadRankingList() {
 }
 
 //判断滚动条有没到底部
+/*
 $(window).scroll(function(){
 　　 var scrollTop = $(this).scrollTop();
 　　 var scrollHeight = $(document).height();
@@ -171,3 +265,4 @@ $(window).scroll(function(){
 	    loadRankingList();
 　　 }
 });
+*/
