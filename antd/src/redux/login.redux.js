@@ -3,8 +3,7 @@ const LOGOUT = "LOGOUT";
 
 // reducer
 export function auth(state={isLogin:false, user:null}, action) {
-	console.log(action.type)
-	switch(action.type) {		
+	switch(action.type) {
 		case LOGIN:
 			return {...state, isLogin:true};
 		case LOGOUT:
