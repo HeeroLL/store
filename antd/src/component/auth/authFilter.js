@@ -1,5 +1,4 @@
 import React from 'react'
-import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import { LOGIN_UNCHECK_URLS } from '../../app.props'
 
@@ -13,6 +12,7 @@ class AuthFilter extends React.Component {
             return;
         }
         // 判断是否有用户信息
+        // 没有则跳转到login页面
         this.props.history.push('/login');
     }
 
