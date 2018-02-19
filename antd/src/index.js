@@ -4,12 +4,14 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { LocaleProvider } from 'antd'
+import zhCN from 'antd/lib/locale-provider/zh_CN';
 
 import reducers from './redux/reducer'
 import './config'
-import AuthFilter from './component/auth/authFilter'
-import Login from './container/login.js'
-import Main from './container/main.js'
+import AuthFilter from './components/auth/authFilter'
+import Login from './containers/login/login'
+import Main from './containers/main/main'
 
 const store = createStore(reducers, compose(
     applyMiddleware(thunk),
@@ -17,20 +19,18 @@ const store = createStore(reducers, compose(
 ))
 
 ReactDom.render((
-    <Provider store={store}>
-        <BrowserRouter>
-            <div>
-                <AuthFilter />
-                <Switch>                
-                    <Route path="/login" component={Login} />
-                    <Route path="/main" component={Main} />
-                    <Route path="/" render={props => (
-                            <h1>你好</h1>
-                        )} />
-                </Switch>
-            </div>
-        </BrowserRouter>
-    </Provider>
+    <LocaleProvider locale={zhCN}>
+        <Provider store={store}>
+            <BrowserRouter>        
+                <div>
+                    <AuthFilter />
+                    <Switch>                
+                        <Route path="/login" component={Login} />
+                        <Route path="/" component={Main} />
+                    </Switch>
+                </div>            
+            </BrowserRouter>
+        </Provider>
+    </LocaleProvider>
     ), document.getElementById('root')
 )
-
