@@ -1,27 +1,22 @@
 import axios from 'axios';
-import { setCookie } from '../../utils/utils'
 
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
-const ERROR_MSG = "ERROR_MSG";
 
 const initState = {
 	redirectTo:'',
 	token: '',
 	username: '',
-	password: '',
-	msg:''
+	password: ''
 }
 
 // reducer
 export function auth(state=initState, action) {
 	switch(action.type) {
 		case LOGIN_SUCCESS:
-			return {...state, msg:'', password:'', redirectTo:'/', ...action.payload};
+			return {...state, password:'', redirectTo:'/', ...action.payload};
 		case LOGOUT_SUCCESS:
 			return {...state, token:'', redirectTo:'/login'};
-		case ERROR_MSG:
-			return {...state, token:''}
 		default:
 			return state;
 	}
@@ -32,13 +27,9 @@ function login(data) {
 	return {type:LOGIN_SUCCESS, payload:data};
 }
 
-// function logout() {
-// 	return {type:LOGOUT_SUCCESS};
-// }
-
-// function errorMsg(msg) {
-// 	return {msg, type:ERROR_MSG};
-// }
+function logout() {
+	return {type:LOGOUT_SUCCESS};
+}
 
 // 登录操作
 export function actionLogin({username,password}) {
@@ -47,11 +38,32 @@ export function actionLogin({username,password}) {
             username,
             password
         }).then(res => {
-			if (res && res.data && res.data.token) {
-                // 把token存入cookie
-                setCookie('token', res.data.token)
-				dispatch(login({username,token:res.data.token}));
+			if (res && res.data) {
+                // 把用户信息存入localStorage
+                localStorage.setItem('token', JSON.stringify(res.data));               
+				dispatch(login({username,...res.data}));
+				return true;
 			}
+			return false;
 		});
 	}
+}
+
+// 登出操作
+export function actionLogout() {
+    return dispatch => {
+        // 判断是否存在token，如果存在的话，则每个http header都加上token
+        const userInfo = JSON.parse(localStorage.getItem("token"));
+        if (userInfo) {
+            axios.post('/user/logout', {
+                token: userInfo.token
+            }).then(res => {
+                // if (res && res.data) {
+                // 把用户信息从localStorage移除
+                localStorage.removeItem('token');                
+                //}
+            });
+        }
+        dispatch(logout());
+    }
 }

@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { Form, Button, Input, Row } from 'antd';
 import { actionLogin } from '../../redux/login/login.redux.js';
 import './login.css';
+import { SYS_NAME, LOGO_URL } from '../../utils/constants.js'
 
 const FormItem = Form.Item;
 
@@ -34,10 +35,11 @@ class Login extends React.Component {
 		const { getFieldDecorator } = this.props.form;
 		return (			
 			<div className="form">
-				{this.props.redirectTo ? <Redirect to={this.props.redirectTo} /> : null}
+				{this.props.redirectTo && this.props.location.pathname !== this.props.redirectTo 
+                    ? <Redirect to={this.props.redirectTo} /> : null}
 		      	<div className="logo">
-		        	<img alt="logo" src="https://app-cdn.starcharge.com/starcharge-logo.png" />
-			        <span>SaaS后台登录系统</span>
+		        	<img alt="logo" src={LOGO_URL} />
+			        <span>{SYS_NAME}</span>
 			    </div>
 		      	<form>
 		        	<FormItem>

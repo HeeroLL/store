@@ -25,7 +25,7 @@ ReactDom.render((
                 <div>
                     <AuthFilter />
                     <Switch>                
-                        <Route path="/login" component={Login} />
+                        <Route path="/login" component={Login} />                        
                         <Route path="/" component={Main} />
                     </Switch>
                 </div>            
