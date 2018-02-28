@@ -42,9 +42,7 @@ export function actionLogin({username,password}) {
                 // 把用户信息存入localStorage
                 localStorage.setItem('token', JSON.stringify(res.data));               
 				dispatch(login({username,...res.data}));
-				return true;
 			}
-			return false;
 		});
 	}
 }

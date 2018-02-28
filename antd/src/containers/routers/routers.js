@@ -9,6 +9,7 @@ class Routers extends React.Component {
 		return (
 			<Switch>                
                 <Route path="/user/list" component={UserList} />
+                <Route path="/action.do" component={UserList} />
                 <Route path="/" exact render={() => (
                 		<h2>欢迎你，{userinfo ? userinfo.username : null}</h2>
                 	)} />
