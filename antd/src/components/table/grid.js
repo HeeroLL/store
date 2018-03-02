@@ -15,15 +15,13 @@ class Grid extends React.Component {
         this.handleTableChange = this.handleTableChange.bind(this);
     }
 
-    componentDidMount() {
+    // 通过父组件更新子组件props时触发
+    componentWillReceiveProps(nextProps) {        
         this.fetch({
             pagecount: 10,
-            page: 1
+            page: 1,
+            ...nextProps.params
         });
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        console.log(prevProps)
     }
 
     // 表单change事件
@@ -38,13 +36,13 @@ class Grid extends React.Component {
         });
     }
 
-    fetch(pagination) {
+    // 后台查询数据
+    fetch(params) {
         this.setState({ 
             loading: true 
         });
         axios.post(this.props.url, {            
-            ...pagination,
-            ...this.props.params
+            ...params
         }).then(res => {
             const pagination = { ...this.state.pagination, total: res.pageLimit.totalCount };
             this.setState({

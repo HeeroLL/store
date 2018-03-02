@@ -1,5 +1,5 @@
 import React from 'react';
-import {Input,Button} from 'antd';
+import {Input, Button, Row, Col} from 'antd';
 import Grid from '../../components/table/grid';
 import AddUser from './addUser';
 
@@ -58,13 +58,20 @@ class UserList extends React.Component {
     render() {
         return (
             <div>
-                <Input.Search
-                    placeholder="输入用户名"
-                    onSearch={this.search}
-                    enterButton
-                />
-                <Button type="primary" onClick={this.showAddUserModal}>新增</Button>
-                <br/><br/>
+                <Row>
+                    <Col span={4}>
+                        <Input.Search
+                            placeholder="输入用户名"
+                            onSearch={this.search}
+                            enterButton
+                            style={{ width: 200 }}
+                        />
+                    </Col>
+                    <Col span={4} offset={1}>
+                        <Button type="primary" onClick={this.showAddUserModal}>新增</Button>
+                    </Col>
+                </Row>
+                <p />
                 <Grid params={this.state.params} columns={this.columns} url="/user/findAdminList" />
                 <AddUser visible={this.state.addUserModel} close={this.hideAddUserModal} />
             </div>
