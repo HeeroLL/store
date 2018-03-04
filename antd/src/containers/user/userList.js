@@ -58,17 +58,25 @@ class UserList extends React.Component {
     render() {
         return (
             <div>
-                <Row>
-                    <Col span={4}>
+                <Row gutter={16}>
+                    <Col span={5}>
                         <Input.Search
                             placeholder="输入用户名"
                             onSearch={this.search}
                             enterButton
-                            style={{ width: 200 }}
                         />
                     </Col>
-                    <Col span={4} offset={1}>
-                        <Button type="primary" onClick={this.showAddUserModal}>新增</Button>
+                    <Col span={5}>
+                        <Input placeholder="输入用户名" />
+                    </Col>
+                    <Col span={5}>
+                        <Input placeholder="输入电话" />
+                    </Col>
+                    <Col span={2}>
+                        <Button type="primary" onClick={this.showAddUserModal}>查询</Button>
+                    </Col>
+                    <Col span={2}>
+                        <Button onClick={this.showAddUserModal}>新增</Button>
                     </Col>
                 </Row>
                 <p />
