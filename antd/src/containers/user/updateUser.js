@@ -16,7 +16,6 @@ class AddUser extends React.Component {
     // 通过父组件更新子组件props时触发
     componentWillReceiveProps(nextProps) { 
         if (nextProps.userId !== this.props.userId) {
-            console.log(nextProps.userId, this.props.userId);
             axios.post('/user/getAdmin', {
                 id: nextProps.userId
             }).then(res => {
