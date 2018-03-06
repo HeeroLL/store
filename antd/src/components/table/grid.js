@@ -16,12 +16,14 @@ class Grid extends React.Component {
     }
 
     // 通过父组件更新子组件props时触发
-    componentWillReceiveProps(nextProps) {        
-        this.fetch({
-            pagecount: 10,
-            page: 1,
-            ...nextProps.params
-        });
+    componentWillReceiveProps(nextProps) { 
+        if (nextProps.refresh !== this.props.refresh) {
+            this.fetch({
+                pagecount: 10,
+                page: 1,
+                ...nextProps.params
+            });    
+        }        
     }
 
     // 表单change事件

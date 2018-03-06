@@ -48,3 +48,7 @@
 .ant-spin-nested-loading {
   height: 100%;
 }
+
+.bgcolorRed {
+  background: red;
+}

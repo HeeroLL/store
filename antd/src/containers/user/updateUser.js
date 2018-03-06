@@ -13,13 +13,30 @@ class AddUser extends React.Component {
         this.cancel = this.cancel.bind(this);
     }
 
+    // 通过父组件更新子组件props时触发
+    componentWillReceiveProps(nextProps) { 
+        if (nextProps.userId !== this.props.userId) {
+            console.log(nextProps.userId, this.props.userId);
+            axios.post('/user/getAdmin', {
+                id: nextProps.userId
+            }).then(res => {
+                this.props.form.setFieldsValue({
+                    id: res.data.id,
+                    account: res.data.account,
+                    phone: res.data.phone,
+                    remark: res.data.remark
+                });
+            });    
+        }        
+    }
+
     ok() {
     	this.props.form.validateFields((err, values) => {
 			if (!err) {
-				axios.post('/user/addAdmin', {
+				axios.post('/user/updateAdmin', {
 		            ...values
 		        }).then(res => {
-		            this.props.form.resetFields();
+		            // this.props.form.resetFields();
 					this.props.close(true);
 		        });				
 			}
@@ -35,14 +52,17 @@ class AddUser extends React.Component {
     	const { getFieldDecorator } = this.props.form;
     	return (
     		<Modal
-	          	title="新增用户"
+	          	title="修改用户"
 	          	visible={this.props.visible}
 	          	onOk={this.ok}
 	          	onCancel={this.cancel}
-	          	okText="新增"
+	          	okText="修改"
 	          	cancelText="关闭"
 	        >
 		        <form>
+                    <FormItem>
+                        {getFieldDecorator('id')(<Input type="hidden" />)}
+                    </FormItem>
 		        	<FormItem {...formItemLayout} label="用户名">
 		          		{getFieldDecorator('account', {
 		            		rules: [
