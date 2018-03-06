@@ -30,10 +30,10 @@ class UserList extends React.Component {
                 key: 'action',
                 render: (text, record) => (
                     <span>
-                        <Button onClick={() => this.toUpdate(record.id)}>修改</Button>
+                        <a onClick={() => this.toUpdate(record.id)}>修改</a>
                         <Divider type="vertical" />
                         <Popconfirm title="确认需要删除吗？" okText="确认" onConfirm={() => this.delete(record.id)} cancelText="取消">
-                            <Button>删除</Button>
+                            <a>删除</a>
                         </Popconfirm>
                     </span>
                 )
@@ -44,8 +44,8 @@ class UserList extends React.Component {
                 account: '',
                 phone: ''
             },
-            addUserModal: false,
-            updateUserModal: false,
+            addModal: false,
+            updateModal: false,
             userId: '',
             refresh: 0
         };
@@ -62,7 +62,7 @@ class UserList extends React.Component {
     }
 
     toUpdate(userId) {
-        this.showModal('updateUserModal', true);
+        this.showModal('updateModal', true);
         this.setState({userId});
     }
 
@@ -112,13 +112,13 @@ class UserList extends React.Component {
                             account:this.state.account,
                             phone:this.state.phone
                         })} style={{marginRight:10}}>查询</Button>
-                        <Button onClick={() => this.showModal('addUserModal', true)}>新增</Button>
+                        <Button onClick={() => this.showModal('addModal', true)}>新增</Button>
                     </Col>
                 </Row>
                 <p />
                 <Grid refresh={this.state.refresh} params={this.state.params} columns={this.columns} url="/user/findAdminList" />
-                <AddUser visible={this.state.addUserModal} close={isRefresh => this.showModal('addUserModal', false, isRefresh)} />
-                <UpdateUser userId={this.state.userId} visible={this.state.updateUserModal} close={isRefresh => this.showModal('updateUserModal', false, isRefresh)} />
+                <AddUser visible={this.state.addModal} close={isRefresh => this.showModal('addModal', false, isRefresh)} />
+                <UpdateUser userId={this.state.userId} visible={this.state.updateModal} close={isRefresh => this.showModal('updateModal', false, isRefresh)} />
             </div>
         )
     }

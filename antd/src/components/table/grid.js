@@ -22,8 +22,16 @@ class Grid extends React.Component {
                 pagecount: 10,
                 page: 1,
                 ...nextProps.params
-            });    
+            });
         }        
+    }
+
+    componentDidMount() {
+        this.fetch({
+            pagecount: 10,
+            page: 1,
+            ...this.props.params
+        });
     }
 
     // 表单change事件
@@ -60,6 +68,7 @@ class Grid extends React.Component {
             <Table 
                 bordered
                 rowKey={record => record.id}
+                size="middle"
                 dataSource={this.state.data}
                 pagination={this.state.pagination}
                 loading={this.state.loading}
