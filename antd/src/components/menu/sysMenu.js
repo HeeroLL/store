@@ -40,7 +40,7 @@ class SysMenu extends React.Component {
 
     // 页面初始化完成后加载菜单
     componentDidMount() {
-    	const userInfo = JSON.parse(localStorage.getItem("token"));
+    	const userInfo = JSON.parse(sessionStorage.getItem("token"));
         if (userInfo) {
             this.props.loadMenus({userId:userInfo.id});
         }        

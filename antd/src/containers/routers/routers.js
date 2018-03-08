@@ -5,7 +5,7 @@ import UserList from '../user/userList';
 
 class Routers extends React.Component {
 	render() {
-		const userinfo = JSON.parse(localStorage.getItem("token"));
+		const userinfo = JSON.parse(sessionStorage.getItem("token"));
 		return (
 			<Switch>                
                 <Route path="/user/list" component={UserList} />

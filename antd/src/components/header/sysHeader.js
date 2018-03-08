@@ -11,7 +11,7 @@ import './sysHeader.css';
 class SysHeader extends React.Component {
     constructor(props) {
         super(props);
-        this.userinfo = JSON.parse(localStorage.getItem("token"));
+        this.userinfo = JSON.parse(sessionStorage.getItem("token"));
         this.toggle = this.toggle.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.menuClick = this.menuClick.bind(this);

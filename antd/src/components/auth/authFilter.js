@@ -12,7 +12,7 @@ class AuthFilter extends React.Component {
             return;
         }
         // 判断是否有登录信息
-        if (!localStorage.getItem("token")) {
+        if (!sessionStorage.getItem("token")) {
             // 没有则跳转到login页面
             this.props.history.push('/login');
         } 
