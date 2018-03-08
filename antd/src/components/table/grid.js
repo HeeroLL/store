@@ -42,7 +42,8 @@ class Grid extends React.Component {
         });
         this.fetch({
             pagecount: pagination.pageSize,
-            page: pagination.current
+            page: pagination.current,
+            ...this.props.params
         });
     }
 
@@ -64,6 +65,7 @@ class Grid extends React.Component {
     }
 
     render() {
+        // let {url, refresh, params, ...props} = this.props
         return (
             <Table 
                 bordered
