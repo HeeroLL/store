@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import MenuContent from './menuContent';
 import { SYS_NAME, LOGO_URL } from '../../utils/constants.js';
 import { loadMenus } from '../../redux/menu/menu.redux.js';
+import { getItem } from '../../utils/store'
 
 @withRouter
 @connect(state => state.menu, {loadMenus})
@@ -40,7 +41,7 @@ class SysMenu extends React.Component {
 
     // 页面初始化完成后加载菜单
     componentDidMount() {
-    	const userInfo = JSON.parse(sessionStorage.getItem("token"));
+    	const userInfo = JSON.parse(getItem("token"));
         if (userInfo) {
             this.props.loadMenus({userId:userInfo.id});
         }        

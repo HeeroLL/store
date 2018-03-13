@@ -2,10 +2,11 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import NotFound from '../error/notFound';
 import UserList from '../user/userList';
+import { getItem } from '../../utils/store'
 
 class Routers extends React.Component {
 	render() {
-		const userinfo = JSON.parse(sessionStorage.getItem("token"));
+		const userinfo = JSON.parse(getItem("token"));
 		return (
 			<Switch>                
                 <Route path="/user/list" component={UserList} />

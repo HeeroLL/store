@@ -4,6 +4,8 @@ import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {actionCollapsed} from '../../redux/menu/menu.redux.js';
 import {actionLogout} from '../../redux/login/login.redux';
+import { getItem } from '../../utils/store';
+
 import './sysHeader.css';
 
 @withRouter
@@ -11,7 +13,7 @@ import './sysHeader.css';
 class SysHeader extends React.Component {
     constructor(props) {
         super(props);
-        this.userinfo = JSON.parse(sessionStorage.getItem("token"));
+        this.userinfo = JSON.parse(getItem("token"));
         this.toggle = this.toggle.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.menuClick = this.menuClick.bind(this);

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getItem, setItem, removeItem } from '../../utils/store'
 
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
@@ -39,8 +40,8 @@ export function actionLogin({username,password}) {
             password
         }).then(res => {
 			if (res && res.data) {
-                // 把用户信息存入sessionStorage
-                sessionStorage.setItem('token', JSON.stringify(res.data));               
+                // 把用户信息存入store
+                setItem('token', JSON.stringify(res.data));               
 				dispatch(login({username,...res.data}));
 			}
 		});
@@ -51,14 +52,14 @@ export function actionLogin({username,password}) {
 export function actionLogout() {
     return dispatch => {
         // 判断是否存在token，如果存在的话，则每个http header都加上token
-        const userInfo = JSON.parse(sessionStorage.getItem("token"));
+        const userInfo = JSON.parse(getItem("token"));
         if (userInfo) {
             axios.post('/user/logout', {
                 token: userInfo.token
             }).then(res => {
                 // if (res && res.data) {
-                // 把用户信息从sessionStorage移除
-                sessionStorage.removeItem('token');                
+                // 把用户信息从store中移除
+                removeItem('token');                
                 //}
             });
         }

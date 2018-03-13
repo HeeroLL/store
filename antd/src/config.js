@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { message } from 'antd'
 import qs from 'qs'
+import { getItem } from './utils/store'
 
 // 全局默认值
 axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "http://localhost:8000/api" : "http://localhost:8006/api";
@@ -12,7 +13,7 @@ axios.interceptors.request.use(function(config) {
 	// 在发送请求之前在header里加入token，并转换参数为form形式提交
 	config.data = qs.stringify(config.data);
 	// 判断是否存在token，如果存在的话，则每个http header都加上token
-	const userInfo = JSON.parse(sessionStorage.getItem("token"));
+	const userInfo = JSON.parse(getItem("token"));
 	if (userInfo && userInfo.token) {
         config.headers.Authorization = userInfo.token;
     }
