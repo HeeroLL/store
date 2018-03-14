@@ -16,7 +16,7 @@ class AddUser extends React.Component {
     ok() {
     	this.props.form.validateFields((err, values) => {
 			if (!err) {
-				axios.post('/user/addAdmin', {
+				axios.post('/admin/addAdmin', {
 		            ...values
 		        }).then(res => {
 		            this.props.form.resetFields();

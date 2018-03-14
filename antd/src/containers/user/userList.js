@@ -52,7 +52,7 @@ class UserList extends React.Component {
     }
 
     delete(id) {
-        axios.post('/user/deleteAdmin', {
+        axios.post('/admin/deleteAdmin', {
             id
         }).then(res => {
             this.setState({
@@ -116,7 +116,7 @@ class UserList extends React.Component {
                     </Col>
                 </Row>
                 <p />
-                <Grid refresh={this.state.refresh} params={this.state.params} columns={this.columns} url="/user/findAdminList" />
+                <Grid refresh={this.state.refresh} params={this.state.params} columns={this.columns} url="/admin/findAdminList" />
                 <AddUser visible={this.state.addModal} close={isRefresh => this.showModal('addModal', false, isRefresh)} />
                 <UpdateUser userId={this.state.userId} visible={this.state.updateModal} close={isRefresh => this.showModal('updateModal', false, isRefresh)} />
             </div>

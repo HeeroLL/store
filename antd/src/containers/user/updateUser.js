@@ -16,7 +16,7 @@ class AddUser extends React.Component {
     // 通过父组件更新子组件props时触发
     componentWillReceiveProps(nextProps) { 
         if (nextProps.userId !== this.props.userId) {
-            axios.post('/user/getAdmin', {
+            axios.post('/admin/getAdmin', {
                 id: nextProps.userId
             }).then(res => {
                 this.props.form.setFieldsValue({
@@ -32,7 +32,7 @@ class AddUser extends React.Component {
     ok() {
     	this.props.form.validateFields((err, values) => {
 			if (!err) {
-				axios.post('/user/updateAdmin', {
+				axios.post('/admin/updateAdmin', {
 		            ...values
 		        }).then(res => {
 		            // this.props.form.resetFields();

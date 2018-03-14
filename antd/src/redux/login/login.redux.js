@@ -35,7 +35,7 @@ function logout() {
 // 登录操作
 export function actionLogin({username,password}) {
 	return dispatch => {
-		axios.post('/user/login', {
+		axios.post('/admin/login', {
             username,
             password
         }).then(res => {
@@ -54,7 +54,7 @@ export function actionLogout() {
         // 判断是否存在token，如果存在的话，则每个http header都加上token
         const userInfo = JSON.parse(getItem("token"));
         if (userInfo) {
-            axios.post('/user/logout', {
+            axios.post('/admin/logout', {
                 token: userInfo.token
             }).then(res => {
                 // if (res && res.data) {
