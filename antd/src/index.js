@@ -10,7 +10,7 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import reducers from './redux/reducer'
 import './config'
 import AuthFilter from './components/auth/authFilter'
-import Login from './containers/login/login'
+import LoginAdapter from './containers/login/loginAdapter'
 import Main from './containers/main/main'
 
 const store = createStore(reducers, compose(
@@ -25,7 +25,7 @@ ReactDom.render((
                 <div>
                     <AuthFilter />
                     <Switch>                
-                        <Route path="/login" component={Login} />                        
+                        <Route path="/login" component={LoginAdapter} />                        
                         <Route path="/" component={Main} />
                     </Switch>
                 </div>            
