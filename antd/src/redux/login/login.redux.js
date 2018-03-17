@@ -7,7 +7,7 @@ const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 const initState = {
 	redirectTo:'',
 	token: '',
-	username: '',
+	account: '',
 	password: ''
 }
 
@@ -33,16 +33,16 @@ function logout() {
 }
 
 // 登录操作
-export function actionLogin({username,password}) {
+export function actionLogin({account,password}) {
 	return dispatch => {
 		axios.post('/admin/login', {
-            username,
+            account,
             password
         }).then(res => {
 			if (res && res.data) {
                 // 把用户信息存入store
                 setItem('token', JSON.stringify(res.data));               
-				dispatch(login({username,...res.data}));
+				dispatch(login({account,...res.data}));
 			}
 		});
 	}

@@ -12,7 +12,7 @@ class Routers extends React.Component {
                 <Route path="/user/list" component={UserList} />
                 <Route path="/action.do" component={UserList} />
                 <Route path="/" exact render={() => (
-                		<h2>欢迎你，{userinfo ? userinfo.username : null}</h2>
+                		<h2>欢迎你，{userinfo ? userinfo.account : null}</h2>
                 	)} />
                 <Route component={NotFound} />
             </Switch>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Router } from 'react-router'
 import {LOGIN_MODE} from '../../utils/constants';
 import Login from './login'
 import SsoLogin from './ssoLogin'

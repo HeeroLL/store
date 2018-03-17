@@ -49,7 +49,7 @@ class SysHeader extends React.Component {
                     <Menu.SubMenu title={
                         <span>
                             <Icon type="user" />
-                            {this.userinfo ? this.userinfo.username : null}
+                            {this.userinfo ? this.userinfo.account : null}
                         </span>
                     }>
                         <Menu.Item style={{textAlign: 'center', margin: '50'}} 

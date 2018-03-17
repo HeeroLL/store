@@ -2,12 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 import { Form, Button, Input, Row } from 'antd';
+import { withRouter } from 'react-router'
 import { actionLogin } from '../../redux/login/login.redux.js';
 import './login.css';
 import { SYS_NAME, LOGO_URL } from '../../utils/constants.js'
 
 const FormItem = Form.Item;
 
+@withRouter
 @connect(state => state.auth, {actionLogin})
 @Form.create()
 class Login extends React.Component {
@@ -43,7 +45,7 @@ class Login extends React.Component {
 			    </div>
 		      	<form>
 		        	<FormItem>
-		          		{getFieldDecorator('username', {
+		          		{getFieldDecorator('account', {
 		            		rules: [
 			              		{
 			                		required: true,
