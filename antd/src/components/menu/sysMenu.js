@@ -28,8 +28,10 @@ class SysMenu extends React.Component {
             margin: '16px'
         };
         this.siderStyle = {
-            // overflowY: 'auto', 
-            // height: '100vh'
+            overflowY: 'auto', 
+            height: '100vh',
+            position: 'fixed',
+            left: 0
         };
         this.logoImg = {
             width:32,

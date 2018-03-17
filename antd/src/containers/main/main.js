@@ -11,11 +11,11 @@ class Main extends React.Component {
             <Layout hasSider="true">                
                 {/*左侧菜单栏*/}
                 <SysMenu />
-                <Layout>
+                <Layout style={{ marginLeft: 200 }}>
                     {/*头部*/}
                     <SysHeader />
                     {/*内容*/}
-                    <Content style={{ margin: '24px 16px 0' }}>
+                    <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
                         <div style={
                             { padding: 24, background: '#fff', minHeight: 'calc(100vh - 158px)'}
                         }>
