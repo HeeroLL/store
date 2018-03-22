@@ -11,7 +11,7 @@ class Grid extends React.Component {
             pagination: {
                 showQuickJumper: true,
                 showSizeChanger: true,
-                pageSize: getItem("pageSize") ? getItem("pageSize") : 10
+                pageSize: getItem("pageSize") ? parseInt(getItem("pageSize"), 10) : 10
             },
             loading: false
         };
