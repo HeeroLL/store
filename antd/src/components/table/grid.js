@@ -1,14 +1,17 @@
 import React from 'react';
 import {Table} from 'antd';
 import axios from 'axios';
+import { setItem, getItem } from '../../utils/store';
 
 class Grid extends React.Component {
     constructor(props) {
-        super(props);
+        super(props);        
         this.state = {
             data: [],
             pagination: {
-                showQuickJumper: true
+                showQuickJumper: true,
+                showSizeChanger: true,
+                pageSize: getItem("pageSize") ? getItem("pageSize") : 10
             },
             loading: false
         };
@@ -36,7 +39,11 @@ class Grid extends React.Component {
 
     // 表单change事件
     handleTableChange(pagination, filters, sorter) {
-        const pager = { ...this.state.pagination, current: pagination.current };
+        // 用户改变每页条数时，记录到本地变量中
+        if (this.state.pagination.pageSize !== pagination.pageSize) {
+            setItem("pageSize", pagination.pageSize);
+        }
+        const pager = { ...this.state.pagination, ...pagination };
         this.setState({
             pagination: pager,
         });
