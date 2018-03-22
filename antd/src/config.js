@@ -1,11 +1,18 @@
 import axios from 'axios'
 import { message } from 'antd'
 import qs from 'qs'
+<<<<<<< HEAD
 import { getItem } from './utils/store'
 import { BACK_BASE_URL } from './utils/constants'
 
 // 全局默认值
 axios.defaults.baseURL =BACK_BASE_URL;
+=======
+import { getItem, removeItem } from './utils/store'
+
+// 全局默认值
+axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "http://localhost:8000/api" : "http://localhost:8680/api";
+>>>>>>> fbcdc713cb3da58dd917c8a66815143eb5eae0c8
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // axios.defaults.timeout = 5000;
 
@@ -27,9 +34,16 @@ axios.interceptors.request.use(function(config) {
 // 添加响应拦截器
 axios.interceptors.response.use(function(response) {
 	// 对响应数据做点什么
-	if (response.data && response.data.code !== '200' && response.data.text) {
-		message.error(response.data.text);
-		return null;
+	if (response.data && response.data.code !== '200') {
+        if (response.data.code === '401') {
+            // 删除localStorage里的用户信息
+            removeItem("token");
+            window.location.href = "/login";
+            return null;
+        }
+        const errorMsg = response.data.text ? response.data.text : response.data.code;
+        message.error(errorMsg);
+        return null;
 	}
 	return response.data;
 }, function(error) {
