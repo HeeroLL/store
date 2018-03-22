@@ -1,18 +1,11 @@
 import axios from 'axios'
 import { message } from 'antd'
 import qs from 'qs'
-<<<<<<< HEAD
-import { getItem } from './utils/store'
 import { BACK_BASE_URL } from './utils/constants'
-
-// 全局默认值
-axios.defaults.baseURL =BACK_BASE_URL;
-=======
 import { getItem, removeItem } from './utils/store'
 
 // 全局默认值
-axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "http://localhost:8000/api" : "http://localhost:8680/api";
->>>>>>> fbcdc713cb3da58dd917c8a66815143eb5eae0c8
+axios.defaults.baseURL =BACK_BASE_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // axios.defaults.timeout = 5000;
 
