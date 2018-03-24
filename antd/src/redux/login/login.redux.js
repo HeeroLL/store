@@ -5,47 +5,62 @@ const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 
 const initState = {
-	redirectTo:'',
-	token: '',
-	account: '',
-	password: ''
+    redirectTo:'',
+    token: '',
+    account: '',
+    password: ''
 }
 
 // reducer
 export function auth(state=initState, action) {
-	switch(action.type) {
-		case LOGIN_SUCCESS:
-			return {...state, password:'', redirectTo:'/', ...action.payload};
-		case LOGOUT_SUCCESS:
-			return {...state, token:'', redirectTo:'/login'};
-		default:
-			return state;
-	}
+    switch(action.type) {
+        case LOGIN_SUCCESS:
+            return {...state, password:'', redirectTo:'/', ...action.payload};
+        case LOGOUT_SUCCESS:
+            return {...state, token:'', redirectTo:'/login'};
+        default:
+            return state;
+    }
 }
 
 // action creator
 function login(data) {
-	return {type:LOGIN_SUCCESS, payload:data};
+    return {type:LOGIN_SUCCESS, payload:data};
 }
 
 function logout() {
-	return {type:LOGOUT_SUCCESS};
+    return {type:LOGOUT_SUCCESS};
 }
 
 // 登录操作
 export function actionLogin({account,password}) {
-	return dispatch => {
-		axios.post('/admin/login', {
+    return dispatch => {
+        axios.post('/admin/login', {
             account,
             password
         }).then(res => {
-			if (res && res.data) {
+            if (res && res.data) {
                 // 把用户信息存入store
                 setItem('token', JSON.stringify(res.data));               
-				dispatch(login({account,...res.data}));
-			}
-		});
-	}
+                dispatch(login({account,...res.data}));
+            }
+        });
+    }
+}
+
+// sso登录操作
+export function ssoLogin({token}) {
+    return dispatch => {
+        axios.post('/admin/ssoLogin', {
+            token
+        }).then(res => {
+            if (res && res.data) {
+                // 把用户信息存入store
+                setItem('token', JSON.stringify({...res.data, token}));
+                dispatch(login({...res.data, token}));
+            }
+        });
+    }
 }
 
 // 登出操作

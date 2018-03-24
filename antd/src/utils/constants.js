@@ -9,4 +9,4 @@ export const LOGIN_MODE = 1;
 // 后端url
 export const BACK_BASE_URL = process.env.NODE_ENV === "production" ? "http://10.9.35.52/api" : "http://localhost:8006/api";
 // ssourl
-export const SSO_URL = process.env.NODE_ENV === "production" ? "https://usercenter.starcharge.com/" : "http://10.9.35.50:8004/";
+export const SSO_URL = process.env.NODE_ENV === "production" ? "https://usercenter.starcharge.com/" : "http://10.9.35.53:8004/";

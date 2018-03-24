@@ -21,6 +21,8 @@ class SysHeader extends React.Component {
 
     toggle() {
         this.props.actionCollapsed(!this.props.menu.collapsed);
+        // 设置主窗口大小
+        this.props.setSize(this.props.menu.collapsed ? 200 : 0);
     }
 
     handleLogout() {        

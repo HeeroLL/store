@@ -6,14 +6,28 @@ import SysHeader from '../../components/header/sysHeader';
 
 const { Content, Footer } = Layout;
 class Main extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            marginLeft: 200
+        }
+        this.setMarginLeft = this.setMarginLeft.bind(this);
+    }
+
+    setMarginLeft(size) {
+        this.setState({
+            marginLeft: size
+        });
+    }
+
 	render() {
 		return (
             <Layout hasSider="true">                
                 {/*左侧菜单栏*/}
                 <SysMenu />
-                <Layout style={{ marginLeft: 200 }}>
+                <Layout style={this.state}>
                     {/*头部*/}
-                    <SysHeader />
+                    <SysHeader setSize={this.setMarginLeft} />
                     {/*内容*/}
                     <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
                         <div style={
