@@ -62,12 +62,14 @@ class Grid extends React.Component {
         axios.post(this.props.url, {            
             ...params
         }).then(res => {
-            const pagination = { ...this.state.pagination, total: res.pageLimit.totalCount };
-            this.setState({
-                loading: false,
-                data: res.data,
-                pagination,
-            });
+            if (res) {
+                const pagination = { ...this.state.pagination, total: res.pageLimit.totalCount };
+                this.setState({
+                    loading: false,
+                    data: res.data,
+                    pagination,
+                });
+            }            
         });
     }
 
