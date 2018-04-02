@@ -11,7 +11,7 @@ import { getItem } from '../../utils/store'
 @withRouter
 @connect(state => state.menu, {loadMenus})
 class SysMenu extends React.Component {
-	constructor(props) {
+    constructor(props) {
         super(props);
         this.state = {
             currentMenu: ''
@@ -43,10 +43,10 @@ class SysMenu extends React.Component {
 
     // 页面初始化完成后加载菜单
     componentDidMount() {
-    	const userInfo = JSON.parse(getItem("token"));
+        const userInfo = JSON.parse(getItem("token"));
         if (userInfo) {
-            this.props.loadMenus({userId:userInfo.id});
-        }        
+            this.props.loadMenus({userId:userInfo.id, defaultUrl:this.props.location.pathname});
+        }
     }
 
     // 点击菜单刷新右侧页面
@@ -59,9 +59,9 @@ class SysMenu extends React.Component {
         }
     }
 
-	render() {
-		return (
-			<Layout.Sider style={this.siderStyle}
+    render() {
+        return (
+            <Layout.Sider style={this.siderStyle}
                 trigger={null}
                 collapsedWidth="0"
                 breakpoint="lg"
@@ -72,7 +72,9 @@ class SysMenu extends React.Component {
                         src={LOGO_URL} />
                     <h3 style={this.appTitle}>{SYS_NAME}</h3>
                 </div>
-                <Menu theme="dark" mode="inline" onClick={this.handleClick}>
+                <Menu defaultOpenKeys={this.props.defaultOpenKeys} 
+                    defaultSelectedKeys={this.props.defaultSelectedKeys} 
+                    theme="dark" mode="inline" onClick={this.handleClick}>
                 {/*这里只渲染三级及以下菜单，超过三级需重新定制*/
                     this.props.menus.map(v => (
                         v.children && v.children.length > 0 ? 
@@ -104,8 +106,8 @@ class SysMenu extends React.Component {
                 }
                 </Menu>
             </Layout.Sider>
-		)
-	}
+        )
+    }
 }
 
 export default SysMenu;

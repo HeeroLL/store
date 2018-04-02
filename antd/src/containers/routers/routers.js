@@ -1,8 +1,10 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { getItem } from '../../utils/store'
 import NotFound from '../error/notFound';
 import UserList from '../user/userList';
-import { getItem } from '../../utils/store'
+
+import StubGroupDiscountList from '../activity/stubGroupDiscount/list';
 
 class Routers extends React.Component {
 	render() {
@@ -11,6 +13,7 @@ class Routers extends React.Component {
 			<Switch>                
                 <Route path="/user/list" component={UserList} />
                 <Route path="/action.do" component={UserList} />
+                <Route path="/activity/stubGroupDiscount/list" component={StubGroupDiscountList} />
                 <Route path="/" exact render={() => (
                 		<h2>欢迎你，{userinfo ? userinfo.account : null}</h2>
                 	)} />

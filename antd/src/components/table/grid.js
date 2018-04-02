@@ -5,13 +5,14 @@ import { setItem, getItem } from '../../utils/store';
 
 class Grid extends React.Component {
     constructor(props) {
-        super(props);        
+        super(props);
         this.state = {
             data: [],
             pagination: {
                 showQuickJumper: true,
                 showSizeChanger: true,
-                pageSize: getItem("pageSize") ? parseInt(getItem("pageSize"), 10) : 10
+                pageSize: getItem("pageSize") ? parseInt(getItem("pageSize"), 10) : 10,
+                current: 1
             },
             loading: false
         };
@@ -22,8 +23,8 @@ class Grid extends React.Component {
     componentWillReceiveProps(nextProps) { 
         if (nextProps.refresh !== this.props.refresh) {
             this.fetch({
-                pagecount: 10,
-                page: 1,
+                pagecount: this.state.pagination.pageSize,
+                page: this.state.pagination.current,
                 ...nextProps.params
             });
         }        
@@ -31,7 +32,7 @@ class Grid extends React.Component {
 
     componentDidMount() {
         this.fetch({
-            pagecount: 10,
+            pagecount: getItem("pageSize") ? parseInt(getItem("pageSize"), 10) : 10,
             page: 1,
             ...this.props.params
         });

@@ -20,16 +20,22 @@ class Main extends React.Component {
         });
     }
 
-	render() {
-		return (
+    render() {
+        return (
             <Layout hasSider="true">                
                 {/*左侧菜单栏*/}
                 <SysMenu />
                 <Layout style={this.state}>
                     {/*头部*/}
                     <SysHeader setSize={this.setMarginLeft} />
+                    {/*
+                    <Breadcrumb style={{margin: '16px'}}>
+                        <Breadcrumb.Item>Home</Breadcrumb.Item>
+                    </Breadcrumb>
+                    */}
                     {/*内容*/}
                     <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+                        
                         <div style={
                             { padding: 24, background: '#fff', minHeight: 'calc(100vh - 158px)'}
                         }>
@@ -42,8 +48,8 @@ class Main extends React.Component {
                     </Footer>
                 </Layout>
             </Layout>
-		);
-	}
+        );
+    }
 }
 
 export default Main;

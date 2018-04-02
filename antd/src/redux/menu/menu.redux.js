@@ -7,26 +7,28 @@ const MENU_LOAD_DATA = "MENU_LOAD_DATA";
 const initState = {
 	collapsed: false,
 	menus: [],
-	currentMenu: ''
+	defaultSelectedKeys: [],
+    defaultOpenKeys: []
 }
 
 // reducer
 export function menu(state=initState, action) {
+    
 	switch(action.type) {
 		case MENU_COLLAPSED:
 			return {...state, collapsed:true};
 		case MENU_EXTENDED:
 			return {...state, collapsed:false};
 		case MENU_LOAD_DATA:
-			return {...state, menus:action.payload};
+			return {...state, ...action.payload};
 		default:
 			return state;
 	}
 }
 
 // action creator
-function loadData(data) {
-	return {type:MENU_LOAD_DATA, payload:data};
+function loadData(data, defaultSelectedKeys, defaultOpenKeys) {
+	return {type:MENU_LOAD_DATA, payload:{menus:data, defaultSelectedKeys, defaultOpenKeys}};
 }
 
 function collapsed() {
@@ -43,7 +45,7 @@ export function actionCollapsed(flag) {
 }
 
 // 加载菜单操作
-export function loadMenus({userId}) {
+export function loadMenus({userId,defaultUrl}) {
 	return dispatch => {
 		// 后端需按照id顺序排序
 		axios.post('/menu/queryList', {
@@ -51,11 +53,17 @@ export function loadMenus({userId}) {
         }).then(res => {
         	if (res && res.data) {
         		let data = [];
+                let defaultSelectedKeys = [];
+                let defaultOpenKeys = [];
 	            res.data.map(function(v, index) {
 	                v.children = [];
 	                if (v.parentId === '00') {                 
 	                    data.push(v);
 	                } else if (index > 0) { // 从第二个菜单开始判断
+	                	if (defaultUrl === v.url) { // 设置默认选中的菜单
+                            defaultSelectedKeys = [v.url];
+                            defaultOpenKeys = [v.parentId];
+	                	}
 	                    let last = index - 1;
 	                    if (v.parentId === res.data[last].id) {
 	                        res.data[last].children.push(v);
@@ -68,7 +76,7 @@ export function loadMenus({userId}) {
 	                }
 	                return v;
 	            });
-	            dispatch(loadData(data));
+	            dispatch(loadData(data, defaultSelectedKeys, defaultOpenKeys));
         	}			
 		});
 	}

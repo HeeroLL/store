@@ -28,7 +28,7 @@ axios.interceptors.request.use(function(config) {
 axios.interceptors.response.use(function(response) {
 	// 对响应数据做点什么
     if (response.data && response.data.code !== '200') {
-        if (response.data.code === '401') {
+        if (response.data.code === '402') {
             // 删除localStorage里的用户信息
             removeItem("token");
             window.location.href = "/login";
