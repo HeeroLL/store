@@ -22,9 +22,19 @@ class Grid extends React.Component {
     // 通过父组件更新子组件props时触发
     componentWillReceiveProps(nextProps) { 
         if (nextProps.refresh !== this.props.refresh) {
+            let page = this.state.pagination.current;
+            if (nextProps.params !== this.props.params) {
+                page = 1;
+                this.setState({
+                    pagination: {
+                        ...this.state.pagination,
+                        current: 1
+                    }
+                });
+            }
             this.fetch({
                 pagecount: this.state.pagination.pageSize,
-                page: this.state.pagination.current,
+                page: page,
                 ...nextProps.params
             });
         }        

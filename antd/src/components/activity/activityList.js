@@ -70,6 +70,7 @@ class ActivityList extends React.Component {
         };
     }
 
+    // 改状态
     startUsing(id, status) {
 
     }
